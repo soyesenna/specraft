@@ -34,6 +34,15 @@ export function listConflicts(database: SpecraftDatabase): readonly Conflict[] {
   return rows.map(toConflict)
 }
 
+export function conflictHasSourceBranch(database: SpecraftDatabase, id: string): boolean {
+  const row = database
+    .prepare<[string], { readonly source_branch: string | null }>(
+      "SELECT source_branch FROM conflicts WHERE id = ?",
+    )
+    .get(id)
+  return row?.source_branch !== null && row?.source_branch !== undefined
+}
+
 export function resolveConflict(
   database: SpecraftDatabase,
   input: { readonly id: string; readonly directive: string; readonly memberId: string },

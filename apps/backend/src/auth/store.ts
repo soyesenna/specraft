@@ -4,7 +4,7 @@ import type { SpecraftDatabase } from "../storage/database.js"
 
 import { encryptCredential } from "./credentials.js"
 import { hashPassword, verifyPassword } from "./password.js"
-import { apiKeyPrefix, createApiKeySecret, createId, createOpaqueToken } from "./tokens.js"
+import { apiKeyPrefix, createApiKeySecret, createId } from "./tokens.js"
 
 const now = (): string => new Date().toISOString()
 
@@ -54,6 +54,12 @@ export type CreatedApiKey = {
   readonly api_key: string
 }
 
+class InviteUnavailableError extends Error {
+  constructor() {
+    super("invite is unavailable")
+  }
+}
+
 export function hasMembers(database: SpecraftDatabase): boolean {
   const row = database
     .prepare<[], { readonly count: number }>("SELECT COUNT(*) AS count FROM members")
@@ -65,19 +71,63 @@ export async function createMember(
   database: SpecraftDatabase,
   input: CreateMemberInput,
 ): Promise<Member> {
-  const member = {
+  const member = buildMember(input)
+  insertMember(database, member, await hashPassword(input.password), now())
+  return member
+}
+
+export async function createMemberWithInvite(
+  database: SpecraftDatabase,
+  input: CreateMemberInput,
+  inviteToken: string,
+): Promise<Member | null> {
+  if (!isInviteUsable(database, inviteToken)) {
+    return null
+  }
+  const member = buildMember(input)
+  const passwordHash = await hashPassword(input.password)
+  const createdAt = now()
+  try {
+    return database.transaction(() => {
+      insertMember(database, member, passwordHash, createdAt)
+      const result = database
+        .prepare<[string, string, string, string]>(
+          "UPDATE invites SET used_at = ?, used_by = ? WHERE token = ? AND used_at IS NULL AND expires_at >= ?",
+        )
+        .run(createdAt, member.id, inviteToken, createdAt)
+      if (result.changes !== 1) {
+        throw new InviteUnavailableError()
+      }
+      return member
+    })()
+  } catch (error) {
+    if (error instanceof InviteUnavailableError) {
+      return null
+    }
+    throw error
+  }
+}
+
+function buildMember(input: CreateMemberInput): Member {
+  return {
     id: createId("mem"),
     email: input.email,
     name: input.name,
     role: input.role,
   } satisfies Member
-  const passwordHash = await hashPassword(input.password)
+}
+
+function insertMember(
+  database: SpecraftDatabase,
+  member: Member,
+  passwordHash: string,
+  createdAt: string,
+): void {
   database
     .prepare<[string, string, string, string, string, string]>(
       "INSERT INTO members (id, email, password_hash, name, role, created_at) VALUES (?, ?, ?, ?, ?, ?)",
     )
-    .run(member.id, member.email, passwordHash, member.name, member.role, now())
-  return member
+    .run(member.id, member.email, passwordHash, member.name, member.role, createdAt)
 }
 
 export async function authenticateMember(
@@ -120,42 +170,13 @@ export function getMember(database: SpecraftDatabase, id: string): Member | null
   }
 }
 
-export function createInvite(
-  database: SpecraftDatabase,
-  createdBy: string,
-): {
-  readonly token: string
-  readonly expires_at: string
-} {
-  const token = createOpaqueToken()
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-  database
-    .prepare<[string, string, string]>(
-      "INSERT INTO invites (token, created_by, expires_at) VALUES (?, ?, ?)",
-    )
-    .run(token, createdBy, expiresAt)
-  return { token, expires_at: expiresAt }
-}
-
-export function consumeInvite(
-  database: SpecraftDatabase,
-  token: string,
-  memberId: string,
-): boolean {
+function isInviteUsable(database: SpecraftDatabase, token: string): boolean {
   const parsed = InviteRowSchema.safeParse(
     database
       .prepare<[string], unknown>("SELECT token, expires_at, used_at FROM invites WHERE token = ?")
       .get(token),
   )
-  if (!parsed.success || parsed.data.used_at !== null || parsed.data.expires_at < now()) {
-    return false
-  }
-  database
-    .prepare<[string, string, string]>(
-      "UPDATE invites SET used_at = ?, used_by = ? WHERE token = ?",
-    )
-    .run(now(), memberId, token)
-  return true
+  return parsed.success && parsed.data.used_at === null && parsed.data.expires_at >= now()
 }
 
 export async function createApiKey(

@@ -118,6 +118,48 @@ describe("mcp proxy core", () => {
     })
   })
 
+  it("excludes the current session from pending replay prompts", () => {
+    const home = mkdtempSync(join(tmpdir(), "specraft-session-current-"))
+    startSession({ home, sessionId: "current", branch: "main", startedHead: "abc" })
+    startSession({ home, sessionId: "previous", branch: "main", startedHead: "def" })
+
+    expect(
+      pendingReplaySessions(home, { excludeSessionId: "current" }).map(
+        (marker) => marker.session_id,
+      ),
+    ).toEqual(["previous"])
+  })
+
+  it("blocks specraft_ingest locally when HEAD is not pushed", async () => {
+    let called = false
+    const client: SpecraftToolClient = {
+      query: async () => ({ answer: "ok", citations: [], query_id: "qry_1" }),
+      ingest: async () => {
+        called = true
+        return { status: "accepted", wiki_commit: "abc" }
+      },
+      status: async () => ({ server: "ok", branch_locks: [], wiki_head_by_branch: {} }),
+    }
+    const context = {
+      client,
+      home: mkdtempSync(join(tmpdir(), "specraft-unpushed-home-")),
+      sessionId: "s-unpushed",
+      gitSnapshot: async () => ({ branch: "main", head: "abc" }),
+      headPushed: async () => false,
+    }
+
+    await expect(
+      specraftIngest(context, {
+        agent: "codex",
+        summary: "should not call server",
+        spec_changes: [{ type: "added", area: "mcp", description: "blocked", reasoning: "P2" }],
+        progress_updates: [],
+        open_questions: [],
+      }),
+    ).rejects.toThrow("HEAD is not pushed")
+    expect(called).toBe(false)
+  })
+
   it("derives stop-gate state from git and session ingest markers", () => {
     const fixture = createGitRepo()
     const home = mkdtempSync(join(tmpdir(), "specraft-gate-home-"))

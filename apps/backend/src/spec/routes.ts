@@ -14,6 +14,7 @@ import {
 import type { FastifyInstance, FastifyReply } from "fastify"
 import { z } from "zod"
 import { getSetting } from "../auth/store.js"
+import { BranchQueue } from "../git/branch-queue.js"
 import {
   branchLock,
   commitExists,
@@ -25,24 +26,26 @@ import {
   type WikiRepository,
   wikiHead,
 } from "../git/sync.js"
-import { resolveLockedWikiMerge } from "../git/wiki-merge.js"
+import { isSafeBranchName, isSafeWikiPath } from "../git/validation.js"
 import { sendValidationFailed } from "../http/errors.js"
+import type { LLMProvider } from "../llm/provider.js"
 import type { SpecraftDatabase } from "../storage/database.js"
 import { requireMember } from "./auth.js"
-import { listConflicts, resolveConflict } from "./conflicts.js"
+import { registerConflictRoutes } from "./conflict-routes.js"
 import { listIngestLogs, listQueryLogs, recordIngestLog, recordQueryLog } from "./logs.js"
-import { answerWikiQuestion, appendIngestToWiki } from "./wiki-agent.js"
+import { answerWikiQuestionWithAgent, ingestWikiWithAgent } from "./wiki-agent.js"
 
 export type SpecRouteContext = {
   readonly database: SpecraftDatabase
   readonly dataDir?: string
   readonly codeRemoteUrl?: string
+  readonly branchQueue?: BranchQueue
+  readonly llmProvider?: LLMProvider
 }
 
-const BranchParamsSchema = z.object({ branch: z.string().min(1) })
-const ConflictParamsSchema = z.object({ id: z.string().min(1) })
-const ConflictResolveBodySchema = z.object({ directive: z.string().min(1) })
-const WikiPageQuerySchema = z.object({ path: z.string().min(1) })
+const BranchNameSchema = z.string().min(1).refine(isSafeBranchName)
+const BranchParamsSchema = z.object({ branch: BranchNameSchema })
+const WikiPageQuerySchema = z.object({ path: z.string().min(1).refine(isSafeWikiPath) })
 
 function wikiFor(context: SpecRouteContext, branch: string): WikiRepository | null {
   return context.dataDir ? createSkeletonWiki({ dataDir: context.dataDir, branch }) : null
@@ -67,13 +70,15 @@ function commitIsKnown(context: SpecRouteContext, commitHash: string): boolean {
 }
 
 export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteContext): void {
+  const branchQueue = context.branchQueue ?? new BranchQueue()
+
   server.post("/api/v1/context", async (request, reply) => {
     const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
     const parsed = ContextRequestSchema.safeParse(request.body)
-    if (!parsed.success) {
+    if (!parsed.success || !isSafeBranchName(parsed.data.branch)) {
       return sendValidationFailed(reply)
     }
     if (!ensureUnlocked(context, parsed.data.branch, reply)) {
@@ -95,7 +100,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       return member
     }
     const parsed = QueryRequestSchema.safeParse(request.body)
-    if (!parsed.success) {
+    if (!parsed.success || !isSafeBranchName(parsed.data.branch)) {
       return sendValidationFailed(reply)
     }
     if (!ensureUnlocked(context, parsed.data.branch, reply)) {
@@ -109,7 +114,12 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
     })
     return QueryResponseSchema.parse(
       wiki
-        ? answerWikiQuestion(wiki, parsed.data.question, queryId)
+        ? await answerWikiQuestionWithAgent({
+            provider: context.llmProvider,
+            queryId,
+            question: parsed.data.question,
+            wiki,
+          })
         : { answer: "", citations: [], query_id: queryId },
     )
   })
@@ -120,35 +130,47 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       return member
     }
     const parsed = IngestPayloadSchema.safeParse(request.body)
-    if (!parsed.success) {
+    if (!parsed.success || !isSafeBranchName(parsed.data.branch)) {
       return sendValidationFailed(reply)
     }
     if (!ensureUnlocked(context, parsed.data.branch, reply)) {
       return reply
     }
-    if (!commitIsKnown(context, parsed.data.commit_hash)) {
-      recordIngestLog(context.database, {
+    return branchQueue.run(parsed.data.branch, async () => {
+      if (!ensureUnlocked(context, parsed.data.branch, reply)) {
+        return reply
+      }
+      if (!commitIsKnown(context, parsed.data.commit_hash)) {
+        recordIngestLog(context.database, {
+          branch: parsed.data.branch,
+          commitHash: parsed.data.commit_hash,
+          memberId: member.id,
+          status: "rejected",
+          summary: parsed.data.summary,
+        })
+        return reply.status(422).send({ status: "rejected", reason: "commit_not_found" })
+      }
+      const wiki = wikiFor(context, parsed.data.branch)
+      const wikiCommit = wiki
+        ? await ingestWikiWithAgent({
+            member,
+            payload: parsed.data,
+            provider: context.llmProvider,
+            wiki,
+          })
+        : undefined
+      const logInput = {
         branch: parsed.data.branch,
         commitHash: parsed.data.commit_hash,
         memberId: member.id,
-        status: "rejected",
+        status: "accepted",
         summary: parsed.data.summary,
-      })
-      return reply.status(422).send({ status: "rejected", reason: "commit_not_found" })
-    }
-    const wiki = wikiFor(context, parsed.data.branch)
-    const wikiCommit = wiki ? appendIngestToWiki(wiki, member, parsed.data) : undefined
-    const logInput = {
-      branch: parsed.data.branch,
-      commitHash: parsed.data.commit_hash,
-      memberId: member.id,
-      status: "accepted",
-      summary: parsed.data.summary,
-    } as const
-    recordIngestLog(context.database, wikiCommit ? { ...logInput, wikiCommit } : logInput)
-    return IngestResponseSchema.parse(
-      wikiCommit ? { status: "accepted", wiki_commit: wikiCommit } : { status: "accepted" },
-    )
+      } as const
+      recordIngestLog(context.database, wikiCommit ? { ...logInput, wikiCommit } : logInput)
+      return IngestResponseSchema.parse(
+        wikiCommit ? { status: "accepted", wiki_commit: wikiCommit } : { status: "accepted" },
+      )
+    })
   })
 
   server.get("/api/v1/logs/ingests", async (request, reply) => {
@@ -202,41 +224,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
     })
   })
 
-  server.get("/api/v1/conflicts", async (request, reply) => {
-    const member = await requireMember(request, reply, context.database)
-    if ("statusCode" in member) {
-      return member
-    }
-    return { conflicts: listConflicts(context.database) }
-  })
-
-  server.post("/api/v1/conflicts/:id/resolve", async (request, reply) => {
-    const member = await requireMember(request, reply, context.database)
-    if ("statusCode" in member) {
-      return member
-    }
-    const params = ConflictParamsSchema.safeParse(request.params)
-    const body = ConflictResolveBodySchema.safeParse(request.body)
-    if (!params.success || !body.success) {
-      return sendValidationFailed(reply)
-    }
-    if (context.dataDir) {
-      const resolved = resolveLockedWikiMerge(context.database, {
-        dataDir: context.dataDir,
-        directive: body.data.directive,
-        id: params.data.id,
-        memberId: member.id,
-      })
-      if (resolved.status === "resolved") {
-        return resolved
-      }
-    }
-    return resolveConflict(context.database, {
-      directive: body.data.directive,
-      id: params.data.id,
-      memberId: member.id,
-    })
-  })
+  registerConflictRoutes(server, context)
 
   server.get("/api/v1/status", async () => {
     const headByBranch: Record<string, string> = {}

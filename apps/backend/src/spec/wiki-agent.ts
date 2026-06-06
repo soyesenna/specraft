@@ -7,6 +7,8 @@ import {
   type WikiRepository,
   writeWikiFile,
 } from "../git/sync.js"
+import { type LLMProvider, runToolLoop } from "../llm/provider.js"
+import { createWikiTools } from "../llm/wiki-tools.js"
 
 type RankedPage = {
   readonly content: string
@@ -112,6 +114,30 @@ export function appendIngestToWiki(
   })
 }
 
+export async function ingestWikiWithAgent(input: {
+  readonly member: Member
+  readonly payload: IngestPayload
+  readonly provider: LLMProvider | undefined
+  readonly wiki: WikiRepository
+}): Promise<string> {
+  if (input.provider) {
+    await runToolLoop({
+      maxTurns: 6,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are the specraft Ingest Agent. Use wiki tools to inspect or update project wiki pages. Preserve index.md and log.md integrity.",
+        },
+        { role: "user", content: JSON.stringify(input.payload) },
+      ],
+      provider: input.provider,
+      tools: createWikiTools(input.wiki.root),
+    })
+  }
+  return appendIngestToWiki(input.wiki, input.member, input.payload)
+}
+
 function sectionFor(path: string, content: string, queryTokens: readonly string[]): string {
   if (path.startsWith("changes/") && content.includes("## Spec Changes")) {
     return "Spec Changes"
@@ -173,4 +199,43 @@ export function answerWikiQuestion(
     })
     .join("\n\n")
   return { answer, citations, query_id: queryId }
+}
+
+function citationsFromAnswer(answer: string): Citation[] {
+  const matches = answer.matchAll(/\[?([a-zA-Z0-9._/-]+\.md)#([^\]\s]+)\]?/g)
+  return [...matches].map((match) => ({
+    path: match[1] ?? "overview.md",
+    section: match[2] ?? "Overview",
+  }))
+}
+
+export async function answerWikiQuestionWithAgent(input: {
+  readonly provider: LLMProvider | undefined
+  readonly queryId: string
+  readonly question: string
+  readonly wiki: WikiRepository
+}): Promise<QueryResponse> {
+  if (!input.provider) {
+    return answerWikiQuestion(input.wiki, input.question, input.queryId)
+  }
+  const fallback = answerWikiQuestion(input.wiki, input.question, input.queryId)
+  const response = await runToolLoop({
+    maxTurns: 6,
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are the specraft Query Agent. Use wiki tools, answer with concrete citations in the form [path.md#Section].",
+      },
+      { role: "user", content: input.question },
+    ],
+    provider: input.provider,
+    tools: createWikiTools(input.wiki.root),
+  })
+  const citations = citationsFromAnswer(response.content)
+  return {
+    answer: response.content,
+    citations: citations.length > 0 ? citations : fallback.citations,
+    query_id: input.queryId,
+  }
 }

@@ -11,13 +11,13 @@ import { z } from "zod"
 import { sendConflict, sendUnauthorized, sendValidationFailed } from "../http/errors.js"
 import type { SpecraftDatabase } from "../storage/database.js"
 import { requireAdmin, requireMember } from "./identity.js"
+import { createInvite } from "./invites.js"
 import { setSessionCookie } from "./session.js"
 import {
   authenticateMember,
-  consumeInvite,
   createApiKey,
-  createInvite,
   createMember,
+  createMemberWithInvite,
   disableMember,
   hasMembers,
   listApiKeys,
@@ -67,8 +67,12 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
     if (!parsed.success) {
       return sendValidationFailed(reply)
     }
-    const member = await createMember(context.database, { ...parsed.data, role: "member" })
-    if (!consumeInvite(context.database, parsed.data.invite_token, member.id)) {
+    const member = await createMemberWithInvite(
+      context.database,
+      { ...parsed.data, role: "member" },
+      parsed.data.invite_token,
+    )
+    if (!member) {
       return sendValidationFailed(reply)
     }
     setSessionCookie(reply, member.id)

@@ -71,7 +71,15 @@ export function readSessionOrNull(home: string, sessionId: string): SessionMarke
   return SessionMarkerSchema.parse(JSON.parse(readFileSync(path, "utf8")))
 }
 
-export function pendingReplaySessions(home: string): readonly SessionMarker[] {
+export function pendingReplaySessions(home: string): readonly SessionMarker[]
+export function pendingReplaySessions(
+  home: string,
+  options: { readonly excludeSessionId?: string },
+): readonly SessionMarker[]
+export function pendingReplaySessions(
+  home: string,
+  options: { readonly excludeSessionId?: string } = {},
+): readonly SessionMarker[] {
   const dir = sessionsDir(home)
   if (!existsSync(dir)) {
     return []
@@ -79,6 +87,7 @@ export function pendingReplaySessions(home: string): readonly SessionMarker[] {
   return readdirSync(dir)
     .filter((name) => name.endsWith(".json"))
     .map((name) => SessionMarkerSchema.parse(JSON.parse(readFileSync(join(dir, name), "utf8"))))
+    .filter((marker) => marker.session_id !== options.excludeSessionId)
     .filter((marker) => !marker.ingested && !marker.resolved)
     .sort((left, right) => left.started_at.localeCompare(right.started_at))
 }

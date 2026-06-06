@@ -4,6 +4,7 @@ import { z } from "zod"
 
 import type { SpecraftDatabase } from "../storage/database.js"
 import { createSkeletonWiki, type WikiRepository } from "./sync.js"
+import { isSafeBranchName } from "./validation.js"
 
 const gitTimeoutMs = 30_000
 const serverEmail = "server@specraft.local"
@@ -42,6 +43,12 @@ function branchExists(gitDirectory: string, branch: string): boolean {
       timeout: gitTimeoutMs,
     }).status === 0
   )
+}
+
+function assertSafeBranchName(branch: string): void {
+  if (!isSafeBranchName(branch)) {
+    throw new RangeError("invalid git branch name")
+  }
 }
 
 function conflictIdFor(targetBranch: string, sourceBranch: string): string {
@@ -117,6 +124,8 @@ export function createWikiBranchFromParent(input: {
   readonly branch: string
   readonly parentBranch: string
 }): WikiRepository {
+  assertSafeBranchName(input.branch)
+  assertSafeBranchName(input.parentBranch)
   const parent = createSkeletonWiki({ dataDir: input.dataDir, branch: input.parentBranch })
   if (!branchExists(parent.gitDir, input.branch)) {
     gitDir(parent.gitDir, ["branch", input.branch, input.parentBranch])

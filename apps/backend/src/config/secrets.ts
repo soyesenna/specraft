@@ -6,6 +6,8 @@ const minSecretLength = 16
 export type ServerConfig = {
   readonly codeRemoteUrl?: string
   readonly dataDir: string
+  readonly openRouterApiKey?: string
+  readonly openRouterModel: string
   readonly sessionSecret: string
   readonly credentialKey: string
 }
@@ -27,6 +29,8 @@ export function loadServerConfig(env: EnvReader): ServerConfig {
   return {
     ...(codeRemoteUrl ? { codeRemoteUrl } : {}),
     dataDir: env["SPECRAFT_DATA_DIR"] ?? defaultDataDir,
+    ...(env["OPENROUTER_API_KEY"] ? { openRouterApiKey: env["OPENROUTER_API_KEY"] } : {}),
+    openRouterModel: env["OPENROUTER_MODEL"] ?? "openrouter/auto",
     sessionSecret: deriveKey(secret, "session-cookie"),
     credentialKey: deriveKey(secret, "credential-encryption"),
   }

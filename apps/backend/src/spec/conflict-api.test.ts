@@ -4,7 +4,8 @@ import { join } from "node:path"
 
 import { describe, expect, it } from "vitest"
 
-import { lockBranch } from "../git/sync.js"
+import { commitWiki, createSkeletonWiki, lockBranch, writeWikiFile } from "../git/sync.js"
+import { createWikiBranchFromParent, mergeWikiBranch } from "../git/wiki-merge.js"
 import { buildServer } from "../server.js"
 import { createDatabase } from "../storage/database.js"
 
@@ -69,4 +70,70 @@ describe("conflict API", () => {
     await server.close()
     database.close()
   })
+
+  it("keeps a git merge conflict locked when the directive cannot resolve it", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const dataDir = mkdtempSync(join(tmpdir(), "specraft-conflict-retry-"))
+    const server = buildServer({ database, dataDir, secret })
+    const admin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: { email: "admin@example.com", password: "password", name: "Admin" },
+    })
+    const cookie = admin.cookies[0]?.value ?? ""
+    const main = createSkeletonWiki({ dataDir, branch: "main" })
+    writeWikiFile(main, "areas/backend.md", "# Backend\n\nbase\n")
+    commitWiki(main, {
+      authorEmail: "test@example.com",
+      authorName: "Test User",
+      message: "base",
+    })
+    const feature = createWikiBranchFromParent({
+      dataDir,
+      branch: "feature/conflict",
+      parentBranch: "main",
+    })
+    writeWikiFile(main, "areas/backend.md", "# Backend\n\ntarget\n")
+    commitWiki(main, {
+      authorEmail: "test@example.com",
+      authorName: "Test User",
+      message: "target",
+    })
+    writeWikiFile(feature, "areas/backend.md", "# Backend\n\nsource\n")
+    commitWiki(feature, {
+      authorEmail: "test@example.com",
+      authorName: "Test User",
+      message: "source",
+    })
+    const conflict = mergeWikiBranch({
+      database,
+      dataDir,
+      sourceBranch: "feature/conflict",
+      targetBranch: "main",
+    })
+    expect(conflict.status).toBe("locked")
+    if (conflict.status !== "locked") {
+      throw new Error("expected conflict lock")
+    }
+
+    const unresolved = await server.inject({
+      method: "POST",
+      url: `/api/v1/conflicts/${encodeURIComponent(conflict.conflictId)}/resolve`,
+      cookies: { specraft_session: cookie },
+      payload: { directive: "manual review required" },
+    })
+    const stillBlocked = await server.inject({
+      method: "POST",
+      url: "/api/v1/query",
+      cookies: { specraft_session: cookie },
+      payload: { branch: "main", commit_hash: "abc", question: "Can I query?" },
+    })
+
+    expect(unresolved.statusCode).toBe(200)
+    expect(unresolved.json()).toEqual({ status: "still_locked" })
+    expect(stillBlocked.statusCode).toBe(409)
+
+    await server.close()
+    database.close()
+  }, 15_000)
 })

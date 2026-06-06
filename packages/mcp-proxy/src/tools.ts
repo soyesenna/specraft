@@ -30,6 +30,7 @@ export type ToolContext = {
   readonly sessionId: string
   readonly home: string
   readonly gitSnapshot: () => Promise<GitSnapshot>
+  readonly headPushed?: () => Promise<boolean> | boolean
 }
 
 const QueryToolInputSchema = z.object({ question: z.string().min(1) })
@@ -55,6 +56,9 @@ export async function specraftIngest(
   context: ToolContext,
   input: Omit<IngestPayload, "branch" | "commit_hash" | "session_id">,
 ): Promise<IngestResponse> {
+  if (context.headPushed && !(await context.headPushed())) {
+    throw new Error("HEAD is not pushed; push before specraft_ingest")
+  }
   const snapshot = await context.gitSnapshot()
   const response = await context.client.ingest({
     ...input,

@@ -4,6 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 import { describe, expect, it } from "vitest"
+import { MockProvider } from "../llm/provider.js"
 import { buildServer } from "../server.js"
 import { createDatabase } from "../storage/database.js"
 
@@ -171,9 +172,28 @@ describe("spec REST API", () => {
     expect(wikiPage.statusCode).toBe(200)
     expect(wikiPage.json<{ content: string }>().content).toContain("Implemented backend APIs.")
 
+    const pathEscape = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/main/page?path=../../../../etc/passwd",
+      cookies: { specraft_session: cookie },
+    })
+    expect(pathEscape.statusCode).toBe(422)
+
+    const unsafeBranch = await server.inject({
+      method: "POST",
+      url: "/api/v1/query",
+      cookies: { specraft_session: cookie },
+      payload: {
+        branch: "-D",
+        commit_hash: fixture.commit,
+        question: "Should not run git option.",
+      },
+    })
+    expect(unsafeBranch.statusCode).toBe(422)
+
     await server.close()
     database.close()
-  })
+  }, 15_000)
 
   it("rejects ingest when commit validation cannot be configured", async () => {
     const database = createDatabase({ path: ":memory:" })
@@ -211,6 +231,42 @@ describe("spec REST API", () => {
 
     expect(ingest.statusCode).toBe(422)
     expect(ingest.json()).toEqual({ status: "rejected", reason: "commit_not_found" })
+
+    await server.close()
+    database.close()
+  })
+
+  it("uses the configured LLM provider for query responses", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const dataDir = mkdtempSync(join(tmpdir(), "specraft-api-provider-"))
+    const provider = new MockProvider([
+      {
+        role: "assistant",
+        content: "Provider answer. [overview.md#Overview]",
+      },
+    ])
+    const server = buildServer({ database, dataDir, llmProvider: provider, secret })
+    const admin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: { email: "admin@example.com", password: "password", name: "Admin" },
+    })
+    const cookie = admin.cookies[0]?.value ?? ""
+
+    const query = await server.inject({
+      method: "POST",
+      url: "/api/v1/query",
+      cookies: { specraft_session: cookie },
+      payload: {
+        branch: "main",
+        commit_hash: "abc",
+        question: "What does the provider say?",
+      },
+    })
+
+    expect(query.statusCode).toBe(200)
+    expect(query.json<{ answer: string }>().answer).toBe("Provider answer. [overview.md#Overview]")
+    expect(provider.requests).toHaveLength(1)
 
     await server.close()
     database.close()

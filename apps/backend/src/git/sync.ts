@@ -13,6 +13,7 @@ import { dirname, join } from "node:path"
 import { type BranchLock, BranchLockSchema } from "@specraft/shared"
 
 import type { SpecraftDatabase } from "../storage/database.js"
+import { isSafeBranchName, resolveWikiPath } from "./validation.js"
 
 export type GitMirror = {
   readonly path: string
@@ -58,6 +59,12 @@ function safeBranchPath(branch: string): string {
   return branch.replaceAll("/", "__")
 }
 
+function assertSafeBranchName(branch: string): void {
+  if (!isSafeBranchName(branch)) {
+    throw new RangeError("invalid git branch name")
+  }
+}
+
 function ensureGitIdentity(repo: string): void {
   git(repo, ["config", "user.email", serverEmail])
   git(repo, ["config", "user.name", serverName])
@@ -99,6 +106,7 @@ function initializeBareWiki(dataDir: string): string {
 }
 
 function ensureWikiBranch(gitDirectory: string, branch: string): void {
+  assertSafeBranchName(branch)
   if (gitStatus(gitDirectory, ["show-ref", "--verify", `refs/heads/${branch}`]) === 0) {
     return
   }
@@ -106,6 +114,7 @@ function ensureWikiBranch(gitDirectory: string, branch: string): void {
 }
 
 function ensureWikiWorktree(dataDir: string, gitDirectory: string, branch: string): string {
+  assertSafeBranchName(branch)
   const root = join(dataDir, "workspace", "wiki", safeBranchPath(branch))
   if (existsSync(join(root, ".git"))) {
     git(root, ["checkout", branch])
@@ -188,11 +197,11 @@ export function listWikiFiles(wiki: WikiRepository): readonly string[] {
 }
 
 export function readWikiFile(wiki: WikiRepository, path: string): string {
-  return readFileSync(join(wiki.root, path), "utf8")
+  return readFileSync(resolveWikiPath(wiki.root, path), "utf8")
 }
 
 export function writeWikiFile(wiki: WikiRepository, path: string, content: string): void {
-  const target = join(wiki.root, path)
+  const target = resolveWikiPath(wiki.root, path)
   mkdirSync(dirname(target), { recursive: true })
   writeFileSync(target, content)
 }

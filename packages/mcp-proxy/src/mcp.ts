@@ -36,7 +36,14 @@ export async function handleMcpRequest(
     if (!tool) {
       return { jsonrpc: "2.0", id: request.id, error: { code: -32601, message: "tool not found" } }
     }
-    return { jsonrpc: "2.0", id: request.id, result: await tool.call(params.arguments ?? {}) }
+    try {
+      return { jsonrpc: "2.0", id: request.id, result: await tool.call(params.arguments ?? {}) }
+    } catch (error) {
+      if (error instanceof Error) {
+        return { jsonrpc: "2.0", id: request.id, error: { code: -32000, message: error.message } }
+      }
+      throw error
+    }
   }
   return { jsonrpc: "2.0", id: request.id, error: { code: -32601, message: "method not found" } }
 }
