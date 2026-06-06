@@ -1,10 +1,13 @@
 import { type ClientConfig, createRequester } from "./client-core.js"
 import type {
   AdminInviteCreateResponse,
+  AdminInviteListResponse,
   AdminMemberDisableRequest,
   AdminMemberDisableResponse,
+  AdminMemberListResponse,
   AdminSettingsRequest,
   AdminSettingsResponse,
+  AdminSettingsViewResponse,
   ApiKeyCreatedResponse,
   ApiKeyCreateRequest,
   ApiKeyDeleteRequest,
@@ -13,6 +16,7 @@ import type {
   AuthLoginRequest,
   AuthSessionResponse,
   AuthSignupRequest,
+  BootstrapAdminRequest,
   ConflictListResponse,
   ConflictResolveRequest,
   ConflictResolveResponse,
@@ -33,10 +37,13 @@ import type {
 } from "./schemas.js"
 import {
   AdminInviteCreateResponseSchema,
+  AdminInviteListResponseSchema,
   AdminMemberDisableRequestSchema,
   AdminMemberDisableResponseSchema,
+  AdminMemberListResponseSchema,
   AdminSettingsRequestSchema,
   AdminSettingsResponseSchema,
+  AdminSettingsViewResponseSchema,
   ApiKeyCreatedResponseSchema,
   ApiKeyCreateRequestSchema,
   ApiKeyDeleteRequestSchema,
@@ -45,6 +52,7 @@ import {
   AuthLoginRequestSchema,
   AuthSessionResponseSchema,
   AuthSignupRequestSchema,
+  BootstrapAdminRequestSchema,
   ConflictListResponseSchema,
   ConflictResolveRequestSchema,
   ConflictResolveResponseSchema,
@@ -72,13 +80,18 @@ export type SpecraftClient = {
   readonly query: (request: QueryRequest) => Promise<QueryResponse>
   readonly ingest: (request: IngestPayload) => Promise<IngestResponse>
   readonly status: () => Promise<StatusResponse>
+  readonly authSession: () => Promise<AuthSessionResponse>
+  readonly bootstrapAdmin: (request: BootstrapAdminRequest) => Promise<AuthSessionResponse>
   readonly authSignup: (request: AuthSignupRequest) => Promise<AuthSessionResponse>
   readonly authLogin: (request: AuthLoginRequest) => Promise<AuthSessionResponse>
   readonly createApiKey: (request: ApiKeyCreateRequest) => Promise<ApiKeyCreatedResponse>
   readonly listApiKeys: () => Promise<ApiKeyListResponse>
   readonly deleteApiKey: (request: ApiKeyDeleteRequest) => Promise<ApiKeyDeleteResponse>
   readonly createAdminInvite: () => Promise<AdminInviteCreateResponse>
+  readonly listAdminInvites: () => Promise<AdminInviteListResponse>
+  readonly getAdminSettings: () => Promise<AdminSettingsViewResponse>
   readonly updateAdminSettings: (request: AdminSettingsRequest) => Promise<AdminSettingsResponse>
+  readonly listAdminMembers: () => Promise<AdminMemberListResponse>
   readonly disableAdminMember: (
     request: AdminMemberDisableRequest,
   ) => Promise<AdminMemberDisableResponse>
@@ -124,6 +137,20 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         method: "GET",
         responseSchema: StatusResponseSchema,
       }),
+    authSession: () =>
+      request({
+        path: "/api/v1/auth/session",
+        method: "GET",
+        responseSchema: AuthSessionResponseSchema,
+      }),
+    bootstrapAdmin: (body) =>
+      request({
+        path: "/api/v1/auth/bootstrap-admin",
+        method: "POST",
+        requestSchema: BootstrapAdminRequestSchema,
+        responseSchema: AuthSessionResponseSchema,
+        body,
+      }),
     authSignup: (body) =>
       request({
         path: "/api/v1/auth/signup",
@@ -168,6 +195,18 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         method: "POST",
         responseSchema: AdminInviteCreateResponseSchema,
       }),
+    listAdminInvites: () =>
+      request({
+        path: "/api/v1/admin/invites",
+        method: "GET",
+        responseSchema: AdminInviteListResponseSchema,
+      }),
+    getAdminSettings: () =>
+      request({
+        path: "/api/v1/admin/settings",
+        method: "GET",
+        responseSchema: AdminSettingsViewResponseSchema,
+      }),
     updateAdminSettings: (body) =>
       request({
         path: "/api/v1/admin/settings",
@@ -175,6 +214,12 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         requestSchema: AdminSettingsRequestSchema,
         responseSchema: AdminSettingsResponseSchema,
         body,
+      }),
+    listAdminMembers: () =>
+      request({
+        path: "/api/v1/admin/members",
+        method: "GET",
+        responseSchema: AdminMemberListResponseSchema,
       }),
     disableAdminMember: (body) => {
       const parsed = AdminMemberDisableRequestSchema.parse(body)

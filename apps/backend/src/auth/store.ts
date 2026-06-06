@@ -1,4 +1,11 @@
-import type { AdminSettingsRequest, ApiKey, Member, MemberRole } from "@specraft/shared"
+import type {
+  AdminInvite,
+  AdminSettingsRequest,
+  AdminSettingsViewResponse,
+  ApiKey,
+  Member,
+  MemberRole,
+} from "@specraft/shared"
 import { z } from "zod"
 import type { SpecraftDatabase } from "../storage/database.js"
 
@@ -40,6 +47,13 @@ const InviteRowSchema = z.object({
   token: z.string(),
   expires_at: z.string(),
   used_at: z.string().nullable(),
+})
+
+const InviteListRowSchema = InviteRowSchema.extend({
+  used_by_id: z.string().nullable(),
+  used_by_email: z.string().email().nullable(),
+  used_by_name: z.string().nullable(),
+  used_by_role: z.enum(["admin", "member"]).nullable(),
 })
 
 export type CreateMemberInput = {
@@ -170,6 +184,16 @@ export function getMember(database: SpecraftDatabase, id: string): Member | null
   }
 }
 
+export function listMembers(database: SpecraftDatabase): readonly Member[] {
+  return z
+    .array(MemberRowSchema)
+    .parse(
+      database
+        .prepare<[], unknown>("SELECT id, email, name, role FROM members ORDER BY created_at")
+        .all(),
+    )
+}
+
 function isInviteUsable(database: SpecraftDatabase, token: string): boolean {
   const parsed = InviteRowSchema.safeParse(
     database
@@ -177,6 +201,41 @@ function isInviteUsable(database: SpecraftDatabase, token: string): boolean {
       .get(token),
   )
   return parsed.success && parsed.data.used_at === null && parsed.data.expires_at >= now()
+}
+
+function toAdminInvite(row: z.infer<typeof InviteListRowSchema>): AdminInvite {
+  const usedBy =
+    row.used_by_id && row.used_by_email && row.used_by_name && row.used_by_role
+      ? {
+          id: row.used_by_id,
+          email: row.used_by_email,
+          name: row.used_by_name,
+          role: row.used_by_role,
+        }
+      : null
+
+  return {
+    token: row.token,
+    expires_at: row.expires_at,
+    used_at: row.used_at,
+    used_by: usedBy,
+  }
+}
+
+export function listInvites(database: SpecraftDatabase): readonly AdminInvite[] {
+  const rows = z.array(InviteListRowSchema).parse(
+    database
+      .prepare<[], unknown>(
+        `SELECT invites.token, invites.expires_at, invites.used_at,
+                members.id AS used_by_id, members.email AS used_by_email,
+                members.name AS used_by_name, members.role AS used_by_role
+         FROM invites
+         LEFT JOIN members ON members.id = invites.used_by
+         ORDER BY invites.expires_at DESC`,
+      )
+      .all(),
+  )
+  return rows.map(toAdminInvite)
 }
 
 export async function createApiKey(
@@ -264,4 +323,13 @@ export function getSetting(database: SpecraftDatabase, key: string): string | nu
     .prepare<[string], { readonly value: string }>("SELECT value FROM settings WHERE key = ?")
     .get(key)
   return row?.value ?? null
+}
+
+export function getSettingsView(database: SpecraftDatabase): AdminSettingsViewResponse {
+  return {
+    git_remote_url: getSetting(database, "git_remote_url"),
+    model_ingest: getSetting(database, "model_ingest"),
+    model_query: getSetting(database, "model_query"),
+    credential_configured: getSetting(database, "git_credential") !== null,
+  }
 }

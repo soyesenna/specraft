@@ -33,6 +33,21 @@ describe("auth and admin API", () => {
     })
     expect(adminCookie?.name).toBe("specraft_session")
 
+    const adminSession = await server.inject({
+      method: "GET",
+      url: "/api/v1/auth/session",
+      cookies: { specraft_session: adminCookie?.value ?? "" },
+    })
+    expect(adminSession.statusCode).toBe(200)
+    expect(adminSession.json()).toEqual({
+      member: {
+        id: expect.any(String),
+        email: "admin@example.com",
+        name: "Admin One",
+        role: "admin",
+      },
+    })
+
     const invite = await server.inject({
       method: "POST",
       url: "/api/v1/admin/invites",
@@ -45,6 +60,23 @@ describe("auth and admin API", () => {
     })
     const inviteUrlParts = String(invite.json<{ invite_url: string }>().invite_url).split("/")
     const inviteToken = inviteUrlParts[inviteUrlParts.length - 1]
+
+    const inviteList = await server.inject({
+      method: "GET",
+      url: "/api/v1/admin/invites",
+      cookies: { specraft_session: adminCookie?.value ?? "" },
+    })
+    expect(inviteList.statusCode).toBe(200)
+    expect(inviteList.json()).toEqual({
+      invites: [
+        {
+          token: inviteToken,
+          expires_at: expect.any(String),
+          used_at: null,
+          used_by: null,
+        },
+      ],
+    })
 
     const signup = await server.inject({
       method: "POST",
@@ -99,6 +131,21 @@ describe("auth and admin API", () => {
       listedKeys.json<{ keys: readonly { readonly prefix: string }[] }>().keys[0]?.prefix,
     ).toBe("sk-spcrft-")
 
+    const memberSession = await server.inject({
+      method: "GET",
+      url: "/api/v1/auth/session",
+      cookies: { specraft_session: memberCookie?.value ?? "" },
+    })
+    expect(memberSession.statusCode).toBe(200)
+    expect(memberSession.json()).toEqual({
+      member: {
+        id: expect.any(String),
+        email: "member@example.com",
+        name: "Member One",
+        role: "member",
+      },
+    })
+
     const settings = await server.inject({
       method: "PUT",
       url: "/api/v1/admin/settings",
@@ -111,6 +158,18 @@ describe("auth and admin API", () => {
     })
     expect(settings.statusCode).toBe(200)
     expect(settings.json()).toEqual({ status: "ok" })
+    const settingsView = await server.inject({
+      method: "GET",
+      url: "/api/v1/admin/settings",
+      cookies: { specraft_session: adminCookie?.value ?? "" },
+    })
+    expect(settingsView.statusCode).toBe(200)
+    expect(settingsView.json()).toEqual({
+      git_remote_url: "https://example.com/repo.git",
+      model_ingest: "openrouter/auto",
+      model_query: null,
+      credential_configured: true,
+    })
     const encryptedCredential = database
       .prepare<[string], { readonly value: string }>("SELECT value FROM settings WHERE key = ?")
       .get("git_credential")
@@ -140,6 +199,29 @@ describe("auth and admin API", () => {
       payload: { branch: "main", commit_hash: "abc", question: "Can I still query?" },
     })
     expect(revokedBearerQuery.statusCode).toBe(401)
+
+    const members = await server.inject({
+      method: "GET",
+      url: "/api/v1/admin/members",
+      cookies: { specraft_session: adminCookie?.value ?? "" },
+    })
+    expect(members.statusCode).toBe(200)
+    expect(members.json()).toEqual({
+      members: expect.arrayContaining([
+        {
+          id: expect.any(String),
+          email: "admin@example.com",
+          name: "Admin One",
+          role: "admin",
+        },
+        {
+          id: expect.any(String),
+          email: "member@example.com",
+          name: "Member One",
+          role: "member",
+        },
+      ]),
+    })
 
     const disabled = await server.inject({
       method: "PUT",

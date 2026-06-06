@@ -4,6 +4,7 @@ import {
   ApiKeyDeleteRequestSchema,
   AuthLoginRequestSchema,
   AuthSignupRequestSchema,
+  BootstrapAdminRequestSchema,
 } from "@specraft/shared"
 import type { FastifyInstance } from "fastify"
 import { z } from "zod"
@@ -19,17 +20,14 @@ import {
   createMember,
   createMemberWithInvite,
   disableMember,
+  getSettingsView,
   hasMembers,
   listApiKeys,
+  listInvites,
+  listMembers,
   revokeApiKey,
   updateSettings,
 } from "./store.js"
-
-const BootstrapAdminSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-  name: z.string().min(1),
-})
 
 type AuthContext = {
   readonly database: SpecraftDatabase
@@ -38,7 +36,7 @@ type AuthContext = {
 
 export function registerAuthRoutes(server: FastifyInstance, context: AuthContext): void {
   server.post("/api/v1/auth/bootstrap-admin", async (request, reply) => {
-    const parsed = BootstrapAdminSchema.safeParse(request.body)
+    const parsed = BootstrapAdminRequestSchema.safeParse(request.body)
     if (!parsed.success) {
       return sendValidationFailed(reply)
     }
@@ -47,6 +45,14 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
     }
     const member = await createMember(context.database, { ...parsed.data, role: "admin" })
     setSessionCookie(reply, member.id)
+    return { member }
+  })
+
+  server.get("/api/v1/auth/session", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
     return { member }
   })
 
@@ -60,6 +66,14 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
       invite_url: `https://specraft.local/invite/${invite.token}`,
       expires_at: invite.expires_at,
     }
+  })
+
+  server.get("/api/v1/admin/invites", async (request, reply) => {
+    const member = await requireAdmin(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    return { invites: listInvites(context.database) }
   })
 
   server.post("/api/v1/auth/signup", async (request, reply) => {
@@ -140,6 +154,22 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
     }
     updateSettings(context.database, parsed.data, context.credentialKey)
     return { status: "ok" }
+  })
+
+  server.get("/api/v1/admin/settings", async (request, reply) => {
+    const member = await requireAdmin(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    return getSettingsView(context.database)
+  })
+
+  server.get("/api/v1/admin/members", async (request, reply) => {
+    const member = await requireAdmin(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    return { members: listMembers(context.database) }
   })
 
   server.put("/api/v1/admin/members/:id/disable", async (request, reply) => {

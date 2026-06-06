@@ -34,6 +34,8 @@ describe("Specraft client", () => {
       ["POST /api/v1/query", { answer: "A", citations: [], query_id: "qry-1" }],
       ["POST /api/v1/ingest", { status: "accepted", wiki_commit: "wiki-1" }],
       ["GET /api/v1/status", { server: "ok", branch_locks: [], wiki_head_by_branch: {} }],
+      ["GET /api/v1/auth/session", { member }],
+      ["POST /api/v1/auth/bootstrap-admin", { member }],
       ["POST /api/v1/auth/signup", { member }],
       ["POST /api/v1/auth/login", { member }],
       ["POST /api/v1/keys", { id: "key-1", api_key: "sk-spcrft-secret" }],
@@ -43,7 +45,30 @@ describe("Specraft client", () => {
         "POST /api/v1/admin/invites",
         { invite_url: "https://specraft.test/invite", expires_at: "t" },
       ],
+      [
+        "GET /api/v1/admin/invites",
+        {
+          invites: [
+            {
+              token: "invite-token",
+              expires_at: "2026-06-06T00:00:00Z",
+              used_at: null,
+              used_by: null,
+            },
+          ],
+        },
+      ],
+      [
+        "GET /api/v1/admin/settings",
+        {
+          git_remote_url: "ssh://git.example/repo.git",
+          model_ingest: "openrouter/auto",
+          model_query: "openrouter/auto",
+          credential_configured: true,
+        },
+      ],
       ["PUT /api/v1/admin/settings", { status: "ok" }],
+      ["GET /api/v1/admin/members", { members: [member] }],
       ["PUT /api/v1/admin/members/mem-1/disable", { status: "ok" }],
       ["GET /api/v1/conflicts", { conflicts: [] }],
       ["POST /api/v1/conflicts/conf-1/resolve", { status: "resolved" }],
@@ -93,6 +118,12 @@ describe("Specraft client", () => {
       open_questions: [],
     })
     await client.status()
+    await client.authSession()
+    await client.bootstrapAdmin({
+      email: "admin@example.com",
+      password: "password",
+      name: "Admin One",
+    })
     await client.authSignup({
       invite_token: "token",
       email: "member@example.com",
@@ -104,7 +135,10 @@ describe("Specraft client", () => {
     await client.listApiKeys()
     await client.deleteApiKey(keyDelete)
     await client.createAdminInvite()
+    await client.listAdminInvites()
+    await client.getAdminSettings()
     await client.updateAdminSettings({ git_remote_url: "ssh://git.example/repo.git" })
+    await client.listAdminMembers()
     await client.disableAdminMember(memberDisable)
     await client.listConflicts()
     await client.resolveConflict(conflictResolve)
@@ -113,7 +147,7 @@ describe("Specraft client", () => {
     await client.wikiTree(wikiTree)
     await client.wikiPage(wikiPage)
 
-    expect(calls).toHaveLength(18)
+    expect(calls).toHaveLength(23)
     expect(calls).toContainEqual({
       url: "https://specraft.test/api/v1/admin/members/mem-1/disable",
       method: "PUT",

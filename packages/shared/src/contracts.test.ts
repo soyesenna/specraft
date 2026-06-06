@@ -1,11 +1,16 @@
 import { describe, expect, it } from "vitest"
 
 import {
+  AdminInviteListResponseSchema,
   AdminMemberDisableResponseSchema,
+  AdminMemberListResponseSchema,
   AdminSettingsRequestSchema,
+  AdminSettingsResponseSchema,
+  AdminSettingsViewResponseSchema,
   ApiKeyDeleteResponseSchema,
   ApiKeyListResponseSchema,
   AuthSessionResponseSchema,
+  BootstrapAdminRequestSchema,
   BranchLockedErrorSchema,
   ConflictListResponseSchema,
   ContextRequestSchema,
@@ -78,6 +83,11 @@ describe("M1 v1 contracts", () => {
       wiki_head_by_branch: { main: "def456" },
     })
     const authSession = AuthSessionResponseSchema.parse({ member })
+    const bootstrapAdmin = BootstrapAdminRequestSchema.parse({
+      email: "admin@example.com",
+      password: "password",
+      name: "Admin One",
+    })
     const keyList = ApiKeyListResponseSchema.parse({
       keys: [
         {
@@ -92,6 +102,23 @@ describe("M1 v1 contracts", () => {
     const conflictList = ConflictListResponseSchema.parse({
       conflicts: [{ id: "conf-1", branch: "main", state: "open", detail: "Needs directive." }],
     })
+    const settingsView = AdminSettingsViewResponseSchema.parse({
+      git_remote_url: "ssh://git.example/repo.git",
+      model_ingest: "openrouter/auto",
+      model_query: "openrouter/auto",
+      credential_configured: true,
+    })
+    const inviteList = AdminInviteListResponseSchema.parse({
+      invites: [
+        {
+          token: "invite-token",
+          expires_at: "2026-06-06T00:00:00Z",
+          used_at: null,
+          used_by: null,
+        },
+      ],
+    })
+    const memberList = AdminMemberListResponseSchema.parse({ members: [member] })
     const ingestLogs = IngestLogListResponseSchema.parse({
       logs: [
         {
@@ -136,11 +163,16 @@ describe("M1 v1 contracts", () => {
     expect(ingestResponse.status).toBe("accepted")
     expect(statusResponse.server).toBe("ok")
     expect(authSession.member.email).toBe("member@example.com")
+    expect(bootstrapAdmin.email).toBe("admin@example.com")
     expect(keyList.keys[0]?.prefix).toBe("sk-spcrft-test")
     expect(ApiKeyDeleteResponseSchema.parse({ status: "ok" }).status).toBe("ok")
     expect(AdminSettingsRequestSchema.parse({ model_query: "openrouter/auto" }).model_query).toBe(
       "openrouter/auto",
     )
+    expect(AdminSettingsResponseSchema.parse({ status: "ok" }).status).toBe("ok")
+    expect(settingsView.credential_configured).toBe(true)
+    expect(inviteList.invites[0]?.used_at).toBeNull()
+    expect(memberList.members[0]?.role).toBe("admin")
     expect(AdminMemberDisableResponseSchema.parse({ status: "ok" }).status).toBe("ok")
     expect(conflictList.conflicts[0]?.state).toBe("open")
     expect(ingestLogs.logs[0]?.member.name).toBe("Member One")

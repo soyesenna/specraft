@@ -88,6 +88,12 @@ export const AuthLoginRequestSchema = z.object({
   password: NonEmptyStringSchema,
 })
 
+export const BootstrapAdminRequestSchema = z.object({
+  email: EmailSchema,
+  password: NonEmptyStringSchema,
+  name: NonEmptyStringSchema,
+})
+
 export const AuthSessionResponseSchema = z.object({
   member: MemberSchema,
 })
@@ -124,6 +130,17 @@ export const AdminInviteCreateResponseSchema = z.object({
   expires_at: NonEmptyStringSchema,
 })
 
+export const AdminInviteSchema = z.object({
+  token: NonEmptyStringSchema,
+  expires_at: NonEmptyStringSchema,
+  used_at: NonEmptyStringSchema.nullable(),
+  used_by: MemberSchema.nullable(),
+})
+
+export const AdminInviteListResponseSchema = z.object({
+  invites: z.array(AdminInviteSchema),
+})
+
 export const AdminSettingsRequestSchema = z.object({
   git_remote_url: NonEmptyStringSchema.optional(),
   git_credential: NonEmptyStringSchema.optional(),
@@ -133,11 +150,22 @@ export const AdminSettingsRequestSchema = z.object({
 
 export const AdminSettingsResponseSchema = OkResponseSchema
 
+export const AdminSettingsViewResponseSchema = z.object({
+  git_remote_url: NonEmptyStringSchema.nullable(),
+  model_ingest: NonEmptyStringSchema.nullable(),
+  model_query: NonEmptyStringSchema.nullable(),
+  credential_configured: z.boolean(),
+})
+
 export const AdminMemberDisableRequestSchema = z.object({
   id: NonEmptyStringSchema,
 })
 
 export const AdminMemberDisableResponseSchema = OkResponseSchema
+
+export const AdminMemberListResponseSchema = z.object({
+  members: z.array(MemberSchema),
+})
 
 export const ConflictSchema = z.object({
   id: NonEmptyStringSchema,
@@ -237,6 +265,7 @@ export type IngestResponse = z.infer<typeof IngestResponseSchema>
 export type StatusResponse = z.infer<typeof StatusResponseSchema>
 export type AuthSignupRequest = z.infer<typeof AuthSignupRequestSchema>
 export type AuthLoginRequest = z.infer<typeof AuthLoginRequestSchema>
+export type BootstrapAdminRequest = z.infer<typeof BootstrapAdminRequestSchema>
 export type AuthSessionResponse = z.infer<typeof AuthSessionResponseSchema>
 export type ApiKeyCreateRequest = z.infer<typeof ApiKeyCreateRequestSchema>
 export type ApiKeyCreatedResponse = z.infer<typeof ApiKeyCreatedResponseSchema>
@@ -245,10 +274,14 @@ export type ApiKeyListResponse = z.infer<typeof ApiKeyListResponseSchema>
 export type ApiKeyDeleteRequest = z.infer<typeof ApiKeyDeleteRequestSchema>
 export type ApiKeyDeleteResponse = z.infer<typeof ApiKeyDeleteResponseSchema>
 export type AdminInviteCreateResponse = z.infer<typeof AdminInviteCreateResponseSchema>
+export type AdminInvite = z.infer<typeof AdminInviteSchema>
+export type AdminInviteListResponse = z.infer<typeof AdminInviteListResponseSchema>
 export type AdminSettingsRequest = z.infer<typeof AdminSettingsRequestSchema>
 export type AdminSettingsResponse = z.infer<typeof AdminSettingsResponseSchema>
+export type AdminSettingsViewResponse = z.infer<typeof AdminSettingsViewResponseSchema>
 export type AdminMemberDisableRequest = z.infer<typeof AdminMemberDisableRequestSchema>
 export type AdminMemberDisableResponse = z.infer<typeof AdminMemberDisableResponseSchema>
+export type AdminMemberListResponse = z.infer<typeof AdminMemberListResponseSchema>
 export type Conflict = z.infer<typeof ConflictSchema>
 export type ConflictListResponse = z.infer<typeof ConflictListResponseSchema>
 export type ConflictResolveRequest = z.infer<typeof ConflictResolveRequestSchema>
