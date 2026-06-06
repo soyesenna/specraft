@@ -90,6 +90,46 @@ describe("spec REST API", () => {
     expect(ingest.statusCode).toBe(200)
     expect(ingest.json<{ status: string }>().status).toBe("accepted")
 
+    const treeAfterIngest = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/main/tree",
+      cookies: { specraft_session: cookie },
+    })
+    expect(treeAfterIngest.statusCode).toBe(200)
+    expect(
+      treeAfterIngest.json<{ entries: readonly { readonly path: string }[] }>().entries,
+    ).toContainEqual({
+      path: "changes/session-1.md",
+      type: "file",
+    })
+
+    const changePage = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/main/page?path=changes/session-1.md",
+      cookies: { specraft_session: cookie },
+    })
+    expect(changePage.statusCode).toBe(200)
+    expect(changePage.json<{ content: string }>().content).toContain("Added spec API.")
+
+    const targetedQuery = await server.inject({
+      method: "POST",
+      url: "/api/v1/query",
+      cookies: { specraft_session: cookie },
+      payload: {
+        branch: "main",
+        commit_hash: fixture.commit,
+        question: "What backend API progress was added?",
+      },
+    })
+    expect(targetedQuery.statusCode).toBe(200)
+    expect(targetedQuery.json<{ answer: string }>().answer).toContain("Added spec API.")
+    expect(
+      targetedQuery.json<{ citations: readonly { readonly path: string }[] }>().citations,
+    ).toContainEqual({
+      path: "changes/session-1.md",
+      section: "Spec Changes",
+    })
+
     const missingCommit = await server.inject({
       method: "POST",
       url: "/api/v1/ingest",
@@ -130,6 +170,47 @@ describe("spec REST API", () => {
     expect(logs.json<{ logs: readonly unknown[] }>().logs).toHaveLength(2)
     expect(wikiPage.statusCode).toBe(200)
     expect(wikiPage.json<{ content: string }>().content).toContain("Implemented backend APIs.")
+
+    await server.close()
+    database.close()
+  })
+
+  it("rejects ingest when commit validation cannot be configured", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const dataDir = mkdtempSync(join(tmpdir(), "specraft-api-no-remote-"))
+    const server = buildServer({ database, secret, dataDir })
+    const admin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: { email: "admin@example.com", password: "password", name: "Admin" },
+    })
+    const cookie = admin.cookies[0]?.value ?? ""
+
+    const ingest = await server.inject({
+      method: "POST",
+      url: "/api/v1/ingest",
+      cookies: { specraft_session: cookie },
+      payload: {
+        branch: "main",
+        commit_hash: "1".repeat(40),
+        agent: "codex",
+        session_id: "session-no-remote",
+        summary: "Should fail closed.",
+        spec_changes: [
+          {
+            type: "added",
+            area: "backend",
+            description: "Unverified commit.",
+            reasoning: "P2 must not fail open.",
+          },
+        ],
+        progress_updates: [],
+        open_questions: [],
+      },
+    })
+
+    expect(ingest.statusCode).toBe(422)
+    expect(ingest.json()).toEqual({ status: "rejected", reason: "commit_not_found" })
 
     await server.close()
     database.close()

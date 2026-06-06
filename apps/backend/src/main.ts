@@ -10,6 +10,7 @@ const config = loadServerConfig(process.env)
 const database = createDatabase({ path: `${config.dataDir}/specraft.db` })
 verifyWikiIntegrity(config.dataDir)
 const server = buildServer({
+  ...(config.codeRemoteUrl ? { codeRemoteUrl: config.codeRemoteUrl } : {}),
   credentialKey: config.credentialKey,
   database,
   dataDir: config.dataDir,

@@ -4,7 +4,6 @@ import {
   IngestLogListResponseSchema,
   IngestPayloadSchema,
   IngestResponseSchema,
-  type Member,
   QueryLogListResponseSchema,
   QueryRequestSchema,
   QueryResponseSchema,
@@ -14,11 +13,10 @@ import {
 } from "@specraft/shared"
 import type { FastifyInstance, FastifyReply } from "fastify"
 import { z } from "zod"
-
+import { getSetting } from "../auth/store.js"
 import {
   branchLock,
   commitExists,
-  commitWiki,
   createCodeMirror,
   createSkeletonWiki,
   listBranchLocks,
@@ -26,13 +24,14 @@ import {
   readWikiFile,
   type WikiRepository,
   wikiHead,
-  writeWikiFile,
 } from "../git/sync.js"
+import { resolveLockedWikiMerge } from "../git/wiki-merge.js"
 import { sendValidationFailed } from "../http/errors.js"
 import type { SpecraftDatabase } from "../storage/database.js"
 import { requireMember } from "./auth.js"
 import { listConflicts, resolveConflict } from "./conflicts.js"
 import { listIngestLogs, listQueryLogs, recordIngestLog, recordQueryLog } from "./logs.js"
+import { answerWikiQuestion, appendIngestToWiki } from "./wiki-agent.js"
 
 export type SpecRouteContext = {
   readonly database: SpecraftDatabase
@@ -59,31 +58,12 @@ function ensureUnlocked(context: SpecRouteContext, branch: string, reply: Fastif
 }
 
 function commitIsKnown(context: SpecRouteContext, commitHash: string): boolean {
-  if (!context.codeRemoteUrl || !context.dataDir) {
-    return true
+  const remoteUrl = context.codeRemoteUrl ?? getSetting(context.database, "git_remote_url")
+  if (!remoteUrl || !context.dataDir) {
+    return false
   }
-  const mirror = createCodeMirror({ dataDir: context.dataDir, remoteUrl: context.codeRemoteUrl })
+  const mirror = createCodeMirror({ dataDir: context.dataDir, remoteUrl })
   return commitExists(mirror, commitHash)
-}
-
-function appendIngest(wiki: WikiRepository, member: Member, summary: string): string {
-  const current = readWikiFile(wiki, "log.md")
-  const timestamp = new Date().toISOString().slice(0, 16).replace("T", " ")
-  writeWikiFile(
-    wiki,
-    "log.md",
-    `${current}\n## [${timestamp}] ingest | ${summary} | by ${member.name}\n`,
-  )
-  writeWikiFile(
-    wiki,
-    "index.md",
-    "# Index\n\n- [Overview](overview.md) - project summary\n- [Log](log.md) - ingest history\n",
-  )
-  return commitWiki(wiki, {
-    authorEmail: member.email,
-    authorName: member.name,
-    message: `ingest: ${summary}`,
-  })
 }
 
 export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteContext): void {
@@ -122,17 +102,16 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       return reply
     }
     const wiki = wikiFor(context, parsed.data.branch)
-    const overview = wiki ? readWikiFile(wiki, "overview.md") : ""
     const queryId = recordQueryLog(context.database, {
       branch: parsed.data.branch,
       memberId: member.id,
       question: parsed.data.question,
     })
-    return QueryResponseSchema.parse({
-      answer: `${overview}\n\n[overview.md#Overview]`,
-      citations: [{ path: "overview.md", section: "Overview" }],
-      query_id: queryId,
-    })
+    return QueryResponseSchema.parse(
+      wiki
+        ? answerWikiQuestion(wiki, parsed.data.question, queryId)
+        : { answer: "", citations: [], query_id: queryId },
+    )
   })
 
   server.post("/api/v1/ingest", async (request, reply) => {
@@ -158,7 +137,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       return reply.status(422).send({ status: "rejected", reason: "commit_not_found" })
     }
     const wiki = wikiFor(context, parsed.data.branch)
-    const wikiCommit = wiki ? appendIngest(wiki, member, parsed.data.summary) : undefined
+    const wikiCommit = wiki ? appendIngestToWiki(wiki, member, parsed.data) : undefined
     const logInput = {
       branch: parsed.data.branch,
       commitHash: parsed.data.commit_hash,
@@ -240,6 +219,17 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
     const body = ConflictResolveBodySchema.safeParse(request.body)
     if (!params.success || !body.success) {
       return sendValidationFailed(reply)
+    }
+    if (context.dataDir) {
+      const resolved = resolveLockedWikiMerge(context.database, {
+        dataDir: context.dataDir,
+        directive: body.data.directive,
+        id: params.data.id,
+        memberId: member.id,
+      })
+      if (resolved.status === "resolved") {
+        return resolved
+      }
     }
     return resolveConflict(context.database, {
       directive: body.data.directive,

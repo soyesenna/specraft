@@ -4,6 +4,7 @@ const defaultDataDir = "/data"
 const minSecretLength = 16
 
 export type ServerConfig = {
+  readonly codeRemoteUrl?: string
   readonly dataDir: string
   readonly sessionSecret: string
   readonly credentialKey: string
@@ -21,8 +22,10 @@ export function loadServerConfig(env: EnvReader): ServerConfig {
   if (!secret || secret.length < minSecretLength) {
     throw new Error("SPECRAFT_SECRET is required")
   }
+  const codeRemoteUrl = env["SPECRAFT_CODE_REMOTE_URL"] ?? env["GIT_REMOTE_URL"]
 
   return {
+    ...(codeRemoteUrl ? { codeRemoteUrl } : {}),
     dataDir: env["SPECRAFT_DATA_DIR"] ?? defaultDataDir,
     sessionSecret: deriveKey(secret, "session-cookie"),
     credentialKey: deriveKey(secret, "credential-encryption"),

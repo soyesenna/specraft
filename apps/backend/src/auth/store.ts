@@ -237,3 +237,10 @@ export function updateSettings(
     }
   }
 }
+
+export function getSetting(database: SpecraftDatabase, key: string): string | null {
+  const row = database
+    .prepare<[string], { readonly value: string }>("SELECT value FROM settings WHERE key = ?")
+    .get(key)
+  return row?.value ?? null
+}

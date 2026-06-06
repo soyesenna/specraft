@@ -32,19 +32,26 @@ export type LockBranchInput = {
 
 const serverEmail = "server@specraft.local"
 const serverName = "specraft-server"
+const gitTimeoutMs = 30_000
 
 function git(cwd: string, args: readonly string[]): string {
-  return execFileSync("git", [...args], { cwd, encoding: "utf8" }).trim()
+  return execFileSync("git", [...args], { cwd, encoding: "utf8", timeout: gitTimeoutMs }).trim()
 }
 
 function gitDir(gitDirectory: string, args: readonly string[]): string {
   return execFileSync("git", ["--git-dir", gitDirectory, ...args], {
     encoding: "utf8",
+    timeout: gitTimeoutMs,
   }).trim()
 }
 
 function gitStatus(gitDirectory: string, args: readonly string[]): number {
-  return spawnSync("git", ["--git-dir", gitDirectory, ...args], { encoding: "utf8" }).status ?? 1
+  return (
+    spawnSync("git", ["--git-dir", gitDirectory, ...args], {
+      encoding: "utf8",
+      timeout: gitTimeoutMs,
+    }).status ?? 1
+  )
 }
 
 function safeBranchPath(branch: string): string {
@@ -126,6 +133,14 @@ export function createCodeMirror(input: {
 
 export function commitExists(mirror: GitMirror, commitHash: string): boolean {
   return gitStatus(mirror.path, ["cat-file", "-e", `${commitHash}^{commit}`]) === 0
+}
+
+export function detectNonFastForward(
+  mirror: GitMirror,
+  previousTip: string,
+  nextTip: string,
+): boolean {
+  return gitStatus(mirror.path, ["merge-base", "--is-ancestor", previousTip, nextTip]) !== 0
 }
 
 export function sortCommitsTopologically(

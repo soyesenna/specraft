@@ -6,14 +6,24 @@ import { join } from "node:path"
 import { describe, expect, it } from "vitest"
 
 import { createDatabase } from "../storage/database.js"
+import { BranchQueue } from "./branch-queue.js"
 import {
   commitExists,
+  commitWiki,
   createCodeMirror,
   createSkeletonWiki,
+  detectNonFastForward,
   listWikiFiles,
   lockBranch,
+  readWikiFile,
   sortCommitsTopologically,
+  writeWikiFile,
 } from "./sync.js"
+import {
+  createWikiBranchFromParent,
+  mergeWikiBranch,
+  resolveLockedWikiMerge,
+} from "./wiki-merge.js"
 
 function git(cwd: string, args: readonly string[]): string {
   return execFileSync("git", [...args], { cwd, encoding: "utf8" }).trim()
@@ -54,6 +64,8 @@ describe("git sync and wiki core", () => {
       fixture.first,
       fixture.second,
     ])
+    expect(detectNonFastForward(mirror, fixture.second, fixture.first)).toBe(true)
+    expect(detectNonFastForward(mirror, fixture.first, fixture.second)).toBe(false)
   })
 
   it("initializes wiki skeleton and persists branch locks", () => {
@@ -72,6 +84,125 @@ describe("git sync and wiki core", () => {
         .prepare("SELECT conflict_id FROM branch_locks WHERE branch = ?")
         .get("feature/conflict"),
     ).toEqual({ conflict_id: "conf_1" })
+    database.close()
+  })
+
+  it("serializes branch jobs with a per-branch queue", async () => {
+    const queue = new BranchQueue()
+    const events: string[] = []
+
+    const first = queue.run("main", async () => {
+      events.push("first:start")
+      await queue.run("feature", async () => {
+        events.push("feature")
+      })
+      events.push("first:end")
+      return "first"
+    })
+    const second = queue.run("main", async () => {
+      events.push("second")
+      return "second"
+    })
+
+    await expect(Promise.all([first, second])).resolves.toEqual(["first", "second"])
+    expect(events).toEqual(["first:start", "feature", "first:end", "second"])
+  })
+
+  it("creates wiki branches from parent commits and merges them back", () => {
+    const dataDir = mkdtempSync(join(tmpdir(), "specraft-wiki-merge-"))
+    const database = createDatabase({ path: ":memory:" })
+    const main = createSkeletonWiki({ dataDir, branch: "main" })
+    writeWikiFile(main, "areas/backend.md", "# Backend\n\nbefore\n")
+    commitWiki(main, {
+      authorEmail: "test@example.com",
+      authorName: "Test User",
+      message: "main baseline",
+    })
+
+    const feature = createWikiBranchFromParent({
+      dataDir,
+      branch: "feature/rest",
+      parentBranch: "main",
+    })
+    writeWikiFile(feature, "areas/backend.md", "# Backend\n\nafter\n")
+    commitWiki(feature, {
+      authorEmail: "test@example.com",
+      authorName: "Test User",
+      message: "feature update",
+    })
+
+    expect(
+      mergeWikiBranch({ database, dataDir, targetBranch: "main", sourceBranch: "feature/rest" }),
+    ).toEqual({ status: "merged" })
+    expect(
+      readWikiFile(createSkeletonWiki({ dataDir, branch: "main" }), "areas/backend.md"),
+    ).toContain("after")
+    database.close()
+  })
+
+  it("locks conflicting wiki merges and keeps the lock until a successful retry", () => {
+    const dataDir = mkdtempSync(join(tmpdir(), "specraft-wiki-conflict-"))
+    const database = createDatabase({ path: ":memory:" })
+    database
+      .prepare<[string, string, string, string, string, string]>(
+        "INSERT INTO members (id, email, password_hash, name, role, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+      )
+      .run("mem_1", "test@example.com", "hash", "Test User", "admin", new Date().toISOString())
+    const main = createSkeletonWiki({ dataDir, branch: "main" })
+    writeWikiFile(main, "areas/backend.md", "# Backend\n\nbase\n")
+    commitWiki(main, {
+      authorEmail: "test@example.com",
+      authorName: "Test User",
+      message: "base",
+    })
+    const feature = createWikiBranchFromParent({
+      dataDir,
+      branch: "feature/conflict",
+      parentBranch: "main",
+    })
+    writeWikiFile(main, "areas/backend.md", "# Backend\n\ntarget\n")
+    commitWiki(main, {
+      authorEmail: "test@example.com",
+      authorName: "Test User",
+      message: "target",
+    })
+    writeWikiFile(feature, "areas/backend.md", "# Backend\n\nsource\n")
+    commitWiki(feature, {
+      authorEmail: "test@example.com",
+      authorName: "Test User",
+      message: "source",
+    })
+
+    const conflict = mergeWikiBranch({
+      database,
+      dataDir,
+      targetBranch: "main",
+      sourceBranch: "feature/conflict",
+    })
+    expect(conflict.status).toBe("locked")
+    if (conflict.status !== "locked") {
+      throw new Error("expected conflict lock")
+    }
+
+    expect(
+      resolveLockedWikiMerge(database, {
+        dataDir,
+        directive: "manual review required",
+        id: conflict.conflictId,
+        memberId: "mem_1",
+      }),
+    ).toEqual({ status: "still_locked" })
+    expect(
+      resolveLockedWikiMerge(database, {
+        dataDir,
+        directive: "accept source branch changes",
+        id: conflict.conflictId,
+        memberId: "mem_1",
+      }).status,
+    ).toBe("resolved")
+    expect(
+      readWikiFile(createSkeletonWiki({ dataDir, branch: "main" }), "areas/backend.md"),
+    ).toContain("source")
     database.close()
   })
 })
