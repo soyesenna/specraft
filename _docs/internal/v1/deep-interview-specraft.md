@@ -10,7 +10,7 @@
 - Threshold Source: user-arguments("목표 모호도 5% 미만"; `~/.claude/settings.json`·`./.claude/settings.json`에 `omc.deepInterview.ambiguityThreshold` 미설정 — default 0.2를 사용자 명시값으로 오버라이드)
 - Initial Context Summarized: no (raw-spec.md 적정 크기)
 - Status: PASSED (Round 20에서 spec 전체 승인 — §9 계약 정의 및 §9.6·D9 판단 포함)
-- Revision: 2026-06-06 — §9.10 위임 항목이던 서버 프레임워크를 **Fastify**로 확정(위임 해소, spec 결정 재론 아님) + stale 표기 2곳 사실 정정(OpenRouter 문서 존재, DESIGN.md 정본 등장)
+- Revision: 2026-06-06 — §9.10 위임 항목이던 서버 프레임워크를 **Fastify**로 확정(위임 해소, spec 결정 재론 아님) + stale 표기 2곳 사실 정정(OpenRouter 문서 존재, DESIGN.md 정본 등장) + 앱 네이밍을 `backend`/`frontend`로 정리
 
 ## Clarity Breakdown (최종 — Round 20 승인 후)
 
@@ -31,7 +31,7 @@
 | server-core | active | llm-wiki 저장소 + LLM 문서 엔진 (ingest 통합·갱신, query 탐색·응답) | S2~S4, P1·P2로 커버. 엔진=직접 API(R1), 저장=bare git(R5), provider=자체 추상화+OpenRouter(R9), wiki 골격(R12), bootstrap(R17) |
 | git-sync | active | 코드↔문서 브랜치 1:1 미러링, merge 전파, LLM conflict 해결+브랜치 락, commit 순서 보장 | S5·S6, P1·P2로 커버. 서버 clone/fetch(R2), lazy 감지+브랜치 락(R10), 호스팅 중립 credential(R13), force-push 정책(R18 D3) |
 | plugins | active | CC/Codex 플러그인 — 세션 시작 맥락 주입, 작업 중 query, 종료 시 ingest 게이트 | S2~S4로 커버. 훅 구조(R3), ingest=에이전트 작성+Stop 게이트(R7), 설치·설정(R14), init(R17), hard 게이트(R18)+strict_mode(R19) |
-| dashboard | active | 사람용 웹 UI — 문서 열람(읽기 전용)·자연어 쿼리·이력/로그·conflict 센터 | S6·S7로 커버. 기능 4종(R4), React 스택(R8). UI 세부는 구현 재량(§9.10) |
+| frontend | active | 사람용 웹 UI — 문서 열람(읽기 전용)·자연어 쿼리·이력/로그·conflict 센터 | S6·S7로 커버. 기능 4종(R4), React 스택(R8). UI 세부는 구현 재량(§9.10) |
 | auth | active | admin 부트스트랩, 초대 링크 가입, api-key 발급, 작성자 기록·로그 | S1로 커버. admin/member 2역할(R15), 보안 기본값(R18 D5) |
 
 Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확정)
@@ -44,15 +44,15 @@ Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확
 1. **주입**: 팀원이 Claude Code/Codex 세션을 시작하면 플러그인이 specraft 서버에서 프로젝트의 포괄적 최신 맥락(overview + index)을 자동 주입받는다 — 에이전트가 매번 repo를 탐색하는 비효율 제거.
 2. **질의**: 작업 중 에이전트가 구체 spec이 필요하면 MCP 도구 `specraft_query`로 서버에 질의하고, 서버 LLM이 wiki를 탐색해 상세·최신 정보를 응답한다.
 3. **환류**: 세션 종료 시 Stop 게이트가 commit→push→ingest를 강제하고, 에이전트가 작성한 구조화 요약을 서버 LLM이 wiki에 통합한다 — spec이 항상 코드와 함께 진화.
-4. **동기화**: 문서 브랜치는 코드 git 브랜치와 1:1 미러링되고, 코드 merge 시 문서도 merge된다(LLM이 conflict 1차 해결, 실패 시 브랜치 락 + 사람이 대시보드에서 자연어 지시로 해소).
+4. **동기화**: 문서 브랜치는 코드 git 브랜치와 1:1 미러링되고, 코드 merge 시 문서도 merge된다(LLM이 conflict 1차 해결, 실패 시 브랜치 락 + 사람이 프론트엔드에서 자연어 지시로 해소).
 
 **시스템의 성격 규정 결정: spec 무결성 > 가용성** — 서버 접근 불가 시 종료 게이트는 hard block(ingest 누락 절대 불허), 세션 시작 차단 여부는 `strict_mode` 설정(기본 hard).
 
 ## Constraints
 
 - **테넌시**: 1 서버 인스턴스 = 1 프로젝트(코드 repo 1개). Docker(compose)로 셀프호스트.
-- **스택**: TypeScript 통합 — 서버(Node + **Fastify**, 2026-06-06 §9.10 위임 해소로 확정), 대시보드(React), MCP 프록시·훅 스크립트까지 단일 언어.
-- **LLM**: 자체 provider 추상화 인터페이스 + v1 구현체는 OpenRouter만. `OPENROUTER_API_KEY`는 env, 모델 슬러그는 env 기본값 + admin 대시보드에서 변경(ingest용/query용 분리 설정 가능). *(참고: `docs/external/openrouter/` 13개 문서 제공 완료)*
+- **스택**: TypeScript 통합 — 백엔드(Node + **Fastify**, 2026-06-06 §9.10 위임 해소로 확정), 프론트엔드(React), MCP 프록시·훅 스크립트까지 단일 언어.
+- **LLM**: 자체 provider 추상화 인터페이스 + v1 구현체는 OpenRouter만. `OPENROUTER_API_KEY`는 env, 모델 슬러그는 env 기본값 + admin 프론트엔드에서 변경(ingest용/query용 분리 설정 가능). *(참고: `docs/external/openrouter/` 13개 문서 제공 완료)*
 - **wiki 저장**: 서버 관리 bare git repo가 source of truth. 운영 데이터(계정·키·로그·락·설정)는 SQLite.
 - **git 연동**: 서버가 코드 repo를 bare mirror로 clone/fetch. 호스팅 중립 — admin이 remote URL + credential(HTTPS PAT 또는 SSH deploy key) 등록. 표준 git 프로토콜만 사용.
 - **merge 감지**: 요청 시 lazy fetch (웹훅·폴링 인프라 없음). conflict 락은 **브랜치 단위** (타 브랜치 정상 동작).
@@ -60,7 +60,7 @@ Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확
 - **설정 위치**: 팀 공유(`.specraft.json` — 서버 URL 등)는 repo 커밋, api-key는 개인 영역(`SPECRAFT_API_KEY` env 또는 `~/.specraft/credentials`). `/specraft-setup` 대화형 온보딩 명령 제공.
 - **장애 정책**: Stop 게이트 = hard block (서버 불가 시 종료 차단, 서버 장애 = 작업 중단 감수). 세션 시작 주입 실패 = `.specraft.json`의 `strict_mode`로 선택 (기본 `true` = 세션 차단).
 - **권한**: admin/member 2역할. conflict 해결 지시는 모든 member 가능. api-key는 본인이 발급·재발급·폐기.
-- **보안 기본값**: argon2 비밀번호 해시, httpOnly 세션 쿠키(대시보드), api-key는 1회 노출 + 해시 저장 + `sk-spcrft-` prefix.
+- **보안 기본값**: argon2 비밀번호 해시, httpOnly 세션 쿠키(프론트엔드), api-key는 1회 노출 + 해시 저장 + `sk-spcrft-` prefix.
 - **force-push/rebase**: v1 미지원 — non-fast-forward 감지 시 해당 브랜치 락 + conflict 센터 표시, 사람 지시로 문서 브랜치 리셋.
 - **명칭**: raw-spec의 "ibstrom"은 specraft와 동일 대상 (specraft로 통일).
 
@@ -80,13 +80,13 @@ Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확
 
 **E2E 시나리오 (S1~S7):**
 
-- [ ] **S1 (auth)**: `docker compose up` → 최초 접속 시 admin 생성 화면 → admin이 초대 링크 생성 → 그 링크로 email/password/name 가입 성공 → 대시보드에서 api-key 발급(1회 노출)
+- [ ] **S1 (auth)**: `docker compose up` → 최초 접속 시 admin 생성 화면 → admin이 초대 링크 생성 → 그 링크로 email/password/name 가입 성공 → 프론트엔드에서 api-key 발급(1회 노출)
 - [ ] **S2 (plugins)**: CC·Codex **각각에서** — 새 세션 첫 턴에 "이 프로젝트가 뭔지 아니?" 질문 시 에이전트가 repo 탐색 없이 wiki(overview) 기반으로 답변. `/compact` 후 턴에서도 동일 (재주입 확인)
 - [ ] **S3 (query)**: 에이전트가 `specraft_query` 호출 → 응답에 wiki 페이지 인용 포함 → 서버 query 로그에 호출자(api-key 주인) 기록
-- [ ] **S4 (ingest 게이트)**: ingest 없이 세션 종료 시도 → Stop 게이트 차단(continuePrompt/지시 발동). ingest+commit+push 완료 후 종료 허용 → wiki repo 해당 브랜치에 새 commit + `log.md` 엔트리 + 대시보드 이력에 작성자 표시
+- [ ] **S4 (ingest 게이트)**: ingest 없이 세션 종료 시도 → Stop 게이트 차단(continuePrompt/지시 발동). ingest+commit+push 완료 후 종료 허용 → wiki repo 해당 브랜치에 새 commit + `log.md` 엔트리 + 프론트엔드 이력에 작성자 표시
 - [ ] **S5 (merge 전파)**: `feat/x`→`dev` 코드 merge 후 dev에서 첫 요청 → 문서 브랜치 `feat/x`가 `dev`로 merge됨 (wiki git log로 검증)
 - [ ] **S6 (conflict)**: 의도적 충돌 케이스 → LLM 해결 실패 → 해당 브랜치 query/ingest가 409 거부 + conflict 센터 표시 → 사람 지시 입력 → 재병합 성공 + 락 해제 (타 브랜치는 내내 정상)
-- [ ] **S7 (dashboard)**: 브랜치 선택 → 렌더링된 wiki 열람·링크 탐색, 자연어 쿼리 → 응답, ingest/query 로그 목록 조회
+- [ ] **S7 (frontend)**: 브랜치 선택 → 렌더링된 wiki 열람·링크 탐색, 자연어 쿼리 → 응답, ingest/query 로그 목록 조회
 
 **정책 검증 (P1~P2):**
 
@@ -97,15 +97,15 @@ Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확
 
 | # | Assumption/미정 | Challenge | Resolution |
 |---|----------------|-----------|------------|
-| R0 | 토폴로지 형태 | 5컴포넌트 열거 확인 | server-core/git-sync/plugins/dashboard/auth 확정, deferral 없음 |
+| R0 | 토폴로지 형태 | 5컴포넌트 열거 확인 | server-core/git-sync/plugins/frontend/auth 확정, deferral 없음 |
 | R1 | "LLM에게 맡긴다"의 실체 | 엔진 구동 방식 3택 | **직접 LLM API 호출** (자체 에이전트 루프 + 자체 wiki 도구) |
 | R2 | "서버가 git을 안다"의 실체 | 정보 소스 4택 | **서버가 repo clone/fetch** (bare mirror, git DAG 직접 판정) |
 | R3 | 플러그인 메커니즘 | 훅 vs MCP vs 파일 동기화 | **훅 주입(세션당 1회) + MCP query + Stop ingest + compact 후 재주입** |
-| R4 | 막힌 conflict는 누가 푸나 (spec상 사람은 수정 불가) | 대시보드 기능 범위 | 열람+쿼리+로그+**conflict 센터(사람이 자연어 지시→LLM 재병합)** 전부 채택 |
+| R4 | 막힌 conflict는 누가 푸나 (spec상 사람은 수정 불가) | 프론트엔드 기능 범위 | 열람+쿼리+로그+**conflict 센터(사람이 자연어 지시→LLM 재병합)** 전부 채택 |
 | R5 | 브랜치 시스템을 직접 만들어야 한다는 가정 | 🔥Contrarian: "그냥 git을 쓰면?" | **bare git repo가 wiki source of truth** — 브랜치/머지/conflict/이력 전부 git 위임 |
 | R6 | 배포·테넌시 | 1:1 vs 1:N vs SaaS | **1 인스턴스 = 1 프로젝트**, Docker 셀프호스트 |
 | R7 | ingest 페이로드 작성 주체 | 훅(셸)은 지능이 없음 | **에이전트가 구조화 요약 작성 + Stop 게이트가 강제** (transcript 전송 아님) |
-| R8 | 기술 스택 | 4택 | **TypeScript 통합** (서버 Node + 대시보드 React + 프록시/훅 TS) |
+| R8 | 기술 스택 | 4택 | **TypeScript 통합** (백엔드 Node + 프론트엔드 React + 프록시/훅 TS) |
 | R9 | provider 전략 (R1 동기 확인) | 추상화 수준 3택 | **자체 추상화 + v1은 OpenRouter만** (docs/openrouter/ 추가 예정) |
 | R10 | merge 감지 시점 + "모든 요청 거부"의 범위 | 문구 그대로(전역)인가? | **요청 시 lazy 감지 + 브랜치 단위 락** (raw-spec 22행은 브랜치 스코프로 해석 확정) |
 | R11 | v1 범위 | 🔪Simplifier: 줄일 수 있나? | **7개 시나리오 전부 v1 필수** (축소 거부) |
@@ -125,7 +125,7 @@ Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확
 | D1 | 서버 장애 정책 | **hard block** (사용자가 soft-fail 제안을 hard로 변경): 서버 접근 불가 시 Stop 게이트가 종료를 계속 차단 — ingest 누락 절대 불허, 서버 장애 = 작업 중단 감수. 비정상 종료(프로세스 강제 킬) 대비 미전송 ingest는 로컬 pending 마커로 보관, 다음 세션 시작 시 에이전트에게 작성·전송 지시 | **직접** (게이트 동작 그 자체) |
 | D2 | 새 브랜치 문서 분기 | 새 코드 브랜치에서 첫 요청 시 lazy 분기 — 요청 commit hash 기준 부모 브랜치에서 | 없음 (git-sync) |
 | D3 | force-push/rebase | v1 미지원 — fetch 시 non-fast-forward 감지하면 해당 브랜치 락 + conflict 센터 표시, 사람 지시로 문서 브랜치 리셋 | 없음 (git-sync — 단 락된 브랜치는 ingest 409로 게이트에 표면화) |
-| D4 | 모델·키 설정 | `OPENROUTER_API_KEY`는 env, 모델 슬러그는 env 기본값 + admin 대시보드에서 변경 (ingest용/query용 분리 설정 가능) | 없음 (server-core 설정) |
+| D4 | 모델·키 설정 | `OPENROUTER_API_KEY`는 env, 모델 슬러그는 env 기본값 + admin 프론트엔드에서 변경 (ingest용/query용 분리 설정 가능) | 없음 (server-core 설정) |
 | D5 | 비밀번호·키 보안 | argon2 해시 + httpOnly 세션 쿠키. api-key는 발급 시 1회 노출, 서버엔 해시 저장, `sk-spcrft-` prefix | 없음 (auth) |
 | D6 | merge된 문서 브랜치 | 삭제하지 않고 보존 (git이라 저렴, 이력 가치) | 없음 (git-sync) |
 | D7 | MCP 연결 방식 | 플러그인 동봉 로컬 stdio MCP 프록시 → 서버 REST API 호출 (CC·Codex 양쪽 동일 동작 보장) | **간접** (게이트의 "ingested" 판정이 프록시의 세션 상태 마킹에 의존 — §9.5) |
@@ -155,7 +155,7 @@ Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확
 └─────────────────────────────┘          │  ┌────────────┐  ┌────────────────┐  │
                                          │  │ wiki.git    │  │ code-mirror/   │  │
 ┌─────────────────────────────┐          │  │ (bare, SoT) │  │ (bare, RO)     │  │
-│  브라우저 (대시보드, React)      │─────────►│  └────────────┘  └────────────────┘  │
+│  브라우저 (프론트엔드, React)      │─────────►│  └────────────┘  └────────────────┘  │
 │  열람/쿼리/로그/conflict센터    │ session  │  ┌────────────┐  ┌────────────────┐  │
 └─────────────────────────────┘  cookie  │  │ SQLite      │  │ LLM Engine     │  │
                                          │  │ (운영데이터)   │  │ (OpenRouter)   │  │
@@ -178,7 +178,7 @@ wiki.git (브랜치별로 이 트리 존재)
 
 ### 9.3 REST API 계약 (v1)
 
-인증: 플러그인 = `Authorization: Bearer sk-spcrft-...` / 대시보드 = 세션 쿠키.
+인증: 플러그인 = `Authorization: Bearer sk-spcrft-...` / 프론트엔드 = 세션 쿠키.
 
 | Method | Path | Body → Response | 비고 |
 |--------|------|-----------------|------|
@@ -194,7 +194,7 @@ wiki.git (브랜치별로 이 트리 존재)
 | PUT | `/api/v1/admin/members/:id/disable` | | admin |
 | GET | `/api/v1/conflicts` · POST `/api/v1/conflicts/:id/resolve` | `{directive}` → 재병합 시도 결과 | 지시는 모든 member 가능 |
 | GET | `/api/v1/logs/ingests` · `/api/v1/logs/queries` | 페이지네이션 | |
-| GET | `/api/v1/wiki/:branch/tree` · `/api/v1/wiki/:branch/page?path=` | 대시보드 열람용 (read-only) | |
+| GET | `/api/v1/wiki/:branch/tree` · `/api/v1/wiki/:branch/page?path=` | 프론트엔드 열람용 (read-only) | |
 
 ### 9.4 IngestPayload 스키마
 
@@ -269,8 +269,8 @@ settings(key UNIQUE, value)   -- git_remote_url, git_credential(암호화), mode
 
 모노레포:
 specraft/
-├── apps/server/        # Fastify API + LLM 엔진 + git-sync (+ 대시보드 정적 서빙)
-├── apps/dashboard/     # React (Vite)
+├── apps/backend/       # Fastify API + LLM 엔진 + git-sync (+ 프론트엔드 정적 서빙)
+├── apps/frontend/      # React (Vite)
 ├── packages/shared/    # 공유 타입·API 클라이언트
 ├── packages/mcp-proxy/ # stdio MCP 프록시 (플러그인 동봉)
 ├── plugins/claude-code/ # .claude-plugin (hooks + commands + .mcp.json)
@@ -280,7 +280,7 @@ specraft/
 
 ### 9.10 구현 재량 위임 (모호함이 아닌 명시적 위임)
 
-- 대시보드 세부 UI/UX — 단 2026-06-06부터 루트 `DESIGN.md` + `specraft-ui.pen`이 UI 정본 (이 위임은 해당 정본 범위 내 세부 재량으로 축소. 기능 요건 §R4·S7 충족 전제)
+- 프론트엔드 세부 UI/UX — 단 2026-06-06부터 루트 `DESIGN.md` + `specraft-ui.pen`이 UI 정본 (이 위임은 해당 정본 범위 내 세부 재량으로 축소. 기능 요건 §R4·S7 충족 전제)
 - ~~서버 프레임워크 선택 (Fastify/Hono/Express 등 — TS이면 무방)~~ → **Fastify로 확정** (2026-06-06 사용자 결정 — 본 항목의 위임 범위 내 해소. Next.js 검토 후 기각: 상태 보유 장기 실행 프로세스(per-branch 큐·LLM 루프·worktree/SQLite)와 실행 모델 충돌)
 - query 응답 스트리밍 여부, 컨텍스트 캐싱, 큐 구현 방식
 - wiki 자율 영역의 디렉토리 명명 (서버 LLM 시스템 프롬프트가 진화 규칙 보유)
@@ -317,7 +317,7 @@ specraft/
 | CompactEvent | supporting | — | triggers re-injection |
 | SetupCommand | supporting | /specraft-setup | onboarding flow |
 | InitCommand | supporting | /specraft-init | bootstrap mass-ingest |
-| Dashboard | core domain | 열람/쿼리/로그/conflict센터 | human read-only surface |
+| Frontend | core domain | 열람/쿼리/로그/conflict센터 | human read-only surface |
 
 ## Ontology Convergence
 
@@ -351,7 +351,7 @@ specraft/
 <summary>Full Q&A (Round 0 + 19 rounds)</summary>
 
 ### Round 0 — 토폴로지
-**Q:** 5개 토폴로지(server-core/git-sync/plugins/dashboard/auth)가 맞나? 추가·삭제·병합·defer?
+**Q:** 5개 토폴로지(server-core/git-sync/plugins/frontend/auth)가 맞나? 추가·삭제·병합·defer?
 **A:** 5개 모두 맞아요.
 
 ### Round 1 — server-core/Goal
@@ -369,8 +369,8 @@ specraft/
 **A:** 훅 주입(세션당 1회) + MCP query + Stop ingest. **단 compact 후에도 훅으로 재주입 필수** (compact 시 기존 주입 맥락 소실).
 **Ambiguity:** 74.5%
 
-### Round 4 — dashboard/Goal
-**Q:** 대시보드 기능 범위는? 특히 막힌 conflict를 누가 푸나? (multiSelect)
+### Round 4 — frontend/Goal
+**Q:** 프론트엔드 기능 범위는? 특히 막힌 conflict를 누가 푸나? (multiSelect)
 **A:** 문서 열람 + 자연어 쿼리 + 이력/로그 뷰 + conflict 센터(사람 개입) 전부.
 **Ambiguity:** 67.5%
 

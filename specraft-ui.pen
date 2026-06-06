@@ -10831,7 +10831,7 @@
                       "id": "G5SgI",
                       "name": "Models Note",
                       "fill": "$ink-tertiary",
-                      "content": "OPENROUTER_API_KEY는 서버 env에서 관리됩니다 — 대시보드에는 노출되지 않습니다",
+                      "content": "OPENROUTER_API_KEY는 서버 env에서 관리됩니다 — 프론트엔드에는 노출되지 않습니다",
                       "fontFamily": "$font-text",
                       "fontSize": 11.5,
                       "fontWeight": "normal",

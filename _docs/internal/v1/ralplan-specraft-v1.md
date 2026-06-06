@@ -14,7 +14,7 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 1. **server-core** — llm-wiki 저장소(bare git, SoT) + LLM 문서 엔진(직접 API 호출 에이전트 루프, provider 추상화 + v1 OpenRouter). Ingest/Query/Merge/Init 4종 에이전트.
 2. **git-sync** — 코드 repo bare mirror(read-only fetch), 문서 브랜치 1:1 미러링, 요청 시 lazy merge 전파, conflict 시 브랜치 락, commit DAG 순서 보장(P1)·존재 검증(P2).
 3. **plugins** — CC/Codex 대칭: `SessionStart` 주입 + `PostCompact` 재주입 + `Stop` hard 게이트(clean·pushed·ingested 3검사, read-only 세션 면제), stdio MCP 프록시(`specraft_query`/`specraft_ingest`/`specraft_status`) → 서버 REST, `/specraft-setup`·`/specraft-init` 커맨드, `strict_mode` 설정.
-4. **dashboard** — React: 브랜치별 wiki 열람(읽기 전용)·자연어 쿼리·ingest/query 로그·conflict 센터(자연어 지시 → Merge Agent 재시도).
+4. **frontend** — React: 브랜치별 wiki 열람(읽기 전용)·자연어 쿼리·ingest/query 로그·conflict 센터(자연어 지시 → Merge Agent 재시도).
 5. **auth** — admin 부트스트랩, 초대 링크 가입, admin/member 2역할, api-key(1회 노출, 해시 저장, `sk-spcrft-` prefix), argon2 + httpOnly 세션 쿠키.
 
 확정 제약: TypeScript 통합 모노레포, 1 인스턴스 = 1 프로젝트, Docker compose 배포, SQLite 운영 DB, 호스팅 중립 git credential, **spec 무결성 > 가용성**(hard Stop 게이트).
@@ -153,7 +153,7 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 - [ ] React(Vite) + 세션 인증: 로그인/가입(초대 링크 랜딩) 페이지
 - [ ] wiki 뷰어 (브랜치 선택, 마크다운 렌더, 내부 링크 탐색), 자연어 쿼리 패널, ingest/query 로그 테이블, conflict 센터(목록·상세·지시 입력), admin 설정·멤버·초대 관리, api-key 관리
 - [ ] UI 세부는 구현 재량 (spec §9.10 위임)
-- 검증: **S7 수동 E2E** + **S6 전체 E2E** (대시보드 경유 conflict 해소)
+- 검증: **S7 수동 E2E** + **S6 전체 E2E** (프론트엔드 경유 conflict 해소)
 
 ### M10. 통합 검증 + 패키징
 - [ ] S1~S7 + P1·P2 전체 체크리스트 실행 (CC·Codex 각각)

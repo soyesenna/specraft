@@ -2,8 +2,8 @@ FROM node:24-alpine AS deps
 WORKDIR /app
 RUN corepack enable
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
-COPY apps/server/package.json apps/server/package.json
-COPY apps/dashboard/package.json apps/dashboard/package.json
+COPY apps/backend/package.json apps/backend/package.json
+COPY apps/frontend/package.json apps/frontend/package.json
 COPY packages/shared/package.json packages/shared/package.json
 RUN pnpm install --frozen-lockfile=false
 
@@ -18,7 +18,7 @@ RUN corepack enable
 COPY --from=build /app/package.json /app/pnpm-workspace.yaml ./
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/packages/shared ./packages/shared
-COPY --from=build /app/apps/server ./apps/server
-COPY --from=build /app/apps/dashboard/dist ./apps/dashboard/dist
+COPY --from=build /app/apps/backend ./apps/backend
+COPY --from=build /app/apps/frontend/dist ./apps/frontend/dist
 EXPOSE 4311
-CMD ["node", "apps/server/dist/main.js"]
+CMD ["node", "apps/backend/dist/main.js"]

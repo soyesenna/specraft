@@ -33,7 +33,16 @@ importers:
         specifier: 4.1.8
         version: 4.1.8(@types/node@25.9.2)(jsdom@29.1.1)(vite@8.0.16(@types/node@25.9.2))
 
-  apps/dashboard:
+  apps/backend:
+    dependencies:
+      '@specraft/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      fastify:
+        specifier: 5.8.5
+        version: 5.8.5
+
+  apps/frontend:
     dependencies:
       '@specraft/shared':
         specifier: workspace:*
@@ -63,15 +72,6 @@ importers:
       jsdom:
         specifier: 29.1.1
         version: 29.1.1
-
-  apps/server:
-    dependencies:
-      '@specraft/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
-      fastify:
-        specifier: 5.8.5
-        version: 5.8.5
 
   packages/shared:
     dependencies:
