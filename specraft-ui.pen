@@ -12499,6 +12499,2743 @@
               "fontSize": 11,
               "fontWeight": "normal",
               "letterSpacing": -0.1
+            },
+            {
+              "type": "frame",
+              "id": "OEsh1",
+              "name": "SB Status Spacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "Z3vAS",
+              "name": "SB Collapse Toggle",
+              "width": 26,
+              "height": 26,
+              "cornerRadius": 6,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "bCIm3",
+                  "name": "SB Collapse Icon",
+                  "width": 15,
+                  "height": 15,
+                  "icon": "panel-left-close",
+                  "library": "lucide",
+                  "fill": "$ink-tertiary"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "i3RAsT",
+      "x": 276,
+      "y": -680,
+      "name": "component/Sidebar Rail",
+      "reusable": true,
+      "width": 64,
+      "height": 520,
+      "stroke": "$hairline",
+      "strokeWidth": {
+        "right": 1
+      },
+      "layout": "vertical",
+      "gap": 4,
+      "padding": [
+        14,
+        0,
+        10,
+        0
+      ],
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "M58e99",
+          "name": "SBR Specs",
+          "width": 38,
+          "height": 38,
+          "cornerRadius": 9,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "siXpc",
+              "name": "SBR Specs Icon",
+              "width": 16,
+              "height": 16,
+              "icon": "waypoints",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bNWwU",
+          "name": "SBR Query",
+          "width": 38,
+          "height": 38,
+          "cornerRadius": 9,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "q8NUk3",
+              "name": "SBR Query Icon",
+              "width": 16,
+              "height": 16,
+              "icon": "message-circle",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "v30zyy",
+          "name": "SBR Activity",
+          "width": 38,
+          "height": 38,
+          "cornerRadius": 9,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "FIGv3",
+              "name": "SBR Activity Icon",
+              "width": 16,
+              "height": 16,
+              "icon": "activity",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "U12trt",
+          "name": "SBR Conflicts",
+          "width": 38,
+          "height": 38,
+          "cornerRadius": 9,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "FvlxZ",
+              "name": "SBR Conflicts Icon",
+              "width": 16,
+              "height": 16,
+              "icon": "git-merge",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "ellipse",
+              "id": "klnTK",
+              "layoutPosition": "absolute",
+              "x": 25,
+              "y": 5,
+              "name": "SBR Con Dot",
+              "fill": "$danger",
+              "width": 7,
+              "height": 7
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "sSOof",
+          "name": "SBR Flex",
+          "width": 38,
+          "height": "fill_container"
+        },
+        {
+          "type": "ellipse",
+          "id": "QcY0H",
+          "name": "SBR Status Dot",
+          "fill": "$success",
+          "width": 6,
+          "height": 6
+        },
+        {
+          "type": "frame",
+          "id": "Im1aF",
+          "name": "SBR Expand Toggle",
+          "width": 38,
+          "height": 38,
+          "cornerRadius": 9,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "jeDPW",
+              "name": "SBR Expand Icon",
+              "width": 15,
+              "height": 15,
+              "icon": "panel-left-open",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "s8qQim",
+      "x": 7600,
+      "y": 340,
+      "name": "04b · Specs — List (Sidebar collapsed)",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "vLvG6",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "DCzED",
+          "name": "Shell",
+          "width": "fill_container",
+          "height": "fill_container",
+          "children": [
+            {
+              "id": "fRBjk",
+              "type": "ref",
+              "ref": "i3RAsT",
+              "name": "Sidebar Rail",
+              "height": "fill_container",
+              "descendants": {
+                "M58e99": {
+                  "fill": "$surface"
+                },
+                "siXpc": {
+                  "fill": "$ink"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "vEbrf",
+              "name": "Main",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Q4sP2P",
+                  "name": "Toolbar",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "padding": [
+                    18,
+                    28
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "XuYzJ",
+                      "name": "Page Title",
+                      "fill": "$ink",
+                      "content": "Specs",
+                      "fontFamily": "$font-display",
+                      "fontSize": 28,
+                      "fontWeight": "600",
+                      "letterSpacing": -0.4
+                    },
+                    {
+                      "id": "ZNGOc",
+                      "type": "ref",
+                      "ref": "kKsa7",
+                      "name": "Branch Picker"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "A60Y0K",
+                      "name": "Sync Status",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "ellipse",
+                          "id": "cnb7a",
+                          "name": "Sync Dot",
+                          "fill": "$success",
+                          "width": 6,
+                          "height": 6
+                        },
+                        {
+                          "type": "text",
+                          "id": "Scs0n",
+                          "name": "Sync Label",
+                          "fill": "$ink-tertiary",
+                          "content": "Synced 2 min ago",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zEsQ1",
+                      "name": "Toolbar Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "YEG2w",
+                      "name": "Search Field",
+                      "width": 240,
+                      "height": 32,
+                      "fill": "$input-bg",
+                      "cornerRadius": "$radius-s",
+                      "gap": 7,
+                      "padding": [
+                        0,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "zjeLp",
+                          "name": "Search Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "search",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
+                        },
+                        {
+                          "type": "text",
+                          "id": "MHmSq",
+                          "name": "Search Placeholder",
+                          "fill": "$ink-tertiary",
+                          "content": "Search specs",
+                          "fontFamily": "$font-text",
+                          "fontSize": 13,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PLc1H",
+                      "name": "View Switcher",
+                      "fill": "$input-bg",
+                      "cornerRadius": 9,
+                      "gap": 2,
+                      "padding": 2,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "rUago",
+                          "name": "Segment Graph",
+                          "cornerRadius": 7,
+                          "gap": 6,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "a7tOJP",
+                              "name": "Graph Icon",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "waypoints",
+                              "library": "lucide",
+                              "fill": "$ink-tertiary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "N1CAt",
+                              "name": "Graph Label",
+                              "fill": "$ink-tertiary",
+                              "content": "Graph",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ynwm0",
+                          "name": "Segment List",
+                          "fill": "$surface",
+                          "cornerRadius": 7,
+                          "effect": {
+                            "type": "shadow",
+                            "shadowType": "outer",
+                            "color": "#0000001F",
+                            "offset": {
+                              "x": 0,
+                              "y": 1
+                            },
+                            "blur": 3
+                          },
+                          "gap": 6,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "r9aRpf",
+                              "name": "List Icon",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "list",
+                              "library": "lucide",
+                              "fill": "$ink"
+                            },
+                            {
+                              "type": "text",
+                              "id": "qNHen",
+                              "name": "List Label",
+                              "fill": "$ink",
+                              "content": "List",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "s9MRy9",
+                  "name": "List Body",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "padding": [
+                    4,
+                    28,
+                    28,
+                    28
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "zj39U",
+                      "name": "Docs Table",
+                      "clip": true,
+                      "width": "fill_container",
+                      "fill": "$surface",
+                      "cornerRadius": "$radius-m",
+                      "layout": "vertical",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "zporB",
+                          "name": "Table Header",
+                          "width": "fill_container",
+                          "height": 38,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "o9ZoU",
+                              "name": "H Icon",
+                              "width": 24,
+                              "height": 1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "R8UcD",
+                              "name": "H Name",
+                              "width": 380,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "vhkjl",
+                                  "name": "H Name Label",
+                                  "fill": "$ink-tertiary",
+                                  "content": "NAME",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 10.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": 0.6
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "NuTI4",
+                              "name": "H Summary",
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "YfDeb",
+                                  "name": "H Summary Label",
+                                  "fill": "$ink-tertiary",
+                                  "content": "SUMMARY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 10.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": 0.6
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "oZVUC",
+                              "name": "H Links",
+                              "width": 56,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "mTl2S",
+                                  "name": "H Links Label",
+                                  "fill": "$ink-tertiary",
+                                  "content": "LINKS",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 10.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": 0.6
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "vlHmr",
+                              "name": "H Updated",
+                              "width": 110,
+                              "gap": 4,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "DNKEC",
+                                  "name": "H Updated Label",
+                                  "fill": "$ink-tertiary",
+                                  "content": "UPDATED",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 10.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": 0.6
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "JwNSD",
+                                  "name": "Sort Chevron",
+                                  "width": 10,
+                                  "height": 10,
+                                  "icon": "chevron-down",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "S5gLBl",
+                              "name": "H Author",
+                              "width": 28,
+                              "height": 1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "puavT",
+                              "name": "H Chev",
+                              "width": 14,
+                              "height": 1
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "j5dEf4",
+                          "name": "Row stop-gate.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "fill": "#F5F5F7",
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "g4UpFQ",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "y42jp",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "YZZS2",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "MFl6o",
+                                  "name": "Prefix",
+                                  "fill": "$ink-tertiary",
+                                  "content": "specs/",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "WafD6",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "stop-gate.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "BDoE4",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "p0Nor",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "Stop 게이트 판정 규칙",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "VbMBY",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "KHhvI",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "CQDCU",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "4",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "LQ7Dk",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "TZiYa",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "2시간 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "S6BJU",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "V68al",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "rTxTT",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "MbOFe",
+                          "name": "Row log.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "eu4bK",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$dark-card",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "hW9GR",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$white"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Su8Ap",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "I3BC7",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "log.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "haRhM",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "v8RBZ8",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "append-only 활동 이력",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "lGYSq",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "Z1dJ5F",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Y96b3",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "2",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "jV5Oo",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "uFaJX",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "2시간 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "HLloh",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "D5hqM",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "evT8B",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "fDUDp",
+                          "name": "Row index.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "NvjMi",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$dark-card",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "oyi4U",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$white"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "el6hr",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "YYL2Z",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "index.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "iPjXj",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "do82L",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "전 페이지 카탈로그 · 매 ingest 갱신",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "A6kc4V",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "tLnyU",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "zF2No",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "12",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "JDNpd",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "OxxZI",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "2시간 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "DeH8Q",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "x1leKP",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "N8p52",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "vOIc3",
+                          "name": "Row ingest-pipeline.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "nO1Z6",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "HxB9b",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "QXmuF",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Eeg5k",
+                                  "name": "Prefix",
+                                  "fill": "$ink-tertiary",
+                                  "content": "specs/",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "eH6zl",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "ingest-pipeline.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "apAJ8",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "gHRKr",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "ingest 처리 파이프라인",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Xt5BI",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "rNRGx",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "hMwlh",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "4",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "oDxFI",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "igCbd",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "5시간 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Qvi8f",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "JAbQO",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "MJ",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "AKvI4",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "P1XeNF",
+                          "name": "Row overview.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Fmpp8",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$dark-card",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "EH0a7",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$white"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "j870t",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "lQ51E",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "overview.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "yShjp",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "MgeHr",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "프로젝트 개요 · 세션 주입 본체",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "LQ0Z3",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "w6aEY",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "tFdjZ",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "6",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "B6A92",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "cHSyW",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "어제",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "JAGX2",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Kw8AV",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "MJ",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "Kwj6C",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "vwL4U",
+                          "name": "Row mcp-proxy.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "OiUv8",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "Kap6k",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "t1tnv9",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "zbFuS",
+                                  "name": "Prefix",
+                                  "fill": "$ink-tertiary",
+                                  "content": "specs/",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "yr1w3",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "mcp-proxy.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ODSJl",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "kRvDY",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "stdio 프록시 · 도구 3종",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "L6yaX",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "eaxJG",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "wHRb7",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "3",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "r6bhkW",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "ab90j",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "어제",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "TfTU6",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "erKJG",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "PesCP",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "LkweM",
+                          "name": "Row llm-engine.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "E0ebM",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "j1Zdg",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "HJXKe",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "nw6uk",
+                                  "name": "Prefix",
+                                  "fill": "$ink-tertiary",
+                                  "content": "architecture/",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "v8y9sX",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "llm-engine.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "kNBKB",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "EkpJX",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "4종 에이전트 루프",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "J17Te",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "C754n",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "kLLmP",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "3",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "K4uUd5",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Q2HBY",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "2일 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ZfXio",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "VBvps",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "DK",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "BSBGT",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "SEqvI",
+                          "name": "Row query-engine.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "DNBYB",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "tfA3o",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "j4Qu2",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "MRRkZ",
+                                  "name": "Prefix",
+                                  "fill": "$ink-tertiary",
+                                  "content": "specs/",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Q5gdr",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "query-engine.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "WgWvm",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "IBsqi",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "인용 포함 질의 응답",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "g4Pg2I",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "L4WQBR",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "aU3aG",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "2",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "CS8BW",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "nhCcV",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "2일 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "H8fPli",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "En76c",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "DK",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "RQeed",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "tvXFI",
+                          "name": "Row git-sync.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "KsdIW",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "VZrEy",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "HzPuL",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "ADJPm",
+                                  "name": "Prefix",
+                                  "fill": "$ink-tertiary",
+                                  "content": "architecture/",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "fttVK",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "git-sync.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "RBIgV",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "BpRPb",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "브랜치 미러링 · lazy 전파",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "t3MnJD",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "Pp0r6",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "efhaQ",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "2",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "qfaxT",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "y6OoH",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "3일 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "P3dcV",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "q0CR9D",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "MJ",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "OGrEK",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "VWjgI",
+                          "name": "Row adr-002-hard-gate.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "L02Lx0",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "inDNw",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "c9VAA",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "C8GQHN",
+                                  "name": "Prefix",
+                                  "fill": "$ink-tertiary",
+                                  "content": "decisions/",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "On7yG",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "adr-002-hard-gate.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "r8H56",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "pZVEC",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "spec 무결성 > 가용성",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "IU2dj",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "dh8Fi",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "o2ja3N",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "2",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "I95bwK",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "mCWGQ",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "4일 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Peet0",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "w0SqE",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "A4RgQp",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "GMR5l",
+                          "name": "Row adr-001-bare-git.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "cX2Rs",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "Sh14N",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "K3zBF",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "IaQoj",
+                                  "name": "Prefix",
+                                  "fill": "$ink-tertiary",
+                                  "content": "decisions/",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "qpoqS",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "adr-001-bare-git.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Gwmju",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "W6vdYF",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "wiki SoT = bare git repo",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "RWNcv",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "qCiuK",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "pygCk",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "2",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "a7NXlg",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "jsZrM",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "5일 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "cZXPZ",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "QKezl",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "DK",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "WEWxg",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "JIVTf",
+                          "name": "Row progress.md",
+                          "width": "fill_container",
+                          "height": 48,
+                          "gap": 14,
+                          "padding": [
+                            0,
+                            20
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "HeqAz",
+                              "name": "Doc Chip",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$dark-card",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "x9rrb",
+                                  "name": "Doc Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$white"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "RlYyV",
+                              "name": "Cell Name",
+                              "clip": true,
+                              "width": 380,
+                              "gap": 2,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Y9ZkNI",
+                                  "name": "Doc Name",
+                                  "fill": "$ink",
+                                  "content": "progress.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "OZq9Y",
+                              "name": "Cell Summary",
+                              "clip": true,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "TsRQd",
+                                  "name": "Summary",
+                                  "fill": "$ink-tertiary",
+                                  "content": "마일스톤 진행 현황",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "AY2fl",
+                              "name": "Cell Links",
+                              "width": 56,
+                              "gap": 5,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "l0u60",
+                                  "name": "Links Icon",
+                                  "width": 12,
+                                  "height": 12,
+                                  "icon": "waypoints",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "iRcgp",
+                                  "name": "Links Count",
+                                  "fill": "$ink-secondary",
+                                  "content": "1",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "W3F7E",
+                              "name": "Cell Updated",
+                              "width": 110,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "pjmtN",
+                                  "name": "Updated",
+                                  "fill": "$ink-tertiary",
+                                  "content": "5일 전",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "b0KsMq",
+                              "name": "Cell Author",
+                              "width": 28,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "x8BZB",
+                                  "name": "Author Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "MJ",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "u4vPR",
+                              "name": "Row Chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-right",
+                              "library": "lucide",
+                              "fill": "$separator"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "guGX2",
+          "layoutPosition": "absolute",
+          "x": 72,
+          "y": 111,
+          "name": "Hover Tooltip",
+          "fill": "$dark-card",
+          "cornerRadius": 6,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#00000029",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 8
+          },
+          "padding": [
+            5,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "uAAiR",
+              "name": "Tooltip Label",
+              "fill": "$white",
+              "content": "Query",
+              "fontFamily": "$font-text",
+              "fontSize": 11.5,
+              "fontWeight": "500",
+              "letterSpacing": -0.1
             }
           ]
         }
