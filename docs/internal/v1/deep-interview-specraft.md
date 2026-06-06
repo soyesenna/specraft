@@ -10,6 +10,7 @@
 - Threshold Source: user-arguments("목표 모호도 5% 미만"; `~/.claude/settings.json`·`./.claude/settings.json`에 `omc.deepInterview.ambiguityThreshold` 미설정 — default 0.2를 사용자 명시값으로 오버라이드)
 - Initial Context Summarized: no (raw-spec.md 적정 크기)
 - Status: PASSED (Round 20에서 spec 전체 승인 — §9 계약 정의 및 §9.6·D9 판단 포함)
+- Revision: 2026-06-06 — §9.10 위임 항목이던 서버 프레임워크를 **Fastify**로 확정(위임 해소, spec 결정 재론 아님) + stale 표기 2곳 사실 정정(OpenRouter 문서 존재, DESIGN.md 정본 등장)
 
 ## Clarity Breakdown (최종 — Round 20 승인 후)
 
@@ -50,8 +51,8 @@ Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확
 ## Constraints
 
 - **테넌시**: 1 서버 인스턴스 = 1 프로젝트(코드 repo 1개). Docker(compose)로 셀프호스트.
-- **스택**: TypeScript 통합 — 서버(Node), 대시보드(React), MCP 프록시·훅 스크립트까지 단일 언어.
-- **LLM**: 자체 provider 추상화 인터페이스 + v1 구현체는 OpenRouter만. `OPENROUTER_API_KEY`는 env, 모델 슬러그는 env 기본값 + admin 대시보드에서 변경(ingest용/query용 분리 설정 가능). *(의존: 사용자가 `docs/openrouter/` 문서 추가 예정)*
+- **스택**: TypeScript 통합 — 서버(Node + **Fastify**, 2026-06-06 §9.10 위임 해소로 확정), 대시보드(React), MCP 프록시·훅 스크립트까지 단일 언어.
+- **LLM**: 자체 provider 추상화 인터페이스 + v1 구현체는 OpenRouter만. `OPENROUTER_API_KEY`는 env, 모델 슬러그는 env 기본값 + admin 대시보드에서 변경(ingest용/query용 분리 설정 가능). *(참고: `docs/external/openrouter/` 13개 문서 제공 완료)*
 - **wiki 저장**: 서버 관리 bare git repo가 source of truth. 운영 데이터(계정·키·로그·락·설정)는 SQLite.
 - **git 연동**: 서버가 코드 repo를 bare mirror로 clone/fetch. 호스팅 중립 — admin이 remote URL + credential(HTTPS PAT 또는 SSH deploy key) 등록. 표준 git 프로토콜만 사용.
 - **merge 감지**: 요청 시 lazy fetch (웹훅·폴링 인프라 없음). conflict 락은 **브랜치 단위** (타 브랜치 정상 동작).
@@ -268,7 +269,7 @@ settings(key UNIQUE, value)   -- git_remote_url, git_credential(암호화), mode
 
 모노레포:
 specraft/
-├── apps/server/        # Node API + LLM 엔진 + git-sync (+ 대시보드 정적 서빙)
+├── apps/server/        # Fastify API + LLM 엔진 + git-sync (+ 대시보드 정적 서빙)
 ├── apps/dashboard/     # React (Vite)
 ├── packages/shared/    # 공유 타입·API 클라이언트
 ├── packages/mcp-proxy/ # stdio MCP 프록시 (플러그인 동봉)
@@ -279,8 +280,8 @@ specraft/
 
 ### 9.10 구현 재량 위임 (모호함이 아닌 명시적 위임)
 
-- 대시보드 세부 UI/UX (기능 요건 §R4·S7만 충족하면 레이아웃·디자인 자유. DESIGN.md 부재 확인됨)
-- 서버 프레임워크 선택 (Fastify/Hono/Express 등 — TS이면 무방)
+- 대시보드 세부 UI/UX — 단 2026-06-06부터 루트 `DESIGN.md` + `specraft-ui.pen`이 UI 정본 (이 위임은 해당 정본 범위 내 세부 재량으로 축소. 기능 요건 §R4·S7 충족 전제)
+- ~~서버 프레임워크 선택 (Fastify/Hono/Express 등 — TS이면 무방)~~ → **Fastify로 확정** (2026-06-06 사용자 결정 — 본 항목의 위임 범위 내 해소. Next.js 검토 후 기각: 상태 보유 장기 실행 프로세스(per-branch 큐·LLM 루프·worktree/SQLite)와 실행 모델 충돌)
 - query 응답 스트리밍 여부, 컨텍스트 캐싱, 큐 구현 방식
 - wiki 자율 영역의 디렉토리 명명 (서버 LLM 시스템 프롬프트가 진화 규칙 보유)
 - 에러 메시지 문구, 로그 포맷 상세

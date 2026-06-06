@@ -52,10 +52,11 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 
 > Option A·B 기각 근거: A는 bare git/LLM 엔진 같은 공유 인프라의 반복 재방문 비용이 그린필드에서 과대, B는 hard 게이트(Stop hook)와 서버의 상호작용이라는 최대 통합 리스크를 마지막까지 미룸. C가 두 결함을 모두 보완.
 
-## Architecture Decisions (spec 계승 — 재결정 아님)
+## Architecture Decisions (spec 계승 + 위임 해소)
 
 | 결정 | 근거 (spec) |
 |------|-------------|
+| **서버 프레임워크 = Fastify** | 사용자 확정 2026-06-06 — spec §9.10 위임 해소. Hono 대비 생태계·플러그인(인증/쿠키/정적 서빙) 성숙도와 장기 실행 프로세스 검증 이력. Next.js 기각: per-branch 큐 워커·LLM 루프·worktree/SQLite 로컬 상태와 실행 모델 충돌 |
 | wiki SoT = bare git repo | R5 (Contrarian 통과 — 브랜치/머지/이력 공짜) |
 | 운영 데이터 = SQLite (better-sqlite3) | §9.8 — 단일 프로젝트 셀프호스트에 과한 DB 불필요 |
 | LLM = 자체 루프 + ProviderAdapter, v1 OpenRouter | R1·R9 |
@@ -68,9 +69,9 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 
 ### M0. 모노레포 스캐폴딩
 - [ ] pnpm workspace + TypeScript strict + ESLint/Prettier + vitest 셋업
-- [ ] 구조: `apps/server`, `apps/dashboard`, `packages/shared`, `packages/mcp-proxy`, `plugins/claude-code`, `plugins/codex` (spec §9.9)
+- [ ] 구조: `apps/server`(**Fastify** — 2026-06-06 확정), `apps/dashboard`(React/Vite), `packages/shared`, `packages/mcp-proxy`, `plugins/claude-code`, `plugins/codex` (spec §9.9)
 - [ ] `docker-compose.yml` 골격 (server + `/data` 볼륨), `Dockerfile` (멀티스테이지: dashboard 빌드 → server가 정적 서빙)
-- 검증: `pnpm -r build` 통과, `docker compose up`으로 헬스 엔드포인트 응답
+- 검증: `pnpm -r build` 통과, `docker compose up`으로 Fastify 헬스 엔드포인트 응답
 
 ### M0.5. Walking-Skeleton Spike (Architect 합의 반영 — 최대 통합 리스크 선검증)
 - [ ] **CC·Codex 훅 공식 스키마 재검증** (M7/M8에서 이동): SessionStart/PostCompact/UserPromptSubmit/Stop의 현행 I/O 형태를 공식 문서·실세션으로 확정 — 번들 참고문서(docs/external/claude-code-codex-docs/)의 "CC 5종 훅" 정보는 구버전임이 확인됨
@@ -220,6 +221,8 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 
 ## Changelog
 
+- 2026-06-06 사용자 확정 (consensus 후 위임 해소 — 합의 결정 변경 아님):
+  - **서버 프레임워크 = Fastify** (spec §9.10 위임 범위 내 결정. Architecture Decisions 표·M0에 반영. Next.js 검토 후 기각: 상태 보유 장기 실행 프로세스와 실행 모델 충돌)
 - Critic 2차 리뷰(REVISE — 신규 CRITICAL 1건) 대응:
   - **M7에 비정상 종료 pending-replay 태스크 신설** (CRITICAL-1: 부록 A D1의 pending-마커 절을 §9.5 세션 상태 파일에 통합 구현 — 정본과 실행계획 일치 회복). 출처 검증: 해당 절은 가필이 아닌 Round 18 제시 표 원문으로, hard block 전환 후 SIGKILL 경로에 한해 유효 — spec 부록 A에 출처 각주 추가
   - **R8 리스크 행 추가** (MINOR-1: 비정상 종료 ingest 소실 + 완화 추적), Verification에 비정상 종료 E2E 추가
