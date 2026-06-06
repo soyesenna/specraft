@@ -35,3 +35,16 @@ Cleanup receipts are recorded in the C001, C002, and C003 evidence files.
 - Split shared schema/client files so implementation files stay below the 250 pure LOC review cap.
 - Re-ran `pnpm -r test`, `pnpm -r typecheck`, `pnpm -r build`, `pnpm biome check .`,
   no-excuse pattern scan, and pure LOC scan after remediation; all passed.
+
+## Latest External Docs Audit Remediation
+
+- Rechecked the updated local OpenRouter, Claude Code, and Codex external docs against
+  the v1 spec/plan and M1 implementation.
+- OpenRouter `Responses API Beta` remains a separate beta endpoint from Chat Completions,
+  so M1 keeps the existing internal REST/shared contract and defers provider transport
+  choice to M4.
+- Confirmed packages/shared production은 REST/Zod/API client 전용으로 유지한다.
+- Documented that hook I/O·capability는 M0.5 검증 산출물로 분리하고 M7/M8 어댑터 입력으로 사용한다.
+- Updated the spec and plan to clarify Claude Code `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP`,
+  `background_tasks`, `session_crons`, optional manifest packaging, Codex required
+  `.codex-plugin/plugin.json`, and Codex matcher-ignored semantics.

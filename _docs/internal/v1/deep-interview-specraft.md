@@ -10,7 +10,7 @@
 - Threshold Source: user-arguments("목표 모호도 5% 미만"; `~/.claude/settings.json`·`./.claude/settings.json`에 `omc.deepInterview.ambiguityThreshold` 미설정 — default 0.2를 사용자 명시값으로 오버라이드)
 - Initial Context Summarized: no (raw-spec.md 적정 크기)
 - Status: PASSED (Round 20에서 spec 전체 승인 — §9 계약 정의 및 §9.6·D9 판단 포함)
-- Revision: 2026-06-06 — §9.10 위임 항목이던 서버 프레임워크를 **Fastify**로 확정(위임 해소, spec 결정 재론 아님) + stale 표기 2곳 사실 정정(OpenRouter 문서 존재, DESIGN.md 정본 등장) + 앱 네이밍을 `backend`/`frontend`로 정리
+- Revision: 2026-06-06 — §9.10 위임 항목이던 서버 프레임워크를 **Fastify**로 확정(위임 해소, spec 결정 재론 아님) + stale 표기 2곳 사실 정정(OpenRouter 문서 존재, DESIGN.md 정본 등장) + 앱 네이밍을 `backend`/`frontend`로 정리 + 최신 외부 문서 감사 반영(Claude Code Stop cap·plugin packaging, Codex matcher semantics, OpenRouter Responses API Beta no-change)
 
 ## Clarity Breakdown (최종 — Round 20 승인 후)
 
@@ -52,13 +52,13 @@ Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확
 
 - **테넌시**: 1 서버 인스턴스 = 1 프로젝트(코드 repo 1개). Docker(compose)로 셀프호스트.
 - **스택**: TypeScript 통합 — 백엔드(Node + **Fastify**, 2026-06-06 §9.10 위임 해소로 확정), 프론트엔드(React), MCP 프록시·훅 스크립트까지 단일 언어.
-- **LLM**: 자체 provider 추상화 인터페이스 + v1 구현체는 OpenRouter만. `OPENROUTER_API_KEY`는 env, 모델 슬러그는 env 기본값 + admin 프론트엔드에서 변경(ingest용/query용 분리 설정 가능). *(참고: `docs/external/openrouter/` 13개 문서 제공 완료)*
+- **LLM**: 자체 provider 추상화 인터페이스 + v1 구현체는 OpenRouter만. `OPENROUTER_API_KEY`는 env, 모델 슬러그는 env 기본값 + admin 프론트엔드에서 변경(ingest용/query용 분리 설정 가능). 최신 OpenRouter `Responses API Beta`는 Chat Completions와 별도이며 기존 Chat Completions 기반 프로젝트는 변경 없이 유지 가능하므로 M1 계약은 변경하지 않고, M4에서 beta 채택 여부만 재평가한다.
 - **wiki 저장**: 서버 관리 bare git repo가 source of truth. 운영 데이터(계정·키·로그·락·설정)는 SQLite.
 - **git 연동**: 서버가 코드 repo를 bare mirror로 clone/fetch. 호스팅 중립 — admin이 remote URL + credential(HTTPS PAT 또는 SSH deploy key) 등록. 표준 git 프로토콜만 사용.
 - **merge 감지**: 요청 시 lazy fetch (웹훅·폴링 인프라 없음). conflict 락은 **브랜치 단위** (타 브랜치 정상 동작).
-- **플러그인 훅**: CC·Codex 모두 `SessionStart`(주입) + `PostCompact`(재주입) + `Stop`(게이트) — 양 플랫폼 대칭. query/ingest는 플러그인 동봉 **로컬 stdio MCP 프록시 → 서버 REST** 경유.
+- **플러그인 훅**: CC·Codex 모두 `SessionStart`(주입) + `PostCompact`(재주입) + `Stop`(게이트) — 양 플랫폼 대칭. Codex의 UserPromptSubmit/Stop 이벤트는 지원되며 matcher는 무시됨(설정 matcher에 의존 금지), `decision:"block"` 기반 차단/계속 semantics는 사용 가능하다. query/ingest는 플러그인 동봉 **로컬 stdio MCP 프록시 → 서버 REST** 경유.
 - **설정 위치**: 팀 공유(`.specraft.json` — 서버 URL 등)는 repo 커밋, api-key는 개인 영역(`SPECRAFT_API_KEY` env 또는 `~/.specraft/credentials`). `/specraft-setup` 대화형 온보딩 명령 제공.
-- **장애 정책**: Stop 게이트 = hard block (서버 불가 시 종료 차단, 서버 장애 = 작업 중단 감수). 세션 시작 주입 실패 = `.specraft.json`의 `strict_mode`로 선택 (기본 `true` = 세션 차단).
+- **장애 정책**: Stop 게이트 = hard block (서버 불가 시 종료 차단, 서버 장애 = 작업 중단 감수). 단 Claude Code는 Stop/SubagentStop 연속 차단을 기본 8회 뒤 오버라이드하므로 `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP`와 `stop_hook_active`를 반영해 게이트 안내를 강화하고, Stop 입력의 `background_tasks`/`session_crons`가 있으면 세션 완전 종료가 아니라 대기 상태로 판정한다. 세션 시작 주입 실패 = `.specraft.json`의 `strict_mode`로 선택 (기본 `true` = 세션 차단).
 - **권한**: admin/member 2역할. conflict 해결 지시는 모든 member 가능. api-key는 본인이 발급·재발급·폐기.
 - **보안 기본값**: argon2 비밀번호 해시, httpOnly 세션 쿠키(프론트엔드), api-key는 1회 노출 + 해시 저장 + `sk-spcrft-` prefix.
 - **force-push/rebase**: v1 미지원 — non-fast-forward 감지 시 해당 브랜치 락 + conflict 센터 표시, 사람 지시로 문서 브랜치 리셋.
@@ -83,7 +83,7 @@ Deferral: 없음 (R0·R11에서 5컴포넌트/7시나리오 전부 v1 필수 확
 - [ ] **S1 (auth)**: `docker compose up` → 최초 접속 시 admin 생성 화면 → admin이 초대 링크 생성 → 그 링크로 email/password/name 가입 성공 → 프론트엔드에서 api-key 발급(1회 노출)
 - [ ] **S2 (plugins)**: CC·Codex **각각에서** — 새 세션 첫 턴에 "이 프로젝트가 뭔지 아니?" 질문 시 에이전트가 repo 탐색 없이 wiki(overview) 기반으로 답변. `/compact` 후 턴에서도 동일 (재주입 확인)
 - [ ] **S3 (query)**: 에이전트가 `specraft_query` 호출 → 응답에 wiki 페이지 인용 포함 → 서버 query 로그에 호출자(api-key 주인) 기록
-- [ ] **S4 (ingest 게이트)**: ingest 없이 세션 종료 시도 → Stop 게이트 차단(continuePrompt/지시 발동). ingest+commit+push 완료 후 종료 허용 → wiki repo 해당 브랜치에 새 commit + `log.md` 엔트리 + 프론트엔드 이력에 작성자 표시
+- [ ] **S4 (ingest 게이트)**: ingest 없이 세션 종료 시도 → Stop 게이트 차단(`decision:"block"` + `reason` 지시 발동). ingest+commit+push 완료 후 종료 허용 → wiki repo 해당 브랜치에 새 commit + `log.md` 엔트리 + 프론트엔드 이력에 작성자 표시
 - [ ] **S5 (merge 전파)**: `feat/x`→`dev` 코드 merge 후 dev에서 첫 요청 → 문서 브랜치 `feat/x`가 `dev`로 merge됨 (wiki git log로 검증)
 - [ ] **S6 (conflict)**: 의도적 충돌 케이스 → LLM 해결 실패 → 해당 브랜치 query/ingest가 409 거부 + conflict 센터 표시 → 사람 지시 입력 → 재병합 성공 + 락 해제 (타 브랜치는 내내 정상)
 - [ ] **S7 (frontend)**: 브랜치 선택 → 렌더링된 wiki 열람·링크 탐색, 자연어 쿼리 → 응답, ingest/query 로그 목록 조회
@@ -231,13 +231,13 @@ wiki.git (브랜치별로 이 트리 존재)
 | 동작 | Claude Code | Codex | 공통 로직 (TS 스크립트) |
 |------|-------------|-------|------------------------|
 | 세션 시작 주입 | `SessionStart` | `SessionStart` | `/context` 호출 → 컨텍스트 출력(주입). 실패 시 `strict_mode`에 따라: true→차단 플래그 기록, false→경고 주입 |
-| strict 차단 집행 | `UserPromptSubmit` (차단 플래그 시 block) | `UserPromptSubmit` (decision: deny) | CC의 SessionStart는 차단 불가하므로 차단은 UserPromptSubmit에서 집행 |
+| strict 차단 집행 | `UserPromptSubmit` (차단 플래그 시 block) | `UserPromptSubmit` (`decision: block` + `reason`) | CC의 SessionStart는 차단 불가하므로 차단은 UserPromptSubmit에서 집행 |
 | compact 후 재주입 | `PostCompact` | `PostCompact` | `/context` 재호출 → 재주입 |
-| 종료 게이트 | `Stop` (block + 지시) | `Stop` (`decision: block` + `continuePrompt`) | 검사: ① 워킹트리 clean ② HEAD push됨 ③ 세션 ingest 마킹 존재. 미충족 → block + "commit/push/ingest를 완료하라" 지시. **read-only 세션(변경·커밋 0건)은 ingest 면제(D9)** |
+| 종료 게이트 | `Stop` (`decision: block` + `reason`) | `Stop` (`decision: block` + `reason`) | 검사: ① 워킹트리 clean ② HEAD push됨 ③ 세션 ingest 마킹 존재. 미충족 → block + "commit/push/ingest를 완료하라" 지시. **read-only 세션(변경·커밋 0건)은 ingest 면제(D9)**. Claude Code는 `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` 기본 8회 cap과 `background_tasks`/`session_crons` 대기 상태를 반영 |
 | 온보딩 | `/specraft-setup` 커맨드 | `specraft-setup` 스킬 | 초대링크/URL 입력 → key 발급 → 로컬 저장 |
 | 초기화 | `/specraft-init` 커맨드 | `specraft-init` 스킬 | 에이전트가 repo 분석 → 구조화 대량 ingest |
 
-> 참고: 인터뷰 중 검증된 사실 — 참고문서(03-hooks-comparison.md)의 "CC 훅 5종"은 구버전 정보. 실사용 settings.json에서 `SessionStart`·`PreCompact`·`PostCompact`·`SubagentStart/Stop` 작동 확인. 구현 시 양 플랫폼 최신 훅 스키마 재검증 필요.
+> 최신 외부 문서 감사 반영: Claude Code 매니페스트는 선택 사항이며 플러그인 루트의 기본 컴포넌트 자동 탐색과 단일 `SKILL.md` 플러그인을 허용한다. Codex 플러그인은 `.codex-plugin/plugin.json`이 필수다. Codex의 UserPromptSubmit/Stop 이벤트는 지원되며 matcher는 무시됨이므로 matcher 설정 없이 등록하고, Stop의 `decision:"block"`은 `reason`을 새 계속 프롬프트로 사용한다.
 
 ### 9.7 서버 LLM 엔진 (직접 API 호출 에이전트 루프)
 
@@ -273,7 +273,7 @@ specraft/
 ├── apps/frontend/      # React (Vite)
 ├── packages/shared/    # 공유 타입·API 클라이언트
 ├── packages/mcp-proxy/ # stdio MCP 프록시 (플러그인 동봉)
-├── plugins/claude-code/ # .claude-plugin (hooks + commands + .mcp.json)
+├── plugins/claude-code/ # Claude Code plugin (매니페스트 선택 사항, hooks + commands + .mcp.json, 단일 SKILL.md 가능)
 ├── plugins/codex/      # .codex-plugin (hooks + skills + mcp)
 └── docker-compose.yml
 ```

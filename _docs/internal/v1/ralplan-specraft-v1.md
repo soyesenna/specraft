@@ -13,7 +13,7 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 
 1. **server-core** — llm-wiki 저장소(bare git, SoT) + LLM 문서 엔진(직접 API 호출 에이전트 루프, provider 추상화 + v1 OpenRouter). Ingest/Query/Merge/Init 4종 에이전트.
 2. **git-sync** — 코드 repo bare mirror(read-only fetch), 문서 브랜치 1:1 미러링, 요청 시 lazy merge 전파, conflict 시 브랜치 락, commit DAG 순서 보장(P1)·존재 검증(P2).
-3. **plugins** — CC/Codex 대칭: `SessionStart` 주입 + `PostCompact` 재주입 + `Stop` hard 게이트(clean·pushed·ingested 3검사, read-only 세션 면제), stdio MCP 프록시(`specraft_query`/`specraft_ingest`/`specraft_status`) → 서버 REST, `/specraft-setup`·`/specraft-init` 커맨드, `strict_mode` 설정.
+3. **plugins** — CC/Codex 대칭: `SessionStart` 주입 + `PostCompact` 재주입 + `Stop` hard 게이트(clean·pushed·ingested 3검사, read-only 세션 면제), stdio MCP 프록시(`specraft_query`/`specraft_ingest`/`specraft_status`) → 서버 REST, `/specraft-setup`·`/specraft-init` 커맨드, `strict_mode` 설정. Claude Code는 `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` 기본 8회 cap과 `background_tasks`/`session_crons` 대기 상태를 반영하고, Codex의 UserPromptSubmit/Stop 이벤트는 지원되며 matcher는 무시됨이므로 matcher 설정에 의존하지 않는다.
 4. **frontend** — React: 브랜치별 wiki 열람(읽기 전용)·자연어 쿼리·ingest/query 로그·conflict 센터(자연어 지시 → Merge Agent 재시도).
 5. **auth** — admin 부트스트랩, 초대 링크 가입, admin/member 2역할, api-key(1회 노출, 해시 저장, `sk-spcrft-` prefix), argon2 + httpOnly 세션 쿠키.
 
@@ -59,11 +59,11 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 | **서버 프레임워크 = Fastify** | 사용자 확정 2026-06-06 — spec §9.10 위임 해소. Hono 대비 생태계·플러그인(인증/쿠키/정적 서빙) 성숙도와 장기 실행 프로세스 검증 이력. Next.js 기각: per-branch 큐 워커·LLM 루프·worktree/SQLite 로컬 상태와 실행 모델 충돌 |
 | wiki SoT = bare git repo | R5 (Contrarian 통과 — 브랜치/머지/이력 공짜) |
 | 운영 데이터 = SQLite (better-sqlite3) | §9.8 — 단일 프로젝트 셀프호스트에 과한 DB 불필요 |
-| LLM = 자체 루프 + ProviderAdapter, v1 OpenRouter | R1·R9 |
+| LLM = 자체 루프 + ProviderAdapter, v1 OpenRouter | R1·R9 — OpenRouter Responses API Beta는 M4에서 재평가, M1 계약 변경 없음 |
 | merge 감지 = 요청 시 lazy fetch | R10 — 웹훅/폴링 인프라 제거 |
 | conflict 락 = 브랜치 단위 409 | R10 |
 | MCP = stdio 프록시 → REST | §9.5 D7 — CC/Codex 동작 동일성 보장 |
-| 게이트 = Stop hook hard block | R18 — spec 무결성 > 가용성 |
+| 게이트 = Stop hook hard block | R18 — spec 무결성 > 가용성. Claude Code Stop cap(`CLAUDE_CODE_STOP_HOOK_BLOCK_CAP`)은 안내·탈출 경로로 반영하되 무결성 검사는 완화하지 않음 |
 
 ## Implementation Steps (Milestones)
 
@@ -74,7 +74,7 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 - 검증: `pnpm -r build` 통과, `docker compose up`으로 Fastify 헬스 엔드포인트 응답
 
 ### M0.5. Walking-Skeleton Spike (Architect 합의 반영 — 최대 통합 리스크 선검증)
-- [ ] **CC·Codex 훅 공식 스키마 재검증** (M7/M8에서 이동): SessionStart/PostCompact/UserPromptSubmit/Stop의 현행 I/O 형태를 공식 문서·실세션으로 확정 — 번들 참고문서(docs/external/claude-code-codex-docs/)의 "CC 5종 훅" 정보는 구버전임이 확인됨
+- [ ] **CC·Codex 훅 공식 스키마 재검증** (M7/M8에서 이동): SessionStart/PostCompact/UserPromptSubmit/Stop의 현행 I/O 형태를 공식 문서·실세션으로 확정 — 번들 참고문서(docs/external/claude-code-codex-docs/)의 "CC 5종 훅" 정보는 구버전임이 확인됨. 최신 문서 기준 Claude Code 매니페스트는 선택 사항이고 단일 `SKILL.md` 플러그인을 허용하며, Codex의 UserPromptSubmit/Stop 이벤트는 지원되며 matcher는 무시됨(설정 matcher 무시)이다.
 - [ ] 일회용 CC 미니 플러그인: `SessionStart` → stub `/context`(하드코딩 문자열) 주입 + `Stop` → stub `/status` 대상 3검사 block-and-continue 루프
 - [ ] 실제 CC 세션에서 검증: ① SessionStart/PostCompact가 실제 발화하는가 ② Stop hook이 사용자를 가두지 않고 block→지시→재시도 루프를 안정적으로 수행하는가 (R4 조기 검증)
 - [ ] **합격 기준 (정량, Critic 반영)**: ① 주입 — 새 세션·compact 후 각 3회 연속 컨텍스트 주입 확인 ② 게이트 — block→지시→(조건 충족)→통과 루프 3회 연속 성공 + 미충족 상태 5회 연속 block에서 탈출 수단(조건 충족 또는 strict 해제) 동작 확인
@@ -83,7 +83,7 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 - 검증: 합격 기준 ①② 충족 기록 + 게이트 block 루프 실연
 
 ### M1. 계약 고정 (packages/shared)
-- [ ] spec §9.3 REST API 전체의 요청/응답 TS 타입 + zod 스키마 (M0.5의 검증된 훅 I/O 스키마 반영)
+- [ ] spec §9.3 REST API 전체의 요청/응답 TS 타입 + zod 스키마. packages/shared production은 REST/Zod/API client 전용으로 고정하고, 훅 I/O·capability matrix는 M0.5 검증 문서 산출물로 분리해 M7/M8 어댑터 입력으로 사용
 - [ ] spec §9.4 `IngestPayload` zod 스키마
 - [ ] **에러 표현 통일** (Architect m-1 반영): 락 = HTTP 409 + body `{error:"branch_locked", conflict_id}`, P2 커밋 미발견 = HTTP 422 + body `{status:"rejected", reason:"commit_not_found"}`, 인증 = 401. ingest 거부는 "HTTP 4xx + body status/reason 병행" 단일 표현으로 고정 — spec §9.3·§9.4와 정합, mcp-proxy/frontend 클라이언트 처리 일원화
 - [ ] API 클라이언트(fetch 래퍼) — mcp-proxy·frontend·훅 스크립트 공용
@@ -115,7 +115,7 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 
 ### M4. LLM 엔진 (apps/backend)
 - [ ] `LLMProvider` 인터페이스 + `MockProvider`(테스트·CI용 결정적 스파인)
-- [ ] **OpenRouter 구현체** (Architect M-3 반영: `docs/external/openrouter/` 13개 문서 **이미 존재 확인** — "도착 대기" 전제 폐기, 본 마일스톤에서 즉시 구현. 도구 호출은 `03-tool-calling.md`의 에이전트 루프 패턴 준수)
+- [ ] **OpenRouter 구현체** (Architect M-3 반영: `docs/external/openrouter/` 문서 **이미 존재 확인** — "도착 대기" 전제 폐기, 본 마일스톤에서 즉시 구현. 도구 호출은 `03-tool-calling.md`의 에이전트 루프 패턴 준수. `Responses API Beta`는 Chat Completions와 별도 beta endpoint이므로 v1 기본값은 기존 Chat Completions 호환 경로를 유지하고 beta 채택은 평가 하네스에서 별도 판단)
 - [ ] 도구 실행 루프 (tool-call 파싱·실행·재투입, max-turns 가드)
 - [ ] wiki 도구: `wiki_read/wiki_write/wiki_list/wiki_search(ripgrep)/wiki_delete`, `code_log/code_diff` (worktree 단위, spec §9.7)
 - [ ] **Ingest Agent**: payload → 관련 페이지 갱신 + index/log 필수 갱신 → 단일 commit(author=member)
@@ -139,14 +139,14 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 
 ### M7. MCP 프록시 + CC 플러그인 → **S2·S4(CC) 체크포인트**
 - [ ] packages/mcp-proxy: stdio MCP 서버 (`specraft_query`/`specraft_ingest`/`specraft_status`), branch/HEAD 자동 수집, push 사전 확인, 세션 상태 파일(`~/.specraft/sessions/`) — 훅 스키마는 M0.5 산출물 사용
-- [ ] plugins/claude-code: `.claude-plugin` 매니페스트, hooks(`SessionStart` 주입, `PostCompact` 재주입, `UserPromptSubmit` strict 차단 집행, `Stop` 게이트), `.mcp.json`, `/specraft-setup`·`/specraft-init` 커맨드
-- [ ] **게이트 판정 매트릭스** (Architect m-4 + Critic MAJOR-1 반영): 기본 4축(clean × 신규커밋 × pushed × ingested) 전 조합 + **dirty-uncommitted 셀 명시** — 워킹트리 변경 있음 & 커밋 없음 = clean 검사(①)에서 차단하고 "commit→push→ingest" 지시. **D-패키지 게이트 셀은 spec 부록 A의 분류를 정본으로 사용** (D1=hard block 동작 그 자체, D9=read-only 면제 — "워킹트리 clean AND 신규 커밋 0 AND 세션 중 변경 이력 없음"일 때만, D7=ingested 판정의 프록시 마킹 의존 / D2~D6·D8은 게이트 비관련로 분류 완료). 서버 도달 불가 vs git 지연 구분(M3 바운딩과 연동)
+- [ ] plugins/claude-code: Claude Code 매니페스트는 선택 사항이나 배포 메타데이터를 위해 `.claude-plugin/plugin.json`을 제공, hooks(`SessionStart` 주입, `PostCompact` 재주입, `UserPromptSubmit` strict 차단 집행, `Stop` 게이트), `.mcp.json`, `/specraft-setup`·`/specraft-init` 커맨드, 필요 시 단일 `SKILL.md` 플러그인 형태와 호환
+- [ ] **게이트 판정 매트릭스** (Architect m-4 + Critic MAJOR-1 반영): 기본 4축(clean × 신규커밋 × pushed × ingested) 전 조합 + **dirty-uncommitted 셀 명시** — 워킹트리 변경 있음 & 커밋 없음 = clean 검사(①)에서 차단하고 "commit→push→ingest" 지시. **D-패키지 게이트 셀은 spec 부록 A의 분류를 정본으로 사용** (D1=hard block 동작 그 자체, D9=read-only 면제 — "워킹트리 clean AND 신규 커밋 0 AND 세션 중 변경 이력 없음"일 때만, D7=ingested 판정의 프록시 마킹 의존 / D2~D6·D8은 게이트 비관련로 분류 완료). 서버 도달 불가 vs git 지연 구분(M3 바운딩과 연동). Claude Code Stop 입력의 `background_tasks`/`session_crons`가 존재하면 종료 대기 상태로 보고 게이트 종료 판정을 보류한다.
 - [ ] **비정상 종료 pending-replay** (Critic CRITICAL-1 / spec 부록 A D1 반영): 세션 마커 생명주기를 §9.5 세션 상태 파일(`~/.specraft/sessions/{id}.json`)에 통합 — 세션 시작 시 `{started_at, branch, ingested:false}` 생성, `specraft_ingest` 성공 시 `ingested:true`, 게이트 통과 시(read-only 면제 포함) resolved 마킹. **SessionStart(컨틴전시 시 UserPromptSubmit 첫 턴)가 직전 미해소 마커(`ingested:false`·미resolved) 스캔 → "직전 세션(시각·브랜치) 미전송 ingest 존재 — 직전 작업 요약을 포함해 ingest하라" 지시를 주입 컨텍스트에 추가.** 마커 정리 규칙: resolved는 7일 후 삭제, 미해소는 해소 시까지 유지 (SIGKILL은 Stop hook을 실행시키지 않으므로 정상 게이트로 못 막는 유일한 ingest 소실 경로를 닫음)
-- [ ] `.specraft.json` 로더 (`server_url`, `strict_mode` 기본 true)
+- [ ] `.specraft.json` 로더 (`server_url`, `strict_mode` 기본 true, Claude Code `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` 감지 시 게이트 안내 문구에 cap/탈출 경로 반영)
 - 검증: **S2·S4 수동 E2E** (실제 CC 세션) + 게이트 단위 테스트 (판정 매트릭스 전 셀) + **비정상 종료 E2E: 세션 중 프로세스 강제 킬 → 다음 세션 시작 시 pending 지시 주입 확인 — 합격 기준: 주입 컨텍스트에 직전 세션 시각·브랜치 문자열 + "ingest하라" 지시 포함을 문자열 단언 (S4 인접 시나리오)**. 다중 미해소 마커(연속 SIGKILL) 시 스캔은 **모든 미해소 마커를 나열 지시** (최신 1개 아님 — v1 안전 기본값)
 
 ### M8. Codex 플러그인 → **S2·S4(Codex) 체크포인트**
-- [ ] plugins/codex: `.codex-plugin` 매니페스트, hooks.json (JSON stdin/stdout 프로토콜), skills(`specraft-setup`/`specraft-init`), MCP 등록 — mcp-proxy·게이트 로직 재사용, 훅 스키마는 M0.5 산출물 사용
+- [ ] plugins/codex: `.codex-plugin` 매니페스트, hooks.json (JSON stdin/stdout 프로토콜), skills(`specraft-setup`/`specraft-init`), MCP 등록 — mcp-proxy·게이트 로직 재사용, 훅 스키마는 M0.5 산출물 사용. Codex의 UserPromptSubmit/Stop 이벤트는 지원되며 matcher는 무시됨이므로 matcher 없이 항상 실행되는 이벤트로 등록하고 `decision:"block"`의 `reason`을 계속 프롬프트로 사용
 - 검증: **S2·S4 수동 E2E** (실제 Codex 세션)
 
 ### M9. 프론트엔드 (apps/frontend) → **S6·S7 체크포인트**
@@ -170,8 +170,8 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 |---|------|------|------------|
 | R1 | LLM merge 해결 품질 미달 — 잘못된 병합이 wiki 오염 | 高 | 보수적 프롬프트("불확실하면 실패 선언"), 실패 시 즉시 락(안전 기본값), 모든 병합은 git 커밋이므로 revert 가능, 사람 지시 경로(S6) 확보. **M4부터 실 provider 평가 하네스로 fail-closed율 연속 측정** (M10 절벽 제거) |
 | R2 | CC/Codex 훅·플러그인 스키마 변동 (참고문서 구버전 확인됨) | 高→中 | **M0.5 walking-skeleton spike에서 선검증** (M7/M8에서 전진 배치), 검증된 스키마가 M1 계약의 입력. 어댑터 레이어 최소화 |
-| R3 | ~~OpenRouter 문서 미도착~~ → **전제 폐기**: `docs/external/openrouter/` 13개 문서 존재 확인됨 | 解消 | 엔지니어링 리스크는 MockProvider(CI 결정성)로, **모델 품질 리스크(R1)는 M4 실 provider 평가 하네스로** 분리 대응 |
-| R4 | Stop 게이트 무한 block 루프 (ingest 불가 상황) | 中 | **M0.5에서 block-and-continue 루프 실세션 선검증**, 게이트 메시지에 원인·해결책 명시(`specraft_status` 자가진단 유도), **동일 사유 3회(기본값, 설정 가능) 반복 시 안내 강화 — M0.5 실측으로 보정**, strict_mode=false 탈출구 문서화, 서버 다운 vs git 지연 구분(M3 fetch 바운딩) |
+| R3 | ~~OpenRouter 문서 미도착~~ → **전제 폐기**: `docs/external/openrouter/` 문서 존재 확인됨 | 解消 | 엔지니어링 리스크는 MockProvider(CI 결정성)로, **모델 품질 리스크(R1)는 M4 실 provider 평가 하네스로** 분리 대응 |
+| R4 | Stop 게이트 무한 block 루프 (ingest 불가 상황) | 中 | **M0.5에서 block-and-continue 루프 실세션 선검증**, 게이트 메시지에 원인·해결책 명시(`specraft_status` 자가진단 유도), **동일 사유 3회(기본값, 설정 가능) 반복 시 안내 강화 — M0.5 실측으로 보정**, strict_mode=false 탈출구 문서화, 서버 다운 vs git 지연 구분(M3 fetch 바운딩). Claude Code는 `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` 기본 8회 오버라이드와 `background_tasks`/`session_crons` 대기 상태를 실측·문서화 |
 | R5 | P1 직렬화·DAG 정렬 동시성 버그 + worktree 경합 | 中 | **per-branch 큐**(브랜치 간 병렬·브랜치 내 직렬 — spec "타 브랜치 정상 동작" 보장), 큐 내 락 재검사, lazy-merge 큐 편입, worktree 풀 + 기동 시 prune, fixture repo 결정적 테스트 |
 | R6 | wiki 품질 드리프트 (LLM 자율 영역 비대화) | 低 | 에이전트 시스템 프롬프트에 진화 규칙·index/log 필수 갱신 강제, log.md로 추적 가능성 확보 (v2: lint 패스) |
 | R7 | git credential 평문 노출 / 서버 시크릿 분실 | 中 | `SPECRAFT_SECRET` 필수 env(부재 시 fail-fast) + HKDF 키 파생 암호화, 로그 마스킹, SSH key 권한 600, 시크릿 분실 시 credential 재입력 절차 문서화 |
