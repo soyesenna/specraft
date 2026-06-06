@@ -6,6 +6,7 @@ import {
   CitationSchema,
   ConflictStateSchema,
   EmailSchema,
+  GitBranchNameSchema,
   IngestRejectionReasonSchema,
   IngestStatusSchema,
   LogActorSchema,
@@ -22,7 +23,7 @@ export const PaginationRequestSchema = z.object({
 })
 
 export const IngestPayloadSchema = z.object({
-  branch: NonEmptyStringSchema,
+  branch: GitBranchNameSchema,
   commit_hash: NonEmptyStringSchema,
   agent: AgentSchema,
   session_id: NonEmptyStringSchema,
@@ -33,7 +34,7 @@ export const IngestPayloadSchema = z.object({
 })
 
 export const ContextRequestSchema = z.object({
-  branch: NonEmptyStringSchema,
+  branch: GitBranchNameSchema,
   commit_hash: NonEmptyStringSchema,
 })
 
@@ -72,7 +73,7 @@ export const IngestResponseSchema = z.discriminatedUnion("status", [
 export const StatusResponseSchema = z.object({
   server: z.literal("ok"),
   branch_locks: z.array(BranchLockSchema),
-  wiki_head_by_branch: z.record(NonEmptyStringSchema, NonEmptyStringSchema),
+  wiki_head_by_branch: z.record(GitBranchNameSchema, NonEmptyStringSchema),
 })
 
 export const AuthSignupRequestSchema = z.object({

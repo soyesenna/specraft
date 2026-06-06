@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "specraft": {
+      "command": "specraft-mcp-proxy",
+      "env": {
+        "SPECRAFT_SERVER_URL": "${SPECRAFT_SERVER_URL}",
+        "SPECRAFT_API_KEY": "${SPECRAFT_API_KEY}"
+      }
+    }
+  }
+}

@@ -3,6 +3,43 @@ import { z } from "zod"
 export const NonEmptyStringSchema = z.string().min(1)
 export const EmailSchema = z.string().email()
 
+const ForbiddenGitBranchCharacters = new Set(["~", "^", ":", "?", "*", "[", "\\", "]"])
+
+function hasInvalidGitBranchCharacter(value: string): boolean {
+  return [...value].some((character) => {
+    const codePoint = character.codePointAt(0)
+    return (
+      codePoint === undefined ||
+      codePoint < 32 ||
+      codePoint === 127 ||
+      /\s/u.test(character) ||
+      ForbiddenGitBranchCharacters.has(character)
+    )
+  })
+}
+
+export function isValidGitBranchName(value: string): boolean {
+  if (
+    value.length === 0 ||
+    value === "@" ||
+    value.startsWith("-") ||
+    value.startsWith("/") ||
+    value.endsWith("/") ||
+    value.endsWith(".") ||
+    value.includes("//") ||
+    value.includes("..") ||
+    value.includes("@{") ||
+    hasInvalidGitBranchCharacter(value)
+  ) {
+    return false
+  }
+  return value
+    .split("/")
+    .every((part) => part.length > 0 && !part.startsWith(".") && !part.endsWith(".lock"))
+}
+
+export const GitBranchNameSchema = z.string().min(1).refine(isValidGitBranchName)
+
 export const AgentSchema = z.enum(["claude-code", "codex"])
 export const SpecChangeTypeSchema = z.enum(["added", "modified", "removed"])
 export const ProgressStatusSchema = z.enum(["planned", "in_progress", "done", "blocked"])
@@ -23,7 +60,7 @@ export const BranchStatusSchema = z.discriminatedUnion("state", [
 ])
 
 export const BranchLockSchema = z.object({
-  branch: NonEmptyStringSchema,
+  branch: GitBranchNameSchema,
   conflict_id: NonEmptyStringSchema,
   reason: NonEmptyStringSchema.optional(),
 })
