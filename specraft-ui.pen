@@ -16351,6 +16351,2372 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "Jfiu1",
+      "x": 7600,
+      "y": 1320,
+      "name": "11 · Settings — Members",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "GBcOe",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "H3yIQ",
+          "name": "Toolbar",
+          "width": "fill_container",
+          "gap": 14,
+          "padding": [
+            18,
+            28
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "L8GofU",
+              "name": "Back Button",
+              "width": 28,
+              "height": 28,
+              "fill": "$input-bg",
+              "cornerRadius": 14,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "qVVKA",
+                  "name": "Back Icon",
+                  "width": 15,
+                  "height": 15,
+                  "icon": "chevron-left",
+                  "library": "lucide",
+                  "fill": "$ink-secondary"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "xOcJo",
+              "name": "Page Title",
+              "fill": "$ink",
+              "content": "Settings",
+              "fontFamily": "$font-display",
+              "fontSize": 28,
+              "fontWeight": "600",
+              "letterSpacing": -0.4
+            },
+            {
+              "type": "frame",
+              "id": "A36fdI",
+              "name": "Admin Badge",
+              "fill": "$input-bg",
+              "cornerRadius": "$radius-pill",
+              "padding": [
+                3,
+                9
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "U1yeq",
+                  "name": "Admin Label",
+                  "fill": "$ink-secondary",
+                  "content": "ADMIN",
+                  "fontFamily": "$font-text",
+                  "fontSize": 10.5,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Q5dUK5",
+          "name": "Settings Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 26,
+          "padding": [
+            4,
+            28,
+            28,
+            28
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "a3iTZY",
+              "name": "Settings Nav",
+              "width": 216,
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Btu3w",
+                  "name": "SNav General",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "TkZI8",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "sliders-horizontal",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "t8EVy",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "General",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GoW8d",
+                  "name": "SNav Git integration",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "EyttE",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "git-branch",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "FYIpP",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "Git integration",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "P6vXME",
+                  "name": "SNav Models",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "y6j5Am",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "cpu",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Ep4d4",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "Models",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "blFLX",
+                  "name": "SNav Members",
+                  "width": "fill_container",
+                  "height": 32,
+                  "fill": "$surface",
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "gMXEW",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "users",
+                      "library": "lucide",
+                      "fill": "$ink"
+                    },
+                    {
+                      "type": "text",
+                      "id": "pzpLW",
+                      "name": "SNav Label",
+                      "fill": "$ink",
+                      "content": "Members",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "600",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "cy8RP",
+                  "name": "SNav Invites",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "prVPf",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "user-plus",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "QK4Hx",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "Invites",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "qtt1c",
+                  "name": "SNav API keys",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "PO7VU",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "key",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "P18Ia",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "API keys",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "HJmXc",
+              "name": "Members Content",
+              "width": 660,
+              "layout": "vertical",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Y9Kjz",
+                  "name": "Members Head",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "OLNbJ",
+                      "name": "Members Head Col",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 3,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ts3Ca",
+                          "name": "Members Title",
+                          "fill": "$ink",
+                          "content": "Members · 4",
+                          "fontFamily": "$font-text",
+                          "fontSize": 16,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.26
+                        },
+                        {
+                          "type": "text",
+                          "id": "wDD7j",
+                          "name": "Members Desc",
+                          "fill": "$ink-tertiary",
+                          "content": "프로젝트 멤버와 역할을 관리합니다 — 가입은 초대 링크로만 가능합니다.",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12.5,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        }
+                      ]
+                    },
+                    {
+                      "id": "z6C0P",
+                      "type": "ref",
+                      "ref": "XufQA",
+                      "name": "Invite Btn",
+                      "descendants": {
+                        "VGKQ2": {
+                          "content": "Create invite"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jU9ha",
+                  "name": "Members Table",
+                  "clip": true,
+                  "width": "fill_container",
+                  "fill": "$surface",
+                  "cornerRadius": "$radius-m",
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "aQpgP",
+                      "name": "M Header",
+                      "width": "fill_container",
+                      "height": 36,
+                      "stroke": "$hairline",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 14,
+                      "padding": [
+                        0,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "jwOy0",
+                          "name": "MH MEMBER",
+                          "width": 170,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "G1zNIC",
+                              "name": "MHL MEMBER",
+                              "fill": "$ink-tertiary",
+                              "content": "MEMBER",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "xc2wl",
+                          "name": "MH EMAIL",
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ykhpL",
+                              "name": "MHL EMAIL",
+                              "fill": "$ink-tertiary",
+                              "content": "EMAIL",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Z52KG",
+                          "name": "MH ROLE",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "sEsig",
+                              "name": "MHL ROLE",
+                              "fill": "$ink-tertiary",
+                              "content": "ROLE",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "n3JfW",
+                          "name": "MH STATUS",
+                          "width": 110,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "r6pOM",
+                              "name": "MHL STATUS",
+                              "fill": "$ink-tertiary",
+                              "content": "STATUS",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "E2Ug0",
+                          "name": "MH JOINED",
+                          "width": 80,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "TBC0J",
+                              "name": "MHL JOINED",
+                              "fill": "$ink-tertiary",
+                              "content": "JOINED",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "e59SKW",
+                          "name": "MH ",
+                          "width": 60,
+                          "height": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "j0Hg14",
+                      "name": "Member 수연",
+                      "width": "fill_container",
+                      "height": 48,
+                      "stroke": "$hairline",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 14,
+                      "padding": [
+                        0,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "rdmE7",
+                          "name": "MC Member",
+                          "width": 170,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "p4naBh",
+                              "name": "M Avatar",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$dark-card",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "U9r1t2",
+                                  "name": "M Initials",
+                                  "fill": "$white",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8.5,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "N0JPCj",
+                              "name": "M Name",
+                              "fill": "$ink",
+                              "content": "수연",
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.2
+                            },
+                            {
+                              "type": "frame",
+                              "id": "dDeGv",
+                              "name": "You Chip",
+                              "fill": "$input-bg",
+                              "cornerRadius": 4,
+                              "padding": [
+                                2,
+                                6
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "bIwF0",
+                                  "name": "You Label",
+                                  "fill": "$ink-tertiary",
+                                  "content": "You",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9.5,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "OUXb3",
+                          "name": "MC Email",
+                          "clip": true,
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "qkvIB",
+                              "name": "M Email",
+                              "fill": "$ink-secondary",
+                              "content": "senna@prompt.town",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "vA45f",
+                          "name": "MC Role",
+                          "width": 90,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Kqv2N",
+                              "name": "Role Badge",
+                              "fill": "$input-bg",
+                              "cornerRadius": 4,
+                              "padding": [
+                                2,
+                                7
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "LuMJV",
+                                  "name": "Role Label",
+                                  "fill": "$ink-secondary",
+                                  "content": "ADMIN",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": 0.4
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "LQytl",
+                          "name": "MC Status",
+                          "width": 110,
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "EQkBH",
+                              "name": "M Dot",
+                              "fill": "$success",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "sOgsV",
+                              "name": "M Status",
+                              "fill": "$ink-secondary",
+                              "content": "Active",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "F91iwq",
+                          "name": "MC Joined",
+                          "width": 80,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "K2vW9",
+                              "name": "M Joined",
+                              "fill": "$ink-tertiary",
+                              "content": "5월 2일",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "N2IC6",
+                          "name": "MC Action",
+                          "width": 60,
+                          "height": 1,
+                          "justifyContent": "end"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "whjpi",
+                      "name": "Member 민지",
+                      "width": "fill_container",
+                      "height": 48,
+                      "stroke": "$hairline",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 14,
+                      "padding": [
+                        0,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "nu2TX",
+                          "name": "MC Member",
+                          "width": 170,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "e1Of8",
+                              "name": "M Avatar",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "X3OXiP",
+                                  "name": "M Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "MJ",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8.5,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "NJZ8i",
+                              "name": "M Name",
+                              "fill": "$ink",
+                              "content": "민지",
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "j2FvYv",
+                          "name": "MC Email",
+                          "clip": true,
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Pg9PX",
+                              "name": "M Email",
+                              "fill": "$ink-secondary",
+                              "content": "minji@prompt.town",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "glNxk",
+                          "name": "MC Role",
+                          "width": 90,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "sWL78",
+                              "name": "Role Label",
+                              "fill": "$ink-secondary",
+                              "content": "Member",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Q0Imy",
+                          "name": "MC Status",
+                          "width": 110,
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "movdd",
+                              "name": "M Dot",
+                              "fill": "$success",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "XkKNO",
+                              "name": "M Status",
+                              "fill": "$ink-secondary",
+                              "content": "Active",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "wDI47",
+                          "name": "MC Joined",
+                          "width": 80,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "VAaQZ",
+                              "name": "M Joined",
+                              "fill": "$ink-tertiary",
+                              "content": "5월 12일",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "OWpQA",
+                          "name": "MC Action",
+                          "width": 60,
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "f7IA7p",
+                              "name": "M Action",
+                              "fill": "$danger",
+                              "content": "Disable",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "luhlY",
+                      "name": "Member 동규",
+                      "width": "fill_container",
+                      "height": 48,
+                      "stroke": "$hairline",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 14,
+                      "padding": [
+                        0,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "y051L",
+                          "name": "MC Member",
+                          "width": 170,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Xi8MT",
+                              "name": "M Avatar",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "tF42Q",
+                                  "name": "M Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "DK",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8.5,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "bLhgj",
+                              "name": "M Name",
+                              "fill": "$ink",
+                              "content": "동규",
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZqE2g",
+                          "name": "MC Email",
+                          "clip": true,
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Xb0FB",
+                              "name": "M Email",
+                              "fill": "$ink-secondary",
+                              "content": "dongkyu@prompt.town",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "e73duQ",
+                          "name": "MC Role",
+                          "width": 90,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "kfYim",
+                              "name": "Role Label",
+                              "fill": "$ink-secondary",
+                              "content": "Member",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "P5twt",
+                          "name": "MC Status",
+                          "width": 110,
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "WyJP2",
+                              "name": "M Dot",
+                              "fill": "$success",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "wkyo1",
+                              "name": "M Status",
+                              "fill": "$ink-secondary",
+                              "content": "Active",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "em1rH",
+                          "name": "MC Joined",
+                          "width": 80,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "J0H5kR",
+                              "name": "M Joined",
+                              "fill": "$ink-tertiary",
+                              "content": "5월 20일",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Jnnyp",
+                          "name": "MC Action",
+                          "width": 60,
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "r5BbjJ",
+                              "name": "M Action",
+                              "fill": "$danger",
+                              "content": "Disable",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "j6X58Z",
+                      "name": "Member 지훈",
+                      "opacity": 0.6,
+                      "width": "fill_container",
+                      "height": 48,
+                      "gap": 14,
+                      "padding": [
+                        0,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "K4cgK",
+                          "name": "MC Member",
+                          "width": 170,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "DEpY1",
+                              "name": "M Avatar",
+                              "width": 24,
+                              "height": 24,
+                              "fill": "$input-bg",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "houwV",
+                                  "name": "M Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "JH",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8.5,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "ISOtv",
+                              "name": "M Name",
+                              "fill": "$ink",
+                              "content": "지훈",
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Il92J",
+                          "name": "MC Email",
+                          "clip": true,
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "gOtSP",
+                              "name": "M Email",
+                              "fill": "$ink-secondary",
+                              "content": "jihoon@prompt.town",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "TOo3G",
+                          "name": "MC Role",
+                          "width": 90,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "GJ87X",
+                              "name": "Role Label",
+                              "fill": "$ink-secondary",
+                              "content": "Member",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "V8IFEp",
+                          "name": "MC Status",
+                          "width": 110,
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "EuEmN",
+                              "name": "M Dot",
+                              "fill": "$separator",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "rh8jN",
+                              "name": "M Status",
+                              "fill": "$ink-secondary",
+                              "content": "Disabled",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "nrVLB",
+                          "name": "MC Joined",
+                          "width": 80,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "qa4zg",
+                              "name": "M Joined",
+                              "fill": "$ink-tertiary",
+                              "content": "5월 8일",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "v5DKdc",
+                          "name": "MC Action",
+                          "width": 60,
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "UuFtX",
+                              "name": "M Action",
+                              "fill": "$link",
+                              "content": "Enable",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "qhZfv",
+                  "name": "Members Note",
+                  "fill": "$ink-tertiary",
+                  "content": "Disabled 멤버의 api-key는 즉시 401로 거부됩니다 · 역할은 admin / member 2종입니다.",
+                  "fontFamily": "$font-text",
+                  "fontSize": 11.5,
+                  "fontWeight": "normal",
+                  "letterSpacing": -0.1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "x430Pb",
+      "x": 9120,
+      "y": 1320,
+      "name": "12 · Settings — Invites",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "v0GuVY",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "hdBH0",
+          "name": "Toolbar",
+          "width": "fill_container",
+          "gap": 14,
+          "padding": [
+            18,
+            28
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "kVEF1",
+              "name": "Back Button",
+              "width": 28,
+              "height": 28,
+              "fill": "$input-bg",
+              "cornerRadius": 14,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "u1YWP3",
+                  "name": "Back Icon",
+                  "width": 15,
+                  "height": 15,
+                  "icon": "chevron-left",
+                  "library": "lucide",
+                  "fill": "$ink-secondary"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "S1rSU",
+              "name": "Page Title",
+              "fill": "$ink",
+              "content": "Settings",
+              "fontFamily": "$font-display",
+              "fontSize": 28,
+              "fontWeight": "600",
+              "letterSpacing": -0.4
+            },
+            {
+              "type": "frame",
+              "id": "jsd4Q",
+              "name": "Admin Badge",
+              "fill": "$input-bg",
+              "cornerRadius": "$radius-pill",
+              "padding": [
+                3,
+                9
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "oxyxO",
+                  "name": "Admin Label",
+                  "fill": "$ink-secondary",
+                  "content": "ADMIN",
+                  "fontFamily": "$font-text",
+                  "fontSize": 10.5,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "MnOBc",
+          "name": "Settings Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 26,
+          "padding": [
+            4,
+            28,
+            28,
+            28
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "UfVtN",
+              "name": "Settings Nav",
+              "width": 216,
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "skalU",
+                  "name": "SNav General",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "Nn273",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "sliders-horizontal",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "xYTAB",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "General",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "E420ei",
+                  "name": "SNav Git integration",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "Uofs6",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "git-branch",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "UsJvW",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "Git integration",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "b6eD5",
+                  "name": "SNav Models",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "uaQVc",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "cpu",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "pbSVX",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "Models",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "OJMRW",
+                  "name": "SNav Members",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "Ga9Bb",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "users",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "dqa8Z",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "Members",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "z3M3r",
+                  "name": "SNav Invites",
+                  "width": "fill_container",
+                  "height": 32,
+                  "fill": "$surface",
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "ZmAEa",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "user-plus",
+                      "library": "lucide",
+                      "fill": "$ink"
+                    },
+                    {
+                      "type": "text",
+                      "id": "NJiGx",
+                      "name": "SNav Label",
+                      "fill": "$ink",
+                      "content": "Invites",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "600",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "aGGmJ",
+                  "name": "SNav API keys",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 7,
+                  "gap": 9,
+                  "padding": [
+                    0,
+                    11
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "YuO3q",
+                      "name": "SNav Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "key",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ZfNdO",
+                      "name": "SNav Label",
+                      "fill": "$ink-secondary",
+                      "content": "API keys",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "IBE5r",
+              "name": "Invites Content",
+              "width": 660,
+              "layout": "vertical",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "aHkWA",
+                  "name": "Invites Head",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "AK8rG",
+                      "name": "Invites Head Col",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 3,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "i44dk",
+                          "name": "Invites Title",
+                          "fill": "$ink",
+                          "content": "Invites",
+                          "fontFamily": "$font-text",
+                          "fontSize": 16,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.26
+                        },
+                        {
+                          "type": "text",
+                          "id": "W5k6m",
+                          "name": "Invites Desc",
+                          "fill": "$ink-tertiary",
+                          "content": "가입은 초대 링크로만 가능합니다 — 링크는 72시간 후 만료됩니다.",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12.5,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        }
+                      ]
+                    },
+                    {
+                      "id": "Nyfq3",
+                      "type": "ref",
+                      "ref": "XufQA",
+                      "name": "Create Invite Btn",
+                      "descendants": {
+                        "VGKQ2": {
+                          "content": "Create invite link"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "K0LNAg",
+                  "name": "Invite Banner",
+                  "width": "fill_container",
+                  "fill": "$surface",
+                  "cornerRadius": "$radius-m",
+                  "stroke": "$accent",
+                  "strokeWidth": 1.5,
+                  "layout": "vertical",
+                  "gap": 10,
+                  "padding": [
+                    18,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "RIhws",
+                      "name": "IB Head",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "i82Ae",
+                          "name": "IB Icon",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "circle-check",
+                          "library": "lucide",
+                          "fill": "$success"
+                        },
+                        {
+                          "type": "text",
+                          "id": "TYuTZ",
+                          "name": "IB Title",
+                          "fill": "$ink",
+                          "content": "Invite link created",
+                          "fontFamily": "$font-text",
+                          "fontSize": 14,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.22
+                        },
+                        {
+                          "type": "frame",
+                          "id": "jFsfx",
+                          "name": "IB Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "icon",
+                          "id": "f3tc40",
+                          "name": "IB Close",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "x",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "z8oElf",
+                      "name": "IB Desc",
+                      "fill": "$ink-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "이 링크를 팀원에게 공유하세요 — 72시간 후 또는 가입 완료 시 만료됩니다.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$font-text",
+                      "fontSize": 12.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.12
+                    },
+                    {
+                      "type": "frame",
+                      "id": "mSGy9",
+                      "name": "IB Link Row",
+                      "width": "fill_container",
+                      "fill": "$dark-card",
+                      "cornerRadius": "$radius-s",
+                      "gap": 10,
+                      "padding": [
+                        10,
+                        14
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZqRRk",
+                          "name": "IB Link",
+                          "fill": "$white",
+                          "content": "https://specraft.prompt.town/join/inv_8f3e21bd7a4c",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZGLfx",
+                          "name": "IB Link Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "icon",
+                          "id": "l7gXYx",
+                          "name": "IB Copy",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "copy",
+                          "library": "lucide",
+                          "fill": "$white-secondary"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "hXqd2",
+                  "name": "Invites Table",
+                  "clip": true,
+                  "width": "fill_container",
+                  "fill": "$surface",
+                  "cornerRadius": "$radius-m",
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "qQhvX",
+                      "name": "I Header",
+                      "width": "fill_container",
+                      "height": 36,
+                      "stroke": "$hairline",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 14,
+                      "padding": [
+                        0,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "G6vCu",
+                          "name": "IH LINK",
+                          "width": 200,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "s7Kxba",
+                              "name": "IHL LINK",
+                              "fill": "$ink-tertiary",
+                              "content": "LINK",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RvXni",
+                          "name": "IH CREATED BY",
+                          "width": 120,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Mg6QS",
+                              "name": "IHL CREATED BY",
+                              "fill": "$ink-tertiary",
+                              "content": "CREATED BY",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "znpdH",
+                          "name": "IH CREATED",
+                          "width": 80,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "vwFJB",
+                              "name": "IHL CREATED",
+                              "fill": "$ink-tertiary",
+                              "content": "CREATED",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "za1vl",
+                          "name": "IH EXPIRES",
+                          "width": 110,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "UkbtG",
+                              "name": "IHL EXPIRES",
+                              "fill": "$ink-tertiary",
+                              "content": "EXPIRES",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "yO6UB",
+                          "name": "IH STATUS",
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "SxvK0",
+                              "name": "IHL STATUS",
+                              "fill": "$ink-tertiary",
+                              "content": "STATUS",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.6
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "A4Wqnl",
+                      "name": "Invite inv_8f3e…21bd",
+                      "width": "fill_container",
+                      "height": 46,
+                      "stroke": "$hairline",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 14,
+                      "padding": [
+                        0,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "K3o4P",
+                          "name": "IC Link",
+                          "width": 200,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Oc30w",
+                              "name": "I Token",
+                              "fill": "$ink-secondary",
+                              "content": "inv_8f3e…21bd",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 11.5,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "LTABW",
+                          "name": "IC By",
+                          "width": 120,
+                          "gap": 7,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "vDkew",
+                              "name": "I Avatar",
+                              "width": 20,
+                              "height": 20,
+                              "fill": "$dark-card",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "jHnht",
+                                  "name": "I Initials",
+                                  "fill": "$white",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "IjCSw",
+                              "name": "I By",
+                              "fill": "$ink",
+                              "content": "수연",
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "z0RyV",
+                          "name": "IC Created",
+                          "width": 80,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "VR46q",
+                              "name": "I Created",
+                              "fill": "$ink-tertiary",
+                              "content": "방금",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZokWV",
+                          "name": "IC Expires",
+                          "width": 110,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "HNiuS",
+                              "name": "I Expires",
+                              "fill": "$ink-tertiary",
+                              "content": "71시간 후",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZF0CF",
+                          "name": "IC Status",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "jXt3f",
+                              "name": "I Dot",
+                              "fill": "$success",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "kUtJ3",
+                              "name": "I Status",
+                              "fill": "$ink-secondary",
+                              "content": "Active",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "kRyWy",
+                      "name": "Invite inv_77ab…d4f2",
+                      "opacity": 0.65,
+                      "width": "fill_container",
+                      "height": 46,
+                      "stroke": "$hairline",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 14,
+                      "padding": [
+                        0,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Peo1L",
+                          "name": "IC Link",
+                          "width": 200,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "GXw4K",
+                              "name": "I Token",
+                              "fill": "$ink-secondary",
+                              "content": "inv_77ab…d4f2",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 11.5,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "PRo0n",
+                          "name": "IC By",
+                          "width": 120,
+                          "gap": 7,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "CxvGg",
+                              "name": "I Avatar",
+                              "width": 20,
+                              "height": 20,
+                              "fill": "$dark-card",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "zadti",
+                                  "name": "I Initials",
+                                  "fill": "$white",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "GXETb",
+                              "name": "I By",
+                              "fill": "$ink",
+                              "content": "수연",
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "I1hH3",
+                          "name": "IC Created",
+                          "width": 80,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "JLhlz",
+                              "name": "I Created",
+                              "fill": "$ink-tertiary",
+                              "content": "5월 12일",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "V2kVg",
+                          "name": "IC Expires",
+                          "width": 110,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "vGVTi",
+                              "name": "I Expires",
+                              "fill": "$ink-tertiary",
+                              "content": "—",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "l1hw1",
+                          "name": "IC Status",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "NByua",
+                              "name": "I Dot",
+                              "fill": "$separator",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "IF9oY",
+                              "name": "I Status",
+                              "fill": "$ink-secondary",
+                              "content": "Used by 민지",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VfDQL",
+                      "name": "Invite inv_19cc…a8e7",
+                      "opacity": 0.65,
+                      "width": "fill_container",
+                      "height": 46,
+                      "gap": 14,
+                      "padding": [
+                        0,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "k5KUS",
+                          "name": "IC Link",
+                          "width": 200,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "pmcZr",
+                              "name": "I Token",
+                              "fill": "$ink-secondary",
+                              "content": "inv_19cc…a8e7",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 11.5,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "f2y03",
+                          "name": "IC By",
+                          "width": 120,
+                          "gap": 7,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "zsBzr",
+                              "name": "I Avatar",
+                              "width": 20,
+                              "height": 20,
+                              "fill": "$dark-card",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "IJMTa",
+                                  "name": "I Initials",
+                                  "fill": "$white",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "G7uEKK",
+                              "name": "I By",
+                              "fill": "$ink",
+                              "content": "수연",
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "k1CFy",
+                          "name": "IC Created",
+                          "width": 80,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "lza9K",
+                              "name": "I Created",
+                              "fill": "$ink-tertiary",
+                              "content": "5월 28일",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ktvNk",
+                          "name": "IC Expires",
+                          "width": 110,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "v6Zfq",
+                              "name": "I Expires",
+                              "fill": "$ink-tertiary",
+                              "content": "만료됨",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d1omK",
+                          "name": "IC Status",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "V5gE6Z",
+                              "name": "I Dot",
+                              "fill": "$warning",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "LS5Nd",
+                              "name": "I Status",
+                              "fill": "$ink-secondary",
+                              "content": "Expired",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "yucbs",
+                  "name": "Invites Note",
+                  "fill": "$ink-tertiary",
+                  "content": "만료되거나 사용된 링크는 재사용할 수 없습니다 · 초대 생성은 admin만 가능합니다.",
+                  "fontFamily": "$font-text",
+                  "fontSize": 11.5,
+                  "fontWeight": "normal",
+                  "letterSpacing": -0.1
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "variables": {
