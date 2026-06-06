@@ -436,32 +436,23 @@
                       "name": "Branch Picker"
                     },
                     {
-                      "type": "frame",
-                      "id": "k9A5l",
+                      "id": "qf0eT",
+                      "type": "ref",
+                      "ref": "gnElX",
                       "name": "Sync Status",
-                      "gap": 6,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "ellipse",
-                          "id": "fdIuC",
-                          "name": "Sync Dot",
-                          "fill": "$success",
+                      "descendants": {
+                        "D43txF": {
                           "width": 6,
                           "height": 6
                         },
-                        {
-                          "type": "text",
-                          "id": "R1WaL",
-                          "name": "Sync Label",
-                          "fill": "$ink-tertiary",
+                        "bWLVi": {
                           "content": "Synced 2 min ago",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12,
+                          "fill": "$ink-tertiary",
                           "fontWeight": "normal",
+                          "fontSize": 12,
                           "letterSpacing": -0.12
                         }
-                      ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -471,135 +462,16 @@
                       "height": 1
                     },
                     {
-                      "type": "frame",
-                      "id": "zaT49",
-                      "name": "Search Field",
-                      "width": 240,
-                      "height": 32,
-                      "fill": "$input-bg",
-                      "cornerRadius": "$radius-s",
-                      "gap": 7,
-                      "padding": [
-                        0,
-                        10
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon",
-                          "id": "d0xat4",
-                          "name": "Search Icon",
-                          "width": 14,
-                          "height": 14,
-                          "icon": "search",
-                          "library": "lucide",
-                          "fill": "$ink-tertiary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "ZuwCY",
-                          "name": "Search Placeholder",
-                          "fill": "$ink-tertiary",
-                          "content": "Search specs",
-                          "fontFamily": "$font-text",
-                          "fontSize": 13,
-                          "fontWeight": "normal",
-                          "letterSpacing": -0.2
-                        }
-                      ]
+                      "id": "x6X3L",
+                      "type": "ref",
+                      "ref": "camkN",
+                      "name": "Search Field"
                     },
                     {
-                      "type": "frame",
-                      "id": "WxylY",
-                      "name": "View Switcher",
-                      "fill": "$input-bg",
-                      "cornerRadius": 9,
-                      "gap": 2,
-                      "padding": 2,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "Ud3rL",
-                          "name": "Segment Graph",
-                          "fill": "$surface",
-                          "cornerRadius": 7,
-                          "effect": {
-                            "type": "shadow",
-                            "shadowType": "outer",
-                            "color": "#0000001F",
-                            "offset": {
-                              "x": 0,
-                              "y": 1
-                            },
-                            "blur": 3
-                          },
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "BRdHh",
-                              "name": "Graph Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "waypoints",
-                              "library": "lucide",
-                              "fill": "$ink"
-                            },
-                            {
-                              "type": "text",
-                              "id": "y8lW3o",
-                              "name": "Graph Label",
-                              "fill": "$ink",
-                              "content": "Graph",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "qm2sM",
-                          "name": "Segment List",
-                          "cornerRadius": 7,
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "E77ziR",
-                              "name": "List Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "list",
-                              "library": "lucide",
-                              "fill": "$ink-tertiary"
-                            },
-                            {
-                              "type": "text",
-                              "id": "WW9B7",
-                              "name": "List Label",
-                              "fill": "$ink-tertiary",
-                              "content": "List",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        }
-                      ]
+                      "id": "s3L8Wp",
+                      "type": "ref",
+                      "ref": "LWzOM",
+                      "name": "View Switcher"
                     }
                   ]
                 },
@@ -1541,32 +1413,23 @@
                       "fill": "$input-bg"
                     },
                     {
-                      "type": "frame",
-                      "id": "skhTY",
+                      "id": "aXY9G",
+                      "type": "ref",
+                      "ref": "gnElX",
                       "name": "Sync Status",
-                      "gap": 6,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "ellipse",
-                          "id": "qD3Ea",
-                          "name": "Sync Dot",
-                          "fill": "$success",
+                      "descendants": {
+                        "D43txF": {
                           "width": 6,
                           "height": 6
                         },
-                        {
-                          "type": "text",
-                          "id": "ZHCXH",
-                          "name": "Sync Label",
-                          "fill": "$ink-tertiary",
+                        "bWLVi": {
                           "content": "Synced 2 min ago",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12,
+                          "fill": "$ink-tertiary",
                           "fontWeight": "normal",
+                          "fontSize": 12,
                           "letterSpacing": -0.12
                         }
-                      ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -1576,94 +1439,39 @@
                       "height": 1
                     },
                     {
-                      "type": "frame",
-                      "id": "KTqQY",
-                      "name": "Search Field",
-                      "width": 240,
-                      "height": 32,
-                      "fill": "$input-bg",
-                      "cornerRadius": "$radius-s",
-                      "gap": 7,
-                      "padding": [
-                        0,
-                        10
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon",
-                          "id": "b11bE",
-                          "name": "Search Icon",
-                          "width": 14,
-                          "height": 14,
-                          "icon": "search",
-                          "library": "lucide",
-                          "fill": "$ink-tertiary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "Bekv4",
-                          "name": "Search Placeholder",
-                          "fill": "$ink-tertiary",
-                          "content": "Search specs",
-                          "fontFamily": "$font-text",
-                          "fontSize": 13,
-                          "fontWeight": "normal",
-                          "letterSpacing": -0.2
-                        }
-                      ]
+                      "id": "lNi0K",
+                      "type": "ref",
+                      "ref": "camkN",
+                      "name": "Search Field"
                     },
                     {
-                      "type": "frame",
-                      "id": "Yofmt",
+                      "id": "x1Am0",
+                      "type": "ref",
+                      "ref": "LWzOM",
                       "name": "View Switcher",
-                      "fill": "$input-bg",
-                      "cornerRadius": 9,
-                      "gap": 2,
-                      "padding": 2,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "LXBK9",
-                          "name": "Segment Graph",
-                          "cornerRadius": 7,
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "t6w61",
-                              "name": "Graph Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "waypoints",
-                              "library": "lucide",
-                              "fill": "$ink-tertiary"
+                      "descendants": {
+                        "UjGFt": {
+                          "fill": "#00000000",
+                          "effect": {
+                            "type": "shadow",
+                            "shadowType": "outer",
+                            "enabled": false,
+                            "color": "#0000001F",
+                            "offset": {
+                              "x": 0,
+                              "y": 1
                             },
-                            {
-                              "type": "text",
-                              "id": "OkIaT",
-                              "name": "Graph Label",
-                              "fill": "$ink-tertiary",
-                              "content": "Graph",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
+                            "blur": 3
+                          }
                         },
-                        {
-                          "type": "frame",
-                          "id": "y3XGb",
-                          "name": "Segment List",
+                        "n8xaV2": {
+                          "fill": "$ink-tertiary"
+                        },
+                        "zUEfp": {
+                          "fill": "$ink-tertiary"
+                        },
+                        "aBHqA": {
                           "fill": "$surface",
-                          "cornerRadius": 7,
                           "effect": {
                             "type": "shadow",
                             "shadowType": "outer",
@@ -1673,38 +1481,15 @@
                               "y": 1
                             },
                             "blur": 3
-                          },
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "GOAN4",
-                              "name": "List Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "list",
-                              "library": "lucide",
-                              "fill": "$ink"
-                            },
-                            {
-                              "type": "text",
-                              "id": "TgNa6",
-                              "name": "List Label",
-                              "fill": "$ink",
-                              "content": "List",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
+                          }
+                        },
+                        "CDg7A": {
+                          "fill": "$ink"
+                        },
+                        "iJnp3": {
+                          "fill": "$ink"
                         }
-                      ]
+                      }
                     }
                   ]
                 },
@@ -4046,27 +3831,10 @@
                   "alignItems": "center",
                   "children": [
                     {
-                      "type": "frame",
-                      "id": "xRLmn",
-                      "name": "Back Button",
-                      "width": 28,
-                      "height": 28,
-                      "fill": "$input-bg",
-                      "cornerRadius": 14,
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon",
-                          "id": "i75cS",
-                          "name": "Back Icon",
-                          "width": 15,
-                          "height": 15,
-                          "icon": "chevron-left",
-                          "library": "lucide",
-                          "fill": "$ink-secondary"
-                        }
-                      ]
+                      "id": "FJE0L",
+                      "type": "ref",
+                      "ref": "fMa8O",
+                      "name": "Back Button"
                     },
                     {
                       "type": "frame",
@@ -9951,27 +9719,10 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "D9jHq",
-              "name": "Back Button",
-              "width": 28,
-              "height": 28,
-              "fill": "$input-bg",
-              "cornerRadius": 14,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "ZoX6F",
-                  "name": "Back Icon",
-                  "width": 15,
-                  "height": 15,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
-                }
-              ]
+              "id": "l0BQkX",
+              "type": "ref",
+              "ref": "fMa8O",
+              "name": "Back Button"
             },
             {
               "type": "text",
@@ -10026,237 +9777,22 @@
           ],
           "children": [
             {
-              "type": "frame",
-              "id": "nozdc",
+              "id": "h4pte",
+              "type": "ref",
+              "ref": "ttcaX",
               "name": "Settings Nav",
-              "width": 216,
-              "layout": "vertical",
-              "gap": 2,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "rJXLp",
-                  "name": "SNav General",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "U4JSw",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "sliders-horizontal",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "VKsY0",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "General",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+              "descendants": {
+                "TpF7b": {
+                  "fill": "$surface"
                 },
-                {
-                  "type": "frame",
-                  "id": "cbVmx",
-                  "name": "SNav Git integration",
-                  "width": "fill_container",
-                  "height": 32,
-                  "fill": "$surface",
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "gOc4N",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "git-branch",
-                      "library": "lucide",
-                      "fill": "$ink"
-                    },
-                    {
-                      "type": "text",
-                      "id": "lyDas",
-                      "name": "SNav Label",
-                      "fill": "$ink",
-                      "content": "Git integration",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "600",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+                "L1Fwo": {
+                  "fill": "$ink"
                 },
-                {
-                  "type": "frame",
-                  "id": "C5MXJo",
-                  "name": "SNav Models",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "i9f7gL",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "cpu",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "i9kciC",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Models",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "ZxCcG",
-                  "name": "SNav Members",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "T8XI9V",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "users",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "BpPnm",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Members",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "iAzbA",
-                  "name": "SNav Invites",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "Wq6iT",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "user-plus",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "avCoQ",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Invites",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "tY8aw",
-                  "name": "SNav API keys",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "i64Jj",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "key",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "NNXjJ",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "API keys",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+                "Hzo2A": {
+                  "fontWeight": "600",
+                  "fill": "$ink"
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -10815,27 +10351,10 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "Tdfkx",
-              "name": "Back Button",
-              "width": 28,
-              "height": 28,
-              "fill": "$input-bg",
-              "cornerRadius": 14,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "NCUpj",
-                  "name": "Back Icon",
-                  "width": 15,
-                  "height": 15,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
-                }
-              ]
+              "id": "ToFoT",
+              "type": "ref",
+              "ref": "fMa8O",
+              "name": "Back Button"
             },
             {
               "type": "text",
@@ -10865,237 +10384,22 @@
           ],
           "children": [
             {
-              "type": "frame",
-              "id": "bpvK1",
+              "id": "N6tCY",
+              "type": "ref",
+              "ref": "ttcaX",
               "name": "Settings Nav",
-              "width": 216,
-              "layout": "vertical",
-              "gap": 2,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "LNfOY",
-                  "name": "SNav General",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "jlaeZ",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "sliders-horizontal",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "nuM0O",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "General",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+              "descendants": {
+                "RSsZk": {
+                  "fill": "$surface"
                 },
-                {
-                  "type": "frame",
-                  "id": "f4aXB0",
-                  "name": "SNav Git integration",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "TRuvf",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "git-branch",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "r8QmHk",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Git integration",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+                "TJCSm": {
+                  "fill": "$ink"
                 },
-                {
-                  "type": "frame",
-                  "id": "szGeQ",
-                  "name": "SNav Models",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "kciqv",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "cpu",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "f040At",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Models",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "F9evd3",
-                  "name": "SNav Members",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "YnnbP",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "users",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "YmqgB",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Members",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "bnpir",
-                  "name": "SNav Invites",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "hRt4p",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "user-plus",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "k2Btj1",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Invites",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "ypCvy",
-                  "name": "SNav API keys",
-                  "width": "fill_container",
-                  "height": 32,
-                  "fill": "$surface",
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "g3Hz4a",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "key",
-                      "library": "lucide",
-                      "fill": "$ink"
-                    },
-                    {
-                      "type": "text",
-                      "id": "yY2sY",
-                      "name": "SNav Label",
-                      "fill": "$ink",
-                      "content": "API keys",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "600",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+                "YqmsW": {
+                  "fontWeight": "600",
+                  "fill": "$ink"
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -11834,28 +11138,19 @@
               ]
             },
             {
-              "type": "frame",
-              "id": "t0oRo7",
-              "name": "Sign In Btn",
+              "id": "nwWxl",
+              "type": "ref",
+              "ref": "m2N0bx",
+              "name": "Sign in Btn",
               "width": "fill_container",
               "height": 40,
-              "fill": "$accent",
-              "cornerRadius": "$radius-pill",
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "c4MqGB",
-                  "name": "Sign In Label",
-                  "fill": "$white",
+              "descendants": {
+                "wSvQI": {
                   "content": "Sign in",
-                  "fontFamily": "$font-text",
-                  "fontSize": 15,
                   "fontWeight": "500",
                   "letterSpacing": -0.24
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -12128,28 +11423,19 @@
               ]
             },
             {
-              "type": "frame",
-              "id": "D6krR",
-              "name": "Join Btn",
+              "id": "YPYrv",
+              "type": "ref",
+              "ref": "m2N0bx",
+              "name": "Create account Btn",
               "width": "fill_container",
               "height": 40,
-              "fill": "$accent",
-              "cornerRadius": "$radius-pill",
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "U0hRjz",
-                  "name": "Join Label",
-                  "fill": "$white",
+              "descendants": {
+                "wSvQI": {
                   "content": "Create account",
-                  "fontFamily": "$font-text",
-                  "fontSize": 15,
                   "fontWeight": "500",
                   "letterSpacing": -0.24
                 }
-              ]
+              }
             }
           ]
         },
@@ -12677,32 +11963,23 @@
                       "name": "Branch Picker"
                     },
                     {
-                      "type": "frame",
-                      "id": "A60Y0K",
+                      "id": "STIZy",
+                      "type": "ref",
+                      "ref": "gnElX",
                       "name": "Sync Status",
-                      "gap": 6,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "ellipse",
-                          "id": "cnb7a",
-                          "name": "Sync Dot",
-                          "fill": "$success",
+                      "descendants": {
+                        "D43txF": {
                           "width": 6,
                           "height": 6
                         },
-                        {
-                          "type": "text",
-                          "id": "Scs0n",
-                          "name": "Sync Label",
-                          "fill": "$ink-tertiary",
+                        "bWLVi": {
                           "content": "Synced 2 min ago",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12,
+                          "fill": "$ink-tertiary",
                           "fontWeight": "normal",
+                          "fontSize": 12,
                           "letterSpacing": -0.12
                         }
-                      ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -12712,94 +11989,39 @@
                       "height": 1
                     },
                     {
-                      "type": "frame",
-                      "id": "YEG2w",
-                      "name": "Search Field",
-                      "width": 240,
-                      "height": 32,
-                      "fill": "$input-bg",
-                      "cornerRadius": "$radius-s",
-                      "gap": 7,
-                      "padding": [
-                        0,
-                        10
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon",
-                          "id": "zjeLp",
-                          "name": "Search Icon",
-                          "width": 14,
-                          "height": 14,
-                          "icon": "search",
-                          "library": "lucide",
-                          "fill": "$ink-tertiary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "MHmSq",
-                          "name": "Search Placeholder",
-                          "fill": "$ink-tertiary",
-                          "content": "Search specs",
-                          "fontFamily": "$font-text",
-                          "fontSize": 13,
-                          "fontWeight": "normal",
-                          "letterSpacing": -0.2
-                        }
-                      ]
+                      "id": "XNmZZ",
+                      "type": "ref",
+                      "ref": "camkN",
+                      "name": "Search Field"
                     },
                     {
-                      "type": "frame",
-                      "id": "PLc1H",
+                      "id": "CgRbn",
+                      "type": "ref",
+                      "ref": "LWzOM",
                       "name": "View Switcher",
-                      "fill": "$input-bg",
-                      "cornerRadius": 9,
-                      "gap": 2,
-                      "padding": 2,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "rUago",
-                          "name": "Segment Graph",
-                          "cornerRadius": 7,
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "a7tOJP",
-                              "name": "Graph Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "waypoints",
-                              "library": "lucide",
-                              "fill": "$ink-tertiary"
+                      "descendants": {
+                        "UjGFt": {
+                          "fill": "#00000000",
+                          "effect": {
+                            "type": "shadow",
+                            "shadowType": "outer",
+                            "enabled": false,
+                            "color": "#0000001F",
+                            "offset": {
+                              "x": 0,
+                              "y": 1
                             },
-                            {
-                              "type": "text",
-                              "id": "N1CAt",
-                              "name": "Graph Label",
-                              "fill": "$ink-tertiary",
-                              "content": "Graph",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
+                            "blur": 3
+                          }
                         },
-                        {
-                          "type": "frame",
-                          "id": "ynwm0",
-                          "name": "Segment List",
+                        "n8xaV2": {
+                          "fill": "$ink-tertiary"
+                        },
+                        "zUEfp": {
+                          "fill": "$ink-tertiary"
+                        },
+                        "aBHqA": {
                           "fill": "$surface",
-                          "cornerRadius": 7,
                           "effect": {
                             "type": "shadow",
                             "shadowType": "outer",
@@ -12809,38 +12031,15 @@
                               "y": 1
                             },
                             "blur": 3
-                          },
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "r9aRpf",
-                              "name": "List Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "list",
-                              "library": "lucide",
-                              "fill": "$ink"
-                            },
-                            {
-                              "type": "text",
-                              "id": "qNHen",
-                              "name": "List Label",
-                              "fill": "$ink",
-                              "content": "List",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
+                          }
+                        },
+                        "CDg7A": {
+                          "fill": "$ink"
+                        },
+                        "iJnp3": {
+                          "fill": "$ink"
                         }
-                      ]
+                      }
                     }
                   ]
                 },
@@ -15224,32 +14423,23 @@
                       "name": "Branch Picker"
                     },
                     {
-                      "type": "frame",
-                      "id": "MkMSZ",
+                      "id": "h8OlAD",
+                      "type": "ref",
+                      "ref": "gnElX",
                       "name": "Sync Status",
-                      "gap": 6,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "ellipse",
-                          "id": "euwHF",
-                          "name": "Sync Dot",
-                          "fill": "$success",
+                      "descendants": {
+                        "D43txF": {
                           "width": 6,
                           "height": 6
                         },
-                        {
-                          "type": "text",
-                          "id": "M3JNa",
-                          "name": "Sync Label",
-                          "fill": "$ink-tertiary",
+                        "bWLVi": {
                           "content": "Synced 2 min ago",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12,
+                          "fill": "$ink-tertiary",
                           "fontWeight": "normal",
+                          "fontSize": 12,
                           "letterSpacing": -0.12
                         }
-                      ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -15259,135 +14449,16 @@
                       "height": 1
                     },
                     {
-                      "type": "frame",
-                      "id": "j4UjG",
-                      "name": "Search Field",
-                      "width": 240,
-                      "height": 32,
-                      "fill": "$input-bg",
-                      "cornerRadius": "$radius-s",
-                      "gap": 7,
-                      "padding": [
-                        0,
-                        10
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon",
-                          "id": "FlCkg",
-                          "name": "Search Icon",
-                          "width": 14,
-                          "height": 14,
-                          "icon": "search",
-                          "library": "lucide",
-                          "fill": "$ink-tertiary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "kldUW",
-                          "name": "Search Placeholder",
-                          "fill": "$ink-tertiary",
-                          "content": "Search specs",
-                          "fontFamily": "$font-text",
-                          "fontSize": 13,
-                          "fontWeight": "normal",
-                          "letterSpacing": -0.2
-                        }
-                      ]
+                      "id": "e3cNP",
+                      "type": "ref",
+                      "ref": "camkN",
+                      "name": "Search Field"
                     },
                     {
-                      "type": "frame",
-                      "id": "i3Jke",
-                      "name": "View Switcher",
-                      "fill": "$input-bg",
-                      "cornerRadius": 9,
-                      "gap": 2,
-                      "padding": 2,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "zcFn4",
-                          "name": "Segment Graph",
-                          "fill": "$surface",
-                          "cornerRadius": 7,
-                          "effect": {
-                            "type": "shadow",
-                            "shadowType": "outer",
-                            "color": "#0000001F",
-                            "offset": {
-                              "x": 0,
-                              "y": 1
-                            },
-                            "blur": 3
-                          },
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "mDaw7",
-                              "name": "Graph Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "waypoints",
-                              "library": "lucide",
-                              "fill": "$ink"
-                            },
-                            {
-                              "type": "text",
-                              "id": "HPVR8",
-                              "name": "Graph Label",
-                              "fill": "$ink",
-                              "content": "Graph",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "IBvI3",
-                          "name": "Segment List",
-                          "cornerRadius": 7,
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "q6SW6M",
-                              "name": "List Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "list",
-                              "library": "lucide",
-                              "fill": "$ink-tertiary"
-                            },
-                            {
-                              "type": "text",
-                              "id": "M3MhD",
-                              "name": "List Label",
-                              "fill": "$ink-tertiary",
-                              "content": "List",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        }
-                      ]
+                      "id": "QE5Wd",
+                      "type": "ref",
+                      "ref": "LWzOM",
+                      "name": "View Switcher"
                     }
                   ]
                 },
@@ -16277,27 +15348,10 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "L8GofU",
-              "name": "Back Button",
-              "width": 28,
-              "height": 28,
-              "fill": "$input-bg",
-              "cornerRadius": 14,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "qVVKA",
-                  "name": "Back Icon",
-                  "width": 15,
-                  "height": 15,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
-                }
-              ]
+              "id": "O6hVeY",
+              "type": "ref",
+              "ref": "fMa8O",
+              "name": "Back Button"
             },
             {
               "type": "text",
@@ -16352,237 +15406,22 @@
           ],
           "children": [
             {
-              "type": "frame",
-              "id": "a3iTZY",
+              "id": "nuf1B",
+              "type": "ref",
+              "ref": "ttcaX",
               "name": "Settings Nav",
-              "width": 216,
-              "layout": "vertical",
-              "gap": 2,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "Btu3w",
-                  "name": "SNav General",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "TkZI8",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "sliders-horizontal",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "t8EVy",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "General",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+              "descendants": {
+                "yyiXU": {
+                  "fill": "$surface"
                 },
-                {
-                  "type": "frame",
-                  "id": "GoW8d",
-                  "name": "SNav Git integration",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "EyttE",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "git-branch",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "FYIpP",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Git integration",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+                "dDCev": {
+                  "fill": "$ink"
                 },
-                {
-                  "type": "frame",
-                  "id": "P6vXME",
-                  "name": "SNav Models",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "y6j5Am",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "cpu",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "Ep4d4",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Models",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "blFLX",
-                  "name": "SNav Members",
-                  "width": "fill_container",
-                  "height": 32,
-                  "fill": "$surface",
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "gMXEW",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "users",
-                      "library": "lucide",
-                      "fill": "$ink"
-                    },
-                    {
-                      "type": "text",
-                      "id": "pzpLW",
-                      "name": "SNav Label",
-                      "fill": "$ink",
-                      "content": "Members",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "600",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "cy8RP",
-                  "name": "SNav Invites",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "prVPf",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "user-plus",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "QK4Hx",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Invites",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "qtt1c",
-                  "name": "SNav API keys",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "PO7VU",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "key",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "P18Ia",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "API keys",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+                "obq9e": {
+                  "fontWeight": "600",
+                  "fill": "$ink"
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -17532,27 +16371,10 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "kVEF1",
-              "name": "Back Button",
-              "width": 28,
-              "height": 28,
-              "fill": "$input-bg",
-              "cornerRadius": 14,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "u1YWP3",
-                  "name": "Back Icon",
-                  "width": 15,
-                  "height": 15,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
-                }
-              ]
+              "id": "cQZka",
+              "type": "ref",
+              "ref": "fMa8O",
+              "name": "Back Button"
             },
             {
               "type": "text",
@@ -17607,237 +16429,22 @@
           ],
           "children": [
             {
-              "type": "frame",
-              "id": "UfVtN",
+              "id": "zkvLZ",
+              "type": "ref",
+              "ref": "ttcaX",
               "name": "Settings Nav",
-              "width": 216,
-              "layout": "vertical",
-              "gap": 2,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "skalU",
-                  "name": "SNav General",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "Nn273",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "sliders-horizontal",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "xYTAB",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "General",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+              "descendants": {
+                "FG1fb": {
+                  "fill": "$surface"
                 },
-                {
-                  "type": "frame",
-                  "id": "E420ei",
-                  "name": "SNav Git integration",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "Uofs6",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "git-branch",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "UsJvW",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Git integration",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+                "AdZqC": {
+                  "fill": "$ink"
                 },
-                {
-                  "type": "frame",
-                  "id": "b6eD5",
-                  "name": "SNav Models",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "uaQVc",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "cpu",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "pbSVX",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Models",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "OJMRW",
-                  "name": "SNav Members",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "Ga9Bb",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "users",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "dqa8Z",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "Members",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "z3M3r",
-                  "name": "SNav Invites",
-                  "width": "fill_container",
-                  "height": 32,
-                  "fill": "$surface",
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "ZmAEa",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "user-plus",
-                      "library": "lucide",
-                      "fill": "$ink"
-                    },
-                    {
-                      "type": "text",
-                      "id": "NJiGx",
-                      "name": "SNav Label",
-                      "fill": "$ink",
-                      "content": "Invites",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "600",
-                      "letterSpacing": -0.2
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "aGGmJ",
-                  "name": "SNav API keys",
-                  "width": "fill_container",
-                  "height": 32,
-                  "cornerRadius": 7,
-                  "gap": 9,
-                  "padding": [
-                    0,
-                    11
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "YuO3q",
-                      "name": "SNav Icon",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "key",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "ZfNdO",
-                      "name": "SNav Label",
-                      "fill": "$ink-secondary",
-                      "content": "API keys",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.2
-                    }
-                  ]
+                "aDqaV": {
+                  "fontWeight": "600",
+                  "fill": "$ink"
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -18694,32 +17301,23 @@
                       "name": "Branch Picker"
                     },
                     {
-                      "type": "frame",
-                      "id": "MoFrj",
+                      "id": "PM4qU",
+                      "type": "ref",
+                      "ref": "gnElX",
                       "name": "Sync Status",
-                      "gap": 6,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "ellipse",
-                          "id": "xSyaY",
-                          "name": "Sync Dot",
-                          "fill": "$success",
+                      "descendants": {
+                        "D43txF": {
                           "width": 6,
                           "height": 6
                         },
-                        {
-                          "type": "text",
-                          "id": "WmbiW",
-                          "name": "Sync Label",
-                          "fill": "$ink-tertiary",
+                        "bWLVi": {
                           "content": "Synced 2 min ago",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12,
+                          "fill": "$ink-tertiary",
                           "fontWeight": "normal",
+                          "fontSize": 12,
                           "letterSpacing": -0.12
                         }
-                      ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -18729,135 +17327,16 @@
                       "height": 1
                     },
                     {
-                      "type": "frame",
-                      "id": "e2HjZi",
-                      "name": "Search Field",
-                      "width": 240,
-                      "height": 32,
-                      "fill": "$input-bg",
-                      "cornerRadius": "$radius-s",
-                      "gap": 7,
-                      "padding": [
-                        0,
-                        10
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon",
-                          "id": "H57cOy",
-                          "name": "Search Icon",
-                          "width": 14,
-                          "height": 14,
-                          "icon": "search",
-                          "library": "lucide",
-                          "fill": "$ink-tertiary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "zFjeZ",
-                          "name": "Search Placeholder",
-                          "fill": "$ink-tertiary",
-                          "content": "Search specs",
-                          "fontFamily": "$font-text",
-                          "fontSize": 13,
-                          "fontWeight": "normal",
-                          "letterSpacing": -0.2
-                        }
-                      ]
+                      "id": "Qxkgv",
+                      "type": "ref",
+                      "ref": "camkN",
+                      "name": "Search Field"
                     },
                     {
-                      "type": "frame",
-                      "id": "a3J10",
-                      "name": "View Switcher",
-                      "fill": "$input-bg",
-                      "cornerRadius": 9,
-                      "gap": 2,
-                      "padding": 2,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "vOF2O",
-                          "name": "Segment Graph",
-                          "fill": "$surface",
-                          "cornerRadius": 7,
-                          "effect": {
-                            "type": "shadow",
-                            "shadowType": "outer",
-                            "color": "#0000001F",
-                            "offset": {
-                              "x": 0,
-                              "y": 1
-                            },
-                            "blur": 3
-                          },
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "VXKfU",
-                              "name": "Graph Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "waypoints",
-                              "library": "lucide",
-                              "fill": "$ink"
-                            },
-                            {
-                              "type": "text",
-                              "id": "iaRXb",
-                              "name": "Graph Label",
-                              "fill": "$ink",
-                              "content": "Graph",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "UtBRj",
-                          "name": "Segment List",
-                          "cornerRadius": 7,
-                          "gap": 6,
-                          "padding": [
-                            5,
-                            12
-                          ],
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "f3FH9",
-                              "name": "List Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "list",
-                              "library": "lucide",
-                              "fill": "$ink-tertiary"
-                            },
-                            {
-                              "type": "text",
-                              "id": "HxiFl",
-                              "name": "List Label",
-                              "fill": "$ink-tertiary",
-                              "content": "List",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        }
-                      ]
+                      "id": "SO3Cm",
+                      "type": "ref",
+                      "ref": "LWzOM",
+                      "name": "View Switcher"
                     }
                   ]
                 },
@@ -21810,28 +20289,19 @@
                   ]
                 },
                 {
-                  "type": "frame",
-                  "id": "x2C5L0",
-                  "name": "Sign In Btn",
+                  "id": "zufyX",
+                  "type": "ref",
+                  "ref": "m2N0bx",
+                  "name": "Sign in Btn",
                   "width": "fill_container",
                   "height": 46,
-                  "fill": "$accent",
-                  "cornerRadius": "$radius-pill",
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "wQh1K",
-                      "name": "Sign In Label",
-                      "fill": "$white",
+                  "descendants": {
+                    "wSvQI": {
                       "content": "Sign in",
-                      "fontFamily": "$font-text",
-                      "fontSize": 15,
                       "fontWeight": "500",
                       "letterSpacing": -0.24
                     }
-                  ]
+                  }
                 },
                 {
                   "type": "frame",
@@ -22136,28 +20606,19 @@
                   ]
                 },
                 {
-                  "type": "frame",
-                  "id": "i4jr1",
-                  "name": "Join Btn",
+                  "id": "RfhxM",
+                  "type": "ref",
+                  "ref": "m2N0bx",
+                  "name": "Create account Btn",
                   "width": "fill_container",
                   "height": 46,
-                  "fill": "$accent",
-                  "cornerRadius": "$radius-pill",
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "ZEf5r",
-                      "name": "Join Label",
-                      "fill": "$white",
+                  "descendants": {
+                    "wSvQI": {
                       "content": "Create account",
-                      "fontFamily": "$font-text",
-                      "fontSize": 15,
                       "fontWeight": "500",
                       "letterSpacing": -0.24
                     }
-                  ]
+                  }
                 }
               ]
             }
@@ -22267,95 +20728,21 @@
           ],
           "children": [
             {
-              "type": "frame",
-              "id": "X3prJh",
+              "id": "nNKQT",
+              "type": "ref",
+              "ref": "LWzOM",
               "name": "View Switcher",
               "width": "fill_container",
-              "fill": "$input-bg",
-              "cornerRadius": 9,
-              "gap": 2,
-              "padding": 2,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "B5Icf",
-                  "name": "Segment Graph",
+              "descendants": {
+                "UjGFt": {
                   "width": "fill_container",
-                  "height": 30,
-                  "fill": "$surface",
-                  "cornerRadius": 7,
-                  "effect": {
-                    "type": "shadow",
-                    "shadowType": "outer",
-                    "color": "#0000001F",
-                    "offset": {
-                      "x": 0,
-                      "y": 1
-                    },
-                    "blur": 3
-                  },
-                  "gap": 6,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "JWSG0",
-                      "name": "Graph Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "waypoints",
-                      "library": "lucide",
-                      "fill": "$ink"
-                    },
-                    {
-                      "type": "text",
-                      "id": "kXyAr",
-                      "name": "Graph Label",
-                      "fill": "$ink",
-                      "content": "Graph",
-                      "fontFamily": "$font-text",
-                      "fontSize": 12.5,
-                      "fontWeight": "500",
-                      "letterSpacing": -0.12
-                    }
-                  ]
+                  "height": 30
                 },
-                {
-                  "type": "frame",
-                  "id": "f3RHz",
-                  "name": "Segment List",
+                "aBHqA": {
                   "width": "fill_container",
-                  "height": 30,
-                  "cornerRadius": 7,
-                  "gap": 6,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "sZD25",
-                      "name": "List Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "list",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "lzZZZ",
-                      "name": "List Label",
-                      "fill": "$ink-tertiary",
-                      "content": "List",
-                      "fontFamily": "$font-text",
-                      "fontSize": 12.5,
-                      "fontWeight": "500",
-                      "letterSpacing": -0.12
-                    }
-                  ]
+                  "height": 30
                 }
-              ]
+              }
             }
           ]
         },
@@ -22855,57 +21242,36 @@
           ],
           "children": [
             {
-              "type": "frame",
-              "id": "c4hQO",
+              "id": "O3cdD",
+              "type": "ref",
+              "ref": "LWzOM",
               "name": "View Switcher",
               "width": "fill_container",
-              "fill": "$input-bg",
-              "cornerRadius": 9,
-              "gap": 2,
-              "padding": 2,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "Mc6cJ",
-                  "name": "Segment Graph",
-                  "width": "fill_container",
-                  "height": 30,
-                  "cornerRadius": 7,
-                  "gap": 6,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "Lbf0H",
-                      "name": "Graph Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "waypoints",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
+              "descendants": {
+                "UjGFt": {
+                  "fill": "#00000000",
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "enabled": false,
+                    "color": "#0000001F",
+                    "offset": {
+                      "x": 0,
+                      "y": 1
                     },
-                    {
-                      "type": "text",
-                      "id": "mK7bs",
-                      "name": "Graph Label",
-                      "fill": "$ink-tertiary",
-                      "content": "Graph",
-                      "fontFamily": "$font-text",
-                      "fontSize": 12.5,
-                      "fontWeight": "500",
-                      "letterSpacing": -0.12
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "YvyqY",
-                  "name": "Segment List",
+                    "blur": 3
+                  },
                   "width": "fill_container",
-                  "height": 30,
+                  "height": 30
+                },
+                "n8xaV2": {
+                  "fill": "$ink-tertiary"
+                },
+                "zUEfp": {
+                  "fill": "$ink-tertiary"
+                },
+                "aBHqA": {
                   "fill": "$surface",
-                  "cornerRadius": 7,
                   "effect": {
                     "type": "shadow",
                     "shadowType": "outer",
@@ -22916,34 +21282,16 @@
                     },
                     "blur": 3
                   },
-                  "gap": 6,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "o3p0xP",
-                      "name": "List Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "list",
-                      "library": "lucide",
-                      "fill": "$ink"
-                    },
-                    {
-                      "type": "text",
-                      "id": "OkTtU",
-                      "name": "List Label",
-                      "fill": "$ink",
-                      "content": "List",
-                      "fontFamily": "$font-text",
-                      "fontSize": 12.5,
-                      "fontWeight": "500",
-                      "letterSpacing": -0.12
-                    }
-                  ]
+                  "width": "fill_container",
+                  "height": 30
+                },
+                "CDg7A": {
+                  "fill": "$ink"
+                },
+                "iJnp3": {
+                  "fill": "$ink"
                 }
-              ]
+              }
             }
           ]
         },
@@ -24009,27 +22357,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "kJTl8",
+              "id": "dtlTO",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "H8ujbR",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -26903,27 +25243,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "Y4XX2a",
+              "id": "F6S8h",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "f4z3Ns",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -28047,27 +26379,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "ZZVdR",
+              "id": "j2r3u",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "Eoc7K",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "text",
@@ -28524,95 +26848,21 @@
           ],
           "children": [
             {
-              "type": "frame",
-              "id": "eVRMP",
+              "id": "Ypg1i",
+              "type": "ref",
+              "ref": "LWzOM",
               "name": "View Switcher",
               "width": "fill_container",
-              "fill": "$input-bg",
-              "cornerRadius": 9,
-              "gap": 2,
-              "padding": 2,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "GIqoZ",
-                  "name": "Segment Graph",
+              "descendants": {
+                "UjGFt": {
                   "width": "fill_container",
-                  "height": 30,
-                  "fill": "$surface",
-                  "cornerRadius": 7,
-                  "effect": {
-                    "type": "shadow",
-                    "shadowType": "outer",
-                    "color": "#0000001F",
-                    "offset": {
-                      "x": 0,
-                      "y": 1
-                    },
-                    "blur": 3
-                  },
-                  "gap": 6,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "XLsHR",
-                      "name": "Graph Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "waypoints",
-                      "library": "lucide",
-                      "fill": "$ink"
-                    },
-                    {
-                      "type": "text",
-                      "id": "N7Onzi",
-                      "name": "Graph Label",
-                      "fill": "$ink",
-                      "content": "Graph",
-                      "fontFamily": "$font-text",
-                      "fontSize": 12.5,
-                      "fontWeight": "500",
-                      "letterSpacing": -0.12
-                    }
-                  ]
+                  "height": 30
                 },
-                {
-                  "type": "frame",
-                  "id": "ILsfW",
-                  "name": "Segment List",
+                "aBHqA": {
                   "width": "fill_container",
-                  "height": 30,
-                  "cornerRadius": 7,
-                  "gap": 6,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "Q8npPa",
-                      "name": "List Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "list",
-                      "library": "lucide",
-                      "fill": "$ink-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "Z5rF3S",
-                      "name": "List Label",
-                      "fill": "$ink-tertiary",
-                      "content": "List",
-                      "fontFamily": "$font-text",
-                      "fontSize": 12.5,
-                      "fontWeight": "500",
-                      "letterSpacing": -0.12
-                    }
-                  ]
+                  "height": 30
                 }
-              ]
+              }
             }
           ]
         },
@@ -29840,27 +28090,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "yZTzG",
+              "id": "LKPeB",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "T30OS",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "text",
@@ -30540,27 +28782,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "ySgzM",
+              "id": "gnHjU",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "ptilR",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "text",
@@ -30926,27 +29160,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "nSLjp",
+              "id": "m7KLq",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "KoFqc",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "text",
@@ -31159,27 +29385,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "wpNPo",
+              "id": "LmJ17",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "l66vqJ",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "text",
@@ -31824,27 +30042,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "YYMyN",
+              "id": "M6MmQ4",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "xu0LH",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "text",
@@ -34508,27 +32718,10 @@
                   "alignItems": "center",
                   "children": [
                     {
-                      "type": "frame",
-                      "id": "wZf9e",
-                      "name": "Back Button",
-                      "width": 28,
-                      "height": 28,
-                      "fill": "$input-bg",
-                      "cornerRadius": 14,
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon",
-                          "id": "AwKCz",
-                          "name": "Back Icon",
-                          "width": 15,
-                          "height": 15,
-                          "icon": "chevron-left",
-                          "library": "lucide",
-                          "fill": "$ink-secondary"
-                        }
-                      ]
+                      "id": "NJnOg",
+                      "type": "ref",
+                      "ref": "fMa8O",
+                      "name": "Back Button"
                     },
                     {
                       "type": "frame",
@@ -35849,27 +34042,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "D1VAE",
+              "id": "u9vnJe",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "iHnmb",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -37188,27 +35373,19 @@
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "apaj2",
+              "id": "q3YvTS",
+              "type": "ref",
+              "ref": "fMa8O",
               "name": "Back Button",
               "width": 30,
               "height": 30,
-              "fill": "$input-bg",
               "cornerRadius": 15,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "SNbdD",
-                  "name": "Back Icon",
+              "descendants": {
+                "O9jDg3": {
                   "width": 16,
-                  "height": 16,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
+                  "height": 16
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -37988,6 +36165,1213 @@
                   "fontSize": 10,
                   "fontWeight": "normal",
                   "letterSpacing": -0.1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "fMa8O",
+      "x": 0,
+      "y": -2660,
+      "name": "component/Icon Button",
+      "reusable": true,
+      "width": 28,
+      "height": 28,
+      "fill": "$input-bg",
+      "cornerRadius": 14,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "icon",
+          "id": "O9jDg3",
+          "name": "IB Icon",
+          "width": 15,
+          "height": 15,
+          "icon": "chevron-left",
+          "library": "lucide",
+          "fill": "$ink-secondary"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "camkN",
+      "x": 60,
+      "y": -2660,
+      "name": "component/Search Field",
+      "reusable": true,
+      "width": 240,
+      "height": 32,
+      "fill": "$input-bg",
+      "cornerRadius": "$radius-s",
+      "gap": 7,
+      "padding": [
+        0,
+        10
+      ],
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "icon",
+          "id": "giTSl",
+          "name": "SF Icon",
+          "width": 14,
+          "height": 14,
+          "icon": "search",
+          "library": "lucide",
+          "fill": "$ink-tertiary"
+        },
+        {
+          "type": "text",
+          "id": "QlcXd",
+          "name": "SF Placeholder",
+          "fill": "$ink-tertiary",
+          "content": "Search specs",
+          "fontFamily": "$font-text",
+          "fontSize": 13,
+          "fontWeight": "normal",
+          "letterSpacing": -0.2
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "LWzOM",
+      "x": 330,
+      "y": -2660,
+      "name": "component/View Switcher",
+      "reusable": true,
+      "fill": "$input-bg",
+      "cornerRadius": 9,
+      "gap": 2,
+      "padding": 2,
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "UjGFt",
+          "name": "VSW Graph",
+          "fill": "$surface",
+          "cornerRadius": 7,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000001F",
+            "offset": {
+              "x": 0,
+              "y": 1
+            },
+            "blur": 3
+          },
+          "gap": 6,
+          "padding": [
+            5,
+            12
+          ],
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "n8xaV2",
+              "name": "VSW Graph Icon",
+              "width": 13,
+              "height": 13,
+              "icon": "waypoints",
+              "library": "lucide",
+              "fill": "$ink"
+            },
+            {
+              "type": "text",
+              "id": "zUEfp",
+              "name": "VSW Graph Label",
+              "fill": "$ink",
+              "content": "Graph",
+              "fontFamily": "$font-text",
+              "fontSize": 12.5,
+              "fontWeight": "500",
+              "letterSpacing": -0.12
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "aBHqA",
+          "name": "VSW List",
+          "cornerRadius": 7,
+          "gap": 6,
+          "padding": [
+            5,
+            12
+          ],
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "CDg7A",
+              "name": "VSW List Icon",
+              "width": 13,
+              "height": 13,
+              "icon": "list",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "iJnp3",
+              "name": "VSW List Label",
+              "fill": "$ink-tertiary",
+              "content": "List",
+              "fontFamily": "$font-text",
+              "fontSize": 12.5,
+              "fontWeight": "500",
+              "letterSpacing": -0.12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "T6uuhx",
+      "x": 560,
+      "y": -2660,
+      "name": "component/Avatar",
+      "reusable": true,
+      "width": 24,
+      "height": 24,
+      "fill": "$input-bg",
+      "cornerRadius": 12,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "text",
+          "id": "a4sT7",
+          "name": "AV Initials",
+          "fill": "$ink-secondary",
+          "content": "SY",
+          "fontFamily": "$font-text",
+          "fontSize": 9,
+          "fontWeight": "600"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Agoqb",
+      "x": 620,
+      "y": -2660,
+      "name": "component/Field",
+      "reusable": true,
+      "width": 320,
+      "layout": "vertical",
+      "gap": 6,
+      "children": [
+        {
+          "type": "text",
+          "id": "eZzYN",
+          "name": "FLD Label",
+          "fill": "$ink",
+          "content": "Label",
+          "fontFamily": "$font-text",
+          "fontSize": 12.5,
+          "fontWeight": "500",
+          "letterSpacing": -0.12
+        },
+        {
+          "type": "frame",
+          "id": "Ux31t",
+          "name": "FLD Input",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#F5F5F7",
+          "cornerRadius": "$radius-s",
+          "gap": 8,
+          "padding": [
+            0,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Y9CJe",
+              "name": "FLD Value",
+              "fill": "$ink",
+              "content": "Value",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ttcaX",
+      "x": 0,
+      "y": -2580,
+      "name": "component/Settings Nav",
+      "reusable": true,
+      "width": 216,
+      "layout": "vertical",
+      "gap": 2,
+      "children": [
+        {
+          "type": "frame",
+          "id": "C0g8F",
+          "name": "SN General",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 9,
+          "padding": [
+            0,
+            11
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "HcOtP",
+              "name": "SN Icon General",
+              "width": 14,
+              "height": 14,
+              "icon": "sliders-horizontal",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "kante",
+              "name": "SN Label General",
+              "fill": "$ink-secondary",
+              "content": "General",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TpF7b",
+          "name": "SN Git integration",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 9,
+          "padding": [
+            0,
+            11
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "L1Fwo",
+              "name": "SN Icon Git integration",
+              "width": 14,
+              "height": 14,
+              "icon": "git-branch",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "Hzo2A",
+              "name": "SN Label Git integration",
+              "fill": "$ink-secondary",
+              "content": "Git integration",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bxOMS",
+          "name": "SN Models",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 9,
+          "padding": [
+            0,
+            11
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "p02Kex",
+              "name": "SN Icon Models",
+              "width": 14,
+              "height": 14,
+              "icon": "cpu",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "R1efZ",
+              "name": "SN Label Models",
+              "fill": "$ink-secondary",
+              "content": "Models",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yyiXU",
+          "name": "SN Members",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 9,
+          "padding": [
+            0,
+            11
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "dDCev",
+              "name": "SN Icon Members",
+              "width": 14,
+              "height": 14,
+              "icon": "users",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "obq9e",
+              "name": "SN Label Members",
+              "fill": "$ink-secondary",
+              "content": "Members",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "FG1fb",
+          "name": "SN Invites",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 9,
+          "padding": [
+            0,
+            11
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "AdZqC",
+              "name": "SN Icon Invites",
+              "width": 14,
+              "height": 14,
+              "icon": "user-plus",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "aDqaV",
+              "name": "SN Label Invites",
+              "fill": "$ink-secondary",
+              "content": "Invites",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "RSsZk",
+          "name": "SN API keys",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 9,
+          "padding": [
+            0,
+            11
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "TJCSm",
+              "name": "SN Icon API keys",
+              "width": 14,
+              "height": 14,
+              "icon": "key",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "YqmsW",
+              "name": "SN Label API keys",
+              "fill": "$ink-secondary",
+              "content": "API keys",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "zwvHJ",
+      "x": 0,
+      "y": -4160,
+      "name": "00 · Design System",
+      "width": 1560,
+      "fill": "$bg",
+      "cornerRadius": 24,
+      "layout": "vertical",
+      "gap": 32,
+      "padding": [
+        36,
+        40
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "QPK9x",
+          "name": "DS Head",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "CKzdF",
+              "name": "DS Title",
+              "fill": "$ink",
+              "content": "specraft · Design System",
+              "fontFamily": "$font-display",
+              "fontSize": 24,
+              "fontWeight": "600",
+              "letterSpacing": -0.36
+            },
+            {
+              "type": "text",
+              "id": "sGQQA",
+              "name": "DS Sub",
+              "fill": "$ink-tertiary",
+              "content": "재사용 컴포넌트 카탈로그 — 코드 변환의 기준 정의 · 모든 화면은 이 컴포넌트의 인스턴스를 사용합니다",
+              "fontFamily": "$font-text",
+              "fontSize": 12.5,
+              "fontWeight": "normal",
+              "letterSpacing": -0.12
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "J0kfXW",
+          "name": "Sec NAVIGATION & SHELL",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "DSMf6",
+              "name": "Sec Label NAVIGATION & SHELL",
+              "fill": "$ink-tertiary",
+              "content": "NAVIGATION & SHELL",
+              "fontFamily": "$font-text",
+              "fontSize": 11,
+              "fontWeight": "600",
+              "letterSpacing": 0.8
+            },
+            {
+              "type": "frame",
+              "id": "MufzJ",
+              "name": "Row 1a",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "RRfCG",
+                  "name": "IL TopNav",
+                  "fill": "$ink-secondary",
+                  "content": "TopNav",
+                  "fontFamily": "$font-text",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": -0.1
+                },
+                {
+                  "id": "HvwzF",
+                  "type": "ref",
+                  "ref": "nwOLJ",
+                  "name": "TopNav"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "kdk6r",
+              "name": "Row 1b",
+              "gap": 36,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "EpRtq",
+                  "name": "Item Sidebar",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "I1vwE",
+                      "name": "IL Sidebar",
+                      "fill": "$ink-secondary",
+                      "content": "Sidebar",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "qWSDL",
+                      "type": "ref",
+                      "ref": "rbjMR",
+                      "name": "Sidebar"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "WZYMD",
+                  "name": "Item Sidebar Rail",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "MskNW",
+                      "name": "IL Sidebar Rail",
+                      "fill": "$ink-secondary",
+                      "content": "Sidebar Rail",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "y8jeg",
+                      "type": "ref",
+                      "ref": "i3RAsT",
+                      "name": "Sidebar Rail"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "R8HDP",
+                  "name": "Item Settings Nav",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "MXm1z",
+                      "name": "IL Settings Nav",
+                      "fill": "$ink-secondary",
+                      "content": "Settings Nav",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "Ly88z",
+                      "type": "ref",
+                      "ref": "ttcaX",
+                      "name": "Settings Nav"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "w9qe9E",
+                  "name": "Item Glass Nav",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "w71OPs",
+                      "name": "IL Glass Nav",
+                      "fill": "$ink-secondary",
+                      "content": "Glass Nav",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "YGhBs",
+                      "type": "ref",
+                      "ref": "OQVi0",
+                      "name": "Glass Nav"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c78u6y",
+                  "name": "Mobile Col",
+                  "layout": "vertical",
+                  "gap": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "yaeEP",
+                      "name": "Item Mobile Status Bar",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "a6Kxnk",
+                          "name": "IL MSB",
+                          "fill": "$ink-secondary",
+                          "content": "Mobile Status Bar",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.1
+                        },
+                        {
+                          "id": "BNFXU",
+                          "type": "ref",
+                          "ref": "mtQVR",
+                          "name": "Mobile Status Bar"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "aokd0",
+                      "name": "Item Mobile Tab Bar",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "TDp8K",
+                          "name": "IL MTB",
+                          "fill": "$ink-secondary",
+                          "content": "Mobile Tab Bar",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.1
+                        },
+                        {
+                          "id": "ArYQq",
+                          "type": "ref",
+                          "ref": "yjA8u",
+                          "name": "Mobile Tab Bar"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "W37Nm",
+          "name": "Sec CONTROLS",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "MywUp",
+              "name": "Sec Label CONTROLS",
+              "fill": "$ink-tertiary",
+              "content": "CONTROLS",
+              "fontFamily": "$font-text",
+              "fontSize": 11,
+              "fontWeight": "600",
+              "letterSpacing": 0.8
+            },
+            {
+              "type": "frame",
+              "id": "I5YjzU",
+              "name": "Row 2a",
+              "gap": 32,
+              "alignItems": "end",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "RzkLg",
+                  "name": "Item Button Primary",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "s7fur",
+                      "name": "IL Button Primary",
+                      "fill": "$ink-secondary",
+                      "content": "Button Primary",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "aV4GI",
+                      "type": "ref",
+                      "ref": "XufQA",
+                      "name": "Button Primary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "DiyoG",
+                  "name": "Item Button Secondary",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "gThTw",
+                      "name": "IL Button Secondary",
+                      "fill": "$ink-secondary",
+                      "content": "Button Secondary",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "PXpCq",
+                      "type": "ref",
+                      "ref": "LkrLR",
+                      "name": "Button Secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "V10PEc",
+                  "name": "Item Button Pill",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LhJH9",
+                      "name": "IL Button Pill",
+                      "fill": "$ink-secondary",
+                      "content": "Button Pill",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "sBCOJ",
+                      "type": "ref",
+                      "ref": "m2N0bx",
+                      "name": "Button Pill"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "uZzwN",
+                  "name": "Item Icon Button",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lAIAD",
+                      "name": "IL Icon Button",
+                      "fill": "$ink-secondary",
+                      "content": "Icon Button",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "oNLdR",
+                      "type": "ref",
+                      "ref": "fMa8O",
+                      "name": "Icon Button"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "fQfGF",
+                  "name": "Item Branch Chip",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "bsdI2",
+                      "name": "IL Branch Chip",
+                      "fill": "$ink-secondary",
+                      "content": "Branch Chip",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "WhapP",
+                      "type": "ref",
+                      "ref": "kKsa7",
+                      "name": "Branch Chip"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Adc4c",
+                  "name": "Item Status",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "D8Xmo",
+                      "name": "IL Status",
+                      "fill": "$ink-secondary",
+                      "content": "Status",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "p1uvm",
+                      "type": "ref",
+                      "ref": "gnElX",
+                      "name": "Status"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "NFVRa",
+                  "name": "Item Avatar",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "fYwzk",
+                      "name": "IL Avatar",
+                      "fill": "$ink-secondary",
+                      "content": "Avatar",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "DB0JO",
+                      "type": "ref",
+                      "ref": "T6uuhx",
+                      "name": "Avatar"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZY8L6",
+                  "name": "Item View Switcher",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "e76iH",
+                      "name": "IL View Switcher",
+                      "fill": "$ink-secondary",
+                      "content": "View Switcher",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "MvAug",
+                      "type": "ref",
+                      "ref": "LWzOM",
+                      "name": "View Switcher"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "kQdRD",
+                  "name": "Item Search Field",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "YXR8J",
+                      "name": "IL Search Field",
+                      "fill": "$ink-secondary",
+                      "content": "Search Field",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "K6nhIt",
+                      "type": "ref",
+                      "ref": "camkN",
+                      "name": "Search Field"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "K8YWp",
+              "name": "Row 2b",
+              "gap": 32,
+              "alignItems": "end",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "cbAxg",
+                  "name": "Item Field",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "o8BJ0y",
+                      "name": "IL Field",
+                      "fill": "$ink-secondary",
+                      "content": "Field",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "r9BROX",
+                      "type": "ref",
+                      "ref": "Agoqb",
+                      "name": "Field"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "dmLUI",
+                  "name": "Item Directive Bar",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "KUntX",
+                      "name": "IL Directive Bar",
+                      "fill": "$ink-secondary",
+                      "content": "Directive Bar",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "fNYus",
+                      "type": "ref",
+                      "ref": "p4QRL",
+                      "name": "Directive Bar"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lsYYy",
+          "name": "Sec CARDS & DATA",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "YdUiE",
+              "name": "Sec Label CARDS & DATA",
+              "fill": "$ink-tertiary",
+              "content": "CARDS & DATA",
+              "fontFamily": "$font-text",
+              "fontSize": 11,
+              "fontWeight": "600",
+              "letterSpacing": 0.8
+            },
+            {
+              "type": "frame",
+              "id": "xPIVh",
+              "name": "Row 3a",
+              "gap": 32,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "f0T7d",
+                  "name": "Item Spec Node",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "xom16",
+                      "name": "IL Spec Node",
+                      "fill": "$ink-secondary",
+                      "content": "Spec Node",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "EiPbd",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "name": "Spec Node"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jV98Y",
+                  "name": "Item Select Card",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "sP9cg",
+                      "name": "IL Select Card",
+                      "fill": "$ink-secondary",
+                      "content": "Select Card",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "Bo4wb",
+                      "type": "ref",
+                      "ref": "sOw0t",
+                      "name": "Select Card"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "atZWc",
+                  "name": "Item Branch Menu",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Gn8F7",
+                      "name": "IL Branch Menu",
+                      "fill": "$ink-secondary",
+                      "content": "Branch Menu",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "NiLES",
+                      "type": "ref",
+                      "ref": "XNArG",
+                      "name": "Branch Menu"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "kdmKN",
+                  "name": "Item Doc Sheet",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "r8qK5",
+                      "name": "IL Doc Sheet",
+                      "fill": "$ink-secondary",
+                      "content": "Doc Sheet",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "id": "ijCQK",
+                      "type": "ref",
+                      "ref": "WlLP5",
+                      "name": "Doc Sheet"
+                    }
+                  ]
                 }
               ]
             }
