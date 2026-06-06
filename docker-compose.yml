@@ -1,0 +1,13 @@
+services:
+  server:
+    build: .
+    environment:
+      HOST: 0.0.0.0
+      PORT: "4311"
+    ports:
+      - "4311:4311"
+    volumes:
+      - specraft-data:/data
+
+volumes:
+  specraft-data:

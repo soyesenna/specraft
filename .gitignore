@@ -1,1 +1,8 @@
 .omc/
+.omo/
+node_modules/
+dist/
+**/dist/
+**/dist-types/
+coverage/
+*.tsbuildinfo
