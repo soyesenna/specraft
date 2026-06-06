@@ -15240,6 +15240,1117 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "fXNaq",
+      "x": 9120,
+      "y": 340,
+      "name": "03b · Specs — Graph (Sidebar collapsed)",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "mgcvs",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "U1cfL2",
+          "name": "Shell",
+          "width": "fill_container",
+          "height": "fill_container",
+          "children": [
+            {
+              "id": "nNm3Z",
+              "type": "ref",
+              "ref": "i3RAsT",
+              "name": "Sidebar Rail",
+              "height": "fill_container",
+              "descendants": {
+                "M58e99": {
+                  "fill": "$surface"
+                },
+                "siXpc": {
+                  "fill": "$ink"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "lcSS3",
+              "name": "Main",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "V2tu3x",
+                  "name": "Toolbar",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "padding": [
+                    18,
+                    28
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "X02c0R",
+                      "name": "Page Title",
+                      "fill": "$ink",
+                      "content": "Specs",
+                      "fontFamily": "$font-display",
+                      "fontSize": 28,
+                      "fontWeight": "600",
+                      "letterSpacing": -0.4
+                    },
+                    {
+                      "id": "n2C1n",
+                      "type": "ref",
+                      "ref": "kKsa7",
+                      "name": "Branch Picker"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MkMSZ",
+                      "name": "Sync Status",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "ellipse",
+                          "id": "euwHF",
+                          "name": "Sync Dot",
+                          "fill": "$success",
+                          "width": 6,
+                          "height": 6
+                        },
+                        {
+                          "type": "text",
+                          "id": "M3JNa",
+                          "name": "Sync Label",
+                          "fill": "$ink-tertiary",
+                          "content": "Synced 2 min ago",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "kiNrD",
+                      "name": "Toolbar Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "j4UjG",
+                      "name": "Search Field",
+                      "width": 240,
+                      "height": 32,
+                      "fill": "$input-bg",
+                      "cornerRadius": "$radius-s",
+                      "gap": 7,
+                      "padding": [
+                        0,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "FlCkg",
+                          "name": "Search Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "search",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
+                        },
+                        {
+                          "type": "text",
+                          "id": "kldUW",
+                          "name": "Search Placeholder",
+                          "fill": "$ink-tertiary",
+                          "content": "Search specs",
+                          "fontFamily": "$font-text",
+                          "fontSize": 13,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "i3Jke",
+                      "name": "View Switcher",
+                      "fill": "$input-bg",
+                      "cornerRadius": 9,
+                      "gap": 2,
+                      "padding": 2,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "zcFn4",
+                          "name": "Segment Graph",
+                          "fill": "$surface",
+                          "cornerRadius": 7,
+                          "effect": {
+                            "type": "shadow",
+                            "shadowType": "outer",
+                            "color": "#0000001F",
+                            "offset": {
+                              "x": 0,
+                              "y": 1
+                            },
+                            "blur": 3
+                          },
+                          "gap": 6,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "mDaw7",
+                              "name": "Graph Icon",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "waypoints",
+                              "library": "lucide",
+                              "fill": "$ink"
+                            },
+                            {
+                              "type": "text",
+                              "id": "HPVR8",
+                              "name": "Graph Label",
+                              "fill": "$ink",
+                              "content": "Graph",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "IBvI3",
+                          "name": "Segment List",
+                          "cornerRadius": 7,
+                          "gap": 6,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "q6SW6M",
+                              "name": "List Icon",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "list",
+                              "library": "lucide",
+                              "fill": "$ink-tertiary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "M3MhD",
+                              "name": "List Label",
+                              "fill": "$ink-tertiary",
+                              "content": "List",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "a0FRn",
+                  "name": "Graph Canvas",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "W0bo7I",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Edges",
+                      "geometry": "M554 125c0 87-42 87-42 174m0 0c-154 0-154-112-308-112m308 112c-166 0-166 68-332 68m332-68c0 183 228 183 228 366m-536-478c0 140 100 140 100 280m-100-280c182 0 182 328 364 328m-388-148c0 160 308 160 308 320m80-172c-177 0-177 110-354 110m606-190c-126 0-126 80-252 80",
+                      "viewBox": [
+                        0,
+                        0,
+                        1376,
+                        782
+                      ],
+                      "fill": "#FFFFFF00",
+                      "width": 1376,
+                      "height": 782,
+                      "stroke": "$separator",
+                      "strokeWidth": 1.5
+                    },
+                    {
+                      "type": "path",
+                      "id": "p4sxY",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Edges Active",
+                      "geometry": "M512 299c147 0 147-66 294-66m0 0c0 101 14 101 14 202m-14-202c0 141-238 141-238 282m238-282c0 182 266 182 266 364",
+                      "viewBox": [
+                        0,
+                        0,
+                        1376,
+                        782
+                      ],
+                      "fill": "#FFFFFF00",
+                      "width": 1376,
+                      "height": 782,
+                      "stroke": "$accent",
+                      "strokeWidth": 2
+                    },
+                    {
+                      "id": "XiHdf",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 400,
+                      "y": 262,
+                      "name": "Node overview.md",
+                      "width": 224,
+                      "fill": "$dark-card",
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "CORE",
+                          "fill": "#FFFFFF8F"
+                        },
+                        "xK2pi": {
+                          "content": "overview.md",
+                          "fill": "$white"
+                        },
+                        "Zt5ob": {
+                          "content": "프로젝트 개요 · 세션 주입 본체",
+                          "fill": "#FFFFFF8F"
+                        }
+                      }
+                    },
+                    {
+                      "id": "CtsTK",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 460,
+                      "y": 88,
+                      "name": "Node index.md",
+                      "width": 188,
+                      "fill": "$dark-card",
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "CORE",
+                          "fill": "#FFFFFF8F"
+                        },
+                        "xK2pi": {
+                          "content": "index.md",
+                          "fill": "$white"
+                        },
+                        "Zt5ob": {
+                          "content": "전 페이지 카탈로그",
+                          "fill": "#FFFFFF8F"
+                        }
+                      }
+                    },
+                    {
+                      "id": "aJemf",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 120,
+                      "y": 588,
+                      "name": "Node log.md",
+                      "width": 188,
+                      "fill": "$dark-card",
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "CORE",
+                          "fill": "#FFFFFF8F"
+                        },
+                        "xK2pi": {
+                          "content": "log.md",
+                          "fill": "$white"
+                        },
+                        "Zt5ob": {
+                          "content": "append-only 활동 이력",
+                          "fill": "#FFFFFF8F"
+                        }
+                      }
+                    },
+                    {
+                      "id": "xaI5G",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 700,
+                      "y": 196,
+                      "name": "Node stop-gate.md",
+                      "width": 212,
+                      "stroke": "$accent",
+                      "strokeWidth": 2,
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "SPECS"
+                        },
+                        "xK2pi": {
+                          "content": "stop-gate.md"
+                        },
+                        "Zt5ob": {
+                          "content": "Stop 게이트 판정 규칙"
+                        }
+                      }
+                    },
+                    {
+                      "id": "dfZI6",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 716,
+                      "y": 398,
+                      "name": "Node mcp-proxy.md",
+                      "width": 208,
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "SPECS"
+                        },
+                        "xK2pi": {
+                          "content": "mcp-proxy.md"
+                        },
+                        "Zt5ob": {
+                          "content": "stdio 프록시 · 도구 3종"
+                        }
+                      }
+                    },
+                    {
+                      "id": "GeEdn",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 460,
+                      "y": 478,
+                      "name": "Node ingest-pipeline.md",
+                      "width": 216,
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "SPECS"
+                        },
+                        "xK2pi": {
+                          "content": "ingest-pipeline.md"
+                        },
+                        "Zt5ob": {
+                          "content": "ingest 처리 파이프라인"
+                        }
+                      }
+                    },
+                    {
+                      "id": "s3UOUz",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 200,
+                      "y": 430,
+                      "name": "Node query-engine.md",
+                      "width": 208,
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "SPECS"
+                        },
+                        "xK2pi": {
+                          "content": "query-engine.md"
+                        },
+                        "Zt5ob": {
+                          "content": "인용 포함 질의 응답"
+                        }
+                      }
+                    },
+                    {
+                      "id": "X77cVy",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 100,
+                      "y": 150,
+                      "name": "Node llm-engine.md",
+                      "width": 208,
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "ARCHITECTURE"
+                        },
+                        "xK2pi": {
+                          "content": "llm-engine.md"
+                        },
+                        "Zt5ob": {
+                          "content": "4종 에이전트 루프"
+                        }
+                      }
+                    },
+                    {
+                      "id": "U5sTz",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 72,
+                      "y": 330,
+                      "name": "Node git-sync.md",
+                      "width": 216,
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "ARCHITECTURE"
+                        },
+                        "xK2pi": {
+                          "content": "git-sync.md"
+                        },
+                        "Zt5ob": {
+                          "content": "브랜치 미러링 · lazy 전파"
+                        }
+                      }
+                    },
+                    {
+                      "id": "sCHjs",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 960,
+                      "y": 560,
+                      "name": "Node adr-002-hard-gate.md",
+                      "width": 224,
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "DECISIONS"
+                        },
+                        "xK2pi": {
+                          "content": "adr-002-hard-gate.md"
+                        },
+                        "Zt5ob": {
+                          "content": "spec 무결성 > 가용성"
+                        }
+                      }
+                    },
+                    {
+                      "id": "hJnmC",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 640,
+                      "y": 628,
+                      "name": "Node progress.md",
+                      "width": 200,
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "PROGRESS"
+                        },
+                        "xK2pi": {
+                          "content": "progress.md"
+                        },
+                        "Zt5ob": {
+                          "content": "마일스톤 진행 현황"
+                        }
+                      }
+                    },
+                    {
+                      "id": "U3xof",
+                      "type": "ref",
+                      "ref": "y0dLz",
+                      "x": 380,
+                      "y": 650,
+                      "name": "Node adr-001-bare-git.md",
+                      "width": 216,
+                      "descendants": {
+                        "YBMQp": {
+                          "content": "DECISIONS"
+                        },
+                        "xK2pi": {
+                          "content": "adr-001-bare-git.md"
+                        },
+                        "Zt5ob": {
+                          "content": "wiki SoT = bare git repo"
+                        }
+                      }
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xBgbQ",
+                      "x": 24,
+                      "y": 614,
+                      "name": "Zoom Controls",
+                      "fill": "$surface",
+                      "cornerRadius": "$radius-s",
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#00000014",
+                        "offset": {
+                          "x": 0,
+                          "y": 2
+                        },
+                        "blur": 8
+                      },
+                      "layout": "vertical",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "mzpm7",
+                          "name": "Zoom plus",
+                          "width": 34,
+                          "height": 32,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "A81scR",
+                              "name": "Icon plus",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "plus",
+                              "library": "lucide",
+                              "fill": "$ink-secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "YaZdj",
+                          "name": "Zoom minus",
+                          "width": 34,
+                          "height": 32,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "zqjIC",
+                              "name": "Icon minus",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "minus",
+                              "library": "lucide",
+                              "fill": "$ink-secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "p2hL6",
+                          "name": "Zoom scan",
+                          "width": 34,
+                          "height": 32,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "qATLE",
+                              "name": "Icon scan",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "scan",
+                              "library": "lucide",
+                              "fill": "$ink-secondary"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "jgqO7",
+                      "x": 24,
+                      "y": 744,
+                      "name": "Legend",
+                      "gap": 16,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "A1LEm",
+                          "name": "Legend Core",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 3,
+                              "id": "DHXPA",
+                              "name": "Swatch Core",
+                              "fill": "$dark-card",
+                              "width": 10,
+                              "height": 10
+                            },
+                            {
+                              "type": "text",
+                              "id": "IF8to",
+                              "name": "Legend Core Label",
+                              "fill": "$ink-tertiary",
+                              "content": "Core skeleton",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "WZq1y",
+                          "name": "Legend Gen",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 3,
+                              "id": "ljBOi",
+                              "name": "Swatch Gen",
+                              "fill": "$surface",
+                              "width": 10,
+                              "height": 10,
+                              "stroke": "$separator",
+                              "strokeWidth": 1
+                            },
+                            {
+                              "type": "text",
+                              "id": "G1Qix",
+                              "name": "Legend Gen Label",
+                              "fill": "$ink-tertiary",
+                              "content": "LLM-generated",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "FzMAU",
+                      "x": 1012,
+                      "y": 20,
+                      "name": "Detail Panel",
+                      "width": 344,
+                      "fill": "$surface",
+                      "cornerRadius": "$radius-l",
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#00000038",
+                        "offset": {
+                          "x": 3,
+                          "y": 5
+                        },
+                        "blur": 30
+                      },
+                      "layout": "vertical",
+                      "gap": 14,
+                      "padding": 22,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "eXDWb",
+                          "name": "Panel Head",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 5,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "mLdLw",
+                              "name": "Panel Dir",
+                              "fill": "$ink-tertiary",
+                              "content": "SPECS",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.8
+                            },
+                            {
+                              "type": "text",
+                              "id": "d4QZm",
+                              "name": "Panel Title",
+                              "fill": "$ink",
+                              "content": "stop-gate.md",
+                              "fontFamily": "$font-display",
+                              "fontSize": 21,
+                              "fontWeight": "600",
+                              "letterSpacing": -0.3
+                            },
+                            {
+                              "type": "text",
+                              "id": "D3SZq",
+                              "name": "Panel Summary",
+                              "fill": "$ink-secondary",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "세션 종료를 차단하는 Stop 게이트의 3중 검사(clean · pushed · ingested)와 read-only 세션 면제(D9) 규칙.",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "PqhKY",
+                          "name": "Panel Meta",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "ITLLc",
+                              "name": "Meta Avatar",
+                              "width": 20,
+                              "height": 20,
+                              "fill": "$input-bg",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "YrOLF",
+                                  "name": "Meta Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "bqkTe",
+                              "name": "Meta Text",
+                              "fill": "$ink-tertiary",
+                              "content": "soyesenna · 2시간 전",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "LltJ1",
+                              "name": "Commit Chip",
+                              "fill": "$input-bg",
+                              "cornerRadius": 4,
+                              "padding": [
+                                2,
+                                7
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "kYCyY",
+                                  "name": "Commit Hash",
+                                  "fill": "$ink-secondary",
+                                  "content": "a1b2c3d",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 10.5,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "a9IZlb",
+                          "name": "Divider 1",
+                          "fill": "$hairline",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "frame",
+                          "id": "uswv4",
+                          "name": "Connected Section",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 10,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "kDdvE",
+                              "name": "Connected Label",
+                              "fill": "$ink-tertiary",
+                              "content": "CONNECTED · 4",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.8
+                            },
+                            {
+                              "type": "frame",
+                              "id": "q35kS",
+                              "name": "Link overview.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "MB6iB",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "HOW3t",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "overview.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "hOUvz",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "sQfMo",
+                                  "name": "Arrow",
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "lgk68",
+                              "name": "Link mcp-proxy.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "BIktI",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "ttu7W",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "mcp-proxy.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "B1yED",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "RU9vQ",
+                                  "name": "Arrow",
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ZqSIO",
+                              "name": "Link ingest-pipeline.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "yn57r",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "au1qS",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "ingest-pipeline.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "svkIr",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "VZntg",
+                                  "name": "Arrow",
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "zzAjk",
+                              "name": "Link adr-002-hard-gate.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "qVo4h",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "e8v4X",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "adr-002-hard-gate.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "X2Wcu",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "NMdQv",
+                                  "name": "Arrow",
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "RnEcl",
+                          "name": "Divider 2",
+                          "fill": "$hairline",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "frame",
+                          "id": "b6NIBP",
+                          "name": "Panel Actions",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "id": "m7oqf5",
+                              "type": "ref",
+                              "ref": "XufQA",
+                              "name": "Open Doc Btn",
+                              "width": "fill_container",
+                              "descendants": {
+                                "VGKQ2": {
+                                  "content": "Open document"
+                                }
+                              }
+                            },
+                            {
+                              "id": "dEycd",
+                              "type": "ref",
+                              "ref": "LkrLR",
+                              "name": "History Btn",
+                              "descendants": {
+                                "N46On": {
+                                  "content": "History"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "variables": {
