@@ -64,6 +64,14 @@ describe("auth and admin API", () => {
     const memberCookie = login.cookies[0]
     expect(login.statusCode).toBe(200)
     expect(memberCookie?.name).toBe("specraft_session")
+    expect(login.json()).toEqual({
+      member: {
+        id: expect.any(String),
+        email: "member@example.com",
+        name: "Member One",
+        role: "member",
+      },
+    })
 
     const createdKey = await server.inject({
       method: "POST",

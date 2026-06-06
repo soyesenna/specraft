@@ -82,7 +82,15 @@ export async function authenticateMember(
   if (!row.success || row.data.disabled_at !== null) {
     return null
   }
-  return (await verifyPassword(row.data.password_hash, password)) ? row.data : null
+  if (!(await verifyPassword(row.data.password_hash, password))) {
+    return null
+  }
+  return {
+    id: row.data.id,
+    email: row.data.email,
+    name: row.data.name,
+    role: row.data.role,
+  }
 }
 
 export function getMember(database: SpecraftDatabase, id: string): Member | null {
