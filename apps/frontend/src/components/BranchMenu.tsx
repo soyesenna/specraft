@@ -1,6 +1,6 @@
 import { Check, Lock } from "lucide-react"
-import { GitBranchIcon } from "./GitBranchIcon.js"
 import { cn } from "../lib/cn.js"
+import { GitBranchIcon } from "./GitBranchIcon.js"
 
 export type BranchRow = {
   name: string

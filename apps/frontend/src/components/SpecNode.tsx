@@ -18,7 +18,17 @@ type SpecNodeProps = {
  * component/Spec Node — 그래프 노드 카드 (radius-m, 0 4px 24px 섀도, 12×15 패딩).
  * 골격=dark-card 필 + white 텍스트, 선택=accent 2px stroke.
  */
-export function SpecNode({ dir, name, title, dark, selected, width, x, y, onClick }: SpecNodeProps) {
+export function SpecNode({
+  dir,
+  name,
+  title,
+  dark,
+  selected,
+  width,
+  x,
+  y,
+  onClick,
+}: SpecNodeProps) {
   return (
     <button
       type="button"

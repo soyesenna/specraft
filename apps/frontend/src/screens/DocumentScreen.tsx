@@ -112,8 +112,8 @@ export function DocumentScreen() {
               </span>
               <div className="h-px w-full shrink-0 bg-hairline" />
               <p className="pen-text m-0 w-full text-[14.5px] leading-[1.65] tracking-[-0.22px] text-ink-secondary">
-                Stop 게이트는 세션 종료 시점에 세 가지 검사를 순서대로 수행한다 — ① 워킹트리 clean
-                ② HEAD push 완료 ③ 세션 ingest 마킹 존재. 하나라도 미충족이면 종료를 차단하고
+                Stop 게이트는 세션 종료 시점에 세 가지 검사를 순서대로 수행한다 — ① 워킹트리 clean ②
+                HEAD push 완료 ③ 세션 ingest 마킹 존재. 하나라도 미충족이면 종료를 차단하고
                 에이전트에게 commit → push → ingest 절차를 지시한다.
               </p>
               <h2 className="pen-text m-0 w-full font-display text-[19px] font-semibold tracking-[-0.26px] text-ink">
@@ -190,8 +190,18 @@ export function DocumentScreen() {
                 RECENT INGESTS
               </span>
               <div className="flex w-full flex-col gap-3">
-                <RecentIngest initials="SY" name="수연" time="2시간 전" desc="게이트 면제 조건 D9 반영, 매트릭스 셀 정리" />
-                <RecentIngest initials="MJ" name="민지" time="어제" desc="3중 검사 순서 및 차단 지시 문구 명시" />
+                <RecentIngest
+                  initials="SY"
+                  name="수연"
+                  time="2시간 전"
+                  desc="게이트 면제 조건 D9 반영, 매트릭스 셀 정리"
+                />
+                <RecentIngest
+                  initials="MJ"
+                  name="민지"
+                  time="어제"
+                  desc="3중 검사 순서 및 차단 지시 문구 명시"
+                />
               </div>
             </aside>
           </div>

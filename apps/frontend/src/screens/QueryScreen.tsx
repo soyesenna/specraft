@@ -68,9 +68,9 @@ export function QueryScreen() {
                   절차를 지시합니다.
                 </p>
                 <p className="pen-text m-0 w-full text-[14.5px] leading-[1.7] tracking-[-0.22px] text-ink-secondary">
-                  변경도 커밋도 없는 read-only 세션은 D9 규칙으로 ingest가 면제됩니다. 서버에
-                  접근할 수 없는 경우에도 게이트는 hard block을 유지합니다 — spec 무결성이
-                  가용성보다 우선합니다.
+                  변경도 커밋도 없는 read-only 세션은 D9 규칙으로 ingest가 면제됩니다. 서버에 접근할
+                  수 없는 경우에도 게이트는 hard block을 유지합니다 — spec 무결성이 가용성보다
+                  우선합니다.
                 </p>
                 <span className="pen-text text-[10px] font-semibold tracking-[0.8px] text-ink-tertiary">
                   CITATIONS · 3
@@ -114,10 +114,7 @@ export function QueryScreen() {
       <div className="flex h-full flex-col overflow-hidden bg-bg md:hidden">
         <MobileStatusBar />
         <div
-          className={cn(
-            "flex w-full items-center gap-2.5 px-4",
-            typing ? "pt-1.5 pb-2" : "py-2",
-          )}
+          className={cn("flex w-full items-center gap-2.5 px-4", typing ? "pt-1.5 pb-2" : "py-2")}
         >
           <h1 className="pen-text m-0 font-display text-[24px] font-semibold tracking-[-0.4px] text-ink">
             Query

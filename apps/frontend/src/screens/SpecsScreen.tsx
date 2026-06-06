@@ -94,13 +94,23 @@ export function SpecsScreen() {
         {view === "graph" ? (
           // 디자인 정합을 위해 별도 버튼 없이 캔버스 더블탭으로 도트 모드(M03c) 토글
           dotMode ? (
-            <div className="contents" onDoubleClick={() => setDotMode(false)}>
+            <button
+              type="button"
+              className="contents"
+              aria-label="도트 모드 닫기"
+              onDoubleClick={() => setDotMode(false)}
+            >
               <MobileDotCanvas />
-            </div>
+            </button>
           ) : (
-            <div className="contents" onDoubleClick={() => setDotMode(true)}>
+            <button
+              type="button"
+              className="contents"
+              aria-label="도트 모드 열기"
+              onDoubleClick={() => setDotMode(true)}
+            >
               <MobileGraphCanvas onSelect={() => setSheetOpen(true)} />
-            </div>
+            </button>
           )
         ) : (
           <MobileListView />
@@ -211,6 +221,7 @@ function DesktopGraphCanvas({ onZoomOut: handleZoomOut }: { onZoomOut: () => voi
         className="pointer-events-none absolute top-0 left-0"
         style={{ width: vbWidth, height: vbHeight }}
         aria-hidden
+        role="presentation"
       >
         <path d={data.edges} fill="none" stroke="#D2D2D7" strokeWidth={1.5} />
         <path d={data.edgesActive} fill="none" stroke="#0071E3" strokeWidth={2} />
@@ -400,6 +411,7 @@ function DesktopDotCanvas({ onZoomIn }: { onZoomIn: () => void }) {
         className="pointer-events-none absolute top-0 left-0"
         style={{ width: 1224, height: 782 }}
         aria-hidden
+        role="presentation"
       >
         <path d={d.interEdges} fill="none" stroke="#0000000F" strokeWidth={1} />
         <path d={d.spokes} fill="none" stroke="#00000030" strokeWidth={1} />
@@ -579,6 +591,7 @@ function MobileGraphCanvas({ onSelect }: { onSelect: () => void }) {
         className="pointer-events-none absolute top-0 left-0"
         style={{ width: 390, height: 360 }}
         aria-hidden
+        role="presentation"
       >
         <path d={m.edges} fill="none" stroke="#D2D2D7" strokeWidth={1.5} />
         <path d={m.edgesActive} fill="none" stroke="#0071E3" strokeWidth={2} />
@@ -626,6 +639,7 @@ function MobileDotCanvas() {
         className="pointer-events-none absolute top-0 left-0"
         style={{ width: 390, height: 628 }}
         aria-hidden
+        role="presentation"
       >
         <path d={d.interEdges} fill="none" stroke="#0000000F" strokeWidth={1} />
         <path d={d.spokes} fill="none" stroke="#00000030" strokeWidth={1} />

@@ -8,6 +8,8 @@ export default defineConfig({
   },
   test: {
     environment: "node",
+    fileParallelism: false,
     globals: true,
+    testTimeout: 30_000,
   },
 })

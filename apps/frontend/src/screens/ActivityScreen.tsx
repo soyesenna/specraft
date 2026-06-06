@@ -9,10 +9,10 @@ import {
   MessageCircle,
   SlidersHorizontal,
 } from "lucide-react"
-import { GitBranchIcon } from "../components/GitBranchIcon.js"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { AppShell } from "../components/AppShell.js"
+import { GitBranchIcon } from "../components/GitBranchIcon.js"
 import { GlassNav } from "../components/GlassNav.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
 import { MobileTabBar } from "../components/MobileTabBar.js"
@@ -31,16 +31,107 @@ type LogRow = {
 }
 
 const LOG_ROWS: LogRow[] = [
-  { type: "Ingest", member: "수연", initials: "SY", branch: "dev", summary: "Stop 게이트 면제 조건 D9 반영", commit: "a1b2c3d", status: "accepted", time: "2시간 전" },
-  { type: "Query", member: "민지", initials: "MJ", branch: "dev", summary: "Stop 게이트 차단 조건 질의", commit: "—", status: "logged", time: "3시간 전" },
-  { type: "Ingest", member: "동규", initials: "DK", branch: "feat/query-cache", summary: "쿼리 캐시 spec 초안 — 미push 커밋(P2)", mobileSummary: "쿼리 캐시 spec 초안 — P2 거부", commit: "9f3e21b", status: "rejected", time: "5시간 전" },
-  { type: "Query", member: "수연", initials: "SY", branch: "dev", summary: "ingest 순서 보장 P1 규칙", commit: "—", status: "logged", time: "어제" },
-  { type: "Ingest", member: "민지", initials: "MJ", branch: "dev", summary: "쿼리 엔진 인용 포맷 정리", commit: "7d21f0a", status: "accepted", time: "어제" },
-  { type: "Ingest", member: "수연", initials: "SY", branch: "feat/stop-gate", summary: "게이트 매트릭스 초안", commit: "3c9b771", status: "accepted", time: "2일 전" },
-  { type: "Query", member: "동규", initials: "DK", branch: "dev", summary: "wiki 골격 3파일 역할", commit: "—", status: "logged", time: "2일 전" },
-  { type: "Ingest", member: "동규", initials: "DK", branch: "dev", summary: "llm-engine 도구 루프 정리", commit: "e8a4c52", status: "accepted", time: "3일 전" },
-  { type: "Query", member: "민지", initials: "MJ", branch: "feat/query-cache", summary: "branch lock 해제 절차", commit: "—", status: "logged", time: "3일 전" },
-  { type: "Ingest", member: "민지", initials: "MJ", branch: "dev", summary: "specraft-init 초기 대량 ingest", commit: "1a0f9e3", status: "accepted", time: "5일 전" },
+  {
+    type: "Ingest",
+    member: "수연",
+    initials: "SY",
+    branch: "dev",
+    summary: "Stop 게이트 면제 조건 D9 반영",
+    commit: "a1b2c3d",
+    status: "accepted",
+    time: "2시간 전",
+  },
+  {
+    type: "Query",
+    member: "민지",
+    initials: "MJ",
+    branch: "dev",
+    summary: "Stop 게이트 차단 조건 질의",
+    commit: "—",
+    status: "logged",
+    time: "3시간 전",
+  },
+  {
+    type: "Ingest",
+    member: "동규",
+    initials: "DK",
+    branch: "feat/query-cache",
+    summary: "쿼리 캐시 spec 초안 — 미push 커밋(P2)",
+    mobileSummary: "쿼리 캐시 spec 초안 — P2 거부",
+    commit: "9f3e21b",
+    status: "rejected",
+    time: "5시간 전",
+  },
+  {
+    type: "Query",
+    member: "수연",
+    initials: "SY",
+    branch: "dev",
+    summary: "ingest 순서 보장 P1 규칙",
+    commit: "—",
+    status: "logged",
+    time: "어제",
+  },
+  {
+    type: "Ingest",
+    member: "민지",
+    initials: "MJ",
+    branch: "dev",
+    summary: "쿼리 엔진 인용 포맷 정리",
+    commit: "7d21f0a",
+    status: "accepted",
+    time: "어제",
+  },
+  {
+    type: "Ingest",
+    member: "수연",
+    initials: "SY",
+    branch: "feat/stop-gate",
+    summary: "게이트 매트릭스 초안",
+    commit: "3c9b771",
+    status: "accepted",
+    time: "2일 전",
+  },
+  {
+    type: "Query",
+    member: "동규",
+    initials: "DK",
+    branch: "dev",
+    summary: "wiki 골격 3파일 역할",
+    commit: "—",
+    status: "logged",
+    time: "2일 전",
+  },
+  {
+    type: "Ingest",
+    member: "동규",
+    initials: "DK",
+    branch: "dev",
+    summary: "llm-engine 도구 루프 정리",
+    commit: "e8a4c52",
+    status: "accepted",
+    time: "3일 전",
+  },
+  {
+    type: "Query",
+    member: "민지",
+    initials: "MJ",
+    branch: "feat/query-cache",
+    summary: "branch lock 해제 절차",
+    commit: "—",
+    status: "logged",
+    time: "3일 전",
+  },
+  {
+    type: "Ingest",
+    member: "민지",
+    initials: "MJ",
+    branch: "dev",
+    summary: "specraft-init 초기 대량 ingest",
+    commit: "1a0f9e3",
+    status: "accepted",
+    time: "5일 전",
+  },
 ]
 
 const STATUS_DOT: Record<LogRow["status"], string> = {
@@ -351,13 +442,7 @@ function HeadCell({ w, children }: { w: number; children: string }) {
   )
 }
 
-function TypeFilter({
-  filter,
-  onChange,
-}: {
-  filter: TypeTab
-  onChange: (tab: TypeTab) => void
-}) {
+function TypeFilter({ filter, onChange }: { filter: TypeTab; onChange: (tab: TypeTab) => void }) {
   return (
     <div className="flex items-center gap-0.5 rounded-[9px] bg-input p-0.5">
       {(["All", "Ingests", "Queries"] as const).map((tab) => (

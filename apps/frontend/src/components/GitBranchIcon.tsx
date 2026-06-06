@@ -18,6 +18,7 @@ export function GitBranchIcon(props: SVGProps<SVGSVGElement>) {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
+      role="presentation"
       {...props}
     >
       <line x1="6" x2="6" y1="3" y2="15" />

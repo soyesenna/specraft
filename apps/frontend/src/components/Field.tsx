@@ -28,18 +28,16 @@ export function Field({
   className,
 }: FieldProps) {
   return (
-    <label className={cn("flex w-full flex-col gap-1.5", className)}>
+    <div className={cn("flex w-full flex-col gap-1.5", className)}>
       <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
         {label}
       </span>
       <span
-        className={cn(
-          "flex h-9 w-full items-center gap-2 rounded-sm bg-bg px-3",
-          inputClassName,
-        )}
+        className={cn("flex h-9 w-full items-center gap-2 rounded-sm bg-bg px-3", inputClassName)}
       >
         {children ?? (
           <input
+            aria-label={label}
             type={type}
             placeholder={placeholder}
             defaultValue={value}
@@ -48,6 +46,6 @@ export function Field({
         )}
         {trailing}
       </span>
-    </label>
+    </div>
   )
 }

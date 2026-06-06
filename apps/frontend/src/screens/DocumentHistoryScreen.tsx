@@ -21,11 +21,51 @@ type Version = {
 }
 
 const VERSIONS: Version[] = [
-  { hash: "a1b2c3d", author: "수연", initials: "SY", time: "2시간 전", summary: "게이트 면제 조건 D9 반영, 매트릭스 셀 정리", plus: "+14", minus: "−3", selected: true },
-  { hash: "7d21f0a", author: "민지", initials: "MJ", time: "어제", summary: "3중 검사 순서 및 차단 지시 문구 명시", plus: "+9", minus: "−2" },
-  { hash: "3c9b771", author: "수연", initials: "SY", time: "2일 전", summary: "게이트 매트릭스 초안", plus: "+31", minus: "−0" },
-  { hash: "f00dba2", author: "specraft-server", badge: "MERGE", time: "4일 전", summary: "feat/stop-gate → dev 병합" },
-  { hash: "1a0f9e3", author: "민지", initials: "MJ", badge: "INIT", time: "5일 전", summary: "specraft-init 초기 대량 ingest", plus: "+48", minus: "−0" },
+  {
+    hash: "a1b2c3d",
+    author: "수연",
+    initials: "SY",
+    time: "2시간 전",
+    summary: "게이트 면제 조건 D9 반영, 매트릭스 셀 정리",
+    plus: "+14",
+    minus: "−3",
+    selected: true,
+  },
+  {
+    hash: "7d21f0a",
+    author: "민지",
+    initials: "MJ",
+    time: "어제",
+    summary: "3중 검사 순서 및 차단 지시 문구 명시",
+    plus: "+9",
+    minus: "−2",
+  },
+  {
+    hash: "3c9b771",
+    author: "수연",
+    initials: "SY",
+    time: "2일 전",
+    summary: "게이트 매트릭스 초안",
+    plus: "+31",
+    minus: "−0",
+  },
+  {
+    hash: "f00dba2",
+    author: "specraft-server",
+    badge: "MERGE",
+    time: "4일 전",
+    summary: "feat/stop-gate → dev 병합",
+  },
+  {
+    hash: "1a0f9e3",
+    author: "민지",
+    initials: "MJ",
+    badge: "INIT",
+    time: "5일 전",
+    summary: "specraft-init 초기 대량 ingest",
+    plus: "+48",
+    minus: "−0",
+  },
 ]
 
 /** 05b · Document — History (1440) + M05b/M05c (390) */
@@ -92,9 +132,9 @@ export function DocumentHistoryScreen() {
               </span>
               <div className="h-px w-full shrink-0 bg-hairline" />
               <p className="pen-text m-0 w-full text-[14px] leading-[1.65] tracking-[-0.22px] text-ink-secondary">
-                Stop 게이트는 세션 종료 시점에 세 가지 검사를 순서대로 수행한다 — ① 워킹트리 clean
-                ② HEAD push 완료 ③ 세션 ingest 마킹 존재. 하나라도 미충족이면 종료를 차단하고
-                commit → push → ingest 절차를 지시한다.
+                Stop 게이트는 세션 종료 시점에 세 가지 검사를 순서대로 수행한다 — ① 워킹트리 clean ②
+                HEAD push 완료 ③ 세션 ingest 마킹 존재. 하나라도 미충족이면 종료를 차단하고 commit →
+                push → ingest 절차를 지시한다.
               </p>
               <h2 className="pen-text m-0 w-full font-display text-[17px] font-semibold tracking-[-0.26px] text-ink">
                 판정 매트릭스

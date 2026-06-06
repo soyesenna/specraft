@@ -1,7 +1,7 @@
 import {
-  CircleCheck,
   ChevronLeft,
   ChevronRight,
+  CircleCheck,
   Copy,
   Cpu,
   EyeOff,
@@ -14,8 +14,8 @@ import {
   X,
 } from "lucide-react"
 import type { ComponentType, ReactNode, SVGProps } from "react"
-import { GitBranchIcon } from "../components/GitBranchIcon.js"
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
+import { GitBranchIcon } from "../components/GitBranchIcon.js"
 import { IconButton } from "../components/IconButton.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
 import { MobileTabBar } from "../components/MobileTabBar.js"
@@ -341,7 +341,13 @@ function DesktopKeys() {
           <KeyHead w={90}>LAST USED</KeyHead>
           <span className="h-px flex-1" />
         </div>
-        <KeyRow name="MacBook Pro · Claude Code" prefix="sk-spcrft-9f3e…b1d" created="오늘" used="방금" border />
+        <KeyRow
+          name="MacBook Pro · Claude Code"
+          prefix="sk-spcrft-9f3e…b1d"
+          created="오늘"
+          used="방금"
+          border
+        />
         <KeyRow name="Codex CLI" prefix="sk-spcrft-77ab…e42" created="3월 12일" used="어제" />
       </div>
       <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
@@ -399,7 +405,10 @@ function KeyRow({
         <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">{used}</span>
       </span>
       <span className="h-px flex-1" />
-      <button type="button" className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-danger">
+      <button
+        type="button"
+        className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-danger"
+      >
         Revoke
       </button>
     </div>
@@ -418,10 +427,42 @@ type Member = {
 }
 
 const MEMBERS: Member[] = [
-  { initials: "SY", name: "수연", email: "senna@prompt.town", role: "ADMIN", status: "Active", joined: "5월 2일", you: true },
-  { initials: "MJ", name: "민지", email: "minji@prompt.town", role: "Member", status: "Active", joined: "5월 12일", action: "Disable" },
-  { initials: "DK", name: "동규", email: "dongkyu@prompt.town", role: "Member", status: "Active", joined: "5월 20일", action: "Disable" },
-  { initials: "JH", name: "지훈", email: "jihoon@prompt.town", role: "Member", status: "Disabled", joined: "5월 8일", action: "Enable" },
+  {
+    initials: "SY",
+    name: "수연",
+    email: "senna@prompt.town",
+    role: "ADMIN",
+    status: "Active",
+    joined: "5월 2일",
+    you: true,
+  },
+  {
+    initials: "MJ",
+    name: "민지",
+    email: "minji@prompt.town",
+    role: "Member",
+    status: "Active",
+    joined: "5월 12일",
+    action: "Disable",
+  },
+  {
+    initials: "DK",
+    name: "동규",
+    email: "dongkyu@prompt.town",
+    role: "Member",
+    status: "Active",
+    joined: "5월 20일",
+    action: "Disable",
+  },
+  {
+    initials: "JH",
+    name: "지훈",
+    email: "jihoon@prompt.town",
+    role: "Member",
+    status: "Disabled",
+    joined: "5월 8일",
+    action: "Enable",
+  },
 ]
 
 function DesktopMembers() {
@@ -558,8 +599,22 @@ type Invite = {
 
 const INVITES: Invite[] = [
   { token: "inv_8f3e…21bd", by: "수연", created: "방금", expires: "71시간 후", status: "Active" },
-  { token: "inv_77ab…d4f2", by: "수연", created: "5월 12일", expires: "—", status: "Used by 민지", dim: true },
-  { token: "inv_19cc…a8e7", by: "수연", created: "5월 28일", expires: "만료됨", status: "Expired", dim: true },
+  {
+    token: "inv_77ab…d4f2",
+    by: "수연",
+    created: "5월 12일",
+    expires: "—",
+    status: "Used by 민지",
+    dim: true,
+  },
+  {
+    token: "inv_19cc…a8e7",
+    by: "수연",
+    created: "5월 28일",
+    expires: "만료됨",
+    status: "Expired",
+    dim: true,
+  },
 ]
 
 const INVITE_DOT: Record<Invite["status"], string> = {
@@ -776,19 +831,14 @@ function InfoRow({
       )}
     >
       <span
-        className={cn(
-          "pen-text text-[13px] tracking-[-0.2px]",
-          link ? "text-link" : "text-ink",
-        )}
+        className={cn("pen-text text-[13px] tracking-[-0.2px]", link ? "text-link" : "text-ink")}
       >
         {label}
       </span>
       <span className="h-px flex-1" />
       {dot && <span className="size-[7px] rounded-full bg-success" />}
       {value && (
-        <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
-          {value}
-        </span>
+        <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">{value}</span>
       )}
       {chevron && <ChevronRight className="size-3.5 text-separator" />}
     </div>
@@ -878,7 +928,9 @@ function MobileGit() {
             </span>
           </div>
           <div className="flex h-[42px] w-full items-center gap-2 rounded-[10px] bg-bg px-3">
-            <span className="pen-text font-mono text-[11px] text-ink">ssh-ed25519 ••••••••••••••</span>
+            <span className="pen-text font-mono text-[11px] text-ink">
+              ssh-ed25519 ••••••••••••••
+            </span>
             <span className="h-px flex-1" />
             <EyeOff className="size-3.5 text-ink-tertiary" />
           </div>
@@ -1054,8 +1106,18 @@ function MobileMembers() {
 
 const MOBILE_INVITES = [
   { token: "inv_8f3e…21bd", meta: "수연 · 방금 · 71시간 후 만료", state: "Active" as const },
-  { token: "inv_77ab…d4f2", meta: "수연 · 5월 12일 · 민지 가입에 사용됨", state: "Used" as const, dim: true },
-  { token: "inv_19cc…a8e7", meta: "수연 · 5월 28일 · 만료됨", state: "Expired" as const, dim: true },
+  {
+    token: "inv_77ab…d4f2",
+    meta: "수연 · 5월 12일 · 민지 가입에 사용됨",
+    state: "Used" as const,
+    dim: true,
+  },
+  {
+    token: "inv_19cc…a8e7",
+    meta: "수연 · 5월 28일 · 만료됨",
+    state: "Expired" as const,
+    dim: true,
+  },
 ]
 
 const MOBILE_INVITE_DOT = { Active: "bg-success", Used: "bg-separator", Expired: "bg-warning" }
@@ -1141,7 +1203,10 @@ function MobileKeys() {
                 sk-spcrft-9f3e…b1d · 방금
               </span>
             </span>
-            <button type="button" className="pen-text shrink-0 text-[12px] font-medium tracking-[-0.12px] text-danger">
+            <button
+              type="button"
+              className="pen-text shrink-0 text-[12px] font-medium tracking-[-0.12px] text-danger"
+            >
               Revoke
             </button>
           </div>
@@ -1157,7 +1222,10 @@ function MobileKeys() {
                 sk-spcrft-77ab…e42 · 어제
               </span>
             </span>
-            <button type="button" className="pen-text shrink-0 text-[12px] font-medium tracking-[-0.12px] text-danger">
+            <button
+              type="button"
+              className="pen-text shrink-0 text-[12px] font-medium tracking-[-0.12px] text-danger"
+            >
               Revoke
             </button>
           </div>

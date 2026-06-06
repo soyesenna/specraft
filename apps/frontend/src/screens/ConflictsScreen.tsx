@@ -1,8 +1,8 @@
 import { ChevronLeft, ChevronRight, FileText, GitMerge, Lock } from "lucide-react"
 import { useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { DirectiveBar } from "../components/DirectiveBar.js"
 import { AppShell } from "../components/AppShell.js"
+import { DirectiveBar } from "../components/DirectiveBar.js"
 import { GlassNav } from "../components/GlassNav.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
 import { MobileTabBar } from "../components/MobileTabBar.js"
@@ -20,9 +20,28 @@ type Conflict = {
 }
 
 const CONFLICTS: Conflict[] = [
-  { id: "cfl_04a2", state: "Open", time: "26분 전", branch: "feat/query-cache → dev", sub: "specs/query-engine.md 외 1개 파일 · branch locked" },
-  { id: "cfl_03f1", state: "Resolving", time: "1시간 전", branch: "feat/auth-keys → dev", sub: "민지의 지시로 재병합 시도 중" },
-  { id: "cfl_02b8", state: "Resolved", time: "어제", branch: "feat/stop-gate → dev", sub: "2회 시도 후 해결 · 수연", resolved: true },
+  {
+    id: "cfl_04a2",
+    state: "Open",
+    time: "26분 전",
+    branch: "feat/query-cache → dev",
+    sub: "specs/query-engine.md 외 1개 파일 · branch locked",
+  },
+  {
+    id: "cfl_03f1",
+    state: "Resolving",
+    time: "1시간 전",
+    branch: "feat/auth-keys → dev",
+    sub: "민지의 지시로 재병합 시도 중",
+  },
+  {
+    id: "cfl_02b8",
+    state: "Resolved",
+    time: "어제",
+    branch: "feat/stop-gate → dev",
+    sub: "2회 시도 후 해결 · 수연",
+    resolved: true,
+  },
 ]
 
 const STATE_TONE: Record<Conflict["state"], { dot: string; text: string }> = {
@@ -64,9 +83,7 @@ export function ConflictsScreen() {
                   <SelectCard
                     key={conflict.id}
                     selected={selected === conflict.id}
-                    onClick={() =>
-                      setSelected((cur) => (cur === conflict.id ? null : conflict.id))
-                    }
+                    onClick={() => setSelected((cur) => (cur === conflict.id ? null : conflict.id))}
                     className={cn(conflict.resolved && "opacity-[0.72]")}
                   >
                     <div className="flex w-full flex-col gap-[7px] px-px py-px">
