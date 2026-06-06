@@ -21125,7 +21125,7 @@
           "name": "Glass Nav",
           "layoutPosition": "absolute",
           "x": 16,
-          "y": 692,
+          "y": 702,
           "width": 358,
           "descendants": {
             "B63wxh": {
@@ -22286,7 +22286,7 @@
           "name": "Glass Nav",
           "layoutPosition": "absolute",
           "x": 16,
-          "y": 692,
+          "y": 702,
           "width": 358,
           "descendants": {
             "B63wxh": {
@@ -24716,7 +24716,7 @@
           "name": "Glass Nav",
           "layoutPosition": "absolute",
           "x": 16,
-          "y": 692,
+          "y": 702,
           "width": 358,
           "descendants": {
             "WmKgz": {
@@ -25182,7 +25182,7 @@
           "name": "Glass Nav",
           "layoutPosition": "absolute",
           "x": 16,
-          "y": 692,
+          "y": 702,
           "width": 358,
           "descendants": {
             "p0dzQA": {
@@ -28020,7 +28020,7 @@
           "name": "Glass Nav",
           "layoutPosition": "absolute",
           "x": 16,
-          "y": 692,
+          "y": 702,
           "width": 358,
           "descendants": {
             "B63wxh": {
@@ -30592,17 +30592,17 @@
         }
       ],
       "gap": 2,
-      "padding": 5,
+      "padding": 4,
       "children": [
         {
           "type": "frame",
           "id": "B63wxh",
           "name": "GN Specs",
           "width": "fill_container",
-          "height": 54,
+          "height": 46,
           "cornerRadius": "$radius-pill",
           "layout": "vertical",
-          "gap": 3,
+          "gap": 2,
           "justifyContent": "center",
           "alignItems": "center",
           "children": [
@@ -30610,8 +30610,8 @@
               "type": "frame",
               "id": "TVYOV",
               "name": "GN IconWrap Specs",
-              "width": 22,
-              "height": 22,
+              "width": 20,
+              "height": 20,
               "layout": "none",
               "children": [
                 {
@@ -30620,8 +30620,8 @@
                   "x": 1.5,
                   "y": 1.5,
                   "name": "GN Icon Specs",
-                  "width": 19,
-                  "height": 19,
+                  "width": 17,
+                  "height": 17,
                   "icon": "waypoints",
                   "library": "lucide",
                   "fill": "$ink-secondary"
@@ -30645,10 +30645,10 @@
           "id": "eUOb4",
           "name": "GN Query",
           "width": "fill_container",
-          "height": 54,
+          "height": 46,
           "cornerRadius": "$radius-pill",
           "layout": "vertical",
-          "gap": 3,
+          "gap": 2,
           "justifyContent": "center",
           "alignItems": "center",
           "children": [
@@ -30656,8 +30656,8 @@
               "type": "frame",
               "id": "kXWV5",
               "name": "GN IconWrap Query",
-              "width": 22,
-              "height": 22,
+              "width": 20,
+              "height": 20,
               "layout": "none",
               "children": [
                 {
@@ -30666,8 +30666,8 @@
                   "x": 1.5,
                   "y": 1.5,
                   "name": "GN Icon Query",
-                  "width": 19,
-                  "height": 19,
+                  "width": 17,
+                  "height": 17,
                   "icon": "message-circle",
                   "library": "lucide",
                   "fill": "$ink-secondary"
@@ -30691,10 +30691,10 @@
           "id": "WmKgz",
           "name": "GN Activity",
           "width": "fill_container",
-          "height": 54,
+          "height": 46,
           "cornerRadius": "$radius-pill",
           "layout": "vertical",
-          "gap": 3,
+          "gap": 2,
           "justifyContent": "center",
           "alignItems": "center",
           "children": [
@@ -30702,8 +30702,8 @@
               "type": "frame",
               "id": "iPjbl",
               "name": "GN IconWrap Activity",
-              "width": 22,
-              "height": 22,
+              "width": 20,
+              "height": 20,
               "layout": "none",
               "children": [
                 {
@@ -30712,8 +30712,8 @@
                   "x": 1.5,
                   "y": 1.5,
                   "name": "GN Icon Activity",
-                  "width": 19,
-                  "height": 19,
+                  "width": 17,
+                  "height": 17,
                   "icon": "activity",
                   "library": "lucide",
                   "fill": "$ink-secondary"
@@ -30737,10 +30737,10 @@
           "id": "p0dzQA",
           "name": "GN Conflicts",
           "width": "fill_container",
-          "height": 54,
+          "height": 46,
           "cornerRadius": "$radius-pill",
           "layout": "vertical",
-          "gap": 3,
+          "gap": 2,
           "justifyContent": "center",
           "alignItems": "center",
           "children": [
@@ -30748,8 +30748,8 @@
               "type": "frame",
               "id": "hLMMQ",
               "name": "GN IconWrap Conflicts",
-              "width": 22,
-              "height": 22,
+              "width": 20,
+              "height": 20,
               "layout": "none",
               "children": [
                 {
@@ -30758,8 +30758,8 @@
                   "x": 1.5,
                   "y": 1.5,
                   "name": "GN Icon Conflicts",
-                  "width": 19,
-                  "height": 19,
+                  "width": 17,
+                  "height": 17,
                   "icon": "git-merge",
                   "library": "lucide",
                   "fill": "$ink-secondary"
@@ -30767,7 +30767,7 @@
                 {
                   "type": "ellipse",
                   "id": "IfRIn",
-                  "x": 16,
+                  "x": 14.5,
                   "y": -1,
                   "name": "GN Badge",
                   "fill": "$danger",
