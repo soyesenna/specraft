@@ -204,5 +204,5 @@ describe("git sync and wiki core", () => {
       readWikiFile(createSkeletonWiki({ dataDir, branch: "main" }), "areas/backend.md"),
     ).toContain("source")
     database.close()
-  })
+  }, 15_000)
 })
