@@ -83,9 +83,10 @@ function initializeBareWiki(dataDir: string): string {
   }
   git(seedPath, ["add", "."])
   git(seedPath, ["commit", "-m", "init wiki skeleton"])
-  git(dataDir, ["init", "--bare", barePath])
+  git(dataDir, ["init", "--bare", "-b", "main", barePath])
   git(seedPath, ["remote", "add", "origin", barePath])
   git(seedPath, ["push", "origin", "main"])
+  gitDir(barePath, ["symbolic-ref", "HEAD", "refs/heads/main"])
   rmSync(seedPath, { force: true, recursive: true })
   return barePath
 }

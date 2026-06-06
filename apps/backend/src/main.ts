@@ -1,4 +1,5 @@
 import { loadServerConfig } from "./config/secrets.js"
+import { verifyWikiIntegrity } from "./ops/integrity.js"
 import { buildServer } from "./server.js"
 import { createDatabase } from "./storage/database.js"
 
@@ -7,6 +8,7 @@ const parsedPort = Number.parseInt(process.env["PORT"] ?? "4311", 10)
 const port = Number.isNaN(parsedPort) ? 4311 : parsedPort
 const config = loadServerConfig(process.env)
 const database = createDatabase({ path: `${config.dataDir}/specraft.db` })
+verifyWikiIntegrity(config.dataDir)
 const server = buildServer({
   credentialKey: config.credentialKey,
   database,
