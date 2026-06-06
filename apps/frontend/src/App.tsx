@@ -1,29 +1,29 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import { ActivityScreen } from "./screens/ActivityScreen.js"
-import { ConflictsScreen } from "./screens/ConflictsScreen.js"
-import { DocumentHistoryScreen } from "./screens/DocumentHistoryScreen.js"
-import { DocumentScreen } from "./screens/DocumentScreen.js"
-import { JoinInviteScreen } from "./screens/JoinInviteScreen.js"
-import { QueryScreen } from "./screens/QueryScreen.js"
-import { SettingsScreen } from "./screens/SettingsScreen.js"
-import { SignInScreen } from "./screens/SignInScreen.js"
-import { SpecsScreen } from "./screens/SpecsScreen.js"
+import { ActivityPage } from "./live/ActivityPage.js"
+import { JoinInvitePage, SignInPage } from "./live/AuthPages.js"
+import { SpecraftProvider } from "./live/api.js"
+import { ConflictsPage } from "./live/ConflictsPage.js"
+import { QueryPage } from "./live/QueryPage.js"
+import { SettingsPage } from "./live/SettingsPage.js"
+import { SpecsPage } from "./live/SpecsPage.js"
 
 export function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/specs" replace />} />
-      <Route path="/signin" element={<SignInScreen />} />
-      <Route path="/join" element={<JoinInviteScreen />} />
-      <Route path="/specs" element={<SpecsScreen />} />
-      <Route path="/specs/doc/:docId" element={<DocumentScreen />} />
-      <Route path="/specs/doc/:docId/history" element={<DocumentHistoryScreen />} />
-      <Route path="/query" element={<QueryScreen />} />
-      <Route path="/activity" element={<ActivityScreen />} />
-      <Route path="/conflicts" element={<ConflictsScreen />} />
-      <Route path="/settings" element={<SettingsScreen />} />
-      <Route path="/settings/:section" element={<SettingsScreen />} />
-      <Route path="*" element={<Navigate to="/specs" replace />} />
-    </Routes>
+    <SpecraftProvider>
+      <Routes>
+        <Route path="/" element={<Navigate to="/specs" replace />} />
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/join" element={<JoinInvitePage />} />
+        <Route path="/invite/:token" element={<JoinInvitePage />} />
+        <Route path="/specs" element={<SpecsPage />} />
+        <Route path="/specs/doc/:docId" element={<SpecsPage />} />
+        <Route path="/query" element={<QueryPage />} />
+        <Route path="/activity" element={<ActivityPage />} />
+        <Route path="/conflicts" element={<ConflictsPage />} />
+        <Route path="/settings" element={<Navigate to="/settings/git" replace />} />
+        <Route path="/settings/:section" element={<SettingsPage />} />
+        <Route path="*" element={<Navigate to="/specs" replace />} />
+      </Routes>
+    </SpecraftProvider>
   )
 }

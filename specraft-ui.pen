@@ -37378,6 +37378,638 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "OfzUo",
+      "x": 13680,
+      "y": 340,
+      "name": "13 · Live API Integration",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "nQWq4",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "gALZE",
+          "name": "Toolbar",
+          "width": "fill_container",
+          "gap": 14,
+          "padding": [
+            18,
+            28
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "id": "UYCzP",
+              "type": "ref",
+              "ref": "fMa8O",
+              "name": "Back Button"
+            },
+            {
+              "type": "text",
+              "id": "rB476",
+              "name": "Page Title",
+              "fill": "$ink",
+              "content": "Live API",
+              "fontFamily": "$font-display",
+              "fontSize": 28,
+              "fontWeight": "600",
+              "letterSpacing": -0.4
+            },
+            {
+              "type": "frame",
+              "id": "HQytI",
+              "name": "Admin Badge",
+              "fill": "$input-bg",
+              "cornerRadius": "$radius-pill",
+              "padding": [
+                3,
+                9
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "nnB2B",
+                  "name": "Admin Label",
+                  "fill": "$ink-secondary",
+                  "content": "CONNECTED",
+                  "fontFamily": "$font-text",
+                  "fontSize": 10.5,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yWAau",
+          "name": "Settings Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 26,
+          "padding": [
+            4,
+            28,
+            28,
+            28
+          ],
+          "children": [
+            {
+              "id": "DVLAK",
+              "type": "ref",
+              "ref": "ttcaX",
+              "name": "Settings Nav",
+              "descendants": {
+                "TpF7b": {
+                  "fill": "$surface"
+                },
+                "L1Fwo": {
+                  "fill": "$ink"
+                },
+                "Hzo2A": {
+                  "fontWeight": "600",
+                  "fill": "$ink"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "SYkjR",
+              "name": "Settings Content",
+              "width": 660,
+              "layout": "vertical",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Q1mqp",
+                  "name": "Git Card",
+                  "width": "fill_container",
+                  "fill": "$surface",
+                  "cornerRadius": "$radius-m",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": [
+                    22,
+                    24
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "D0KMGF",
+                      "name": "Git Head",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "z1z1L0",
+                          "name": "Git Title",
+                          "fill": "$ink",
+                          "content": "Frontend integration",
+                          "fontFamily": "$font-text",
+                          "fontSize": 16,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.26
+                        },
+                        {
+                          "type": "text",
+                          "id": "DPrL5",
+                          "name": "Git Desc",
+                          "fill": "$ink-tertiary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "The frontend now renders session, wiki, query, conflict, settings, invites, members, and API key data from the backend client.",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$font-text",
+                          "fontSize": 12.5,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "wCKIw",
+                      "name": "Field Remote",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "swXIQ",
+                          "name": "F Label",
+                          "fill": "$ink",
+                          "content": "Session",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12.5,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.12
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lRU9G",
+                          "name": "F Input",
+                          "width": "fill_container",
+                          "height": 36,
+                          "fill": "#F5F5F7",
+                          "cornerRadius": "$radius-s",
+                          "padding": [
+                            0,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "W11Kk",
+                              "name": "F Value",
+                              "fill": "$ink",
+                              "content": "Admin API User",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "fp1j3",
+                          "name": "F Status",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "b3c4ZK",
+                              "name": "F Dot",
+                              "fill": "$success",
+                              "width": 6,
+                              "height": 6
+                            },
+                            {
+                              "type": "text",
+                              "id": "Pg8tE",
+                              "name": "F Status Text",
+                              "fill": "$ink-tertiary",
+                              "content": "GET /api/v1/auth/session",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "akOvF",
+                      "name": "Field Credential",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "A6RSi",
+                          "name": "Cred Head",
+                          "width": "fill_container",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "D7c1z",
+                              "name": "F Label",
+                              "fill": "$ink",
+                              "content": "API key",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "dSDOG",
+                              "name": "Cred Seg",
+                              "fill": "$input-bg",
+                              "cornerRadius": 8,
+                              "gap": 2,
+                              "padding": 2,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "fFvF5",
+                                  "name": "CSeg SSH",
+                                  "fill": "$surface",
+                                  "cornerRadius": 6,
+                                  "effect": {
+                                    "type": "shadow",
+                                    "shadowType": "outer",
+                                    "color": "#0000001F",
+                                    "offset": {
+                                      "x": 0,
+                                      "y": 1
+                                    },
+                                    "blur": 3
+                                  },
+                                  "padding": [
+                                    3,
+                                    10
+                                  ],
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "bRl7y",
+                                      "name": "CSeg SSH Label",
+                                      "fill": "$ink",
+                                      "content": "created",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "500",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Mjct6",
+                                  "name": "CSeg PAT",
+                                  "cornerRadius": 6,
+                                  "padding": [
+                                    3,
+                                    10
+                                  ],
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "oK0a1",
+                                      "name": "CSeg PAT Label",
+                                      "fill": "$ink-tertiary",
+                                      "content": "one-time",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "500",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "WYXLV",
+                          "name": "F Input 2",
+                          "width": "fill_container",
+                          "height": 36,
+                          "fill": "#F5F5F7",
+                          "cornerRadius": "$radius-s",
+                          "gap": 8,
+                          "padding": [
+                            0,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Rdfkr",
+                              "name": "F Value 2",
+                              "fill": "$ink",
+                              "content": "sk-spcrft-live-secret",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "zli0l",
+                              "name": "In2 Spacer",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "icon",
+                              "id": "Q5Sb6P",
+                              "name": "Eye Icon",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "eye-off",
+                              "library": "lucide",
+                              "fill": "$ink-tertiary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "L7BnNm",
+                          "name": "Cred Note",
+                          "fill": "$ink-tertiary",
+                          "content": "POST /api/v1/keys returns the secret once and refreshes the key list.",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11.5,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zXgMV",
+                      "name": "Git Actions",
+                      "width": "fill_container",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "aH25L",
+                          "type": "ref",
+                          "ref": "LkrLR",
+                          "name": "Test Btn",
+                          "descendants": {
+                            "N46On": {
+                              "content": "Test connection"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "cT6LS",
+                          "name": "GA Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "id": "cqSif",
+                          "type": "ref",
+                          "ref": "XufQA",
+                          "name": "Save Btn",
+                          "descendants": {
+                            "VGKQ2": {
+                              "content": "Save"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Cu20V",
+                  "name": "Models Card",
+                  "width": "fill_container",
+                  "fill": "$surface",
+                  "cornerRadius": "$radius-m",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": [
+                    22,
+                    24
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "qp5oo",
+                      "name": "Models Head",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZQZjx",
+                          "name": "Models Title",
+                          "fill": "$ink",
+                          "content": "Wiki, query, and conflicts",
+                          "fontFamily": "$font-text",
+                          "fontSize": 16,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.26
+                        },
+                        {
+                          "type": "text",
+                          "id": "pNbPt",
+                          "name": "Models Desc",
+                          "fill": "$ink-tertiary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Specs, question answering, query logs, conflict resolution, and settings save states are all bound to server responses.",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$font-text",
+                          "fontSize": 12.5,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "CTvos",
+                      "name": "Model Fields",
+                      "width": "fill_container",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ZgL3V",
+                          "name": "Field Ingest model",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "COvWK",
+                              "name": "MF Label",
+                              "fill": "$ink",
+                              "content": "Wiki page",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Oa2GI",
+                              "name": "MF Input",
+                              "width": "fill_container",
+                              "height": 36,
+                              "fill": "#F5F5F7",
+                              "cornerRadius": "$radius-s",
+                              "padding": [
+                                0,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "wDSWV",
+                                  "name": "MF Value",
+                                  "fill": "$ink",
+                                  "content": "Live Overview",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "I4Jdm",
+                          "name": "Field Query model",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Eu5kT",
+                              "name": "MF Label",
+                              "fill": "$ink",
+                              "content": "Conflict",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "LN81x",
+                              "name": "MF Input",
+                              "width": "fill_container",
+                              "height": 36,
+                              "fill": "#F5F5F7",
+                              "cornerRadius": "$radius-s",
+                              "padding": [
+                                0,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "R6UJY",
+                                  "name": "MF Value",
+                                  "fill": "$ink",
+                                  "content": "resolved from API",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "B9epP",
+                      "name": "Models Note",
+                      "fill": "$ink-tertiary",
+                      "content": "Activity log displays qry-log-live from the server after query submission.",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "GoDtT",
+                      "name": "Models Actions",
+                      "width": "fill_container",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "tY7o6",
+                          "name": "MA Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "id": "T0Seuu",
+                          "type": "ref",
+                          "ref": "XufQA",
+                          "name": "Save Models Btn",
+                          "descendants": {
+                            "VGKQ2": {
+                              "content": "Save"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "variables": {
