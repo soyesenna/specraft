@@ -90,10 +90,15 @@ export function SpecsScreen() {
           <ViewSwitcher view={view} onChange={setView} className="w-full" mobile />
         </div>
         {view === "graph" ? (
+          // 디자인 정합을 위해 별도 버튼 없이 캔버스 더블탭으로 도트 모드(M03c) 토글
           dotMode ? (
-            <MobileDotCanvas />
+            <div className="contents" onDoubleClick={() => setDotMode(false)}>
+              <MobileDotCanvas />
+            </div>
           ) : (
-            <MobileGraphCanvas onSelect={() => setSheetOpen(true)} />
+            <div className="contents" onDoubleClick={() => setDotMode(true)}>
+              <MobileGraphCanvas onSelect={() => setSheetOpen(true)} />
+            </div>
           )
         ) : (
           <MobileListView />
@@ -105,20 +110,6 @@ export function SpecsScreen() {
             onClose={() => setSheetOpen(false)}
             className="absolute bottom-2.5 left-2.5 z-30"
           />
-        )}
-        {view === "graph" && (
-          <button
-            type="button"
-            onClick={() => setDotMode((d) => !d)}
-            className="absolute top-[148px] right-4 z-10 flex size-7 items-center justify-center rounded-[14px] bg-surface shadow-[0_2px_8px_#00000014]"
-            aria-label={dotMode ? "확대" : "축소"}
-          >
-            {dotMode ? (
-              <Plus className="size-3.5 text-ink-secondary" />
-            ) : (
-              <Minus className="size-3.5 text-ink-secondary" />
-            )}
-          </button>
         )}
         {branchOpen && (
           <div className="absolute top-[88px] left-[92px] z-40">

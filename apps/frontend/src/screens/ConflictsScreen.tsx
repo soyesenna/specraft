@@ -166,7 +166,7 @@ export function ConflictsScreen() {
 
 function DesktopConflictDetail() {
   return (
-    <article className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto rounded-l bg-surface px-[26px] py-[22px]">
+    <article className="flex min-w-0 flex-1 flex-col gap-4 self-start rounded-l bg-surface px-[26px] py-[22px]">
       <div className="flex w-full items-center gap-2.5">
         <span className="pen-text font-display text-[21px] font-semibold tracking-[-0.3px] text-ink">
           feat/query-cache → dev

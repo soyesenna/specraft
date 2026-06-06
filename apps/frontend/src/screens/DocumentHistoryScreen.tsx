@@ -97,7 +97,7 @@ export function DocumentHistoryScreen() {
               <h2 className="pen-text m-0 w-full font-display text-[17px] font-semibold tracking-[-0.26px] text-ink">
                 판정 매트릭스
               </h2>
-              <div className="w-full overflow-hidden rounded-s border border-success bg-[#E9F6EE]">
+              <div className="w-full overflow-hidden rounded-s bg-[#E9F6EE]">
                 <div className="flex w-full flex-col gap-1.5 px-3.5 py-2.5">
                   <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-[#1E8E3E]">
                     + ADDED
@@ -110,7 +110,7 @@ export function DocumentHistoryScreen() {
                   </span>
                 </div>
               </div>
-              <div className="w-full overflow-hidden rounded-s border border-danger bg-[#FBEEEC]">
+              <div className="w-full overflow-hidden rounded-s bg-[#FBEEEC]">
                 <div className="flex w-full flex-col gap-1.5 px-3.5 py-2.5">
                   <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-[#C5221F]">
                     − REMOVED
@@ -242,7 +242,7 @@ export function DocumentHistoryScreen() {
             </span>
           </button>
           {/* Diff Sheet */}
-          <article className="flex min-h-0 w-full flex-1 flex-col gap-[9px] overflow-y-auto rounded-m bg-surface px-4 py-3.5">
+          <article className="flex w-full flex-col gap-[9px] rounded-m bg-surface px-4 py-3.5">
             <h1 className="pen-text m-0 w-full font-display text-[17.5px] font-semibold tracking-[-0.28px] text-ink">
               Stop 게이트 판정 규칙
             </h1>
