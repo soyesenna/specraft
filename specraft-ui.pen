@@ -19056,756 +19056,1708 @@
                     },
                     {
                       "type": "ellipse",
-                      "id": "leUc0",
+                      "id": "QEC84",
                       "x": 552.5,
                       "y": 335.5,
                       "name": "Dot ov-0",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
+                      "fill": "#7E92CE",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "ciqoy",
-                      "x": 539.5,
-                      "y": 388.5,
+                      "id": "f1VFp",
+                      "x": 538.5,
+                      "y": 387.5,
                       "name": "Dot ov-1",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "p8c32z",
-                      "x": 484.5,
-                      "y": 386.5,
+                      "id": "I1mohT",
+                      "x": 482.5,
+                      "y": 384.5,
                       "name": "Dot ov-2",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "Qiv5M",
+                      "id": "wQc9s",
                       "x": 429.5,
                       "y": 371.5,
                       "name": "Dot ov-3",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
+                      "fill": "#7E92CE",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "Gz4Gu",
-                      "x": 430.5,
-                      "y": 314.5,
+                      "id": "eJGMS",
+                      "x": 429.5,
+                      "y": 313.5,
                       "name": "Dot ov-4",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "gmGUl",
-                      "x": 446.5,
-                      "y": 255.5,
+                      "id": "llCSu",
+                      "x": 444.5,
+                      "y": 253.5,
                       "name": "Dot ov-5",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "f4c7Lm",
+                      "id": "SuTTP",
                       "x": 507.5,
                       "y": 256.5,
                       "name": "Dot ov-6",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
+                      "fill": "#7E92CE",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "U8u6U",
-                      "x": 568.5,
-                      "y": 274.5,
+                      "id": "g63icr",
+                      "x": 567.5,
+                      "y": 273.5,
                       "name": "Dot ov-7",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "u81SN",
-                      "x": 705.5,
-                      "y": 232.5,
+                      "id": "f1ZhYA",
+                      "x": 704.5,
+                      "y": 231.5,
                       "name": "Dot idx-8",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "T1Ctpi",
-                      "x": 663.5,
-                      "y": 253.5,
+                      "id": "FCwqE",
+                      "x": 661.5,
+                      "y": 251.5,
                       "name": "Dot idx-9",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "QDsbU",
+                      "id": "xr8oA",
                       "x": 621.5,
                       "y": 277.5,
                       "name": "Dot idx-10",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
+                      "fill": "#9AACE4",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "d4ghrH",
-                      "x": 586.5,
-                      "y": 242.5,
+                      "id": "EdoTE",
+                      "x": 585.5,
+                      "y": 241.5,
                       "name": "Dot idx-11",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "LSPCk",
-                      "x": 549.5,
-                      "y": 207.5,
+                      "id": "Q2CT9s",
+                      "x": 547.5,
+                      "y": 205.5,
                       "name": "Dot idx-12",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "rtbEk",
+                      "id": "b4ct9d",
                       "x": 571.5,
                       "y": 161.5,
                       "name": "Dot idx-13",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
+                      "fill": "#9AACE4",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "Wsblr",
-                      "x": 595.5,
-                      "y": 113.5,
+                      "id": "rso1i",
+                      "x": 594.5,
+                      "y": 112.5,
                       "name": "Dot idx-14",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "mbchq",
-                      "x": 648.5,
-                      "y": 120.5,
+                      "id": "kj5CC",
+                      "x": 646.5,
+                      "y": 118.5,
                       "name": "Dot idx-15",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "VvUfx",
+                      "id": "w2o0iU",
                       "x": 703.5,
                       "y": 129.5,
                       "name": "Dot idx-16",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
+                      "fill": "#9AACE4",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "uhvRz",
-                      "x": 714.5,
-                      "y": 184.5,
+                      "id": "h9iQ0",
+                      "x": 713.5,
+                      "y": 183.5,
                       "name": "Dot idx-17",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "iD6OT",
-                      "x": 334.5,
-                      "y": 594.5,
+                      "id": "HmUGl",
+                      "x": 333.5,
+                      "y": 593.5,
                       "name": "Dot log-18",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "d5QZjO",
-                      "x": 261.5,
-                      "y": 621.5,
+                      "id": "wP6cT",
+                      "x": 259.5,
+                      "y": 619.5,
                       "name": "Dot log-19",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "C5lAlR",
+                      "id": "bXmAa",
                       "x": 237.5,
                       "y": 546.5,
                       "name": "Dot log-20",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
+                      "fill": "#5F76B8",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "yVBge",
-                      "x": 283.5,
-                      "y": 478.5,
+                      "id": "P4TsNP",
+                      "x": 282.5,
+                      "y": 477.5,
                       "name": "Dot log-21",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "i4dRMT",
-                      "x": 351.5,
-                      "y": 526.5,
+                      "id": "pmx9p",
+                      "x": 349.5,
+                      "y": 524.5,
                       "name": "Dot log-22",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "C937n",
-                      "x": 894.5,
-                      "y": 295.5,
+                      "id": "S6lf8N",
+                      "x": 892.5,
+                      "y": 293.5,
                       "name": "Dot specs-23",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "TbuN1",
+                      "id": "rX1RX",
                       "x": 855.5,
                       "y": 345.5,
                       "name": "Dot specs-24",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
+                      "fill": "#7E92CE",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "FYi49",
-                      "x": 797.5,
-                      "y": 376.5,
+                      "id": "iXYaK",
+                      "x": 796.5,
+                      "y": 375.5,
                       "name": "Dot specs-25",
                       "innerRadius": 0.42,
-                      "fill": "#2FA8A2",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#2FB3AC",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#2FB3AC8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#2FB3AC40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "N765Bj",
-                      "x": 754.5,
-                      "y": 325.5,
+                      "id": "jegnK",
+                      "x": 752.5,
+                      "y": 323.5,
                       "name": "Dot specs-26",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "ekS6w",
+                      "id": "QAQQp",
                       "x": 737.5,
                       "y": 257.5,
                       "name": "Dot specs-27",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
+                      "fill": "#7E92CE",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "reSY6",
-                      "x": 799.5,
-                      "y": 225.5,
+                      "id": "Sh7Zg",
+                      "x": 798.5,
+                      "y": 224.5,
                       "name": "Dot specs-28",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "VDoT2",
-                      "x": 872.5,
-                      "y": 224.5,
+                      "id": "ZaKrL",
+                      "x": 870.5,
+                      "y": 222.5,
                       "name": "Dot specs-29",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "g97UvI",
-                      "x": 293.5,
-                      "y": 231.5,
+                      "id": "Q0LVT3",
+                      "x": 291.5,
+                      "y": 229.5,
                       "name": "Dot arch-30",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "bscek",
+                      "id": "Fz87H",
                       "x": 255.5,
                       "y": 291.5,
                       "name": "Dot arch-31",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
+                      "fill": "#9AACE4",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "zGQLF",
-                      "x": 190.5,
-                      "y": 260.5,
+                      "id": "IFeZS",
+                      "x": 189.5,
+                      "y": 259.5,
                       "name": "Dot arch-32",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "djxxU",
-                      "x": 155.5,
-                      "y": 194.5,
+                      "id": "L6gqZD",
+                      "x": 153.5,
+                      "y": 192.5,
                       "name": "Dot arch-33",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "aXmYJ",
+                      "id": "D4Diz",
                       "x": 217.5,
                       "y": 149.5,
                       "name": "Dot arch-34",
                       "innerRadius": 0.42,
-                      "fill": "#2FA8A2",
+                      "fill": "#2FB3AC",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#2FB3AC8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#2FB3AC40",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "xv9gV",
-                      "x": 297.5,
-                      "y": 153.5,
+                      "id": "gvU1q",
+                      "x": 296.5,
+                      "y": 152.5,
                       "name": "Dot arch-35",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "RRkUt",
-                      "x": 938.5,
-                      "y": 592.5,
+                      "id": "M2usWM",
+                      "x": 937.5,
+                      "y": 591.5,
                       "name": "Dot dec-36",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "Ebb9x",
-                      "x": 846.5,
-                      "y": 605.5,
+                      "id": "pKky8",
+                      "x": 844.5,
+                      "y": 603.5,
                       "name": "Dot dec-37",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "ksTbs",
+                      "id": "O1d0Q3",
                       "x": 808.5,
                       "y": 517.5,
                       "name": "Dot dec-38",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
+                      "fill": "#5F76B8",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "b5Osju",
-                      "x": 906.5,
-                      "y": 501.5,
+                      "id": "ENGLu",
+                      "x": 905.5,
+                      "y": 500.5,
                       "name": "Dot dec-39",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "z0bhcn",
-                      "x": 621.5,
-                      "y": 680.5,
+                      "id": "DnFz5",
+                      "x": 620.5,
+                      "y": 679.5,
                       "name": "Dot pro-40",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "UUPJy",
-                      "x": 524.5,
-                      "y": 635.5,
+                      "id": "RSsZ6",
+                      "x": 522.5,
+                      "y": 633.5,
                       "name": "Dot pro-41",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "NNvni",
+                      "id": "Bnqp3",
                       "x": 623.5,
                       "y": 587.5,
                       "name": "Dot pro-42",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
+                      "fill": "#7E92CE",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "I3b9h",
+                      "id": "HISkh",
                       "x": 205.5,
                       "y": 441.5,
                       "name": "Dot c8-43",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
+                      "fill": "#9AACE4",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "F4YTO0",
-                      "x": 133.5,
-                      "y": 475.5,
+                      "id": "SSTc4",
+                      "x": 132.5,
+                      "y": 474.5,
                       "name": "Dot c8-44",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "RofZ2",
-                      "x": 59.5,
-                      "y": 437.5,
+                      "id": "AtfQw",
+                      "x": 57.5,
+                      "y": 435.5,
                       "name": "Dot c8-45",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "SyRDJ",
+                      "id": "c5YQa",
                       "x": 99.5,
                       "y": 362.5,
                       "name": "Dot c8-46",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
+                      "fill": "#9AACE4",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "mHr0U",
-                      "x": 186.5,
-                      "y": 350.5,
+                      "id": "TfRzU",
+                      "x": 185.5,
+                      "y": 349.5,
                       "name": "Dot c8-47",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "rDCpA",
-                      "x": 1105.5,
-                      "y": 139.5,
+                      "id": "a6wwDH",
+                      "x": 1104.5,
+                      "y": 138.5,
                       "name": "Dot c9-48",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "zVkFz",
-                      "x": 1071.5,
-                      "y": 202.5,
+                      "id": "Yfisj",
+                      "x": 1069.5,
+                      "y": 200.5,
                       "name": "Dot c9-49",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "qV9TK",
+                      "id": "DOYIp",
                       "x": 1009.5,
                       "y": 163.5,
                       "name": "Dot c9-50",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
+                      "fill": "#5F76B8",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "YrSjm",
-                      "x": 1000.5,
-                      "y": 87.5,
+                      "id": "pgGcU",
+                      "x": 999.5,
+                      "y": 86.5,
                       "name": "Dot c9-51",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "g9OA1H",
-                      "x": 1078.5,
-                      "y": 82.5,
+                      "id": "dbWOu",
+                      "x": 1076.5,
+                      "y": 80.5,
                       "name": "Dot c9-52",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "hoGB6",
-                      "x": 1134.5,
-                      "y": 474.5,
+                      "id": "B0vWP",
+                      "x": 1132.5,
+                      "y": 472.5,
                       "name": "Dot c10-53",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "M1gY4",
+                      "id": "p2CJ4",
                       "x": 1064.5,
                       "y": 486.5,
                       "name": "Dot c10-54",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
+                      "fill": "#7E92CE",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "Uz3VO",
-                      "x": 999.5,
-                      "y": 453.5,
+                      "id": "fMuR5",
+                      "x": 998.5,
+                      "y": 452.5,
                       "name": "Dot c10-55",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "t3Hl9N",
-                      "x": 1024.5,
-                      "y": 383.5,
+                      "id": "iKDrs",
+                      "x": 1022.5,
+                      "y": 381.5,
                       "name": "Dot c10-56",
                       "innerRadius": 0.42,
-                      "fill": "#2FA8A2",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#2FB3AC",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#2FB3AC8C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#2FB3AC40",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "i1r8pm",
+                      "id": "OTZxe",
                       "x": 1090.5,
                       "y": 341.5,
                       "name": "Dot c10-57",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
+                      "fill": "#7E92CE",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "S6h1u",
-                      "x": 1141.5,
-                      "y": 401.5,
+                      "id": "rUFqz",
+                      "x": 1140.5,
+                      "y": 400.5,
                       "name": "Dot c10-58",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#5F76B8",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "lqUbk",
-                      "x": 441.5,
-                      "y": 150.5,
+                      "id": "Tc3DO",
+                      "x": 440.5,
+                      "y": 149.5,
                       "name": "Dot c11-59",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "bAo4p",
-                      "x": 362.5,
-                      "y": 128.5,
+                      "id": "SiUC0",
+                      "x": 360.5,
+                      "y": 126.5,
                       "name": "Dot c11-60",
                       "innerRadius": 0.42,
-                      "fill": "#2FA8A2",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#2FB3AC",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#2FB3AC8C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#2FB3AC40",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "nwTDD",
+                      "id": "ksxtS",
                       "x": 407.5,
                       "y": 56.5,
                       "name": "Dot c11-61",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
+                      "fill": "#9AACE4",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "nlqjS",
-                      "x": 492.5,
-                      "y": 81.5,
+                      "id": "z183pQ",
+                      "x": 491.5,
+                      "y": 80.5,
                       "name": "Dot c11-62",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "u5Dj0s",
-                      "x": 775.5,
-                      "y": 504.5,
+                      "id": "Yfxfy",
+                      "x": 774.5,
+                      "y": 503.5,
                       "name": "Dot c12-63",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "PaH9U",
-                      "x": 701.5,
-                      "y": 519.5,
+                      "id": "Ikcun",
+                      "x": 699.5,
+                      "y": 517.5,
                       "name": "Dot c12-64",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "nRBdr",
+                      "id": "qOMsG",
                       "x": 640.5,
                       "y": 469.5,
                       "name": "Dot c12-65",
                       "innerRadius": 0.42,
-                      "fill": "#76819F",
+                      "fill": "#5F76B8",
                       "width": 9,
-                      "height": 9
+                      "height": 9,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B88C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#5F76B840",
+                          "blur": 8
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "zKPte",
-                      "x": 693.5,
-                      "y": 409.5,
+                      "id": "hWAP2",
+                      "x": 692.5,
+                      "y": 408.5,
                       "name": "Dot c12-66",
                       "innerRadius": 0.42,
-                      "fill": "#A6AFC8",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#9AACE4",
+                      "width": 11,
+                      "height": 11,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE48C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#9AACE440",
+                          "blur": 10
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "UAUca",
-                      "x": 776.5,
-                      "y": 415.5,
+                      "id": "v3XwME",
+                      "x": 774.5,
+                      "y": 413.5,
                       "name": "Dot c12-67",
                       "innerRadius": 0.42,
-                      "fill": "#8C97B4",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#7E92CE",
+                      "width": 13,
+                      "height": 13,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE8C",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#7E92CE40",
+                          "blur": 12
+                        }
+                      ]
                     },
                     {
                       "type": "rectangle",
                       "cornerRadius": 2.5,
-                      "id": "T7we7b",
+                      "id": "celqv",
                       "x": 494,
                       "y": 324,
                       "name": "Hub ov",
@@ -19829,7 +20781,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2.5,
-                      "id": "ebPlO",
+                      "id": "hsgUv",
                       "x": 634,
                       "y": 194,
                       "name": "Hub idx",
@@ -19853,7 +20805,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2.5,
-                      "id": "C6BTqH",
+                      "id": "GZXzo",
                       "x": 294,
                       "y": 554,
                       "name": "Hub log",
@@ -19877,7 +20829,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2,
-                      "id": "LNzJs",
+                      "id": "GUC6w",
                       "x": 815.5,
                       "y": 295.5,
                       "name": "Hub specs",
@@ -19901,7 +20853,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2,
-                      "id": "LIsiq",
+                      "id": "TWvLq",
                       "x": 235.5,
                       "y": 215.5,
                       "name": "Hub arch",
@@ -19925,7 +20877,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2,
-                      "id": "ohWy3",
+                      "id": "BcFLt",
                       "x": 875.5,
                       "y": 555.5,
                       "name": "Hub dec",
@@ -19949,7 +20901,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2,
-                      "id": "CDhiZ",
+                      "id": "sn4vt",
                       "x": 595.5,
                       "y": 635.5,
                       "name": "Hub pro",
@@ -19960,7 +20912,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2,
-                      "id": "y6aSU",
+                      "id": "Xp15g",
                       "x": 135.5,
                       "y": 415.5,
                       "name": "Hub c8",
@@ -19971,7 +20923,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2,
-                      "id": "fZz8X",
+                      "id": "nszrC",
                       "x": 1055.5,
                       "y": 135.5,
                       "name": "Hub c9",
@@ -19982,7 +20934,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2,
-                      "id": "WQGrr",
+                      "id": "J1GkK",
                       "x": 1075.5,
                       "y": 425.5,
                       "name": "Hub c10",
@@ -19993,7 +20945,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2,
-                      "id": "bb6dF",
+                      "id": "O1klH",
                       "x": 425.5,
                       "y": 105.5,
                       "name": "Hub c11",
@@ -20004,7 +20956,7 @@
                     {
                       "type": "rectangle",
                       "cornerRadius": 2,
-                      "id": "ennRx",
+                      "id": "LzqHx",
                       "x": 715.5,
                       "y": 465.5,
                       "name": "Hub c12",
@@ -20026,36 +20978,78 @@
                     },
                     {
                       "type": "ellipse",
-                      "id": "T6yci",
-                      "x": 894.5,
-                      "y": 244.5,
+                      "id": "vGYA1",
+                      "x": 894,
+                      "y": 244,
                       "name": "Selected Dot",
                       "innerRadius": 0.4,
                       "fill": "$accent",
-                      "width": 11,
-                      "height": 11
+                      "width": 12,
+                      "height": 12,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#0071E3B3",
+                          "blur": 4
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#0071E34D",
+                          "blur": 14
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "uVn8y",
-                      "x": 375.5,
-                      "y": 425.5,
+                      "id": "H2RH3",
+                      "x": 375,
+                      "y": 425,
                       "name": "Conflict Dot 1",
                       "innerRadius": 0.42,
-                      "fill": "#ED6A1C",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#F26B1D",
+                      "width": 10,
+                      "height": 10,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#F26B1D8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#F26B1D40",
+                          "blur": 9
+                        }
+                      ]
                     },
                     {
                       "type": "ellipse",
-                      "id": "yPr3M",
-                      "x": 440.5,
-                      "y": 470.5,
+                      "id": "u2pAA",
+                      "x": 440,
+                      "y": 470,
                       "name": "Conflict Dot 2",
                       "innerRadius": 0.42,
-                      "fill": "#ED6A1C",
-                      "width": 9,
-                      "height": 9
+                      "fill": "#F26B1D",
+                      "width": 10,
+                      "height": 10,
+                      "effect": [
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#F26B1D8C",
+                          "blur": 3
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "#F26B1D40",
+                          "blur": 9
+                        }
+                      ]
                     },
                     {
                       "type": "frame",
@@ -20301,10 +21295,10 @@
                           "children": [
                             {
                               "type": "ellipse",
-                              "id": "h3Xs7x",
+                              "id": "bRflq",
                               "name": "Sw Doc",
                               "innerRadius": 0.42,
-                              "fill": "#76819F",
+                              "fill": "#5F76B8",
                               "width": 9,
                               "height": 9
                             },
@@ -20331,7 +21325,7 @@
                             {
                               "type": "rectangle",
                               "cornerRadius": 2,
-                              "id": "pJXMm",
+                              "id": "iY3bK",
                               "name": "Sw Hub",
                               "fill": "#59616F",
                               "width": 9,
@@ -20360,7 +21354,7 @@
                             {
                               "type": "rectangle",
                               "cornerRadius": 2,
-                              "id": "FyNMZ",
+                              "id": "Zb7xr",
                               "name": "Sw Core",
                               "fill": "$dark-card",
                               "width": 9,
@@ -20388,7 +21382,7 @@
                           "children": [
                             {
                               "type": "ellipse",
-                              "id": "Lwa6h",
+                              "id": "JXrgO",
                               "name": "Sw Sel",
                               "innerRadius": 0.4,
                               "fill": "$accent",
@@ -20417,10 +21411,10 @@
                           "children": [
                             {
                               "type": "ellipse",
-                              "id": "lwyBf",
+                              "id": "aU6MA",
                               "name": "Sw Conf",
                               "innerRadius": 0.42,
-                              "fill": "#ED6A1C",
+                              "fill": "#F26B1D",
                               "width": 9,
                               "height": 9
                             },
@@ -20438,6 +21432,86 @@
                           ]
                         }
                       ]
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "OEL7n",
+                      "x": 90,
+                      "y": 115,
+                      "name": "Twinkle 1",
+                      "fill": "#7E92CE4D",
+                      "width": 5,
+                      "height": 5
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "sIMRh",
+                      "x": 345,
+                      "y": 70,
+                      "name": "Twinkle 2",
+                      "fill": "#7E92CE4D",
+                      "width": 4,
+                      "height": 4
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "bVisH",
+                      "x": 1155,
+                      "y": 255,
+                      "name": "Twinkle 3",
+                      "fill": "#7E92CE4D",
+                      "width": 5,
+                      "height": 5
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "nwNMZ",
+                      "x": 60,
+                      "y": 580,
+                      "name": "Twinkle 4",
+                      "fill": "#7E92CE4D",
+                      "width": 4,
+                      "height": 4
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "q9c8hn",
+                      "x": 530,
+                      "y": 150,
+                      "name": "Twinkle 5",
+                      "fill": "#7E92CE4D",
+                      "width": 5,
+                      "height": 5
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "RSU0I",
+                      "x": 770,
+                      "y": 645,
+                      "name": "Twinkle 6",
+                      "fill": "#7E92CE4D",
+                      "width": 4,
+                      "height": 4
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "Z5d0y",
+                      "x": 200,
+                      "y": 700,
+                      "name": "Twinkle 7",
+                      "fill": "#7E92CE4D",
+                      "width": 5,
+                      "height": 5
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "sWAYf",
+                      "x": 1120,
+                      "y": 700,
+                      "name": "Twinkle 8",
+                      "fill": "#7E92CE4D",
+                      "width": 4,
+                      "height": 4
                     }
                   ]
                 }
