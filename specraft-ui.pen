@@ -1444,17 +1444,6 @@
                                   "content": "Open document"
                                 }
                               }
-                            },
-                            {
-                              "id": "Nv8Nx",
-                              "type": "ref",
-                              "ref": "LkrLR",
-                              "name": "History Btn",
-                              "descendants": {
-                                "N46On": {
-                                  "content": "History"
-                                }
-                              }
                             }
                           ]
                         }
@@ -16328,17 +16317,6 @@
                                   "content": "Open document"
                                 }
                               }
-                            },
-                            {
-                              "id": "dEycd",
-                              "type": "ref",
-                              "ref": "LkrLR",
-                              "name": "History Btn",
-                              "descendants": {
-                                "N46On": {
-                                  "content": "History"
-                                }
-                              }
                             }
                           ]
                         }
@@ -24156,6 +24134,29 @@
                   "fontSize": 10.5,
                   "fontWeight": "normal",
                   "letterSpacing": -0.1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "IC9Rk",
+              "name": "History Button",
+              "width": 28,
+              "height": 28,
+              "fill": "$input-bg",
+              "cornerRadius": 14,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "BsLPG",
+                  "name": "History Icon",
+                  "width": 13,
+                  "height": 13,
+                  "icon": "history",
+                  "library": "lucide",
+                  "fill": "$ink-secondary"
                 }
               ]
             },
@@ -34569,6 +34570,1360 @@
                   "fill": "$ink",
                   "width": 134,
                   "height": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "AGh5N",
+      "x": 12160,
+      "y": 340,
+      "name": "05b · Document — History",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "bNVR2",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "C7Ub4c",
+          "name": "Shell",
+          "width": "fill_container",
+          "height": "fill_container",
+          "children": [
+            {
+              "id": "fWdLW",
+              "type": "ref",
+              "ref": "rbjMR",
+              "name": "Sidebar",
+              "height": "fill_container",
+              "descendants": {
+                "Jizja": {
+                  "fill": "$surface"
+                },
+                "aaROC": {
+                  "fill": "$ink"
+                },
+                "ZbeNo": {
+                  "fontWeight": "600",
+                  "fill": "$ink"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "QGeNK",
+              "name": "Main",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "MMpEe",
+                  "name": "Toolbar",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "padding": [
+                    16,
+                    28
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "wZf9e",
+                      "name": "Back Button",
+                      "width": 28,
+                      "height": 28,
+                      "fill": "$input-bg",
+                      "cornerRadius": 14,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "AwKCz",
+                          "name": "Back Icon",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "chevron-left",
+                          "library": "lucide",
+                          "fill": "$ink-secondary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yxSDA",
+                      "name": "Breadcrumb",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "oto6r",
+                          "name": "Crumb Dir",
+                          "fill": "$ink-tertiary",
+                          "content": "specs /",
+                          "fontFamily": "$font-text",
+                          "fontSize": 13,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.2
+                        },
+                        {
+                          "type": "text",
+                          "id": "YOWeG",
+                          "name": "Crumb Name",
+                          "fill": "$ink",
+                          "content": "stop-gate.md",
+                          "fontFamily": "$font-text",
+                          "fontSize": 15,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.24
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VRdIQ",
+                      "name": "History Mode Badge",
+                      "fill": "$dark-card",
+                      "cornerRadius": "$radius-pill",
+                      "gap": 5,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "bWyrO",
+                          "name": "HM Icon",
+                          "width": 11,
+                          "height": 11,
+                          "icon": "history",
+                          "library": "lucide",
+                          "fill": "$white"
+                        },
+                        {
+                          "type": "text",
+                          "id": "RWYHd",
+                          "name": "HM Label",
+                          "fill": "$white",
+                          "content": "History",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11.5,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xMd7Y",
+                      "name": "Toolbar Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "id": "ijWOv",
+                      "type": "ref",
+                      "ref": "kKsa7",
+                      "name": "Branch Picker"
+                    },
+                    {
+                      "id": "plNDv",
+                      "type": "ref",
+                      "ref": "XufQA",
+                      "name": "Done Btn",
+                      "descendants": {
+                        "VGKQ2": {
+                          "content": "Done"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "IggKF",
+                  "name": "History Body",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "gap": 22,
+                  "padding": [
+                    0,
+                    28,
+                    28,
+                    28
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "XUuzU",
+                      "name": "Doc Sheet",
+                      "clip": true,
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "$surface",
+                      "cornerRadius": "$radius-l",
+                      "layout": "vertical",
+                      "gap": 14,
+                      "padding": [
+                        28,
+                        40
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "w0Q1Q",
+                          "name": "Version Banner",
+                          "width": "fill_container",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": "$radius-s",
+                          "gap": 8,
+                          "padding": [
+                            9,
+                            14
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "sjRQq",
+                              "name": "Ban Icon",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "history",
+                              "library": "lucide",
+                              "fill": "$ink-tertiary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "S8TQ7",
+                              "name": "Ban Text",
+                              "fill": "$ink-secondary",
+                              "content": "버전 a1b2c3d을 보는 중 — 수연의 ingest · 2시간 전",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "wjpNz",
+                              "name": "Ban Spacer",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "text",
+                              "id": "pCvGh",
+                              "name": "Ban Link",
+                              "fill": "$link",
+                              "content": "최신 버전으로",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Koqdq",
+                          "name": "Doc H1",
+                          "fill": "$ink",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Stop 게이트 판정 규칙",
+                          "lineHeight": 1.18,
+                          "fontFamily": "$font-display",
+                          "fontSize": 26,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.38
+                        },
+                        {
+                          "type": "text",
+                          "id": "GclfQ",
+                          "name": "Doc Meta",
+                          "fill": "$ink-tertiary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "specs/stop-gate.md · 이 버전 a1b2c3d · 이전 7d21f0a 대비 +14 −3",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "Y8XGd",
+                          "name": "Divider",
+                          "fill": "$hairline",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "text",
+                          "id": "eFeph",
+                          "name": "Doc P1",
+                          "fill": "$ink-secondary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Stop 게이트는 세션 종료 시점에 세 가지 검사를 순서대로 수행한다 — ① 워킹트리 clean ② HEAD push 완료 ③ 세션 ingest 마킹 존재. 하나라도 미충족이면 종료를 차단하고 commit → push → ingest 절차를 지시한다.",
+                          "lineHeight": 1.65,
+                          "fontFamily": "$font-text",
+                          "fontSize": 14,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.22
+                        },
+                        {
+                          "type": "text",
+                          "id": "Z16X4",
+                          "name": "Doc H2",
+                          "fill": "$ink",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "판정 매트릭스",
+                          "fontFamily": "$font-display",
+                          "fontSize": 17,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.26
+                        },
+                        {
+                          "type": "frame",
+                          "id": "kJda8",
+                          "name": "Diff Added",
+                          "clip": true,
+                          "width": "fill_container",
+                          "fill": "#E9F6EE",
+                          "cornerRadius": "$radius-s",
+                          "stroke": "$success",
+                          "strokeWidth": {
+                            "left": 3
+                          },
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "XabPH",
+                              "name": "Add Col",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 6,
+                              "padding": [
+                                10,
+                                14
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Pv1dK",
+                                  "name": "Add Tag",
+                                  "fill": "#1E8E3E",
+                                  "content": "+ ADDED",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600",
+                                  "letterSpacing": 0.8
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "qIPqk",
+                                  "name": "Add L1",
+                                  "fill": "$ink-secondary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "read-only 세션(변경 · 커밋 0건)은 ingest 강제를 면제한다 — D9",
+                                  "lineHeight": 1.55,
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "E9b6r",
+                                  "name": "Add L2",
+                                  "fill": "$ink-secondary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "dirty-uncommitted는 면제가 아니다 — clean 검사(①)에서 차단",
+                                  "lineHeight": 1.55,
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "O1aBI",
+                          "name": "Diff Removed",
+                          "clip": true,
+                          "width": "fill_container",
+                          "fill": "#FBEEEC",
+                          "cornerRadius": "$radius-s",
+                          "stroke": "$danger",
+                          "strokeWidth": {
+                            "left": 3
+                          },
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "RGzEf",
+                              "name": "Rem Col",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 6,
+                              "padding": [
+                                10,
+                                14
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "T4DgvM",
+                                  "name": "Rem Tag",
+                                  "fill": "#C5221F",
+                                  "content": "− REMOVED",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 9,
+                                  "fontWeight": "600",
+                                  "letterSpacing": 0.8
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "gCzYr",
+                                  "name": "Rem L1",
+                                  "fill": "$ink-tertiary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "서버 응답이 없으면 5분 대기 후 게이트를 통과시킨다",
+                                  "lineHeight": 1.55,
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "xL1dF",
+                          "name": "Context Bullet",
+                          "width": "fill_container",
+                          "gap": 9,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "uRuwx",
+                              "name": "Dot Wrap",
+                              "padding": [
+                                8,
+                                0,
+                                0,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "ellipse",
+                                  "id": "HJxN0",
+                                  "name": "Bullet Dot",
+                                  "fill": "$ink-tertiary",
+                                  "width": 4.5,
+                                  "height": 4.5
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "D21IB",
+                              "name": "Bullet Text",
+                              "fill": "$ink-secondary",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "서버 도달 불가 시에도 hard block 유지 — spec 무결성 > 가용성 (D1)",
+                              "lineHeight": 1.6,
+                              "fontFamily": "$font-text",
+                              "fontSize": 14,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.22
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "A6OJs",
+                      "name": "History Panel",
+                      "clip": true,
+                      "width": 360,
+                      "height": "fill_container",
+                      "fill": "$surface",
+                      "cornerRadius": "$radius-l",
+                      "layout": "vertical",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Z1Zi7J",
+                          "name": "HP Head",
+                          "width": "fill_container",
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "layout": "vertical",
+                          "gap": 2,
+                          "padding": [
+                            14,
+                            16,
+                            12,
+                            16
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "gAcym",
+                              "name": "HP Title",
+                              "fill": "$ink",
+                              "content": "History",
+                              "fontFamily": "$font-text",
+                              "fontSize": 15,
+                              "fontWeight": "600",
+                              "letterSpacing": -0.24
+                            },
+                            {
+                              "type": "text",
+                              "id": "dnrDv",
+                              "name": "HP Sub",
+                              "fill": "$ink-tertiary",
+                              "content": "specs/stop-gate.md · 12 versions",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Z1732",
+                          "name": "Ver a1b2c3d",
+                          "width": "fill_container",
+                          "fill": "#F5F5F7",
+                          "stroke": "$accent",
+                          "strokeWidth": {
+                            "left": 3
+                          },
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "qtAAH",
+                              "name": "Ver Col",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 5,
+                              "padding": [
+                                12,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Sky05",
+                                  "name": "Ver Top",
+                                  "width": "fill_container",
+                                  "gap": 7,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "hL6EK",
+                                      "name": "Ver Avatar",
+                                      "width": 20,
+                                      "height": 20,
+                                      "fill": "$input-bg",
+                                      "cornerRadius": 10,
+                                      "justifyContent": "center",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "H4ai6K",
+                                          "name": "Ver Initials",
+                                          "fill": "$ink-secondary",
+                                          "content": "SY",
+                                          "fontFamily": "$font-text",
+                                          "fontSize": 8,
+                                          "fontWeight": "600"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "qbD3O",
+                                      "name": "Ver Name",
+                                      "fill": "$ink",
+                                      "content": "수연",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.12
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "OyXrf",
+                                      "name": "Ver Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "RblR2",
+                                      "name": "Ver Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "2시간 전",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 10.5,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "WN3oY",
+                                  "name": "Ver Summary",
+                                  "fill": "$ink-secondary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "게이트 면제 조건 D9 반영, 매트릭스 셀 정리",
+                                  "lineHeight": 1.45,
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "iEIhX",
+                                  "name": "Ver Meta",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "sy7M8",
+                                      "name": "Ver Commit",
+                                      "fill": "$surface",
+                                      "cornerRadius": 4,
+                                      "padding": [
+                                        2,
+                                        6
+                                      ],
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "CCPKK",
+                                          "name": "Ver Hash",
+                                          "fill": "$ink-secondary",
+                                          "content": "a1b2c3d",
+                                          "fontFamily": "$font-mono",
+                                          "fontSize": 9.5,
+                                          "fontWeight": "normal"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "WNYzc",
+                                      "name": "Ver Plus",
+                                      "fill": "#1E8E3E",
+                                      "content": "+14",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 10,
+                                      "fontWeight": "normal"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "C6Abl",
+                                      "name": "Ver Minus",
+                                      "fill": "#C5221F",
+                                      "content": "−3",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 10,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lyL10",
+                          "name": "Ver 7d21f0a",
+                          "width": "fill_container",
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "LWd45",
+                              "name": "Ver Col",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 5,
+                              "padding": [
+                                12,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "HSkSX",
+                                  "name": "Ver Top",
+                                  "width": "fill_container",
+                                  "gap": 7,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "uGw8z",
+                                      "name": "Ver Avatar",
+                                      "width": 20,
+                                      "height": 20,
+                                      "fill": "$input-bg",
+                                      "cornerRadius": 10,
+                                      "justifyContent": "center",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "Q8WER",
+                                          "name": "Ver Initials",
+                                          "fill": "$ink-secondary",
+                                          "content": "MJ",
+                                          "fontFamily": "$font-text",
+                                          "fontSize": 8,
+                                          "fontWeight": "600"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "l1Ykji",
+                                      "name": "Ver Name",
+                                      "fill": "$ink",
+                                      "content": "민지",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.12
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "c77o5q",
+                                      "name": "Ver Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "AQ5b6",
+                                      "name": "Ver Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "어제",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 10.5,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "JTY4X",
+                                  "name": "Ver Summary",
+                                  "fill": "$ink-secondary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "3중 검사 순서 및 차단 지시 문구 명시",
+                                  "lineHeight": 1.45,
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "cF71y",
+                                  "name": "Ver Meta",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "v027Z",
+                                      "name": "Ver Commit",
+                                      "fill": "#F5F5F7",
+                                      "cornerRadius": 4,
+                                      "padding": [
+                                        2,
+                                        6
+                                      ],
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "sOQne",
+                                          "name": "Ver Hash",
+                                          "fill": "$ink-secondary",
+                                          "content": "7d21f0a",
+                                          "fontFamily": "$font-mono",
+                                          "fontSize": 9.5,
+                                          "fontWeight": "normal"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "z4y4Y",
+                                      "name": "Ver Plus",
+                                      "fill": "#1E8E3E",
+                                      "content": "+9",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 10,
+                                      "fontWeight": "normal"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "u9e2dO",
+                                      "name": "Ver Minus",
+                                      "fill": "#C5221F",
+                                      "content": "−2",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 10,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "nHj2a",
+                          "name": "Ver 3c9b771",
+                          "width": "fill_container",
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "KdqEQ",
+                              "name": "Ver Col",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 5,
+                              "padding": [
+                                12,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "gHUho",
+                                  "name": "Ver Top",
+                                  "width": "fill_container",
+                                  "gap": 7,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "ob7G2",
+                                      "name": "Ver Avatar",
+                                      "width": 20,
+                                      "height": 20,
+                                      "fill": "$input-bg",
+                                      "cornerRadius": 10,
+                                      "justifyContent": "center",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "yEygZ",
+                                          "name": "Ver Initials",
+                                          "fill": "$ink-secondary",
+                                          "content": "SY",
+                                          "fontFamily": "$font-text",
+                                          "fontSize": 8,
+                                          "fontWeight": "600"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "mjDgu",
+                                      "name": "Ver Name",
+                                      "fill": "$ink",
+                                      "content": "수연",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.12
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "S4nyJz",
+                                      "name": "Ver Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "uRuu2",
+                                      "name": "Ver Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "2일 전",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 10.5,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "X0nCh6",
+                                  "name": "Ver Summary",
+                                  "fill": "$ink-secondary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "게이트 매트릭스 초안",
+                                  "lineHeight": 1.45,
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "f1z4T5",
+                                  "name": "Ver Meta",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "J3QDS",
+                                      "name": "Ver Commit",
+                                      "fill": "#F5F5F7",
+                                      "cornerRadius": 4,
+                                      "padding": [
+                                        2,
+                                        6
+                                      ],
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "BJ1el",
+                                          "name": "Ver Hash",
+                                          "fill": "$ink-secondary",
+                                          "content": "3c9b771",
+                                          "fontFamily": "$font-mono",
+                                          "fontSize": 9.5,
+                                          "fontWeight": "normal"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "ZuIyf",
+                                      "name": "Ver Plus",
+                                      "fill": "#1E8E3E",
+                                      "content": "+31",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 10,
+                                      "fontWeight": "normal"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "g929E7",
+                                      "name": "Ver Minus",
+                                      "fill": "#C5221F",
+                                      "content": "−0",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 10,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "o4mB0y",
+                          "name": "Ver f00dba2",
+                          "width": "fill_container",
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "JDwcM",
+                              "name": "Ver Col",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 5,
+                              "padding": [
+                                12,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "FEKh8",
+                                  "name": "Ver Top",
+                                  "width": "fill_container",
+                                  "gap": 7,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "ZpMtn",
+                                      "name": "Ver MergeChip",
+                                      "width": 20,
+                                      "height": 20,
+                                      "fill": "$dark-card",
+                                      "cornerRadius": 10,
+                                      "justifyContent": "center",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "icon",
+                                          "id": "p2ktHr",
+                                          "name": "Merge Icon",
+                                          "width": 11,
+                                          "height": 11,
+                                          "icon": "git-merge",
+                                          "library": "lucide",
+                                          "fill": "$white"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "DsK0l",
+                                      "name": "Ver Name",
+                                      "fill": "$ink",
+                                      "content": "specraft-server",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.12
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "KzBbP",
+                                      "name": "Ver Badge",
+                                      "fill": "$input-bg",
+                                      "cornerRadius": 4,
+                                      "padding": [
+                                        1,
+                                        5
+                                      ],
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "Hjjux",
+                                          "name": "Ver Badge Label",
+                                          "fill": "$ink-secondary",
+                                          "content": "MERGE",
+                                          "fontFamily": "$font-text",
+                                          "fontSize": 8,
+                                          "fontWeight": "600",
+                                          "letterSpacing": 0.5
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "zDbWU",
+                                      "name": "Ver Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "QFhNM",
+                                      "name": "Ver Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "4일 전",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 10.5,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "NPxIP",
+                                  "name": "Ver Summary",
+                                  "fill": "$ink-secondary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "feat/stop-gate → dev 병합",
+                                  "lineHeight": 1.45,
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Zra0b",
+                                  "name": "Ver Meta",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "Rn0kq",
+                                      "name": "Ver Commit",
+                                      "fill": "#F5F5F7",
+                                      "cornerRadius": 4,
+                                      "padding": [
+                                        2,
+                                        6
+                                      ],
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "NTHfQ",
+                                          "name": "Ver Hash",
+                                          "fill": "$ink-secondary",
+                                          "content": "f00dba2",
+                                          "fontFamily": "$font-mono",
+                                          "fontSize": 9.5,
+                                          "fontWeight": "normal"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "aoGUt",
+                          "name": "Ver 1a0f9e3",
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "GmecO",
+                              "name": "Ver Col",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 5,
+                              "padding": [
+                                12,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "s81Suq",
+                                  "name": "Ver Top",
+                                  "width": "fill_container",
+                                  "gap": 7,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "kbUk7",
+                                      "name": "Ver Avatar",
+                                      "width": 20,
+                                      "height": 20,
+                                      "fill": "$input-bg",
+                                      "cornerRadius": 10,
+                                      "justifyContent": "center",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "AW3TU",
+                                          "name": "Ver Initials",
+                                          "fill": "$ink-secondary",
+                                          "content": "MJ",
+                                          "fontFamily": "$font-text",
+                                          "fontSize": 8,
+                                          "fontWeight": "600"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "byjLn",
+                                      "name": "Ver Name",
+                                      "fill": "$ink",
+                                      "content": "민지",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.12
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "Q0Zvm",
+                                      "name": "Ver Badge",
+                                      "fill": "$input-bg",
+                                      "cornerRadius": 4,
+                                      "padding": [
+                                        1,
+                                        5
+                                      ],
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "mrhIN",
+                                          "name": "Ver Badge Label",
+                                          "fill": "$ink-secondary",
+                                          "content": "INIT",
+                                          "fontFamily": "$font-text",
+                                          "fontSize": 8,
+                                          "fontWeight": "600",
+                                          "letterSpacing": 0.5
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "IlifG",
+                                      "name": "Ver Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "aWzkw",
+                                      "name": "Ver Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "5일 전",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 10.5,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "O9IIo",
+                                  "name": "Ver Summary",
+                                  "fill": "$ink-secondary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "specraft-init 초기 대량 ingest",
+                                  "lineHeight": 1.45,
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12.5,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "FQ5Uu",
+                                  "name": "Ver Meta",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "F3mL2W",
+                                      "name": "Ver Commit",
+                                      "fill": "#F5F5F7",
+                                      "cornerRadius": 4,
+                                      "padding": [
+                                        2,
+                                        6
+                                      ],
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "A8qSi",
+                                          "name": "Ver Hash",
+                                          "fill": "$ink-secondary",
+                                          "content": "1a0f9e3",
+                                          "fontFamily": "$font-mono",
+                                          "fontSize": 9.5,
+                                          "fontWeight": "normal"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "e4dXa",
+                                      "name": "Ver Plus",
+                                      "fill": "#1E8E3E",
+                                      "content": "+48",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 10,
+                                      "fontWeight": "normal"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "jPJ5g",
+                                      "name": "Ver Minus",
+                                      "fill": "#C5221F",
+                                      "content": "−0",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 10,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             }
