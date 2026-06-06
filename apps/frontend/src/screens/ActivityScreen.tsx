@@ -82,7 +82,7 @@ export function ActivityScreen() {
                 </div>
                 <div className="h-px w-full bg-hairline" />
                 <Link
-                  to="/settings/general"
+                  to="/settings/git"
                   className="flex h-8 w-full items-center gap-[9px] rounded-[7px] bg-bg px-2.5"
                 >
                   <SlidersHorizontal className="size-3.5 text-ink-secondary" />
