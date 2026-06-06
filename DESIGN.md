@@ -320,6 +320,7 @@ Verified end-to-end against three sources (see footer of this section). Apple op
 - Don't make the navigation opaque — the glass blur effect is essential to the Apple UI identity
 - Don't center-align body text — Apple body copy is left-aligned; only headlines center
 - Don't use rounded corners larger than 12px on rectangular elements (980px is for pills only)
+- Don't use left-edge accent bars/lines to indicate selection or emphasis (selected list rows, diff/highlight blocks, active nav items). Express state with background tint, a check indicator, weight/color emphasis, or a tag label instead — edge lines are forbidden.
 
 ## 8. Responsive Behavior
 

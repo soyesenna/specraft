@@ -1537,7 +1537,8 @@
                       "id": "amcjA",
                       "type": "ref",
                       "ref": "kKsa7",
-                      "name": "Branch Picker"
+                      "name": "Branch Picker",
+                      "fill": "$input-bg"
                     },
                     {
                       "type": "frame",
@@ -3967,6 +3968,15 @@
               ]
             }
           ]
+        },
+        {
+          "id": "VF0U9",
+          "type": "ref",
+          "ref": "XNArG",
+          "name": "Branch Menu",
+          "layoutPosition": "absolute",
+          "x": 328,
+          "y": 102
         }
       ]
     },
@@ -5139,15 +5149,6 @@
                               "alignItems": "center",
                               "children": [
                                 {
-                                  "type": "rectangle",
-                                  "cornerRadius": 1,
-                                  "id": "HPGEp",
-                                  "name": "OTP Bar",
-                                  "fill": "$accent",
-                                  "width": 2,
-                                  "height": 14
-                                },
-                                {
                                   "type": "text",
                                   "id": "Fha93",
                                   "name": "OTP Text",
@@ -5170,15 +5171,6 @@
                               "alignItems": "center",
                               "children": [
                                 {
-                                  "type": "rectangle",
-                                  "cornerRadius": 1,
-                                  "id": "h3dlr2",
-                                  "name": "OTP Bar",
-                                  "fill": "#00000000",
-                                  "width": 2,
-                                  "height": 14
-                                },
-                                {
                                   "type": "text",
                                   "id": "rBEML",
                                   "name": "OTP Text",
@@ -5200,15 +5192,6 @@
                               "gap": 8,
                               "alignItems": "center",
                               "children": [
-                                {
-                                  "type": "rectangle",
-                                  "cornerRadius": 1,
-                                  "id": "lXztI",
-                                  "name": "OTP Bar",
-                                  "fill": "#00000000",
-                                  "width": 2,
-                                  "height": 14
-                                },
                                 {
                                   "type": "text",
                                   "id": "uWMXP",
@@ -9264,266 +9247,287 @@
                       "gap": 10,
                       "children": [
                         {
-                          "type": "frame",
-                          "id": "HXml5",
+                          "id": "AGw5m",
+                          "type": "ref",
+                          "ref": "sOw0t",
                           "name": "Conflict feat/query-cache → dev",
                           "width": "fill_container",
-                          "fill": "$surface",
-                          "cornerRadius": "$radius-m",
                           "stroke": "$accent",
                           "strokeWidth": 2,
-                          "layout": "vertical",
-                          "gap": 7,
-                          "padding": [
-                            14,
-                            16
-                          ],
                           "children": [
                             {
                               "type": "frame",
-                              "id": "w0oiZR",
-                              "name": "CC Top",
+                              "id": "Z3uhWk",
+                              "name": "CC Content",
                               "width": "fill_container",
-                              "gap": 6,
-                              "alignItems": "center",
+                              "layout": "vertical",
+                              "gap": 7,
+                              "padding": [
+                                13,
+                                14
+                              ],
                               "children": [
                                 {
-                                  "type": "ellipse",
-                                  "id": "CpWfP",
-                                  "name": "CC Dot",
-                                  "fill": "$danger",
-                                  "width": 7,
-                                  "height": 7
-                                },
-                                {
-                                  "type": "text",
-                                  "id": "sxhKf",
-                                  "name": "CC State",
-                                  "fill": "$danger",
-                                  "content": "Open",
-                                  "fontFamily": "$font-text",
-                                  "fontSize": 11.5,
-                                  "fontWeight": "600",
-                                  "letterSpacing": -0.1
-                                },
-                                {
                                   "type": "frame",
-                                  "id": "an8b2",
-                                  "name": "CC Spacer",
+                                  "id": "bJQWL",
+                                  "name": "CC Top",
                                   "width": "fill_container",
-                                  "height": 1
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ellipse",
+                                      "id": "uK1Xo",
+                                      "name": "CC Dot",
+                                      "fill": "$danger",
+                                      "width": 7,
+                                      "height": 7
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "u8upI",
+                                      "name": "CC State",
+                                      "fill": "$danger",
+                                      "content": "Open",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.1
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "nYL1Y",
+                                      "name": "CC Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "k1v0P",
+                                      "name": "CC Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "26분 전",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
                                 },
                                 {
                                   "type": "text",
-                                  "id": "n7s1V",
-                                  "name": "CC Time",
-                                  "fill": "$ink-tertiary",
-                                  "content": "26분 전",
+                                  "id": "KQ2Qt",
+                                  "name": "CC Branch",
+                                  "fill": "$ink",
+                                  "content": "feat/query-cache → dev",
                                   "fontFamily": "$font-text",
-                                  "fontSize": 11,
+                                  "fontSize": 13.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "gMgdY",
+                                  "name": "CC Sub",
+                                  "fill": "$ink-tertiary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "specs/query-engine.md 외 1개 파일 · branch locked",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12,
                                   "fontWeight": "normal",
-                                  "letterSpacing": -0.1
+                                  "letterSpacing": -0.12
                                 }
                               ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "SCKmC",
-                              "name": "CC Branch",
-                              "fill": "$ink",
-                              "content": "feat/query-cache → dev",
-                              "fontFamily": "$font-text",
-                              "fontSize": 13.5,
-                              "fontWeight": "600",
-                              "letterSpacing": -0.2
-                            },
-                            {
-                              "type": "text",
-                              "id": "FGZwx",
-                              "name": "CC Sub",
-                              "fill": "$ink-tertiary",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "specs/query-engine.md 외 1개 파일 · branch locked",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
                             }
                           ]
                         },
                         {
-                          "type": "frame",
-                          "id": "OWnSW",
+                          "id": "bRjGl",
+                          "type": "ref",
+                          "ref": "sOw0t",
                           "name": "Conflict feat/auth-keys → dev",
                           "width": "fill_container",
-                          "fill": "$surface",
-                          "cornerRadius": "$radius-m",
-                          "layout": "vertical",
-                          "gap": 7,
-                          "padding": [
-                            14,
-                            16
-                          ],
                           "children": [
                             {
                               "type": "frame",
-                              "id": "Wl52p",
-                              "name": "CC Top",
+                              "id": "Pmv3l",
+                              "name": "CC Content",
                               "width": "fill_container",
-                              "gap": 6,
-                              "alignItems": "center",
+                              "layout": "vertical",
+                              "gap": 7,
+                              "padding": [
+                                13,
+                                14
+                              ],
                               "children": [
                                 {
-                                  "type": "ellipse",
-                                  "id": "vuG98",
-                                  "name": "CC Dot",
-                                  "fill": "$warning",
-                                  "width": 7,
-                                  "height": 7
-                                },
-                                {
-                                  "type": "text",
-                                  "id": "oJJu6",
-                                  "name": "CC State",
-                                  "fill": "$warning",
-                                  "content": "Resolving",
-                                  "fontFamily": "$font-text",
-                                  "fontSize": 11.5,
-                                  "fontWeight": "600",
-                                  "letterSpacing": -0.1
-                                },
-                                {
                                   "type": "frame",
-                                  "id": "eg5HC",
-                                  "name": "CC Spacer",
+                                  "id": "D6n16I",
+                                  "name": "CC Top",
                                   "width": "fill_container",
-                                  "height": 1
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ellipse",
+                                      "id": "TjHRE",
+                                      "name": "CC Dot",
+                                      "fill": "$warning",
+                                      "width": 7,
+                                      "height": 7
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "vAJRp",
+                                      "name": "CC State",
+                                      "fill": "$warning",
+                                      "content": "Resolving",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.1
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "wS9d9",
+                                      "name": "CC Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "tFlbV",
+                                      "name": "CC Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "1시간 전",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
                                 },
                                 {
                                   "type": "text",
-                                  "id": "zqxr6",
-                                  "name": "CC Time",
-                                  "fill": "$ink-tertiary",
-                                  "content": "1시간 전",
+                                  "id": "Z78T8",
+                                  "name": "CC Branch",
+                                  "fill": "$ink",
+                                  "content": "feat/auth-keys → dev",
                                   "fontFamily": "$font-text",
-                                  "fontSize": 11,
+                                  "fontSize": 13.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "u9tJe",
+                                  "name": "CC Sub",
+                                  "fill": "$ink-tertiary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "민지의 지시로 재병합 시도 중",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12,
                                   "fontWeight": "normal",
-                                  "letterSpacing": -0.1
+                                  "letterSpacing": -0.12
                                 }
                               ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "pAQTP",
-                              "name": "CC Branch",
-                              "fill": "$ink",
-                              "content": "feat/auth-keys → dev",
-                              "fontFamily": "$font-text",
-                              "fontSize": 13.5,
-                              "fontWeight": "600",
-                              "letterSpacing": -0.2
-                            },
-                            {
-                              "type": "text",
-                              "id": "d4MnJq",
-                              "name": "CC Sub",
-                              "fill": "$ink-tertiary",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "민지의 지시로 재병합 시도 중",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
                             }
                           ]
                         },
                         {
-                          "type": "frame",
-                          "id": "Qi8qd",
+                          "id": "kbleS",
+                          "type": "ref",
+                          "ref": "sOw0t",
                           "name": "Conflict feat/stop-gate → dev",
-                          "opacity": 0.72,
                           "width": "fill_container",
-                          "fill": "$surface",
-                          "cornerRadius": "$radius-m",
-                          "layout": "vertical",
-                          "gap": 7,
-                          "padding": [
-                            14,
-                            16
-                          ],
+                          "opacity": 0.72,
                           "children": [
                             {
                               "type": "frame",
-                              "id": "j7pQr4",
-                              "name": "CC Top",
+                              "id": "X5ol1q",
+                              "name": "CC Content",
                               "width": "fill_container",
-                              "gap": 6,
-                              "alignItems": "center",
+                              "layout": "vertical",
+                              "gap": 7,
+                              "padding": [
+                                13,
+                                14
+                              ],
                               "children": [
                                 {
-                                  "type": "ellipse",
-                                  "id": "h05yz3",
-                                  "name": "CC Dot",
-                                  "fill": "$success",
-                                  "width": 7,
-                                  "height": 7
-                                },
-                                {
-                                  "type": "text",
-                                  "id": "jC0Zy",
-                                  "name": "CC State",
-                                  "fill": "$success",
-                                  "content": "Resolved",
-                                  "fontFamily": "$font-text",
-                                  "fontSize": 11.5,
-                                  "fontWeight": "600",
-                                  "letterSpacing": -0.1
-                                },
-                                {
                                   "type": "frame",
-                                  "id": "SMO4S",
-                                  "name": "CC Spacer",
+                                  "id": "gWqVd",
+                                  "name": "CC Top",
                                   "width": "fill_container",
-                                  "height": 1
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ellipse",
+                                      "id": "tZFgb",
+                                      "name": "CC Dot",
+                                      "fill": "$success",
+                                      "width": 7,
+                                      "height": 7
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "cS93b",
+                                      "name": "CC State",
+                                      "fill": "$success",
+                                      "content": "Resolved",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.1
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "ZnkiN",
+                                      "name": "CC Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "aQlQI",
+                                      "name": "CC Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "어제",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
                                 },
                                 {
                                   "type": "text",
-                                  "id": "iknib",
-                                  "name": "CC Time",
-                                  "fill": "$ink-tertiary",
-                                  "content": "어제",
+                                  "id": "wtloN",
+                                  "name": "CC Branch",
+                                  "fill": "$ink",
+                                  "content": "feat/stop-gate → dev",
                                   "fontFamily": "$font-text",
-                                  "fontSize": 11,
+                                  "fontSize": 13.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "BAQk7",
+                                  "name": "CC Sub",
+                                  "fill": "$ink-tertiary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "2회 시도 후 해결 · 수연",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12,
                                   "fontWeight": "normal",
-                                  "letterSpacing": -0.1
+                                  "letterSpacing": -0.12
                                 }
                               ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "W9JO2i",
-                              "name": "CC Branch",
-                              "fill": "$ink",
-                              "content": "feat/stop-gate → dev",
-                              "fontFamily": "$font-text",
-                              "fontSize": 13.5,
-                              "fontWeight": "600",
-                              "letterSpacing": -0.2
-                            },
-                            {
-                              "type": "text",
-                              "id": "fO2om",
-                              "name": "CC Sub",
-                              "fill": "$ink-tertiary",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "2회 시도 후 해결 · 수연",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
                             }
                           ]
                         }
@@ -22905,7 +22909,8 @@
               "id": "yTTsI",
               "type": "ref",
               "ref": "kKsa7",
-              "name": "Branch Picker"
+              "name": "Branch Picker",
+              "fill": "$input-bg"
             },
             {
               "type": "frame",
@@ -24046,6 +24051,16 @@
               "fontWeight": "600"
             }
           }
+        },
+        {
+          "id": "t84MVd",
+          "type": "ref",
+          "ref": "XNArG",
+          "name": "Branch Menu",
+          "layoutPosition": "absolute",
+          "x": 92,
+          "y": 88,
+          "width": 250
         }
       ]
     },
@@ -26550,324 +26565,345 @@
           ],
           "children": [
             {
-              "type": "frame",
-              "id": "VBQ2Z",
+              "id": "iX57P",
+              "type": "ref",
+              "ref": "sOw0t",
               "name": "Conflict feat/query-cache → dev",
               "width": "fill_container",
-              "fill": "$surface",
-              "cornerRadius": "$radius-m",
-              "gap": 10,
-              "padding": [
-                13,
-                14
-              ],
-              "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
-                  "id": "flLyk",
-                  "name": "CC Col",
+                  "id": "SLVfp",
+                  "name": "CC Row",
                   "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 5,
+                  "gap": 10,
+                  "padding": [
+                    13,
+                    14
+                  ],
+                  "alignItems": "center",
                   "children": [
                     {
                       "type": "frame",
-                      "id": "DnL5J",
-                      "name": "CC Top",
+                      "id": "f6vPQm",
+                      "name": "CC Col",
                       "width": "fill_container",
-                      "gap": 6,
-                      "alignItems": "center",
+                      "layout": "vertical",
+                      "gap": 5,
                       "children": [
                         {
-                          "type": "ellipse",
-                          "id": "ZjWqZ",
-                          "name": "CC Dot",
-                          "fill": "$danger",
-                          "width": 7,
-                          "height": 7
-                        },
-                        {
-                          "type": "text",
-                          "id": "nNbTw",
-                          "name": "CC State",
-                          "fill": "$danger",
-                          "content": "Open",
-                          "fontFamily": "$font-text",
-                          "fontSize": 11,
-                          "fontWeight": "600",
-                          "letterSpacing": -0.1
-                        },
-                        {
                           "type": "frame",
-                          "id": "bBlyJ",
-                          "name": "CC Spacer",
+                          "id": "D1WOC",
+                          "name": "CC Top",
                           "width": "fill_container",
-                          "height": 1
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "F8J0q",
+                              "name": "CC Dot",
+                              "fill": "$danger",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "qg9Vn",
+                              "name": "CC State",
+                              "fill": "$danger",
+                              "content": "Open",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11,
+                              "fontWeight": "600",
+                              "letterSpacing": -0.1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "bZtFi",
+                              "name": "CC Spacer",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "text",
+                              "id": "A8sGz",
+                              "name": "CC Time",
+                              "fill": "$ink-tertiary",
+                              "content": "26분 전",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
                         },
                         {
                           "type": "text",
-                          "id": "GQ6fb",
-                          "name": "CC Time",
-                          "fill": "$ink-tertiary",
-                          "content": "26분 전",
+                          "id": "Dc7OL",
+                          "name": "CC Branch",
+                          "fill": "$ink",
+                          "content": "feat/query-cache → dev",
                           "fontFamily": "$font-text",
-                          "fontSize": 10.5,
+                          "fontSize": 13.5,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.2
+                        },
+                        {
+                          "type": "text",
+                          "id": "pLLGQ",
+                          "name": "CC Sub",
+                          "fill": "$ink-tertiary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "specs/query-engine.md 외 1개 파일 · branch locked",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11.5,
                           "fontWeight": "normal",
                           "letterSpacing": -0.1
                         }
                       ]
                     },
                     {
-                      "type": "text",
-                      "id": "A1wiO",
-                      "name": "CC Branch",
-                      "fill": "$ink",
-                      "content": "feat/query-cache → dev",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13.5,
-                      "fontWeight": "600",
-                      "letterSpacing": -0.2
-                    },
-                    {
-                      "type": "text",
-                      "id": "MPbq5",
-                      "name": "CC Sub",
-                      "fill": "$ink-tertiary",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "specs/query-engine.md 외 1개 파일 · branch locked",
-                      "fontFamily": "$font-text",
-                      "fontSize": 11.5,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.1
+                      "type": "icon",
+                      "id": "tqQk1",
+                      "name": "CC Chevron",
+                      "width": 15,
+                      "height": 15,
+                      "icon": "chevron-right",
+                      "library": "lucide",
+                      "fill": "$separator"
                     }
                   ]
-                },
-                {
-                  "type": "icon",
-                  "id": "idXPP",
-                  "name": "CC Chevron",
-                  "width": 15,
-                  "height": 15,
-                  "icon": "chevron-right",
-                  "library": "lucide",
-                  "fill": "$separator"
                 }
               ]
             },
             {
-              "type": "frame",
-              "id": "KFYqX",
+              "id": "Y8Ekf",
+              "type": "ref",
+              "ref": "sOw0t",
               "name": "Conflict feat/auth-keys → dev",
               "width": "fill_container",
-              "fill": "$surface",
-              "cornerRadius": "$radius-m",
-              "gap": 10,
-              "padding": [
-                13,
-                14
-              ],
-              "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
-                  "id": "dYTmA",
-                  "name": "CC Col",
+                  "id": "LQkWo",
+                  "name": "CC Row",
                   "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 5,
+                  "gap": 10,
+                  "padding": [
+                    13,
+                    14
+                  ],
+                  "alignItems": "center",
                   "children": [
                     {
                       "type": "frame",
-                      "id": "f7TqEx",
-                      "name": "CC Top",
+                      "id": "C58F9",
+                      "name": "CC Col",
                       "width": "fill_container",
-                      "gap": 6,
-                      "alignItems": "center",
+                      "layout": "vertical",
+                      "gap": 5,
                       "children": [
                         {
-                          "type": "ellipse",
-                          "id": "ksYWp",
-                          "name": "CC Dot",
-                          "fill": "$warning",
-                          "width": 7,
-                          "height": 7
-                        },
-                        {
-                          "type": "text",
-                          "id": "D7s4x",
-                          "name": "CC State",
-                          "fill": "$warning",
-                          "content": "Resolving",
-                          "fontFamily": "$font-text",
-                          "fontSize": 11,
-                          "fontWeight": "600",
-                          "letterSpacing": -0.1
-                        },
-                        {
                           "type": "frame",
-                          "id": "K3N8R",
-                          "name": "CC Spacer",
+                          "id": "xFQn0",
+                          "name": "CC Top",
                           "width": "fill_container",
-                          "height": 1
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "mjDck",
+                              "name": "CC Dot",
+                              "fill": "$warning",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "x9Oau6",
+                              "name": "CC State",
+                              "fill": "$warning",
+                              "content": "Resolving",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11,
+                              "fontWeight": "600",
+                              "letterSpacing": -0.1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "UZo7R",
+                              "name": "CC Spacer",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "text",
+                              "id": "zZtub",
+                              "name": "CC Time",
+                              "fill": "$ink-tertiary",
+                              "content": "1시간 전",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
                         },
                         {
                           "type": "text",
-                          "id": "ygz2Q",
-                          "name": "CC Time",
-                          "fill": "$ink-tertiary",
-                          "content": "1시간 전",
+                          "id": "y3j9H",
+                          "name": "CC Branch",
+                          "fill": "$ink",
+                          "content": "feat/auth-keys → dev",
                           "fontFamily": "$font-text",
-                          "fontSize": 10.5,
+                          "fontSize": 13.5,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.2
+                        },
+                        {
+                          "type": "text",
+                          "id": "aQZge",
+                          "name": "CC Sub",
+                          "fill": "$ink-tertiary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "민지의 지시로 재병합 시도 중",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11.5,
                           "fontWeight": "normal",
                           "letterSpacing": -0.1
                         }
                       ]
                     },
                     {
-                      "type": "text",
-                      "id": "MEUjx",
-                      "name": "CC Branch",
-                      "fill": "$ink",
-                      "content": "feat/auth-keys → dev",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13.5,
-                      "fontWeight": "600",
-                      "letterSpacing": -0.2
-                    },
-                    {
-                      "type": "text",
-                      "id": "Qz59n",
-                      "name": "CC Sub",
-                      "fill": "$ink-tertiary",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "민지의 지시로 재병합 시도 중",
-                      "fontFamily": "$font-text",
-                      "fontSize": 11.5,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.1
+                      "type": "icon",
+                      "id": "o7z4sh",
+                      "name": "CC Chevron",
+                      "width": 15,
+                      "height": 15,
+                      "icon": "chevron-right",
+                      "library": "lucide",
+                      "fill": "$separator"
                     }
                   ]
-                },
-                {
-                  "type": "icon",
-                  "id": "bmEV0",
-                  "name": "CC Chevron",
-                  "width": 15,
-                  "height": 15,
-                  "icon": "chevron-right",
-                  "library": "lucide",
-                  "fill": "$separator"
                 }
               ]
             },
             {
-              "type": "frame",
-              "id": "SJhFJ",
+              "id": "j4iNI5",
+              "type": "ref",
+              "ref": "sOw0t",
               "name": "Conflict feat/stop-gate → dev",
-              "opacity": 0.72,
               "width": "fill_container",
-              "fill": "$surface",
-              "cornerRadius": "$radius-m",
-              "gap": 10,
-              "padding": [
-                13,
-                14
-              ],
-              "alignItems": "center",
+              "opacity": 0.72,
               "children": [
                 {
                   "type": "frame",
-                  "id": "X9sr4",
-                  "name": "CC Col",
+                  "id": "QfUgU",
+                  "name": "CC Row",
                   "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 5,
+                  "gap": 10,
+                  "padding": [
+                    13,
+                    14
+                  ],
+                  "alignItems": "center",
                   "children": [
                     {
                       "type": "frame",
-                      "id": "Gp4Ef",
-                      "name": "CC Top",
+                      "id": "kLHzZ",
+                      "name": "CC Col",
                       "width": "fill_container",
-                      "gap": 6,
-                      "alignItems": "center",
+                      "layout": "vertical",
+                      "gap": 5,
                       "children": [
                         {
-                          "type": "ellipse",
-                          "id": "ZFels",
-                          "name": "CC Dot",
-                          "fill": "$success",
-                          "width": 7,
-                          "height": 7
-                        },
-                        {
-                          "type": "text",
-                          "id": "STXD5",
-                          "name": "CC State",
-                          "fill": "$success",
-                          "content": "Resolved",
-                          "fontFamily": "$font-text",
-                          "fontSize": 11,
-                          "fontWeight": "600",
-                          "letterSpacing": -0.1
-                        },
-                        {
                           "type": "frame",
-                          "id": "t6cqa",
-                          "name": "CC Spacer",
+                          "id": "S9xGgS",
+                          "name": "CC Top",
                           "width": "fill_container",
-                          "height": 1
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "AiSQW",
+                              "name": "CC Dot",
+                              "fill": "$success",
+                              "width": 7,
+                              "height": 7
+                            },
+                            {
+                              "type": "text",
+                              "id": "ZR5hM",
+                              "name": "CC State",
+                              "fill": "$success",
+                              "content": "Resolved",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11,
+                              "fontWeight": "600",
+                              "letterSpacing": -0.1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "vcdnr",
+                              "name": "CC Spacer",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "text",
+                              "id": "r7rma",
+                              "name": "CC Time",
+                              "fill": "$ink-tertiary",
+                              "content": "어제",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
                         },
                         {
                           "type": "text",
-                          "id": "MX7W4",
-                          "name": "CC Time",
-                          "fill": "$ink-tertiary",
-                          "content": "어제",
+                          "id": "juWPF",
+                          "name": "CC Branch",
+                          "fill": "$ink",
+                          "content": "feat/stop-gate → dev",
                           "fontFamily": "$font-text",
-                          "fontSize": 10.5,
+                          "fontSize": 13.5,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.2
+                        },
+                        {
+                          "type": "text",
+                          "id": "eT1dH",
+                          "name": "CC Sub",
+                          "fill": "$ink-tertiary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "2회 시도 후 해결 · 수연",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11.5,
                           "fontWeight": "normal",
                           "letterSpacing": -0.1
                         }
                       ]
                     },
                     {
-                      "type": "text",
-                      "id": "KUsF8",
-                      "name": "CC Branch",
-                      "fill": "$ink",
-                      "content": "feat/stop-gate → dev",
-                      "fontFamily": "$font-text",
-                      "fontSize": 13.5,
-                      "fontWeight": "600",
-                      "letterSpacing": -0.2
-                    },
-                    {
-                      "type": "text",
-                      "id": "zcayQ",
-                      "name": "CC Sub",
-                      "fill": "$ink-tertiary",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "2회 시도 후 해결 · 수연",
-                      "fontFamily": "$font-text",
-                      "fontSize": 11.5,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.1
+                      "type": "icon",
+                      "id": "xoUH1",
+                      "name": "CC Chevron",
+                      "width": 15,
+                      "height": 15,
+                      "icon": "chevron-right",
+                      "library": "lucide",
+                      "fill": "$separator"
                     }
                   ]
-                },
-                {
-                  "type": "icon",
-                  "id": "s9f9t",
-                  "name": "CC Chevron",
-                  "width": 15,
-                  "height": 15,
-                  "icon": "chevron-right",
-                  "library": "lucide",
-                  "fill": "$separator"
                 }
               ]
             }
@@ -34914,9 +34950,6 @@
                           "fill": "#E9F6EE",
                           "cornerRadius": "$radius-s",
                           "stroke": "$success",
-                          "strokeWidth": {
-                            "left": 3
-                          },
                           "children": [
                             {
                               "type": "frame",
@@ -34982,9 +35015,6 @@
                           "fill": "#FBEEEC",
                           "cornerRadius": "$radius-s",
                           "stroke": "$danger",
-                          "strokeWidth": {
-                            "left": 3
-                          },
                           "children": [
                             {
                               "type": "frame",
@@ -35077,12 +35107,11 @@
                       "type": "frame",
                       "id": "A6OJs",
                       "name": "History Panel",
-                      "clip": true,
                       "width": 360,
                       "height": "fill_container",
-                      "fill": "$surface",
-                      "cornerRadius": "$radius-l",
+                      "fill": "#00000000",
                       "layout": "vertical",
+                      "gap": 10,
                       "children": [
                         {
                           "type": "frame",
@@ -35090,16 +35119,11 @@
                           "name": "HP Head",
                           "width": "fill_container",
                           "stroke": "$hairline",
-                          "strokeWidth": {
-                            "bottom": 1
-                          },
                           "layout": "vertical",
                           "gap": 2,
                           "padding": [
-                            14,
-                            16,
-                            12,
-                            16
+                            0,
+                            4
                           ],
                           "children": [
                             {
@@ -35127,31 +35151,29 @@
                           ]
                         },
                         {
-                          "type": "frame",
-                          "id": "Z1732",
+                          "id": "kk1t3",
+                          "type": "ref",
+                          "ref": "sOw0t",
                           "name": "Ver a1b2c3d",
                           "width": "fill_container",
-                          "fill": "#F5F5F7",
                           "stroke": "$accent",
-                          "strokeWidth": {
-                            "left": 3
-                          },
+                          "strokeWidth": 2,
                           "children": [
                             {
                               "type": "frame",
-                              "id": "qtAAH",
-                              "name": "Ver Col",
+                              "id": "Blb4Z",
+                              "name": "Ver Content",
                               "width": "fill_container",
                               "layout": "vertical",
                               "gap": 5,
                               "padding": [
                                 12,
-                                16
+                                14
                               ],
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "Sky05",
+                                  "id": "iWr1N",
                                   "name": "Ver Top",
                                   "width": "fill_container",
                                   "gap": 7,
@@ -35159,7 +35181,7 @@
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "hL6EK",
+                                      "id": "Pjux7",
                                       "name": "Ver Avatar",
                                       "width": 20,
                                       "height": 20,
@@ -35170,7 +35192,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "H4ai6K",
+                                          "id": "etdTt",
                                           "name": "Ver Initials",
                                           "fill": "$ink-secondary",
                                           "content": "SY",
@@ -35182,7 +35204,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "qbD3O",
+                                      "id": "MVjX8",
                                       "name": "Ver Name",
                                       "fill": "$ink",
                                       "content": "수연",
@@ -35193,14 +35215,14 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "OyXrf",
+                                      "id": "ySKpP",
                                       "name": "Ver Spacer",
                                       "width": "fill_container",
                                       "height": 1
                                     },
                                     {
                                       "type": "text",
-                                      "id": "RblR2",
+                                      "id": "mLNew",
                                       "name": "Ver Time",
                                       "fill": "$ink-tertiary",
                                       "content": "2시간 전",
@@ -35213,7 +35235,7 @@
                                 },
                                 {
                                   "type": "text",
-                                  "id": "WN3oY",
+                                  "id": "O05nTk",
                                   "name": "Ver Summary",
                                   "fill": "$ink-secondary",
                                   "textGrowth": "fixed-width",
@@ -35227,16 +35249,16 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "iEIhX",
+                                  "id": "oYSvt",
                                   "name": "Ver Meta",
                                   "gap": 8,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "sy7M8",
+                                      "id": "CgDA5",
                                       "name": "Ver Commit",
-                                      "fill": "$surface",
+                                      "fill": "#F5F5F7",
                                       "cornerRadius": 4,
                                       "padding": [
                                         2,
@@ -35245,7 +35267,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "CCPKK",
+                                          "id": "H2EoO",
                                           "name": "Ver Hash",
                                           "fill": "$ink-secondary",
                                           "content": "a1b2c3d",
@@ -35257,7 +35279,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "WNYzc",
+                                      "id": "aGH8b",
                                       "name": "Ver Plus",
                                       "fill": "#1E8E3E",
                                       "content": "+14",
@@ -35267,7 +35289,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "C6Abl",
+                                      "id": "AcU3T",
                                       "name": "Ver Minus",
                                       "fill": "#C5221F",
                                       "content": "−3",
@@ -35282,30 +35304,27 @@
                           ]
                         },
                         {
-                          "type": "frame",
-                          "id": "lyL10",
+                          "id": "F7fLkX",
+                          "type": "ref",
+                          "ref": "sOw0t",
                           "name": "Ver 7d21f0a",
                           "width": "fill_container",
-                          "stroke": "$hairline",
-                          "strokeWidth": {
-                            "bottom": 1
-                          },
                           "children": [
                             {
                               "type": "frame",
-                              "id": "LWd45",
-                              "name": "Ver Col",
+                              "id": "lBjTP",
+                              "name": "Ver Content",
                               "width": "fill_container",
                               "layout": "vertical",
                               "gap": 5,
                               "padding": [
                                 12,
-                                16
+                                14
                               ],
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "HSkSX",
+                                  "id": "EvFLY",
                                   "name": "Ver Top",
                                   "width": "fill_container",
                                   "gap": 7,
@@ -35313,7 +35332,7 @@
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "uGw8z",
+                                      "id": "zEM1B",
                                       "name": "Ver Avatar",
                                       "width": 20,
                                       "height": 20,
@@ -35324,7 +35343,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "Q8WER",
+                                          "id": "ykJfr",
                                           "name": "Ver Initials",
                                           "fill": "$ink-secondary",
                                           "content": "MJ",
@@ -35336,7 +35355,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "l1Ykji",
+                                      "id": "LSsdC",
                                       "name": "Ver Name",
                                       "fill": "$ink",
                                       "content": "민지",
@@ -35347,14 +35366,14 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "c77o5q",
+                                      "id": "BODDV",
                                       "name": "Ver Spacer",
                                       "width": "fill_container",
                                       "height": 1
                                     },
                                     {
                                       "type": "text",
-                                      "id": "AQ5b6",
+                                      "id": "gLsbI",
                                       "name": "Ver Time",
                                       "fill": "$ink-tertiary",
                                       "content": "어제",
@@ -35367,7 +35386,7 @@
                                 },
                                 {
                                   "type": "text",
-                                  "id": "JTY4X",
+                                  "id": "h5R5LW",
                                   "name": "Ver Summary",
                                   "fill": "$ink-secondary",
                                   "textGrowth": "fixed-width",
@@ -35381,14 +35400,14 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "cF71y",
+                                  "id": "sqtdU",
                                   "name": "Ver Meta",
                                   "gap": 8,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "v027Z",
+                                      "id": "W2aHVz",
                                       "name": "Ver Commit",
                                       "fill": "#F5F5F7",
                                       "cornerRadius": 4,
@@ -35399,7 +35418,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "sOQne",
+                                          "id": "RWTA8",
                                           "name": "Ver Hash",
                                           "fill": "$ink-secondary",
                                           "content": "7d21f0a",
@@ -35411,7 +35430,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "z4y4Y",
+                                      "id": "T6i5TV",
                                       "name": "Ver Plus",
                                       "fill": "#1E8E3E",
                                       "content": "+9",
@@ -35421,7 +35440,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "u9e2dO",
+                                      "id": "zAVtd",
                                       "name": "Ver Minus",
                                       "fill": "#C5221F",
                                       "content": "−2",
@@ -35436,30 +35455,27 @@
                           ]
                         },
                         {
-                          "type": "frame",
-                          "id": "nHj2a",
+                          "id": "J9ImO",
+                          "type": "ref",
+                          "ref": "sOw0t",
                           "name": "Ver 3c9b771",
                           "width": "fill_container",
-                          "stroke": "$hairline",
-                          "strokeWidth": {
-                            "bottom": 1
-                          },
                           "children": [
                             {
                               "type": "frame",
-                              "id": "KdqEQ",
-                              "name": "Ver Col",
+                              "id": "XEvBj",
+                              "name": "Ver Content",
                               "width": "fill_container",
                               "layout": "vertical",
                               "gap": 5,
                               "padding": [
                                 12,
-                                16
+                                14
                               ],
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "gHUho",
+                                  "id": "BfaYb",
                                   "name": "Ver Top",
                                   "width": "fill_container",
                                   "gap": 7,
@@ -35467,7 +35483,7 @@
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "ob7G2",
+                                      "id": "s7XQFI",
                                       "name": "Ver Avatar",
                                       "width": 20,
                                       "height": 20,
@@ -35478,7 +35494,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "yEygZ",
+                                          "id": "tB592",
                                           "name": "Ver Initials",
                                           "fill": "$ink-secondary",
                                           "content": "SY",
@@ -35490,7 +35506,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "mjDgu",
+                                      "id": "yJJsR",
                                       "name": "Ver Name",
                                       "fill": "$ink",
                                       "content": "수연",
@@ -35501,14 +35517,14 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "S4nyJz",
+                                      "id": "JyKrf",
                                       "name": "Ver Spacer",
                                       "width": "fill_container",
                                       "height": 1
                                     },
                                     {
                                       "type": "text",
-                                      "id": "uRuu2",
+                                      "id": "z4EEQ",
                                       "name": "Ver Time",
                                       "fill": "$ink-tertiary",
                                       "content": "2일 전",
@@ -35521,7 +35537,7 @@
                                 },
                                 {
                                   "type": "text",
-                                  "id": "X0nCh6",
+                                  "id": "PdEnG",
                                   "name": "Ver Summary",
                                   "fill": "$ink-secondary",
                                   "textGrowth": "fixed-width",
@@ -35535,14 +35551,14 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "f1z4T5",
+                                  "id": "cuJYP",
                                   "name": "Ver Meta",
                                   "gap": 8,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "J3QDS",
+                                      "id": "oBMA4",
                                       "name": "Ver Commit",
                                       "fill": "#F5F5F7",
                                       "cornerRadius": 4,
@@ -35553,7 +35569,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "BJ1el",
+                                          "id": "Gapzc",
                                           "name": "Ver Hash",
                                           "fill": "$ink-secondary",
                                           "content": "3c9b771",
@@ -35565,7 +35581,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "ZuIyf",
+                                      "id": "rdg87",
                                       "name": "Ver Plus",
                                       "fill": "#1E8E3E",
                                       "content": "+31",
@@ -35575,7 +35591,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "g929E7",
+                                      "id": "DeWG0",
                                       "name": "Ver Minus",
                                       "fill": "#C5221F",
                                       "content": "−0",
@@ -35590,30 +35606,27 @@
                           ]
                         },
                         {
-                          "type": "frame",
-                          "id": "o4mB0y",
+                          "id": "lZYr5",
+                          "type": "ref",
+                          "ref": "sOw0t",
                           "name": "Ver f00dba2",
                           "width": "fill_container",
-                          "stroke": "$hairline",
-                          "strokeWidth": {
-                            "bottom": 1
-                          },
                           "children": [
                             {
                               "type": "frame",
-                              "id": "JDwcM",
-                              "name": "Ver Col",
+                              "id": "iM2Kq",
+                              "name": "Ver Content",
                               "width": "fill_container",
                               "layout": "vertical",
                               "gap": 5,
                               "padding": [
                                 12,
-                                16
+                                14
                               ],
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "FEKh8",
+                                  "id": "zmdPK",
                                   "name": "Ver Top",
                                   "width": "fill_container",
                                   "gap": 7,
@@ -35621,7 +35634,7 @@
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "ZpMtn",
+                                      "id": "krCqv",
                                       "name": "Ver MergeChip",
                                       "width": 20,
                                       "height": 20,
@@ -35632,7 +35645,7 @@
                                       "children": [
                                         {
                                           "type": "icon",
-                                          "id": "p2ktHr",
+                                          "id": "fGv5a",
                                           "name": "Merge Icon",
                                           "width": 11,
                                           "height": 11,
@@ -35644,7 +35657,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "DsK0l",
+                                      "id": "UpUS8",
                                       "name": "Ver Name",
                                       "fill": "$ink",
                                       "content": "specraft-server",
@@ -35655,7 +35668,7 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "KzBbP",
+                                      "id": "K8AzPf",
                                       "name": "Ver Badge",
                                       "fill": "$input-bg",
                                       "cornerRadius": 4,
@@ -35666,7 +35679,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "Hjjux",
+                                          "id": "dYzPb",
                                           "name": "Ver Badge Label",
                                           "fill": "$ink-secondary",
                                           "content": "MERGE",
@@ -35679,14 +35692,14 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "zDbWU",
+                                      "id": "dmuHh",
                                       "name": "Ver Spacer",
                                       "width": "fill_container",
                                       "height": 1
                                     },
                                     {
                                       "type": "text",
-                                      "id": "QFhNM",
+                                      "id": "Cqfva",
                                       "name": "Ver Time",
                                       "fill": "$ink-tertiary",
                                       "content": "4일 전",
@@ -35699,7 +35712,7 @@
                                 },
                                 {
                                   "type": "text",
-                                  "id": "NPxIP",
+                                  "id": "USCJ8",
                                   "name": "Ver Summary",
                                   "fill": "$ink-secondary",
                                   "textGrowth": "fixed-width",
@@ -35713,14 +35726,14 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "Zra0b",
+                                  "id": "vWDQR",
                                   "name": "Ver Meta",
                                   "gap": 8,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "Rn0kq",
+                                      "id": "Ymqdf",
                                       "name": "Ver Commit",
                                       "fill": "#F5F5F7",
                                       "cornerRadius": 4,
@@ -35731,7 +35744,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "NTHfQ",
+                                          "id": "h7eVd",
                                           "name": "Ver Hash",
                                           "fill": "$ink-secondary",
                                           "content": "f00dba2",
@@ -35748,26 +35761,27 @@
                           ]
                         },
                         {
-                          "type": "frame",
-                          "id": "aoGUt",
+                          "id": "PSsGN",
+                          "type": "ref",
+                          "ref": "sOw0t",
                           "name": "Ver 1a0f9e3",
                           "width": "fill_container",
                           "children": [
                             {
                               "type": "frame",
-                              "id": "GmecO",
-                              "name": "Ver Col",
+                              "id": "Wz0JB",
+                              "name": "Ver Content",
                               "width": "fill_container",
                               "layout": "vertical",
                               "gap": 5,
                               "padding": [
                                 12,
-                                16
+                                14
                               ],
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "s81Suq",
+                                  "id": "t9unf",
                                   "name": "Ver Top",
                                   "width": "fill_container",
                                   "gap": 7,
@@ -35775,7 +35789,7 @@
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "kbUk7",
+                                      "id": "Q7zxx6",
                                       "name": "Ver Avatar",
                                       "width": 20,
                                       "height": 20,
@@ -35786,7 +35800,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "AW3TU",
+                                          "id": "bbSy6",
                                           "name": "Ver Initials",
                                           "fill": "$ink-secondary",
                                           "content": "MJ",
@@ -35798,7 +35812,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "byjLn",
+                                      "id": "AEvNy",
                                       "name": "Ver Name",
                                       "fill": "$ink",
                                       "content": "민지",
@@ -35809,7 +35823,7 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "Q0Zvm",
+                                      "id": "dQ6YW",
                                       "name": "Ver Badge",
                                       "fill": "$input-bg",
                                       "cornerRadius": 4,
@@ -35820,7 +35834,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "mrhIN",
+                                          "id": "rMEx0",
                                           "name": "Ver Badge Label",
                                           "fill": "$ink-secondary",
                                           "content": "INIT",
@@ -35833,14 +35847,14 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "IlifG",
+                                      "id": "UANA1",
                                       "name": "Ver Spacer",
                                       "width": "fill_container",
                                       "height": 1
                                     },
                                     {
                                       "type": "text",
-                                      "id": "aWzkw",
+                                      "id": "eVg1k",
                                       "name": "Ver Time",
                                       "fill": "$ink-tertiary",
                                       "content": "5일 전",
@@ -35853,7 +35867,7 @@
                                 },
                                 {
                                   "type": "text",
-                                  "id": "O9IIo",
+                                  "id": "leSnE",
                                   "name": "Ver Summary",
                                   "fill": "$ink-secondary",
                                   "textGrowth": "fixed-width",
@@ -35867,14 +35881,14 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "FQ5Uu",
+                                  "id": "svlhb",
                                   "name": "Ver Meta",
                                   "gap": 8,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "F3mL2W",
+                                      "id": "K8ts7",
                                       "name": "Ver Commit",
                                       "fill": "#F5F5F7",
                                       "cornerRadius": 4,
@@ -35885,7 +35899,7 @@
                                       "children": [
                                         {
                                           "type": "text",
-                                          "id": "A8qSi",
+                                          "id": "L43qw",
                                           "name": "Ver Hash",
                                           "fill": "$ink-secondary",
                                           "content": "1a0f9e3",
@@ -35897,7 +35911,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "e4dXa",
+                                      "id": "NxlJ7",
                                       "name": "Ver Plus",
                                       "fill": "#1E8E3E",
                                       "content": "+48",
@@ -35907,7 +35921,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "jPJ5g",
+                                      "id": "nkbcv",
                                       "name": "Ver Minus",
                                       "fill": "#C5221F",
                                       "content": "−0",
@@ -35926,6 +35940,1445 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "sOw0t",
+      "x": 0,
+      "y": -1800,
+      "name": "component/Select Card",
+      "reusable": true,
+      "clip": true,
+      "width": 360,
+      "fill": "$surface",
+      "cornerRadius": "$radius-m",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "tFujz",
+          "name": "Card Slot",
+          "slot": [],
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 5,
+          "padding": [
+            12,
+            14
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "MDfpE",
+              "name": "Slot Hint",
+              "fill": "$ink-tertiary",
+              "content": "Card content",
+              "fontFamily": "$font-text",
+              "fontSize": 12,
+              "fontWeight": "normal",
+              "letterSpacing": -0.12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "B7Jv9",
+      "x": 9000,
+      "y": 2320,
+      "name": "M05b · Document — History (Mobile)",
+      "clip": true,
+      "width": 390,
+      "height": 844,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "R9ERj",
+          "type": "ref",
+          "ref": "mtQVR",
+          "name": "Status Bar",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "OtkVq",
+          "name": "Nav Row",
+          "width": "fill_container",
+          "gap": 10,
+          "padding": [
+            6,
+            16,
+            10,
+            16
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "D1VAE",
+              "name": "Back Button",
+              "width": 30,
+              "height": 30,
+              "fill": "$input-bg",
+              "cornerRadius": 15,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "iHnmb",
+                  "name": "Back Icon",
+                  "width": 16,
+                  "height": 16,
+                  "icon": "chevron-left",
+                  "library": "lucide",
+                  "fill": "$ink-secondary"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "IaBmh",
+              "name": "Title Col",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 1,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "EBt2q",
+                  "name": "Nav Title",
+                  "fill": "$ink",
+                  "content": "History",
+                  "fontFamily": "$font-text",
+                  "fontSize": 15.5,
+                  "fontWeight": "600",
+                  "letterSpacing": -0.24
+                },
+                {
+                  "type": "text",
+                  "id": "c22S8",
+                  "name": "Nav Sub",
+                  "fill": "$ink-tertiary",
+                  "content": "specs/stop-gate.md · 12 versions",
+                  "fontFamily": "$font-text",
+                  "fontSize": 10.5,
+                  "fontWeight": "normal",
+                  "letterSpacing": -0.1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "b1t9vy",
+              "name": "History Badge",
+              "fill": "$dark-card",
+              "cornerRadius": "$radius-pill",
+              "gap": 4,
+              "padding": [
+                4,
+                9
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "B0cA5j",
+                  "name": "HB Icon",
+                  "width": 10,
+                  "height": 10,
+                  "icon": "history",
+                  "library": "lucide",
+                  "fill": "$white"
+                },
+                {
+                  "type": "text",
+                  "id": "b1mMXV",
+                  "name": "HB Label",
+                  "fill": "$white",
+                  "content": "a1b2c3d",
+                  "fontFamily": "$font-text",
+                  "fontSize": 10.5,
+                  "fontWeight": "500",
+                  "letterSpacing": -0.1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "A5zTzE",
+          "name": "Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 10,
+          "padding": [
+            0,
+            16,
+            16,
+            16
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "g9cY6",
+              "name": "Version Banner",
+              "width": "fill_container",
+              "fill": "$surface",
+              "cornerRadius": 10,
+              "gap": 7,
+              "padding": [
+                9,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "vGIbp",
+                  "name": "Ban Icon",
+                  "width": 12,
+                  "height": 12,
+                  "icon": "history",
+                  "library": "lucide",
+                  "fill": "$ink-tertiary"
+                },
+                {
+                  "type": "text",
+                  "id": "D0DJwI",
+                  "name": "Ban Text",
+                  "fill": "$ink-secondary",
+                  "content": "버전 a1b2c3d을 보는 중 — 수연 · 2시간 전",
+                  "fontFamily": "$font-text",
+                  "fontSize": 11.5,
+                  "fontWeight": "normal",
+                  "letterSpacing": -0.1
+                },
+                {
+                  "type": "frame",
+                  "id": "DdRL3",
+                  "name": "Ban Spacer",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "DrChm",
+                  "name": "Ban Link",
+                  "fill": "$link",
+                  "content": "최신으로",
+                  "fontFamily": "$font-text",
+                  "fontSize": 11.5,
+                  "fontWeight": "500",
+                  "letterSpacing": -0.1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "XYMnR",
+              "name": "Diff Sheet",
+              "width": "fill_container",
+              "fill": "$surface",
+              "cornerRadius": "$radius-m",
+              "layout": "vertical",
+              "gap": 9,
+              "padding": [
+                14,
+                16
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "uasMJ",
+                  "name": "Doc H1",
+                  "fill": "$ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Stop 게이트 판정 규칙",
+                  "fontFamily": "$font-display",
+                  "fontSize": 17.5,
+                  "fontWeight": "600",
+                  "letterSpacing": -0.28
+                },
+                {
+                  "type": "text",
+                  "id": "n9wHGO",
+                  "name": "Doc Meta",
+                  "fill": "$ink-tertiary",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "이전 7d21f0a 대비 +14 −3",
+                  "fontFamily": "$font-text",
+                  "fontSize": 10,
+                  "fontWeight": "normal",
+                  "letterSpacing": -0.1
+                },
+                {
+                  "type": "rectangle",
+                  "id": "TQPoY",
+                  "name": "Divider",
+                  "fill": "$hairline",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "nae94",
+                  "name": "Doc H2",
+                  "fill": "$ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "판정 매트릭스",
+                  "fontFamily": "$font-display",
+                  "fontSize": 14,
+                  "fontWeight": "600",
+                  "letterSpacing": -0.22
+                },
+                {
+                  "type": "frame",
+                  "id": "y8hRw",
+                  "name": "Diff Added",
+                  "width": "fill_container",
+                  "fill": "#E9F6EE",
+                  "cornerRadius": "$radius-s",
+                  "layout": "vertical",
+                  "gap": 5,
+                  "padding": [
+                    9,
+                    12
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "fqkc6",
+                      "name": "Add Tag",
+                      "fill": "#1E8E3E",
+                      "content": "+ ADDED",
+                      "fontFamily": "$font-text",
+                      "fontSize": 8.5,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
+                    },
+                    {
+                      "type": "text",
+                      "id": "Y6RLDq",
+                      "name": "Add L1",
+                      "fill": "$ink-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "read-only 세션(변경 · 커밋 0건)은 ingest 강제를 면제한다 — D9",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$font-text",
+                      "fontSize": 12,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.12
+                    },
+                    {
+                      "type": "text",
+                      "id": "Vp8te",
+                      "name": "Add L2",
+                      "fill": "$ink-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "dirty-uncommitted는 면제가 아니다 — clean 검사에서 차단",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$font-text",
+                      "fontSize": 12,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.12
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZOcqE",
+                  "name": "Diff Removed",
+                  "width": "fill_container",
+                  "fill": "#FBEEEC",
+                  "cornerRadius": "$radius-s",
+                  "layout": "vertical",
+                  "gap": 5,
+                  "padding": [
+                    9,
+                    12
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d4d5V",
+                      "name": "Rem Tag",
+                      "fill": "#C5221F",
+                      "content": "− REMOVED",
+                      "fontFamily": "$font-text",
+                      "fontSize": 8.5,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
+                    },
+                    {
+                      "type": "text",
+                      "id": "eKLw6",
+                      "name": "Rem L1",
+                      "fill": "$ink-tertiary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "서버 응답이 없으면 5분 대기 후 게이트를 통과시킨다",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$font-text",
+                      "fontSize": 12,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.12
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "qbqXK",
+              "name": "Versions Label",
+              "fill": "$ink-tertiary",
+              "content": "VERSIONS",
+              "fontFamily": "$font-text",
+              "fontSize": 10,
+              "fontWeight": "600",
+              "letterSpacing": 0.8
+            },
+            {
+              "id": "U6ePC",
+              "type": "ref",
+              "ref": "sOw0t",
+              "name": "Ver a1b2c3d",
+              "width": "fill_container",
+              "stroke": "$accent",
+              "strokeWidth": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Yv4jz",
+                  "name": "Ver Content",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": [
+                    11,
+                    13
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "aP3kZ",
+                      "name": "Ver Top",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "zULdj",
+                          "name": "Ver Avatar",
+                          "width": 18,
+                          "height": 18,
+                          "fill": "$input-bg",
+                          "cornerRadius": 9,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "pOXSk",
+                              "name": "Ver Initials",
+                              "fill": "$ink-secondary",
+                              "content": "SY",
+                              "fontFamily": "$font-text",
+                              "fontSize": 7.5,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "oXRYs",
+                          "name": "Ver Name",
+                          "fill": "$ink",
+                          "content": "수연",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.12
+                        },
+                        {
+                          "type": "frame",
+                          "id": "teQw5",
+                          "name": "Ver Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "text",
+                          "id": "ZeUh0",
+                          "name": "Ver Time",
+                          "fill": "$ink-tertiary",
+                          "content": "2시간 전",
+                          "fontFamily": "$font-text",
+                          "fontSize": 10,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "fGUJr",
+                      "name": "Ver Summary",
+                      "fill": "$ink-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "게이트 면제 조건 D9 반영, 매트릭스 셀 정리",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font-text",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "qjynu",
+                      "name": "Ver Meta",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "wkQRD",
+                          "name": "Ver Commit",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 4,
+                          "padding": [
+                            2,
+                            6
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "zJzUe",
+                              "name": "Ver Hash",
+                              "fill": "$ink-secondary",
+                              "content": "a1b2c3d",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 9,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "i4FLr",
+                          "name": "Ver Plus",
+                          "fill": "#1E8E3E",
+                          "content": "+14",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 9.5,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tRXRv",
+                          "name": "Ver Minus",
+                          "fill": "#C5221F",
+                          "content": "−3",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 9.5,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "JFdrX",
+              "type": "ref",
+              "ref": "sOw0t",
+              "name": "Ver 7d21f0a",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "CmwOh",
+                  "name": "Ver Content",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": [
+                    11,
+                    13
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "YpguD",
+                      "name": "Ver Top",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "TTuPz",
+                          "name": "Ver Avatar",
+                          "width": 18,
+                          "height": 18,
+                          "fill": "$input-bg",
+                          "cornerRadius": 9,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "oQaD0",
+                              "name": "Ver Initials",
+                              "fill": "$ink-secondary",
+                              "content": "MJ",
+                              "fontFamily": "$font-text",
+                              "fontSize": 7.5,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "LaGi5",
+                          "name": "Ver Name",
+                          "fill": "$ink",
+                          "content": "민지",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.12
+                        },
+                        {
+                          "type": "frame",
+                          "id": "OqgPz",
+                          "name": "Ver Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "text",
+                          "id": "IX9sH",
+                          "name": "Ver Time",
+                          "fill": "$ink-tertiary",
+                          "content": "어제",
+                          "fontFamily": "$font-text",
+                          "fontSize": 10,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "pIo6X",
+                      "name": "Ver Summary",
+                      "fill": "$ink-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "3중 검사 순서 및 차단 지시 문구 명시",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font-text",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "S9P4nC",
+                      "name": "Ver Meta",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "sSrnk",
+                          "name": "Ver Commit",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 4,
+                          "padding": [
+                            2,
+                            6
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ljpZN",
+                              "name": "Ver Hash",
+                              "fill": "$ink-secondary",
+                              "content": "7d21f0a",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 9,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "z1NrQt",
+                          "name": "Ver Plus",
+                          "fill": "#1E8E3E",
+                          "content": "+9",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 9.5,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "j4A6y",
+                          "name": "Ver Minus",
+                          "fill": "#C5221F",
+                          "content": "−2",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 9.5,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "WieE7",
+              "type": "ref",
+              "ref": "sOw0t",
+              "name": "Ver f00dba2",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Npdij",
+                  "name": "Ver Content",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": [
+                    11,
+                    13
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "y4cnAX",
+                      "name": "Ver Top",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "k63zR",
+                          "name": "Ver MergeChip",
+                          "width": 18,
+                          "height": 18,
+                          "fill": "$dark-card",
+                          "cornerRadius": 9,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "Fuyc7",
+                              "name": "Merge Icon",
+                              "width": 10,
+                              "height": 10,
+                              "icon": "git-merge",
+                              "library": "lucide",
+                              "fill": "$white"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "exIsf",
+                          "name": "Ver Name",
+                          "fill": "$ink",
+                          "content": "specraft-server",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.12
+                        },
+                        {
+                          "type": "frame",
+                          "id": "SaKe1",
+                          "name": "Ver Badge",
+                          "fill": "$input-bg",
+                          "cornerRadius": 4,
+                          "padding": [
+                            1,
+                            5
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "d2U4YJ",
+                              "name": "Ver Badge Label",
+                              "fill": "$ink-secondary",
+                              "content": "MERGE",
+                              "fontFamily": "$font-text",
+                              "fontSize": 7.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.5
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Dl53G",
+                          "name": "Ver Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "text",
+                          "id": "fLXAR",
+                          "name": "Ver Time",
+                          "fill": "$ink-tertiary",
+                          "content": "4일 전",
+                          "fontFamily": "$font-text",
+                          "fontSize": 10,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "cjFkG",
+                      "name": "Ver Summary",
+                      "fill": "$ink-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "feat/stop-gate → dev 병합",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font-text",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xcemr",
+                      "name": "Ver Meta",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "gBwmo",
+                          "name": "Ver Commit",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 4,
+                          "padding": [
+                            2,
+                            6
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ZepbC",
+                              "name": "Ver Hash",
+                              "fill": "$ink-secondary",
+                              "content": "f00dba2",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 9,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mLFUe",
+              "type": "ref",
+              "ref": "sOw0t",
+              "name": "Ver 1a0f9e3",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "NDmUI",
+                  "name": "Ver Content",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": [
+                    11,
+                    13
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "sA1d0",
+                      "name": "Ver Top",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "dXAko",
+                          "name": "Ver Avatar",
+                          "width": 18,
+                          "height": 18,
+                          "fill": "$input-bg",
+                          "cornerRadius": 9,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "siIvq",
+                              "name": "Ver Initials",
+                              "fill": "$ink-secondary",
+                              "content": "MJ",
+                              "fontFamily": "$font-text",
+                              "fontSize": 7.5,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "ekvSO",
+                          "name": "Ver Name",
+                          "fill": "$ink",
+                          "content": "민지",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.12
+                        },
+                        {
+                          "type": "frame",
+                          "id": "n1GaLV",
+                          "name": "Ver Badge",
+                          "fill": "$input-bg",
+                          "cornerRadius": 4,
+                          "padding": [
+                            1,
+                            5
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Do9BH",
+                              "name": "Ver Badge Label",
+                              "fill": "$ink-secondary",
+                              "content": "INIT",
+                              "fontFamily": "$font-text",
+                              "fontSize": 7.5,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.5
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "a3Zbj",
+                          "name": "Ver Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "text",
+                          "id": "XmjOz",
+                          "name": "Ver Time",
+                          "fill": "$ink-tertiary",
+                          "content": "5일 전",
+                          "fontFamily": "$font-text",
+                          "fontSize": 10,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "E7xug",
+                      "name": "Ver Summary",
+                      "fill": "$ink-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "specraft-init 초기 대량 ingest",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font-text",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Vqo26",
+                      "name": "Ver Meta",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ztJrS",
+                          "name": "Ver Commit",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 4,
+                          "padding": [
+                            2,
+                            6
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "nYe8E",
+                              "name": "Ver Hash",
+                              "fill": "$ink-secondary",
+                              "content": "1a0f9e3",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 9,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "BfGtu",
+                          "name": "Ver Plus",
+                          "fill": "#1E8E3E",
+                          "content": "+48",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 9.5,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "odoE9",
+                          "name": "Ver Minus",
+                          "fill": "#C5221F",
+                          "content": "−0",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 9.5,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "XNArG",
+      "x": 0,
+      "y": -2200,
+      "name": "component/Branch Menu",
+      "reusable": true,
+      "width": 264,
+      "fill": "$surface",
+      "cornerRadius": "$radius-m",
+      "effect": {
+        "type": "shadow",
+        "shadowType": "outer",
+        "color": "#00000038",
+        "offset": {
+          "x": 3,
+          "y": 5
+        },
+        "blur": 30
+      },
+      "layout": "vertical",
+      "gap": 1,
+      "padding": 6,
+      "children": [
+        {
+          "type": "frame",
+          "id": "nI1BT",
+          "name": "BM Head",
+          "width": "fill_container",
+          "padding": [
+            7,
+            10,
+            5,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "mKWzJ",
+              "name": "BM Label",
+              "fill": "$ink-tertiary",
+              "content": "BRANCHES",
+              "fontFamily": "$font-text",
+              "fontSize": 10,
+              "fontWeight": "600",
+              "letterSpacing": 0.8
+            },
+            {
+              "type": "frame",
+              "id": "nUBFy",
+              "name": "BM Head Spacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "text",
+              "id": "gSMBr",
+              "name": "BM Count",
+              "fill": "$ink-tertiary",
+              "content": "5",
+              "fontFamily": "$font-text",
+              "fontSize": 10,
+              "fontWeight": "normal",
+              "letterSpacing": -0.1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "kyJ7A",
+          "name": "BM dev",
+          "width": "fill_container",
+          "height": 34,
+          "fill": "#F5F5F7",
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "m4fEx",
+              "name": "BM Icon",
+              "width": 13,
+              "height": 13,
+              "icon": "git-branch",
+              "library": "lucide",
+              "fill": "$ink"
+            },
+            {
+              "type": "text",
+              "id": "V9ye8C",
+              "name": "BM Name",
+              "fill": "$ink",
+              "content": "dev",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "600",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "lljMZ",
+              "name": "BM Spacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "text",
+              "id": "C6tQ7",
+              "name": "BM Time",
+              "fill": "$ink-tertiary",
+              "content": "2분 전",
+              "fontFamily": "$font-text",
+              "fontSize": 10.5,
+              "fontWeight": "normal",
+              "letterSpacing": -0.1
+            },
+            {
+              "type": "icon",
+              "id": "uKq0H",
+              "name": "BM Check",
+              "width": 14,
+              "height": 14,
+              "icon": "check",
+              "library": "lucide",
+              "fill": "$accent"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "RgmJO",
+          "name": "BM main",
+          "width": "fill_container",
+          "height": 34,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "wQurW",
+              "name": "BM Icon",
+              "width": 13,
+              "height": 13,
+              "icon": "git-branch",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "FLn0b",
+              "name": "BM Name",
+              "fill": "$ink",
+              "content": "main",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "y2DXA",
+              "name": "BM Spacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "text",
+              "id": "y5Sse",
+              "name": "BM Time",
+              "fill": "$ink-tertiary",
+              "content": "어제",
+              "fontFamily": "$font-text",
+              "fontSize": 10.5,
+              "fontWeight": "normal",
+              "letterSpacing": -0.1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "V0mBS",
+          "name": "BM feat/stop-gate",
+          "width": "fill_container",
+          "height": 34,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "u73aq4",
+              "name": "BM Icon",
+              "width": 13,
+              "height": 13,
+              "icon": "git-branch",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "Priik",
+              "name": "BM Name",
+              "fill": "$ink",
+              "content": "feat/stop-gate",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "TIqzX",
+              "name": "BM Spacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "text",
+              "id": "LpGUp",
+              "name": "BM Time",
+              "fill": "$ink-tertiary",
+              "content": "2시간 전",
+              "fontFamily": "$font-text",
+              "fontSize": 10.5,
+              "fontWeight": "normal",
+              "letterSpacing": -0.1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "j2Cfz",
+          "name": "BM feat/auth-keys",
+          "width": "fill_container",
+          "height": 34,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "Q87U5",
+              "name": "BM Icon",
+              "width": 13,
+              "height": 13,
+              "icon": "git-branch",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "EE1zk",
+              "name": "BM Name",
+              "fill": "$ink",
+              "content": "feat/auth-keys",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "JQAAN",
+              "name": "BM Spacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "text",
+              "id": "Q8grA",
+              "name": "BM Time",
+              "fill": "$ink-tertiary",
+              "content": "1시간 전",
+              "fontFamily": "$font-text",
+              "fontSize": 10.5,
+              "fontWeight": "normal",
+              "letterSpacing": -0.1
+            },
+            {
+              "type": "ellipse",
+              "id": "pAoNU",
+              "name": "BM Resolving Dot",
+              "fill": "$warning",
+              "width": 7,
+              "height": 7
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "oD21J",
+          "name": "BM feat/query-cache",
+          "width": "fill_container",
+          "height": 34,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "ReMQC",
+              "name": "BM Icon",
+              "width": 13,
+              "height": 13,
+              "icon": "git-branch",
+              "library": "lucide",
+              "fill": "$ink-tertiary"
+            },
+            {
+              "type": "text",
+              "id": "wr1kO",
+              "name": "BM Name",
+              "fill": "$ink",
+              "content": "feat/query-cache",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "Z1GFTZ",
+              "name": "BM Spacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "icon",
+              "id": "ucMzx",
+              "name": "BM Lock",
+              "width": 12,
+              "height": 12,
+              "icon": "lock",
+              "library": "lucide",
+              "fill": "$danger"
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "S9QokW",
+          "name": "BM Divider",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "VCmQF",
+          "name": "BM Footer",
+          "width": "fill_container",
+          "padding": [
+            6,
+            10
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "Vqqeh",
+              "name": "BM Note",
+              "fill": "$ink-tertiary",
+              "content": "코드 브랜치와 1:1 미러링 · 요청 시 동기화",
+              "fontFamily": "$font-text",
+              "fontSize": 10,
+              "fontWeight": "normal",
+              "letterSpacing": -0.1
             }
           ]
         }
