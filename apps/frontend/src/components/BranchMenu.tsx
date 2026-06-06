@@ -31,7 +31,7 @@ export function BranchMenu({ rows = BRANCH_ROWS, width = 264, className }: Branc
     <div
       style={{ width }}
       className={cn(
-        "flex flex-col gap-px rounded-m bg-surface p-1.5 shadow-[3px_5px_30px_#00000038]",
+        "flex flex-col gap-px rounded-md bg-surface p-1.5 shadow-[3px_5px_30px_#00000038]",
         className,
       )}
     >

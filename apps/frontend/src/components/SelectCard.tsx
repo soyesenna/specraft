@@ -18,7 +18,7 @@ export function SelectCard({ selected, onClick, unpadded, className, children }:
     <Tag
       {...(onClick ? { type: "button" as const, onClick } : {})}
       className={cn(
-        "flex w-full flex-col overflow-hidden rounded-m bg-surface text-left",
+        "flex w-full flex-col overflow-hidden rounded-md bg-surface text-left",
         selected && "border-2 border-accent",
         className,
       )}

@@ -20,7 +20,7 @@ function InviteField({
         type={type}
         defaultValue={value}
         placeholder={placeholder}
-        className="pen-text h-11 w-full rounded-[10px] border-none bg-bg px-3.5 text-[14px] tracking-[-0.22px] text-ink outline-none placeholder:text-ink-tertiary md:h-[38px] md:rounded-s md:px-3 md:text-[13.5px] md:tracking-[-0.2px]"
+        className="pen-text h-11 w-full rounded-[10px] border-none bg-bg px-3.5 text-[14px] tracking-[-0.22px] text-ink outline-none placeholder:text-ink-tertiary md:h-[38px] md:rounded-sm md:px-3 md:text-[13.5px] md:tracking-[-0.2px]"
       />
     </label>
   )
@@ -31,7 +31,7 @@ export function JoinInviteScreen() {
   const navigate = useNavigate()
 
   const card = (
-    <div className="flex w-full flex-col gap-[13px] rounded-l bg-surface p-5 md:w-[380px] md:gap-3.5 md:p-[26px]">
+    <div className="flex w-full flex-col gap-[13px] rounded-lg bg-surface p-5 md:w-[380px] md:gap-3.5 md:p-[26px]">
       <div className="flex w-full flex-col gap-1 md:gap-[5px]">
         <span className="pen-text font-display text-[19px] font-semibold tracking-[-0.3px] text-ink md:text-[20px]">
           Join specraft

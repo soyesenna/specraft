@@ -7,13 +7,13 @@ export function SignInScreen() {
   const navigate = useNavigate()
 
   const card = (
-    <div className="flex w-full flex-col gap-3.5 rounded-l bg-surface p-5 md:w-[360px] md:p-[26px]">
+    <div className="flex w-full flex-col gap-3.5 rounded-lg bg-surface p-5 md:w-[360px] md:p-[26px]">
       <label className="flex w-full flex-col gap-1.5">
         <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink">Email</span>
         <input
           type="email"
           defaultValue="senna@prompt.town"
-          className="pen-text h-11 w-full rounded-[10px] border-none bg-bg px-3.5 text-[14px] tracking-[-0.22px] text-ink outline-none md:h-[38px] md:rounded-s md:px-3 md:text-[13.5px] md:tracking-[-0.2px]"
+          className="pen-text h-11 w-full rounded-[10px] border-none bg-bg px-3.5 text-[14px] tracking-[-0.22px] text-ink outline-none md:h-[38px] md:rounded-sm md:px-3 md:text-[13.5px] md:tracking-[-0.2px]"
         />
       </label>
       <label className="flex w-full flex-col gap-1.5">
@@ -23,7 +23,7 @@ export function SignInScreen() {
         <input
           type="password"
           defaultValue="0000000000"
-          className="pen-text h-11 w-full rounded-[10px] border-none bg-bg px-3.5 text-[14px] tracking-[-0.22px] text-ink outline-none md:h-[38px] md:rounded-s md:px-3 md:text-[13.5px] md:tracking-[-0.2px]"
+          className="pen-text h-11 w-full rounded-[10px] border-none bg-bg px-3.5 text-[14px] tracking-[-0.22px] text-ink outline-none md:h-[38px] md:rounded-sm md:px-3 md:text-[13.5px] md:tracking-[-0.2px]"
         />
       </label>
       <button

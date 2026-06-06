@@ -58,7 +58,7 @@ export function DocumentScreen() {
             <button
               type="button"
               onClick={() => navigate("/specs/doc/stop-gate/history")}
-              className="flex items-center justify-center gap-1.5 rounded-s bg-input px-4 py-2"
+              className="flex items-center justify-center gap-1.5 rounded-sm bg-input px-4 py-2"
             >
               <span className="pen-text text-[14px] tracking-[-0.22px] text-ink">History</span>
             </button>
@@ -103,7 +103,7 @@ export function DocumentScreen() {
               ))}
             </nav>
             {/* Doc Sheet */}
-            <article className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto rounded-l bg-surface px-11 py-9">
+            <article className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto rounded-lg bg-surface px-11 py-9">
               <h1 className="pen-text m-0 w-full font-display text-[28px] leading-[1.15] font-semibold tracking-[-0.4px] text-ink">
                 Stop 게이트 판정 규칙
               </h1>
@@ -122,7 +122,7 @@ export function DocumentScreen() {
               <DocBullet text="read-only 세션(변경 · 커밋 0건)은 ingest 강제를 면제한다 — D9" />
               <DocBullet text="dirty-uncommitted는 면제가 아니다 — clean 검사(①)에서 차단" />
               <DocBullet text="서버 도달 불가 시에도 hard block 유지 — spec 무결성 > 가용성 (D1)" />
-              <div className="flex w-full flex-col gap-[3px] rounded-s bg-dark-card px-[18px] py-3.5">
+              <div className="flex w-full flex-col gap-[3px] rounded-sm bg-dark-card px-[18px] py-3.5">
                 <code className="pen-text font-mono text-[12px] leading-[1.6] whitespace-pre text-white-secondary">
                   {"// ~/.specraft/sessions/{session_id}.json"}
                 </code>
@@ -231,7 +231,7 @@ export function DocumentScreen() {
           </span>
         </div>
         <div className="flex min-h-0 w-full flex-1 flex-col px-3 pb-4">
-          <article className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto rounded-m bg-surface px-[18px] py-5">
+          <article className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto rounded-md bg-surface px-[18px] py-5">
             <h1 className="pen-text m-0 w-full font-display text-[21px] leading-[1.2] font-semibold tracking-[-0.32px] text-ink">
               Stop 게이트 판정 규칙
             </h1>
@@ -250,7 +250,7 @@ export function DocumentScreen() {
             <MobileBullet text="read-only 세션은 ingest 강제 면제 — D9" />
             <MobileBullet text="dirty-uncommitted는 clean 검사에서 차단" />
             <MobileBullet text="서버 불가 시에도 hard block — D1" />
-            <div className="flex w-full flex-col gap-0.5 overflow-hidden rounded-s bg-dark-card px-[13px] py-[11px]">
+            <div className="flex w-full flex-col gap-0.5 overflow-hidden rounded-sm bg-dark-card px-[13px] py-[11px]">
               <code className="pen-text font-mono text-[10.5px] leading-[1.6] whitespace-pre text-white-secondary">
                 {"// ~/.specraft/sessions/{id}.json"}
               </code>

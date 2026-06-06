@@ -62,7 +62,7 @@ export function DocumentHistoryScreen() {
             <button
               type="button"
               onClick={() => navigate("/specs/doc/stop-gate")}
-              className="flex items-center justify-center gap-1.5 rounded-s bg-accent px-4 py-2"
+              className="flex items-center justify-center gap-1.5 rounded-sm bg-accent px-4 py-2"
             >
               <span className="pen-text text-[14px] tracking-[-0.22px] text-white">Done</span>
             </button>
@@ -70,8 +70,8 @@ export function DocumentHistoryScreen() {
           {/* History Body */}
           <div className="flex min-h-0 w-full flex-1 gap-[22px] px-7 pb-7">
             {/* Doc Sheet (버전 뷰) */}
-            <article className="flex min-h-0 min-w-0 flex-1 flex-col gap-3.5 overflow-y-auto rounded-l bg-surface px-10 py-7">
-              <div className="flex w-full items-center gap-2 rounded-s bg-bg px-3.5 py-[9px]">
+            <article className="flex min-h-0 min-w-0 flex-1 flex-col gap-3.5 overflow-y-auto rounded-lg bg-surface px-10 py-7">
+              <div className="flex w-full items-center gap-2 rounded-sm bg-bg px-3.5 py-[9px]">
                 <History className="size-[13px] text-ink-tertiary" />
                 <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-secondary">
                   버전 a1b2c3d을 보는 중 — 수연의 ingest · 2시간 전
@@ -99,7 +99,7 @@ export function DocumentHistoryScreen() {
               <h2 className="pen-text m-0 w-full font-display text-[17px] font-semibold tracking-[-0.26px] text-ink">
                 판정 매트릭스
               </h2>
-              <div className="w-full overflow-hidden rounded-s bg-[#E9F6EE]">
+              <div className="w-full overflow-hidden rounded-sm bg-[#E9F6EE]">
                 <div className="flex w-full flex-col gap-1.5 px-3.5 py-2.5">
                   <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-[#1E8E3E]">
                     + ADDED
@@ -112,7 +112,7 @@ export function DocumentHistoryScreen() {
                   </span>
                 </div>
               </div>
-              <div className="w-full overflow-hidden rounded-s bg-[#FBEEEC]">
+              <div className="w-full overflow-hidden rounded-sm bg-[#FBEEEC]">
                 <div className="flex w-full flex-col gap-1.5 px-3.5 py-2.5">
                   <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-[#C5221F]">
                     − REMOVED
@@ -242,7 +242,7 @@ export function DocumentHistoryScreen() {
             </span>
           </button>
           {/* Diff Sheet */}
-          <article className="flex w-full flex-col gap-[9px] rounded-m bg-surface px-4 py-3.5">
+          <article className="flex w-full flex-col gap-[9px] rounded-md bg-surface px-4 py-3.5">
             <h1 className="pen-text m-0 w-full font-display text-[17.5px] font-semibold tracking-[-0.28px] text-ink">
               Stop 게이트 판정 규칙
             </h1>
@@ -253,7 +253,7 @@ export function DocumentHistoryScreen() {
             <h2 className="pen-text m-0 w-full font-display text-[14px] font-semibold tracking-[-0.22px] text-ink">
               판정 매트릭스
             </h2>
-            <div className="flex w-full flex-col gap-[5px] rounded-s bg-[#E9F6EE] px-3 py-[9px]">
+            <div className="flex w-full flex-col gap-[5px] rounded-sm bg-[#E9F6EE] px-3 py-[9px]">
               <span className="pen-text text-[8.5px] font-semibold tracking-[0.8px] text-[#1E8E3E]">
                 + ADDED
               </span>
@@ -264,7 +264,7 @@ export function DocumentHistoryScreen() {
                 dirty-uncommitted는 면제가 아니다 — clean 검사에서 차단
               </span>
             </div>
-            <div className="flex w-full flex-col gap-[5px] rounded-s bg-[#FBEEEC] px-3 py-[9px]">
+            <div className="flex w-full flex-col gap-[5px] rounded-sm bg-[#FBEEEC] px-3 py-[9px]">
               <span className="pen-text text-[8.5px] font-semibold tracking-[0.8px] text-[#C5221F]">
                 − REMOVED
               </span>
@@ -276,7 +276,7 @@ export function DocumentHistoryScreen() {
         </div>
         {/* M05c — Version Menu 드롭다운 */}
         {versionMenuOpen && (
-          <div className="absolute top-[132px] left-4 z-40 flex w-[358px] flex-col gap-px rounded-m bg-surface p-1.5 shadow-[0_6px_24px_#00000030]">
+          <div className="absolute top-[132px] left-4 z-40 flex w-[358px] flex-col gap-px rounded-md bg-surface p-1.5 shadow-[0_6px_24px_#00000030]">
             <div className="flex w-full items-center px-2.5 pt-[7px] pb-[5px]">
               <span className="pen-text text-[10px] font-semibold tracking-[0.8px] text-ink-tertiary">
                 VERSIONS

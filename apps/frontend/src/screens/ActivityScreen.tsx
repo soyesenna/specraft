@@ -71,7 +71,7 @@ export function ActivityScreen() {
           onAvatarClick={() => setProfileOpen((o) => !o)}
           topNavOverlay={
             profileOpen ? (
-              <div className="absolute top-[54px] right-[28px] z-50 flex w-[236px] flex-col gap-0.5 rounded-m bg-surface p-1.5 shadow-[3px_5px_30px_#00000038]">
+              <div className="absolute top-[54px] right-[28px] z-50 flex w-[236px] flex-col gap-0.5 rounded-md bg-surface p-1.5 shadow-[3px_5px_30px_#00000038]">
                 <div className="flex w-full flex-col gap-0.5 px-2.5 py-2">
                   <span className="pen-text text-[13px] font-semibold tracking-[-0.2px] text-ink">
                     수연
@@ -125,7 +125,7 @@ export function ActivityScreen() {
             </button>
           </div>
           <div className="flex min-h-0 w-full flex-1 flex-col gap-3 px-7 pt-1 pb-7">
-            <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+            <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
               <div className="flex h-[38px] w-full shrink-0 items-center gap-3.5 border-b border-hairline px-5">
                 <HeadCell w={96}>TYPE</HeadCell>
                 <HeadCell w={130}>MEMBER</HeadCell>
@@ -285,7 +285,7 @@ export function ActivityScreen() {
           </div>
         </div>
         <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-4 pt-0.5 pb-3">
-          <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+          <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
             {visibleRows.slice(0, 9).map((row, i, arr) => (
               <div
                 key={`${row.commit}-${row.summary}`}
@@ -296,7 +296,7 @@ export function ActivityScreen() {
               >
                 <span
                   className={cn(
-                    "flex size-[26px] shrink-0 items-center justify-center rounded-s",
+                    "flex size-[26px] shrink-0 items-center justify-center rounded-sm",
                     row.type === "Ingest" ? "bg-dark-card" : "bg-input",
                   )}
                 >

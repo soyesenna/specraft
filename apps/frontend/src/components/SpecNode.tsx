@@ -25,7 +25,7 @@ export function SpecNode({ dir, name, title, dark, selected, width, x, y, onClic
       onClick={onClick}
       style={{ width, left: x, top: y }}
       className={cn(
-        "absolute flex flex-col gap-[3px] rounded-m px-[15px] py-3 text-left shadow-[0_4px_24px_#0000001F]",
+        "absolute flex flex-col gap-[3px] rounded-md px-[15px] py-3 text-left shadow-[0_4px_24px_#0000001F]",
         dark ? "bg-dark-card" : "bg-surface",
         selected && "border-2 border-accent",
       )}

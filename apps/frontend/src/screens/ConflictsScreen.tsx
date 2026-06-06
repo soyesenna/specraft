@@ -173,7 +173,7 @@ export function ConflictsScreen() {
 
 function DesktopConflictDetail() {
   return (
-    <article className="flex min-w-0 flex-1 flex-col gap-4 self-start rounded-l bg-surface px-[26px] py-[22px]">
+    <article className="flex min-w-0 flex-1 flex-col gap-4 self-start rounded-lg bg-surface px-[26px] py-[22px]">
       <div className="flex w-full items-center gap-2.5">
         <span className="pen-text font-display text-[21px] font-semibold tracking-[-0.3px] text-ink">
           feat/query-cache → dev
@@ -187,7 +187,7 @@ function DesktopConflictDetail() {
         <span className="h-px flex-1" />
         <span className="pen-text font-mono text-[11px] text-ink-tertiary">cfl_04a2</span>
       </div>
-      <div className="flex w-full items-center gap-[9px] rounded-s bg-bg px-3.5 py-2.5">
+      <div className="flex w-full items-center gap-[9px] rounded-sm bg-bg px-3.5 py-2.5">
         <Lock className="size-[13px] shrink-0 text-danger" />
         <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-secondary">
           이 브랜치의 context · query · ingest 요청은 해제 전까지 409로 거부됩니다 — 다른 브랜치는
@@ -305,7 +305,7 @@ function MobileConflictDetail({ onBack }: { onBack: () => void }) {
             이 브랜치의 context · query · ingest 요청은 해제 전까지 409로 거부됩니다.
           </span>
         </div>
-        <div className="flex w-full flex-col gap-[11px] rounded-m bg-surface p-4">
+        <div className="flex w-full flex-col gap-[11px] rounded-md bg-surface p-4">
           <span className="pen-text text-[9.5px] font-semibold tracking-[0.8px] text-ink-tertiary">
             LLM MERGE FAILURE
           </span>
@@ -336,7 +336,7 @@ function MobileConflictDetail({ onBack }: { onBack: () => void }) {
             </span>
           </span>
         </div>
-        <div className="flex w-full flex-col gap-2 rounded-m bg-surface px-4 py-3.5">
+        <div className="flex w-full flex-col gap-2 rounded-md bg-surface px-4 py-3.5">
           <span className="pen-text text-[9.5px] font-semibold tracking-[0.8px] text-ink-tertiary">
             ATTEMPTS · 1
           </span>

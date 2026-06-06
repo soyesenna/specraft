@@ -34,7 +34,7 @@ export function Field({
       </span>
       <span
         className={cn(
-          "flex h-9 w-full items-center gap-2 rounded-s bg-bg px-3",
+          "flex h-9 w-full items-center gap-2 rounded-sm bg-bg px-3",
           inputClassName,
         )}
       >

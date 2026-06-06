@@ -11,7 +11,7 @@ export function ButtonPrimary({ children, className, ...rest }: ButtonProps) {
     <button
       type="button"
       className={cn(
-        "flex items-center justify-center gap-1.5 rounded-s bg-accent px-4 py-2",
+        "flex items-center justify-center gap-1.5 rounded-sm bg-accent px-4 py-2",
         className,
       )}
       {...rest}
@@ -27,7 +27,7 @@ export function ButtonSecondary({ children, className, ...rest }: ButtonProps) {
     <button
       type="button"
       className={cn(
-        "flex items-center justify-center gap-1.5 rounded-s bg-input px-4 py-2",
+        "flex items-center justify-center gap-1.5 rounded-sm bg-input px-4 py-2",
         className,
       )}
       {...rest}

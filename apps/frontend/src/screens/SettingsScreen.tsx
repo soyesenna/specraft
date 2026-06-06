@@ -103,7 +103,7 @@ function SettingsField({
       <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
         {label}
       </span>
-      <div className="flex h-9 w-full items-center gap-2 rounded-s bg-bg px-3">
+      <div className="flex h-9 w-full items-center gap-2 rounded-sm bg-bg px-3">
         <span
           className={cn(
             "pen-text text-ink",
@@ -127,7 +127,7 @@ function SettingsField({
 function DesktopGitModels() {
   return (
     <>
-      <section className="flex w-full flex-col gap-4 rounded-m bg-surface px-6 py-[22px]">
+      <section className="flex w-full flex-col gap-4 rounded-md bg-surface px-6 py-[22px]">
         <div className="flex w-full flex-col gap-1">
           <span className="pen-text text-[16px] font-semibold tracking-[-0.26px] text-ink">
             Git integration
@@ -155,7 +155,7 @@ function DesktopGitModels() {
             <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
               Credential
             </span>
-            <div className="flex items-center gap-0.5 rounded-s bg-input p-0.5">
+            <div className="flex items-center gap-0.5 rounded-sm bg-input p-0.5">
               <span className="flex items-center rounded-[6px] bg-surface px-2.5 py-[3px] shadow-[0_1px_3px_#0000001F]">
                 <span className="pen-text text-[11.5px] font-medium tracking-[-0.1px] text-ink">
                   SSH deploy key
@@ -168,7 +168,7 @@ function DesktopGitModels() {
               </span>
             </div>
           </div>
-          <div className="flex h-9 w-full items-center gap-2 rounded-s bg-bg px-3">
+          <div className="flex h-9 w-full items-center gap-2 rounded-sm bg-bg px-3">
             <span className="pen-text font-mono text-[12.5px] text-ink">
               ssh-ed25519 ••••••••••••••••••••
             </span>
@@ -182,7 +182,7 @@ function DesktopGitModels() {
         <div className="flex w-full items-center gap-2.5">
           <button
             type="button"
-            className="flex items-center justify-center rounded-s bg-input px-4 py-2"
+            className="flex items-center justify-center rounded-sm bg-input px-4 py-2"
           >
             <span className="pen-text text-[14px] tracking-[-0.22px] text-ink">
               Test connection
@@ -191,13 +191,13 @@ function DesktopGitModels() {
           <span className="h-px flex-1" />
           <button
             type="button"
-            className="flex items-center justify-center rounded-s bg-accent px-4 py-2"
+            className="flex items-center justify-center rounded-sm bg-accent px-4 py-2"
           >
             <span className="pen-text text-[14px] tracking-[-0.22px] text-white">Save</span>
           </button>
         </div>
       </section>
-      <section className="flex w-full flex-col gap-4 rounded-m bg-surface px-6 py-[22px]">
+      <section className="flex w-full flex-col gap-4 rounded-md bg-surface px-6 py-[22px]">
         <div className="flex w-full flex-col gap-1">
           <span className="pen-text text-[16px] font-semibold tracking-[-0.26px] text-ink">
             Models
@@ -211,7 +211,7 @@ function DesktopGitModels() {
             <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
               Ingest model
             </span>
-            <div className="flex h-9 w-full items-center rounded-s bg-bg px-3">
+            <div className="flex h-9 w-full items-center rounded-sm bg-bg px-3">
               <span className="pen-text font-mono text-[12px] text-ink">
                 anthropic/claude-sonnet-4.6
               </span>
@@ -221,7 +221,7 @@ function DesktopGitModels() {
             <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
               Query model
             </span>
-            <div className="flex h-9 w-full items-center rounded-s bg-bg px-3">
+            <div className="flex h-9 w-full items-center rounded-sm bg-bg px-3">
               <span className="pen-text font-mono text-[12px] text-ink">
                 anthropic/claude-haiku-4.5
               </span>
@@ -235,7 +235,7 @@ function DesktopGitModels() {
           <span className="h-px flex-1" />
           <button
             type="button"
-            className="flex items-center justify-center rounded-s bg-accent px-4 py-2"
+            className="flex items-center justify-center rounded-sm bg-accent px-4 py-2"
           >
             <span className="pen-text text-[14px] tracking-[-0.22px] text-white">Save</span>
           </button>
@@ -259,7 +259,7 @@ function RevealBanner({
   return (
     <div
       className={cn(
-        "flex w-full flex-col rounded-m border-[1.5px] border-accent bg-surface",
+        "flex w-full flex-col rounded-md border-[1.5px] border-accent bg-surface",
         compact ? "gap-[9px] p-3.5" : "gap-2.5 px-5 py-[18px]",
       )}
     >
@@ -286,7 +286,7 @@ function RevealBanner({
       </p>
       <div
         className={cn(
-          "flex w-full items-center overflow-hidden rounded-s bg-dark-card",
+          "flex w-full items-center overflow-hidden rounded-sm bg-dark-card",
           compact ? "gap-2 px-3 py-[9px]" : "gap-2.5 px-3.5 py-2.5",
         )}
       >
@@ -321,7 +321,7 @@ function DesktopKeys() {
         </div>
         <button
           type="button"
-          className="flex shrink-0 items-center justify-center rounded-s bg-accent px-4 py-2"
+          className="flex shrink-0 items-center justify-center rounded-sm bg-accent px-4 py-2"
         >
           <span className="pen-text text-[14px] tracking-[-0.22px] text-white">
             Generate new key
@@ -333,7 +333,7 @@ function DesktopKeys() {
         desc="이 키는 지금 한 번만 표시됩니다 — 서버에는 해시만 저장됩니다. SPECRAFT_API_KEY env 또는 ~/.specraft/credentials에 보관하세요."
         value="sk-spcrft-9f3e21bd7a4c1e8f2b6d0a5c3e7f9b1d"
       />
-      <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+      <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         <div className="flex h-9 w-full items-center gap-3.5 border-b border-hairline px-[18px]">
           <KeyHead w={170}>NAME</KeyHead>
           <KeyHead w={190}>KEY</KeyHead>
@@ -438,12 +438,12 @@ function DesktopMembers() {
         </div>
         <button
           type="button"
-          className="flex shrink-0 items-center justify-center rounded-s bg-accent px-4 py-2"
+          className="flex shrink-0 items-center justify-center rounded-sm bg-accent px-4 py-2"
         >
           <span className="pen-text text-[14px] tracking-[-0.22px] text-white">Create invite</span>
         </button>
       </div>
-      <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+      <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         <div className="flex h-9 w-full items-center gap-3.5 border-b border-hairline px-[18px]">
           <KeyHead w={170}>MEMBER</KeyHead>
           <span className="min-w-0 flex-1">
@@ -582,7 +582,7 @@ function DesktopInvites() {
         </div>
         <button
           type="button"
-          className="flex shrink-0 items-center justify-center rounded-s bg-accent px-4 py-2"
+          className="flex shrink-0 items-center justify-center rounded-sm bg-accent px-4 py-2"
         >
           <span className="pen-text text-[14px] tracking-[-0.22px] text-white">
             Create invite link
@@ -594,7 +594,7 @@ function DesktopInvites() {
         desc="이 링크를 팀원에게 공유하세요 — 72시간 후 또는 가입 완료 시 만료됩니다."
         value="https://specraft.prompt.town/join/inv_8f3e21bd7a4c"
       />
-      <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+      <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         <div className="flex h-9 w-full items-center gap-3.5 border-b border-hairline px-[18px]">
           <KeyHead w={200}>LINK</KeyHead>
           <KeyHead w={120}>CREATED BY</KeyHead>
@@ -697,7 +697,7 @@ function MobileHub() {
         </h1>
       </div>
       <div className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto px-4 pt-0.5 pb-4">
-        <div className="flex w-full items-center gap-3 rounded-m bg-surface px-4 py-3.5">
+        <div className="flex w-full items-center gap-3 rounded-md bg-surface px-4 py-3.5">
           <span className="flex size-11 shrink-0 items-center justify-center rounded-[22px] bg-dark-card">
             <span className="pen-text text-[15px] font-semibold text-white">SY</span>
           </span>
@@ -715,7 +715,7 @@ function MobileHub() {
             </span>
           </span>
         </div>
-        <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+        <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
           {hubItems.map(({ icon: Icon, label, to }, i) => (
             <Link
               key={label}
@@ -725,7 +725,7 @@ function MobileHub() {
                 i < hubItems.length - 1 && "border-b border-hairline",
               )}
             >
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-s bg-input">
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-sm bg-input">
                 <Icon className="size-3.5 text-ink-secondary" />
               </span>
               <span className="pen-text text-[13.5px] tracking-[-0.2px] text-ink">{label}</span>
@@ -734,9 +734,9 @@ function MobileHub() {
             </Link>
           ))}
         </div>
-        <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+        <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
           <Link to="/signin" className="flex h-[50px] w-full items-center gap-[11px] px-3.5">
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-s bg-[#FF3B3014]">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-sm bg-[#FF3B3014]">
               <LogOut className="size-3.5 text-danger" />
             </span>
             <span className="pen-text text-[13.5px] tracking-[-0.2px] text-danger">Sign out</span>
@@ -813,20 +813,20 @@ function MobileGeneral() {
       <MobileNavRow title="General" />
       <div className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto px-4 pt-0.5 pb-4">
         <SectionLabel first>SERVER</SectionLabel>
-        <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+        <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
           <InfoRow label="Version" value="v1.0.2" />
           <InfoRow label="Status" value="Operational" dot="success" />
           <InfoRow label="Uptime" value="14 days" border={false} />
         </div>
         <SectionLabel>WIKI INTEGRITY</SectionLabel>
-        <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+        <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
           <InfoRow label="git fsck" value="Passed" dot="success" />
           <InfoRow label="Core skeleton" value="index · log · overview" dot="success" />
           <InfoRow label="Last check" value="오늘 06:00" />
           <InfoRow label="Run integrity check" link chevron border={false} />
         </div>
         <SectionLabel>STORAGE</SectionLabel>
-        <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+        <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
           <InfoRow label="wiki.git" value="42 MB" />
           <InfoRow label="specraft.db" value="8 MB" />
           <InfoRow label="Backup guide" link chevron border={false} />
@@ -845,7 +845,7 @@ function MobileGit() {
       <MobileStatusBar />
       <MobileNavRow title="Git integration" />
       <div className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto px-4 pt-0.5 pb-4">
-        <div className="flex w-full flex-col gap-[9px] rounded-m bg-surface p-3.5">
+        <div className="flex w-full flex-col gap-[9px] rounded-md bg-surface p-3.5">
           <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink">
             Remote URL
           </span>
@@ -861,7 +861,7 @@ function MobileGit() {
             </span>
           </span>
         </div>
-        <div className="flex w-full flex-col gap-[9px] rounded-m bg-surface p-3.5">
+        <div className="flex w-full flex-col gap-[9px] rounded-md bg-surface p-3.5">
           <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink">
             Credential
           </span>
@@ -918,7 +918,7 @@ function MobileModels() {
       <MobileStatusBar />
       <MobileNavRow title="Models" />
       <div className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto px-4 pt-0.5 pb-4">
-        <div className="flex w-full flex-col gap-3 rounded-m bg-surface p-3.5">
+        <div className="flex w-full flex-col gap-3 rounded-md bg-surface p-3.5">
           <div className="flex w-full flex-col gap-1.5">
             <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink">
               Ingest model
@@ -970,7 +970,7 @@ function MobileMembers() {
         }
       />
       <div className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto px-4 pt-0.5 pb-4">
-        <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+        <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
           {MEMBERS.map((m, i) => (
             <div
               key={m.email}
@@ -1072,7 +1072,7 @@ function MobileInvites() {
           desc="이 링크를 팀원에게 공유하세요 — 72시간 후 또는 가입 완료 시 만료됩니다."
           value="specraft.prompt.town/join/inv_8f3e21bd…"
         />
-        <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+        <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
           {MOBILE_INVITES.map((inv, i) => (
             <div
               key={inv.token}
@@ -1082,7 +1082,7 @@ function MobileInvites() {
                 inv.dim && "opacity-[0.65]",
               )}
             >
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-s bg-input">
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-sm bg-input">
                 <Link2 className="size-[13px] text-ink-secondary" />
               </span>
               <span className="flex min-w-0 flex-1 flex-col gap-0.5 overflow-hidden">
@@ -1128,9 +1128,9 @@ function MobileKeys() {
           desc="이 키는 지금 한 번만 표시됩니다 — 서버에는 해시만 저장됩니다."
           value="sk-spcrft-9f3e21bd7a4c1e8f2b6d…"
         />
-        <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+        <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
           <div className="flex h-14 w-full items-center gap-[11px] border-b border-hairline px-3.5">
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-s bg-input">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-sm bg-input">
               <Key className="size-[13px] text-ink-secondary" />
             </span>
             <span className="flex min-w-0 flex-1 flex-col gap-0.5 overflow-hidden">
@@ -1146,7 +1146,7 @@ function MobileKeys() {
             </button>
           </div>
           <div className="flex h-14 w-full items-center gap-[11px] px-3.5">
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-s bg-input">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-sm bg-input">
               <Key className="size-[13px] text-ink-secondary" />
             </span>
             <span className="flex min-w-0 flex-1 flex-col gap-0.5 overflow-hidden">

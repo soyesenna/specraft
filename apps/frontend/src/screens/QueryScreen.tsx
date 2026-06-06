@@ -52,7 +52,7 @@ export function QueryScreen() {
                 </span>
               </div>
               {/* Answer Card */}
-              <div className="flex w-full flex-col gap-3.5 rounded-l bg-surface px-[26px] py-[22px] shadow-[0_2px_12px_#0000000F]">
+              <div className="flex w-full flex-col gap-3.5 rounded-lg bg-surface px-[26px] py-[22px] shadow-[0_2px_12px_#0000000F]">
                 <div className="flex items-center gap-[7px]">
                   <Sparkles className="size-3.5 text-accent" />
                   <span className="pen-text text-[12.5px] font-semibold tracking-[-0.12px] text-ink">
@@ -139,7 +139,7 @@ export function QueryScreen() {
                   민지 · 5분 전
                 </span>
               </div>
-              <div className="flex w-full flex-col gap-2.5 rounded-l bg-surface px-4 py-3.5 shadow-[0_2px_10px_#0000000D]">
+              <div className="flex w-full flex-col gap-2.5 rounded-lg bg-surface px-4 py-3.5 shadow-[0_2px_10px_#0000000D]">
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="size-[13px] text-accent" />
                   <span className="pen-text text-[11.5px] font-semibold tracking-[-0.1px] text-ink">
@@ -188,7 +188,7 @@ export function QueryScreen() {
                   민지 · 방금
                 </span>
               </div>
-              <div className="flex w-full flex-col gap-[11px] rounded-l bg-surface p-4 shadow-[0_2px_10px_#0000000D]">
+              <div className="flex w-full flex-col gap-[11px] rounded-lg bg-surface p-4 shadow-[0_2px_10px_#0000000D]">
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="size-[13px] text-accent" />
                   <span className="pen-text text-[11.5px] font-semibold tracking-[-0.1px] text-ink">

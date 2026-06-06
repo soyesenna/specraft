@@ -168,7 +168,7 @@ function ZoomControls({
   return (
     <div
       className={cn(
-        "absolute flex flex-col rounded-s bg-surface shadow-[0_2px_8px_#00000014]",
+        "absolute flex flex-col rounded-sm bg-surface shadow-[0_2px_8px_#00000014]",
         className,
       )}
     >
@@ -252,7 +252,7 @@ function DesktopGraphCanvas({ onZoomOut: handleZoomOut }: { onZoomOut: () => voi
 function DetailPanel() {
   const connected = ["overview.md", "mcp-proxy.md", "ingest-pipeline.md", "adr-002-hard-gate.md"]
   return (
-    <aside className="absolute top-5 right-5 flex w-[344px] flex-col gap-3.5 rounded-l bg-surface p-[22px] shadow-[3px_5px_30px_#00000038]">
+    <aside className="absolute top-5 right-5 flex w-[344px] flex-col gap-3.5 rounded-lg bg-surface p-[22px] shadow-[3px_5px_30px_#00000038]">
       <div className="flex w-full flex-col gap-[5px]">
         <span className="pen-text text-[10px] font-semibold tracking-[0.8px] text-ink-tertiary">
           SPECS
@@ -291,7 +291,7 @@ function DetailPanel() {
       <div className="h-px w-full bg-hairline" />
       <Link
         to="/specs/doc/stop-gate"
-        className="flex w-full items-center justify-center gap-1.5 rounded-s bg-accent px-4 py-2"
+        className="flex w-full items-center justify-center gap-1.5 rounded-sm bg-accent px-4 py-2"
       >
         <span className="pen-text text-[14px] tracking-[-0.22px] text-white">Open document</span>
       </Link>
@@ -485,7 +485,7 @@ function DesktopListView() {
   const navigate = useNavigate()
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col px-7 pt-1 pb-7">
-      <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+      <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         <div className="flex h-[38px] w-full shrink-0 items-center gap-3.5 border-b border-hairline px-5">
           <span className="w-6 shrink-0" />
           <span className="w-[380px] shrink-0">
@@ -655,7 +655,7 @@ function MobileListView() {
   const navigate = useNavigate()
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-4 pt-0.5 pb-3">
-      <div className="flex w-full flex-col overflow-hidden rounded-m bg-surface">
+      <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         {MOBILE_DOC_ROWS.map((row, i) => (
           <button
             key={row.id}
@@ -668,7 +668,7 @@ function MobileListView() {
           >
             <span
               className={cn(
-                "flex size-7 shrink-0 items-center justify-center rounded-s",
+                "flex size-7 shrink-0 items-center justify-center rounded-sm",
                 row.dark ? "bg-dark-card" : "bg-input",
               )}
             >

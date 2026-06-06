@@ -11,7 +11,7 @@ export function SearchField({ placeholder = "Search specs", className }: SearchF
   return (
     <div
       className={cn(
-        "flex h-8 w-[240px] items-center gap-[7px] rounded-s bg-input px-2.5",
+        "flex h-8 w-[240px] items-center gap-[7px] rounded-sm bg-input px-2.5",
         className,
       )}
     >

@@ -31,9 +31,14 @@
   --color-black: #000000;
   --color-transparent: transparent;
 
-  --radius-s: 8px;
-  --radius-m: 12px;
-  --radius-l: 16px;
+  /*
+   * 디자인 토큰 radius-s/m/l은 표준 스케일명(sm/md/lg 오버라이드)으로 노출한다.
+   * `rounded-s`/`rounded-l`은 Tailwind v4의 방향 수식어(s=start, l=left)와 충돌해
+   * 왼쪽 모서리만 0.25rem으로 덮어쓰는 빌트인 유틸리티가 함께 생성되므로 사용 금지.
+   */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
   --radius-pill: 980px;
 
   --font-text:
