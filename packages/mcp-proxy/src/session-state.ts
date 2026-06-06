@@ -45,8 +45,11 @@ export function startSession(input: {
   return marker
 }
 
-export function markIngested(home: string, sessionId: string): SessionMarker {
-  const marker = readSession(home, sessionId)
+export function markIngested(home: string, sessionId: string): SessionMarker | null {
+  const marker = readSessionOrNull(home, sessionId)
+  if (!marker) {
+    return null
+  }
   const updated = { ...marker, ingested: true }
   writeMarker(home, updated)
   return updated
