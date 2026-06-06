@@ -1,6 +1,6 @@
 # OpenRouter 프레임워크 통합 가이드
 
-> 원문: https://openrouter.ai/docs/frameworks
+> 원문: https://openrouter.ai/docs/guides/community
 
 OpenRouter는 인기 있는 AI 프레임워크 및 SDK와 원활하게 통합됩니다.
 
@@ -27,6 +27,8 @@ OpenRouter는 인기 있는 AI 프레임워크 및 SDK와 원활하게 통합됩
 | **PydanticAI** | Python | Pydantic 기반 상위 수준 인터페이스 |
 | **Effect AI SDK** | TypeScript | Effect 애플리케이션과의 통합 |
 | **Mastra** | TypeScript | 통합 AI 모델 접근 인터페이스 |
+| **LiveKit Agents** | Python | *(사이드바에 등록되어 있으나 상세 문서를 확인하지 못해 미검증)* |
+| **Anthropic Agent SDK** | Python, TypeScript | *(사이드바에 등록되어 있으나 상세 문서를 확인하지 못해 미검증)* |
 
 ### 코딩 도구 통합
 
@@ -44,8 +46,12 @@ OpenRouter는 인기 있는 AI 프레임워크 및 SDK와 원활하게 통합됩
 | 도구 | 설명 |
 | --- | --- |
 | **Langfuse** | 관측성 및 트레이싱 통합 |
+| **Arize** | OpenInference auto-instrumentation 기반 관측성·트레이싱 (Python, JS/TS) |
+| **Zapier** | 8000+ 앱 연결 노코드 자동화, 500+ 모델 접근 |
+| **Infisical** | API 키 자동 로테이션, 제로 다운타임 시크릿 관리 |
 | **Deep Agents CLI** | 터미널 코딩 에이전트 |
 | **Junie CLI** | JetBrains agentic 코딩 툴 |
+| **Replit** | BYOK 방식으로 Replit Agent 및 Replit Apps에서 OpenRouter 사용 |
 
 ---
 
@@ -166,7 +172,7 @@ npm install @openrouter/sdk
 ```
 
 ```typescript
-import { OpenRouter } from '@openrouter/sdk';
+import OpenRouter from '@openrouter/sdk';
 
 const client = new OpenRouter({
   apiKey: '<YOUR_API_KEY>',
@@ -237,7 +243,7 @@ const weatherTool = tool({
 
 // 에이전트 호출
 const result = await callModel({
-  model: '~anthropic/claude-sonnet-latest',
+  model: 'anthropic/claude-sonnet-4',
   messages: [
     { role: 'user', content: 'What is the weather in Tokyo?' },
   ],
@@ -250,10 +256,20 @@ console.log(text);
 
 ### Anthropic 베타 기능 사용
 
+> **참고:** Anthropic 베타 헤더(`x-anthropic-beta`) 전달은 Client SDK(`@openrouter/sdk`)의 `chat.send` 메서드를
+> 통해 지원됩니다. Agent SDK(`@openrouter/agent`)의 `callModel`에서는 별도의 헤더 주입이 필요한 경우
+> Client SDK를 직접 사용하세요.
+
 ```typescript
-const completion = await openRouter.chat.send(
+import OpenRouter from '@openrouter/sdk';
+
+const client = new OpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
+
+const completion = await client.chat.send(
   {
-    model: 'anthropic/claude-sonnet-4.5',
+    model: 'anthropic/claude-sonnet-4',
     messages: [{ role: 'user', content: 'Solve step by step: What is 15% of 240?' }],
     stream: true,
   },

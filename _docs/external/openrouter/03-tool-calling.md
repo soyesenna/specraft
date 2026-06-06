@@ -461,6 +461,396 @@ console.log(messages[messages.length - 1].content);
 
 ---
 
+## Python 예제 (OpenAI SDK)
+
+공식 문서에서 제공하는 Project Gutenberg 책 검색 예제를 Python + OpenAI SDK로 구현한 버전입니다.
+
+### 설정
+
+```python
+from openai import OpenAI
+
+OPENROUTER_API_KEY = "<YOUR_API_KEY>"
+MODEL = "google/gemini-3-flash-preview"
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=OPENROUTER_API_KEY,
+)
+
+task = "What are the titles of some James Joyce books?"
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": task},
+]
+```
+
+### 툴 정의
+
+```python
+import requests
+
+def search_gutenberg_books(search_terms: list[str]) -> list[dict]:
+    """Project Gutenberg 라이브러리에서 책을 검색합니다."""
+    search_query = " ".join(search_terms)
+    url = f"https://gutendex.com/books?search={search_query}"
+    response = requests.get(url)
+    data = response.json()
+
+    return [
+        {"id": book["id"], "title": book["title"], "authors": book["authors"]}
+        for book in data["results"]
+    ]
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "search_gutenberg_books",
+            "description": "Search for books in the Project Gutenberg library based on specified search terms",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "search_terms": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "List of search terms to find books in the Gutenberg library",
+                    }
+                },
+                "required": ["search_terms"],
+            },
+        },
+    }
+]
+
+TOOL_MAPPING = {
+    "search_gutenberg_books": search_gutenberg_books,
+}
+```
+
+### 툴 사용 및 결과 처리
+
+```python
+import json
+
+# 첫 번째 API 호출
+result = client.chat.completions.create(
+    model=MODEL,
+    messages=messages,
+    tools=tools,
+)
+
+response_1 = result.choices[0].message
+
+# LLM 응답을 메시지 배열에 추가
+messages.append(response_1)
+
+# 툴 콜 처리
+for tool_call in response_1.tool_calls:
+    tool_name = tool_call.function.name
+    tool_args = json.loads(tool_call.function.arguments)
+    tool_response = TOOL_MAPPING[tool_name](**tool_args)
+    messages.append({
+        "role": "tool",
+        "tool_call_id": tool_call.id,
+        "content": json.dumps(tool_response),
+    })
+
+# 두 번째 API 호출로 최종 결과 획득
+response_2 = client.chat.completions.create(
+    model=MODEL,
+    messages=messages,
+    tools=tools,
+)
+
+print(response_2.choices[0].message.content)
+```
+
+### Python 에이전트 루프
+
+```python
+max_iterations = 10
+
+for i in range(max_iterations):
+    result = client.chat.completions.create(
+        model=MODEL,
+        messages=messages,
+        tools=tools,
+    )
+    message = result.choices[0].message
+    messages.append(message)
+
+    if message.tool_calls:
+        for tool_call in message.tool_calls:
+            tool_name = tool_call.function.name
+            tool_args = json.loads(tool_call.function.arguments)
+            tool_result = TOOL_MAPPING[tool_name](**tool_args)
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tool_call.id,
+                "content": json.dumps(tool_result),
+            })
+    else:
+        break
+else:
+    print("Warning: Maximum iterations reached")
+
+print(messages[-1].content)
+```
+
+---
+
+## TypeScript (fetch) 예제
+
+OpenAI SDK 없이 순수 `fetch`를 사용한 TypeScript 변형 예제입니다.
+
+### 설정
+
+```typescript
+const OPENROUTER_API_KEY = "<YOUR_API_KEY>";
+const MODEL = "google/gemini-3-flash-preview";
+
+const task = "What are the titles of some James Joyce books?";
+
+const messages = [
+  { role: "system", content: "You are a helpful assistant." },
+  { role: "user", content: task },
+];
+```
+
+### 툴 정의
+
+```typescript
+async function searchGutenbergBooks(searchTerms: string[]): Promise<any[]> {
+  const searchQuery = searchTerms.join(" ");
+  const url = `https://gutendex.com/books?search=${searchQuery}`;
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return data.results.map((book: any) => ({
+    id: book.id,
+    title: book.title,
+    authors: book.authors,
+  }));
+}
+
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "searchGutenbergBooks",
+      description:
+        "Search for books in the Project Gutenberg library based on specified search terms",
+      parameters: {
+        type: "object",
+        properties: {
+          search_terms: {
+            type: "array",
+            items: { type: "string" },
+            description: "List of search terms to find books in the Gutenberg library",
+          },
+        },
+        required: ["search_terms"],
+      },
+    },
+  },
+];
+
+const TOOL_MAPPING: Record<string, Function> = {
+  searchGutenbergBooks,
+};
+```
+
+### 툴 사용 및 결과 처리
+
+```typescript
+// 첫 번째 API 호출
+const response1 = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+  },
+  body: JSON.stringify({ model: MODEL, messages, tools }),
+});
+
+const result1 = await response1.json();
+const assistantMessage = result1.choices[0].message;
+
+// LLM 응답을 메시지 배열에 추가
+messages.push(assistantMessage);
+
+// 툴 콜 처리
+for (const toolCall of assistantMessage.tool_calls) {
+  const toolName = toolCall.function.name;
+  const toolArgs = JSON.parse(toolCall.function.arguments);
+  const toolResponse = await TOOL_MAPPING[toolName](...Object.values(toolArgs));
+
+  messages.push({
+    role: "tool",
+    tool_call_id: toolCall.id,
+    content: JSON.stringify(toolResponse),
+  });
+}
+
+// 두 번째 API 호출로 최종 결과 획득
+const response2 = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+  },
+  body: JSON.stringify({ model: MODEL, messages, tools }),
+});
+
+const result2 = await response2.json();
+console.log(result2.choices[0].message.content);
+```
+
+---
+
+## Multi-Tool Workflows
+
+공식 문서에서는 여러 툴을 함께 설계하여 자연스러운 체이닝이 가능하다고 권장합니다. 모델은 `search_products -> get_product_details -> check_inventory` 순서로 자연스럽게 연산을 체이닝할 수 있습니다.
+
+### Multi-Tool 정의 예제
+
+```json
+{
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "search_products",
+        "description": "Search the product catalog by keyword. Returns a list of matching products with IDs and basic info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search keyword, e.g. 'wireless headphones'"
+            }
+          },
+          "required": ["query"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_product_details",
+        "description": "Get detailed information about a specific product by its ID, including price, description, and specifications.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "product_id": {
+              "type": "string",
+              "description": "The product ID returned from search_products"
+            }
+          },
+          "required": ["product_id"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "check_inventory",
+        "description": "Check the inventory status for a specific product, including stock count and warehouse availability.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "product_id": {
+              "type": "string",
+              "description": "The product ID to check inventory for"
+            }
+          },
+          "required": ["product_id"]
+        }
+      }
+    }
+  ]
+}
+```
+
+### 체이닝 흐름 (TypeScript)
+
+```typescript
+// 사용자 질문: "무선 헤드폰 중 재고가 있는 제품을 찾아줘"
+
+// 1차 호출: 모델이 search_products 툴을 요청
+// -> tool_calls: [{ name: "search_products", arguments: { query: "wireless headphones" } }]
+
+// 2차 호출: 검색 결과에서 관심 제품의 상세 정보 요청
+// -> tool_calls: [{ name: "get_product_details", arguments: { product_id: "prod_123" } }]
+
+// 3차 호출: 상세 정보 확인 후 재고 확인
+// -> tool_calls: [{ name: "check_inventory", arguments: { product_id: "prod_123" } }]
+
+// 4차 호출: 모든 툴 결과를 종합하여 최종 사용자 응답 생성
+// -> finish_reason: "stop", content: "무선 헤드폰 'XYZ Pro'가 현재 15개 재고로 보유 중입니다..."
+```
+
+### 체이닝 흐름 (Python, OpenAI SDK)
+
+```python
+import json
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key="<YOUR_API_KEY>",
+)
+
+# search_products, get_product_details, check_inventory 함수는 이미 정의되어 있다고 가정
+TOOL_MAPPING = {
+    "search_products": search_products,
+    "get_product_details": get_product_details,
+    "check_inventory": check_inventory,
+}
+
+messages = [
+    {"role": "system", "content": "You are a helpful shopping assistant."},
+    {"role": "user", "content": "무선 헤드폰 중 재고가 있는 제품을 찾아줘"},
+]
+
+max_iterations = 10
+
+for i in range(max_iterations):
+    result = client.chat.completions.create(
+        model="google/gemini-3-flash-preview",
+        messages=messages,
+        tools=tools,  # 위에서 정의한 3개 툴
+    )
+    message = result.choices[0].message
+    messages.append(message)
+
+    if message.tool_calls:
+        for tool_call in message.tool_calls:
+            tool_name = tool_call.function.name
+            tool_args = json.loads(tool_call.function.arguments)
+            tool_result = TOOL_MAPPING[tool_name](**tool_args)
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tool_call.id,
+                "content": json.dumps(tool_result),
+            })
+    else:
+        break
+
+print(messages[-1].content)
+```
+
+| 단계 | 툴 | 입력 | 출력 |
+|------|------|------|------|
+| 1 | `search_products` | `{"query": "wireless headphones"}` | 제품 목록 (ID 포함) |
+| 2 | `get_product_details` | `{"product_id": "prod_123"}` | 가격, 사양 등 상세 정보 |
+| 3 | `check_inventory` | `{"product_id": "prod_123"}` | 재고 수량, 창고 정보 |
+| 4 | (최종 응답) | 모든 툴 결과 종합 | 사용자 친화적 최종 답변 |
+
+---
+
 ## 신뢰도 추적
 
 OpenRouter는 각 프로바이더의 툴 콜 완료 신뢰도를 추적하며, 이를 모델 페이지의 **Tool Call Error Rate**로 표시합니다. 툴 콜링 요청 시 Auto Exacto 프로바이더 순서에도 반영됩니다.
