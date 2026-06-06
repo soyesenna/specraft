@@ -7,6 +7,6 @@ const parsedPort = Number.parseInt(process.env["PORT"] ?? "4311", 10)
 const port = Number.isNaN(parsedPort) ? 4311 : parsedPort
 const config = loadServerConfig(process.env)
 const database = createDatabase({ path: `${config.dataDir}/specraft.db` })
-const server = buildServer({ database, secret: config.sessionSecret })
+const server = buildServer({ database, dataDir: config.dataDir, secret: config.sessionSecret })
 
 await server.listen({ host, port })
