@@ -7,6 +7,7 @@ const SessionMarkerSchema = z.object({
   session_id: z.string(),
   started_at: z.string(),
   branch: z.string(),
+  started_head: z.string().nullable().default(null),
   ingested: z.boolean(),
   resolved: z.boolean().default(false),
 })
@@ -30,11 +31,13 @@ export function startSession(input: {
   readonly home: string
   readonly sessionId: string
   readonly branch: string
+  readonly startedHead?: string
 }): SessionMarker {
   const marker = {
     session_id: input.sessionId,
     started_at: new Date().toISOString(),
     branch: input.branch,
+    started_head: input.startedHead ?? null,
     ingested: false,
     resolved: false,
   }
@@ -58,6 +61,14 @@ export function resolveSession(home: string, sessionId: string): SessionMarker {
 
 export function readSession(home: string, sessionId: string): SessionMarker {
   return SessionMarkerSchema.parse(JSON.parse(readFileSync(markerPath(home, sessionId), "utf8")))
+}
+
+export function readSessionOrNull(home: string, sessionId: string): SessionMarker | null {
+  const path = markerPath(home, sessionId)
+  if (!existsSync(path)) {
+    return null
+  }
+  return SessionMarkerSchema.parse(JSON.parse(readFileSync(path, "utf8")))
 }
 
 export function pendingReplaySessions(home: string): readonly SessionMarker[] {

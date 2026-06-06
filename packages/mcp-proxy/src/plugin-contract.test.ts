@@ -17,10 +17,18 @@ describe("plugin packaging contracts", () => {
   it("ships Claude Code metadata, MCP registration, and commands", () => {
     const plugin = readJson("plugins/claude-code/.claude-plugin/plugin.json")
     const mcp = readJson("plugins/claude-code/.mcp.json")
+    const stopHook = readFileSync(repoPath("plugins/claude-code/hooks/stop.js"), "utf8")
+    const promptHook = readFileSync(
+      repoPath("plugins/claude-code/hooks/user-prompt-submit.js"),
+      "utf8",
+    )
     expect(plugin["name"]).toBe("specraft")
     expect(JSON.stringify(plugin)).toContain("SessionStart")
     expect(JSON.stringify(plugin)).toContain("Stop")
     expect(JSON.stringify(mcp)).toContain("specraft-mcp-proxy")
+    expect(stopHook).toContain("specraft-mcp-proxy")
+    expect(stopHook).toContain("hook stop")
+    expect(promptHook).toContain("hook user-prompt-submit")
     expect(existsSync(repoPath("plugins/claude-code/commands/specraft-setup.md"))).toBe(true)
     expect(existsSync(repoPath("plugins/claude-code/commands/specraft-init.md"))).toBe(true)
   })
@@ -28,9 +36,14 @@ describe("plugin packaging contracts", () => {
   it("ships Codex manifest, matcher-free hooks, and setup/init skills", () => {
     const plugin = readJson("plugins/codex/.codex-plugin/plugin.json")
     const hooks = readJson("plugins/codex/hooks.json")
+    const stopHook = readFileSync(repoPath("plugins/codex/hooks/stop.js"), "utf8")
+    const promptHook = readFileSync(repoPath("plugins/codex/hooks/user-prompt-submit.js"), "utf8")
     expect(plugin["name"]).toBe("specraft")
     expect(JSON.stringify(hooks)).toContain("UserPromptSubmit")
     expect(JSON.stringify(hooks)).not.toContain("matcher")
+    expect(stopHook).toContain("specraft-mcp-proxy")
+    expect(stopHook).toContain("hook stop")
+    expect(promptHook).toContain("hook user-prompt-submit")
     expect(existsSync(repoPath("plugins/codex/skills/specraft-setup/SKILL.md"))).toBe(true)
     expect(existsSync(repoPath("plugins/codex/skills/specraft-init/SKILL.md"))).toBe(true)
   })

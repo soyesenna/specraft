@@ -1,8 +1,19 @@
 #!/usr/bin/env node
-process.stdout.write(
-  JSON.stringify({
-    decision: "block",
-    reason:
-      "If this session changed code, ensure the tree is clean, HEAD is pushed, and specraft_ingest succeeded. Read-only sessions are exempt.",
-  }),
-)
+import { spawnSync } from "node:child_process"
+
+const hookCommand = "hook stop"
+const result = spawnSync("specraft-mcp-proxy", hookCommand.split(" "), {
+  encoding: "utf8",
+  stdio: ["ignore", "pipe", "pipe"],
+})
+
+if (result.status === 0 && result.stdout.trim() !== "") {
+  process.stdout.write(result.stdout)
+} else {
+  process.stdout.write(
+    JSON.stringify({
+      decision: "block",
+      reason: result.stderr.trim() || "specraft stop gate failed to run",
+    }),
+  )
+}

@@ -1,3 +1,6 @@
+import { isHeadPushed, isWorktreeClean, readGitSnapshot } from "./git.js"
+import { readSessionOrNull } from "./session-state.js"
+
 export type GateInput = {
   readonly strictMode: boolean
   readonly worktreeClean: boolean
@@ -11,6 +14,25 @@ export type GateInput = {
 export type GateDecision =
   | { readonly decision: "allow"; readonly reason: string }
   | { readonly decision: "block"; readonly reason: string }
+
+export type GateStateInput = {
+  readonly cwd: string
+  readonly home: string
+  readonly sessionId: string
+  readonly strictMode: boolean
+}
+
+export function readGitGateState(input: GateStateInput): GateInput {
+  const snapshot = readGitSnapshot(input.cwd)
+  const session = readSessionOrNull(input.home, input.sessionId)
+  return {
+    hasNewCommits: session?.started_head ? session.started_head !== snapshot.head : true,
+    headPushed: isHeadPushed(input.cwd),
+    ingested: session?.ingested ?? false,
+    strictMode: input.strictMode,
+    worktreeClean: isWorktreeClean(input.cwd),
+  }
+}
 
 export function evaluateStopGate(input: GateInput): GateDecision {
   if (!input.strictMode) {

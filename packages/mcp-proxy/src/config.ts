@@ -10,10 +10,18 @@ const SpecraftConfigSchema = z.object({
 
 export type SpecraftConfig = z.infer<typeof SpecraftConfigSchema>
 
-export function loadSpecraftConfig(cwd: string): SpecraftConfig {
+export function findSpecraftConfig(cwd: string): SpecraftConfig | null {
   const configPath = join(cwd, ".specraft.json")
   if (!existsSync(configPath)) {
-    throw new Error(".specraft.json not found")
+    return null
   }
   return SpecraftConfigSchema.parse(JSON.parse(readFileSync(configPath, "utf8")))
+}
+
+export function loadSpecraftConfig(cwd: string): SpecraftConfig {
+  const config = findSpecraftConfig(cwd)
+  if (!config) {
+    throw new Error(".specraft.json not found")
+  }
+  return config
 }
