@@ -1,0 +1,138 @@
+import { describe, expect, it } from "vitest"
+import { buildServer } from "../server.js"
+import { createDatabase } from "../storage/database.js"
+
+const secret = "0123456789abcdef0123456789abcdef"
+
+describe("auth and admin API", () => {
+  it("bootstraps admin, invites a member, logs in, and manages API keys/settings", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const server = buildServer({ database, secret })
+
+    const bootstrap = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: {
+        email: "admin@example.com",
+        password: "admin-password",
+        name: "Admin One",
+      },
+    })
+    const adminCookie = bootstrap.cookies[0]
+    expect(bootstrap.statusCode).toBe(200)
+    expect(bootstrap.json()).toEqual({
+      member: {
+        id: expect.any(String),
+        email: "admin@example.com",
+        name: "Admin One",
+        role: "admin",
+      },
+    })
+    expect(adminCookie?.name).toBe("specraft_session")
+
+    const invite = await server.inject({
+      method: "POST",
+      url: "/api/v1/admin/invites",
+      cookies: { specraft_session: adminCookie?.value ?? "" },
+    })
+    expect(invite.statusCode).toBe(200)
+    expect(invite.json()).toEqual({
+      invite_url: expect.stringContaining("/invite/"),
+      expires_at: expect.any(String),
+    })
+    const inviteUrlParts = String(invite.json<{ invite_url: string }>().invite_url).split("/")
+    const inviteToken = inviteUrlParts[inviteUrlParts.length - 1]
+
+    const signup = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/signup",
+      payload: {
+        invite_token: inviteToken,
+        email: "member@example.com",
+        password: "member-password",
+        name: "Member One",
+      },
+    })
+    expect(signup.statusCode).toBe(200)
+    expect(signup.json<{ member: { readonly role: string } }>().member.role).toBe("member")
+
+    const login = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/login",
+      payload: { email: "member@example.com", password: "member-password" },
+    })
+    const memberCookie = login.cookies[0]
+    expect(login.statusCode).toBe(200)
+    expect(memberCookie?.name).toBe("specraft_session")
+
+    const createdKey = await server.inject({
+      method: "POST",
+      url: "/api/v1/keys",
+      cookies: { specraft_session: memberCookie?.value ?? "" },
+      payload: { name: "default" },
+    })
+    expect(createdKey.statusCode).toBe(200)
+    expect(createdKey.json()).toEqual({
+      id: expect.any(String),
+      api_key: expect.stringMatching(/^sk-spcrft-/),
+    })
+
+    const listedKeys = await server.inject({
+      method: "GET",
+      url: "/api/v1/keys",
+      cookies: { specraft_session: memberCookie?.value ?? "" },
+    })
+    expect(listedKeys.statusCode).toBe(200)
+    expect(
+      listedKeys.json<{ keys: readonly { readonly prefix: string }[] }>().keys[0]?.prefix,
+    ).toBe("sk-spcrft-")
+
+    const settings = await server.inject({
+      method: "PUT",
+      url: "/api/v1/admin/settings",
+      cookies: { specraft_session: adminCookie?.value ?? "" },
+      payload: {
+        git_remote_url: "https://example.com/repo.git",
+        git_credential: "secret-token",
+        model_ingest: "openrouter/auto",
+      },
+    })
+    expect(settings.statusCode).toBe(200)
+    expect(settings.json()).toEqual({ status: "ok" })
+
+    await server.close()
+    database.close()
+  })
+
+  it("rejects duplicate bootstrap and unauthorized admin access", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const server = buildServer({ database, secret })
+
+    await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: {
+        email: "admin@example.com",
+        password: "admin-password",
+        name: "Admin One",
+      },
+    })
+    const duplicate = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: {
+        email: "other@example.com",
+        password: "admin-password",
+        name: "Other Admin",
+      },
+    })
+    const invite = await server.inject({ method: "POST", url: "/api/v1/admin/invites" })
+
+    expect(duplicate.statusCode).toBe(409)
+    expect(invite.statusCode).toBe(401)
+    expect(invite.json()).toEqual({ error: "unauthorized" })
+
+    await server.close()
+    database.close()
+  })
+})
