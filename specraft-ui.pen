@@ -9788,104 +9788,6 @@
                         },
                         {
                           "type": "rectangle",
-                          "id": "kyGs7",
-                          "name": "Det Divider",
-                          "fill": "$hairline",
-                          "width": "fill_container",
-                          "height": 1
-                        },
-                        {
-                          "type": "text",
-                          "id": "HHeyP",
-                          "name": "Dir Label",
-                          "fill": "$ink-tertiary",
-                          "content": "RESOLUTION DIRECTIVE",
-                          "fontFamily": "$font-text",
-                          "fontSize": 10,
-                          "fontWeight": "600",
-                          "letterSpacing": 0.8
-                        },
-                        {
-                          "type": "frame",
-                          "id": "AVyQL",
-                          "name": "Directive Input",
-                          "width": "fill_container",
-                          "height": 92,
-                          "fill": "#F5F5F7",
-                          "cornerRadius": 10,
-                          "padding": [
-                            12,
-                            14
-                          ],
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "HM7On",
-                              "name": "Directive Placeholder",
-                              "fill": "$ink-tertiary",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "병합 방법을 자연어로 지시하세요 — 예: \"dev의 TTL 300초를 기본 정책으로 유지하고, feat 브랜치의 수동 무효화 API는 별도 하위 섹션으로 분리해줘.\"",
-                              "lineHeight": 1.6,
-                              "fontFamily": "$font-text",
-                              "fontSize": 13.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.2
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "nXGMI",
-                          "name": "Det Actions",
-                          "width": "fill_container",
-                          "gap": 10,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "id": "lsGKh",
-                              "type": "ref",
-                              "ref": "XufQA",
-                              "name": "Retry Btn",
-                              "descendants": {
-                                "VGKQ2": {
-                                  "content": "Retry merge"
-                                }
-                              }
-                            },
-                            {
-                              "id": "Vt1Ae",
-                              "type": "ref",
-                              "ref": "LkrLR",
-                              "name": "View Files Btn",
-                              "descendants": {
-                                "N46On": {
-                                  "content": "View files"
-                                }
-                              }
-                            },
-                            {
-                              "type": "frame",
-                              "id": "Na3sd",
-                              "name": "Act Spacer",
-                              "width": "fill_container",
-                              "height": 1
-                            },
-                            {
-                              "type": "text",
-                              "id": "Y0Qa7",
-                              "name": "Act Note",
-                              "fill": "$ink-tertiary",
-                              "content": "모든 멤버가 지시할 수 있습니다",
-                              "fontFamily": "$font-text",
-                              "fontSize": 11.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.1
-                            }
-                          ]
-                        },
-                        {
-                          "type": "rectangle",
                           "id": "zrvwC",
                           "name": "Det Divider 2",
                           "fill": "$hairline",
@@ -10005,6 +9907,15 @@
               ]
             }
           ]
+        },
+        {
+          "id": "C5uWW",
+          "type": "ref",
+          "ref": "p4QRL",
+          "name": "Directive Bar",
+          "layoutPosition": "absolute",
+          "x": 657,
+          "y": 798
         }
       ]
     },
@@ -27306,103 +27217,6 @@
             },
             {
               "type": "frame",
-              "id": "L0z2Z",
-              "name": "Directive Card",
-              "width": "fill_container",
-              "fill": "$surface",
-              "cornerRadius": "$radius-m",
-              "layout": "vertical",
-              "gap": 9,
-              "padding": 16,
-              "children": [
-                {
-                  "type": "text",
-                  "id": "aCcKR",
-                  "name": "Dir Label",
-                  "fill": "$ink-tertiary",
-                  "content": "RESOLUTION DIRECTIVE",
-                  "fontFamily": "$font-text",
-                  "fontSize": 9.5,
-                  "fontWeight": "600",
-                  "letterSpacing": 0.8
-                },
-                {
-                  "type": "frame",
-                  "id": "MWIoy",
-                  "name": "Directive Input",
-                  "width": "fill_container",
-                  "height": 84,
-                  "fill": "#F5F5F7",
-                  "cornerRadius": 10,
-                  "padding": [
-                    10,
-                    12
-                  ],
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "NRKrr",
-                      "name": "Directive Placeholder",
-                      "fill": "$ink-tertiary",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "병합 방법을 자연어로 지시하세요 — 예: \"dev의 TTL 300초를 기본으로 유지해줘.\"",
-                      "lineHeight": 1.55,
-                      "fontFamily": "$font-text",
-                      "fontSize": 12.5,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.12
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "drZNL",
-                  "name": "Retry Btn",
-                  "width": "fill_container",
-                  "height": 44,
-                  "fill": "$accent",
-                  "cornerRadius": 10,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "c4lO84",
-                      "name": "Retry Label",
-                      "fill": "$white",
-                      "content": "Retry merge",
-                      "fontFamily": "$font-text",
-                      "fontSize": 14,
-                      "fontWeight": "500",
-                      "letterSpacing": -0.22
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "eTA2k",
-                  "name": "Helper Wrap",
-                  "width": "fill_container",
-                  "justifyContent": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "hinVH",
-                      "name": "Dir Note",
-                      "fill": "$ink-tertiary",
-                      "content": "모든 멤버가 지시할 수 있습니다",
-                      "fontFamily": "$font-text",
-                      "fontSize": 10.5,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.1
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "frame",
               "id": "GCa67",
               "name": "Attempts Card",
               "width": "fill_container",
@@ -27492,6 +27306,21 @@
               ]
             }
           ]
+        },
+        {
+          "id": "jpkxp",
+          "type": "ref",
+          "ref": "p4QRL",
+          "name": "Directive Bar",
+          "layoutPosition": "absolute",
+          "x": 16,
+          "y": 758,
+          "width": 358,
+          "descendants": {
+            "wpS0r": {
+              "content": "병합 방법을 자연어로 지시하세요…"
+            }
+          }
         }
       ]
     },
@@ -37379,6 +37208,582 @@
               "fontSize": 10,
               "fontWeight": "normal",
               "letterSpacing": -0.1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "p4QRL",
+      "x": 0,
+      "y": -2400,
+      "name": "component/Directive Bar",
+      "reusable": true,
+      "width": 720,
+      "layout": "vertical",
+      "gap": 6,
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "VikJE",
+          "name": "DB Bar",
+          "width": "fill_container",
+          "fill": "$surface",
+          "cornerRadius": "$radius-pill",
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#00000026",
+            "offset": {
+              "x": 0,
+              "y": 6
+            },
+            "blur": 24
+          },
+          "gap": 10,
+          "padding": [
+            7,
+            7,
+            7,
+            16
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "PusjT",
+              "name": "DB Sparkle",
+              "width": 14,
+              "height": 14,
+              "icon": "sparkles",
+              "library": "lucide",
+              "fill": "$accent"
+            },
+            {
+              "type": "text",
+              "id": "wpS0r",
+              "name": "DB Placeholder",
+              "fill": "$ink-tertiary",
+              "content": "병합 방법을 자연어로 지시하세요 — 예: \"dev의 TTL 300초를 기본으로 유지해줘\"",
+              "fontFamily": "$font-text",
+              "fontSize": 13.5,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "XlGvD",
+              "name": "DB Spacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "yP6Wb",
+              "name": "DB Send",
+              "width": 32,
+              "height": 32,
+              "fill": "$accent",
+              "cornerRadius": 16,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "Xrkw7",
+                  "name": "DB Send Icon",
+                  "width": 15,
+                  "height": 15,
+                  "icon": "git-merge",
+                  "library": "lucide",
+                  "fill": "$white"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "LEKIy",
+          "name": "DB Helper",
+          "fill": "$ink-tertiary",
+          "content": "모든 멤버가 지시할 수 있습니다 · Merge Agent가 재병합을 시도합니다",
+          "fontFamily": "$font-text",
+          "fontSize": 10.5,
+          "fontWeight": "normal",
+          "letterSpacing": -0.1
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "phIyu",
+      "x": 10640,
+      "y": 1320,
+      "name": "08b · Conflicts — No selection",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "ZcOiB",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "LmXo7",
+          "name": "Shell",
+          "width": "fill_container",
+          "height": "fill_container",
+          "children": [
+            {
+              "id": "kwZvH",
+              "type": "ref",
+              "ref": "rbjMR",
+              "name": "Sidebar",
+              "height": "fill_container",
+              "descendants": {
+                "nmHv3": {
+                  "fill": "$surface"
+                },
+                "hVE4a": {
+                  "fill": "$ink"
+                },
+                "DRtYd": {
+                  "fontWeight": "600",
+                  "fill": "$ink"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "CQfzu",
+              "name": "Main",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ocZkz",
+                  "name": "Toolbar",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "padding": [
+                    18,
+                    28
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "XwFoo",
+                      "name": "Page Title",
+                      "fill": "$ink",
+                      "content": "Conflicts",
+                      "fontFamily": "$font-display",
+                      "fontSize": 28,
+                      "fontWeight": "600",
+                      "letterSpacing": -0.4
+                    },
+                    {
+                      "type": "text",
+                      "id": "n2JzY",
+                      "name": "Title Sub",
+                      "fill": "$ink-tertiary",
+                      "content": "1 open · 1 resolving · 12 resolved",
+                      "fontFamily": "$font-text",
+                      "fontSize": 12.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.12
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZwKVm",
+                  "name": "Conflicts Body",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "gap": 22,
+                  "padding": [
+                    4,
+                    28,
+                    28,
+                    28
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "D88Ov2",
+                      "name": "Conflict List",
+                      "width": 356,
+                      "layout": "vertical",
+                      "gap": 10,
+                      "children": [
+                        {
+                          "id": "G501XC",
+                          "type": "ref",
+                          "ref": "sOw0t",
+                          "name": "Conflict feat/query-cache → dev",
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Y0CPDN",
+                              "name": "CC Content",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 7,
+                              "padding": [
+                                13,
+                                14
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "MyEOY",
+                                  "name": "CC Top",
+                                  "width": "fill_container",
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ellipse",
+                                      "id": "tu6ZD",
+                                      "name": "CC Dot",
+                                      "fill": "$danger",
+                                      "width": 7,
+                                      "height": 7
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "nDgfH",
+                                      "name": "CC State",
+                                      "fill": "$danger",
+                                      "content": "Open",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.1
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "tM7eZ",
+                                      "name": "CC Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "SrRNC",
+                                      "name": "CC Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "26분 전",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "eQfgj",
+                                  "name": "CC Branch",
+                                  "fill": "$ink",
+                                  "content": "feat/query-cache → dev",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "wvKYa",
+                                  "name": "CC Sub",
+                                  "fill": "$ink-tertiary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "specs/query-engine.md 외 1개 파일 · branch locked",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "bHWux",
+                          "type": "ref",
+                          "ref": "sOw0t",
+                          "name": "Conflict feat/auth-keys → dev",
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "SFjqH",
+                              "name": "CC Content",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 7,
+                              "padding": [
+                                13,
+                                14
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "WnKrs",
+                                  "name": "CC Top",
+                                  "width": "fill_container",
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ellipse",
+                                      "id": "PY6Zb",
+                                      "name": "CC Dot",
+                                      "fill": "$warning",
+                                      "width": 7,
+                                      "height": 7
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "eKOQr",
+                                      "name": "CC State",
+                                      "fill": "$warning",
+                                      "content": "Resolving",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.1
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "HNuqr",
+                                      "name": "CC Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "VP2P2",
+                                      "name": "CC Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "1시간 전",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "I0YKiN",
+                                  "name": "CC Branch",
+                                  "fill": "$ink",
+                                  "content": "feat/auth-keys → dev",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "CHzei",
+                                  "name": "CC Sub",
+                                  "fill": "$ink-tertiary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "민지의 지시로 재병합 시도 중",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "AxhR9",
+                          "type": "ref",
+                          "ref": "sOw0t",
+                          "name": "Conflict feat/stop-gate → dev",
+                          "width": "fill_container",
+                          "opacity": 0.72,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "VzCbz",
+                              "name": "CC Content",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 7,
+                              "padding": [
+                                13,
+                                14
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Uh7Fe",
+                                  "name": "CC Top",
+                                  "width": "fill_container",
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ellipse",
+                                      "id": "D2O09",
+                                      "name": "CC Dot",
+                                      "fill": "$success",
+                                      "width": 7,
+                                      "height": 7
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "k9wiII",
+                                      "name": "CC State",
+                                      "fill": "$success",
+                                      "content": "Resolved",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.1
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "OaOc7",
+                                      "name": "CC Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "ATpu9",
+                                      "name": "CC Time",
+                                      "fill": "$ink-tertiary",
+                                      "content": "어제",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 11,
+                                      "fontWeight": "normal",
+                                      "letterSpacing": -0.1
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "DAkRL",
+                                  "name": "CC Branch",
+                                  "fill": "$ink",
+                                  "content": "feat/stop-gate → dev",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13.5,
+                                  "fontWeight": "600",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "KLSIq",
+                                  "name": "CC Sub",
+                                  "fill": "$ink-tertiary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "2회 시도 후 해결 · 수연",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.12
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "nutUm",
+                      "name": "Empty Pane",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "gap": 14,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "mX0op",
+                          "name": "Empty Icon Wrap",
+                          "width": 56,
+                          "height": 56,
+                          "fill": "$input-bg",
+                          "cornerRadius": 28,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "g9Yddm",
+                              "name": "Empty Icon",
+                              "width": 24,
+                              "height": 24,
+                              "icon": "git-merge",
+                              "library": "lucide",
+                              "fill": "$ink-tertiary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "xRjB0",
+                          "name": "Empty Text Col",
+                          "layout": "vertical",
+                          "gap": 5,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "y3ZSeV",
+                              "name": "Empty Title",
+                              "fill": "$ink",
+                              "content": "No conflict selected",
+                              "fontFamily": "$font-text",
+                              "fontSize": 15,
+                              "fontWeight": "600",
+                              "letterSpacing": -0.24
+                            },
+                            {
+                              "type": "text",
+                              "id": "PgAPz",
+                              "name": "Empty Desc",
+                              "fill": "$ink-tertiary",
+                              "content": "왼쪽 목록에서 conflict를 선택하면 상세와 병합 지시가 표시됩니다",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
