@@ -10,19 +10,20 @@ import { createDatabase, type SpecraftDatabase } from "./storage/database.js"
 export type BuildServerOptions = {
   readonly database?: SpecraftDatabase
   readonly secret?: string
+  readonly credentialKey?: string
   readonly dataDir?: string
   readonly codeRemoteUrl?: string
 }
 
 export function buildServer(options: BuildServerOptions = {}): FastifyInstance {
   const server = fastify({ logger: false })
-  const secret =
-    options.secret ??
-    loadServerConfig({ SPECRAFT_SECRET: "test-secret-0123456789abcdef" }).sessionSecret
+  const fallbackConfig = loadServerConfig({ SPECRAFT_SECRET: "test-secret-0123456789abcdef" })
+  const secret = options.secret ?? fallbackConfig.sessionSecret
+  const credentialKey = options.credentialKey ?? fallbackConfig.credentialKey
   const database = options.database ?? createDatabase({ path: ":memory:" })
 
   void server.register(cookie, { secret })
-  registerAuthRoutes(server, { database })
+  registerAuthRoutes(server, { credentialKey, database })
   registerSpecRoutes(server, {
     database,
     ...(options.dataDir ? { dataDir: options.dataDir } : {}),

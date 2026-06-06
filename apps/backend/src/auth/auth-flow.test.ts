@@ -1,13 +1,16 @@
 import { describe, expect, it } from "vitest"
+import { loadServerConfig } from "../config/secrets.js"
 import { buildServer } from "../server.js"
 import { createDatabase } from "../storage/database.js"
+import { decryptCredential } from "./credentials.js"
 
 const secret = "0123456789abcdef0123456789abcdef"
+const credentialKey = loadServerConfig({ SPECRAFT_SECRET: secret }).credentialKey
 
 describe("auth and admin API", () => {
   it("bootstraps admin, invites a member, logs in, and manages API keys/settings", async () => {
     const database = createDatabase({ path: ":memory:" })
-    const server = buildServer({ database, secret })
+    const server = buildServer({ database, credentialKey, secret })
 
     const bootstrap = await server.inject({
       method: "POST",
@@ -84,6 +87,7 @@ describe("auth and admin API", () => {
       id: expect.any(String),
       api_key: expect.stringMatching(/^sk-spcrft-/),
     })
+    const apiKey = createdKey.json<{ readonly api_key: string }>().api_key
 
     const listedKeys = await server.inject({
       method: "GET",
@@ -107,6 +111,50 @@ describe("auth and admin API", () => {
     })
     expect(settings.statusCode).toBe(200)
     expect(settings.json()).toEqual({ status: "ok" })
+    const encryptedCredential = database
+      .prepare<[string], { readonly value: string }>("SELECT value FROM settings WHERE key = ?")
+      .get("git_credential")
+    expect(encryptedCredential?.value).not.toBe("secret-token")
+    expect(encryptedCredential?.value.startsWith("enc:v1:")).toBe(true)
+    expect(decryptCredential(credentialKey, encryptedCredential?.value ?? "")).toBe("secret-token")
+
+    const bearerQuery = await server.inject({
+      method: "POST",
+      url: "/api/v1/query",
+      headers: { authorization: `Bearer ${apiKey}` },
+      payload: { branch: "main", commit_hash: "abc", question: "What is specraft?" },
+    })
+    expect(bearerQuery.statusCode).toBe(200)
+
+    const revoked = await server.inject({
+      method: "DELETE",
+      url: "/api/v1/keys",
+      cookies: { specraft_session: memberCookie?.value ?? "" },
+      payload: { id: createdKey.json<{ readonly id: string }>().id },
+    })
+    expect(revoked.statusCode).toBe(200)
+    const revokedBearerQuery = await server.inject({
+      method: "POST",
+      url: "/api/v1/query",
+      headers: { authorization: `Bearer ${apiKey}` },
+      payload: { branch: "main", commit_hash: "abc", question: "Can I still query?" },
+    })
+    expect(revokedBearerQuery.statusCode).toBe(401)
+
+    const disabled = await server.inject({
+      method: "PUT",
+      url: `/api/v1/admin/members/${encodeURIComponent(
+        login.json<{ readonly member: { readonly id: string } }>().member.id,
+      )}/disable`,
+      cookies: { specraft_session: adminCookie?.value ?? "" },
+    })
+    expect(disabled.statusCode).toBe(200)
+    const disabledLogin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/login",
+      payload: { email: "member@example.com", password: "member-password" },
+    })
+    expect(disabledLogin.statusCode).toBe(401)
 
     await server.close()
     database.close()

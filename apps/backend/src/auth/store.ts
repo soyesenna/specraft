@@ -2,6 +2,7 @@ import type { AdminSettingsRequest, ApiKey, Member, MemberRole } from "@specraft
 import { z } from "zod"
 import type { SpecraftDatabase } from "../storage/database.js"
 
+import { encryptCredential } from "./credentials.js"
 import { hashPassword, verifyPassword } from "./password.js"
 import { apiKeyPrefix, createApiKeySecret, createId, createOpaqueToken } from "./tokens.js"
 
@@ -17,6 +18,14 @@ const MemberRowSchema = z.object({
 const LoginRowSchema = MemberRowSchema.extend({
   password_hash: z.string(),
   disabled_at: z.string().nullable(),
+})
+
+const SessionMemberRowSchema = MemberRowSchema.extend({
+  disabled_at: z.string().nullable(),
+})
+
+const ApiKeyAuthRowSchema = MemberRowSchema.extend({
+  key_hash: z.string(),
 })
 
 const ApiKeyRowSchema = z.object({
@@ -95,10 +104,20 @@ export async function authenticateMember(
 
 export function getMember(database: SpecraftDatabase, id: string): Member | null {
   const row = database
-    .prepare<[string], unknown>("SELECT id, email, name, role FROM members WHERE id = ?")
+    .prepare<[string], unknown>(
+      "SELECT id, email, name, role, disabled_at FROM members WHERE id = ?",
+    )
     .get(id)
-  const parsed = MemberRowSchema.safeParse(row)
-  return parsed.success ? parsed.data : null
+  const parsed = SessionMemberRowSchema.safeParse(row)
+  if (!parsed.success || parsed.data.disabled_at !== null) {
+    return null
+  }
+  return {
+    id: parsed.data.id,
+    email: parsed.data.email,
+    name: parsed.data.name,
+    role: parsed.data.role,
+  }
 }
 
 export function createInvite(
@@ -174,13 +193,47 @@ export function revokeApiKey(database: SpecraftDatabase, memberId: string, id: s
     .run(now(), id, memberId)
 }
 
-export function updateSettings(database: SpecraftDatabase, settings: AdminSettingsRequest): void {
+export async function authenticateApiKey(
+  database: SpecraftDatabase,
+  apiKey: string,
+): Promise<Member | null> {
+  const rows = z.array(ApiKeyAuthRowSchema).parse(
+    database
+      .prepare<[], unknown>(
+        `SELECT members.id, members.email, members.name, members.role, api_keys.key_hash
+         FROM api_keys
+         JOIN members ON members.id = api_keys.member_id
+         WHERE api_keys.revoked_at IS NULL AND members.disabled_at IS NULL`,
+      )
+      .all(),
+  )
+  for (const row of rows) {
+    if (await verifyPassword(row.key_hash, apiKey)) {
+      return { id: row.id, email: row.email, name: row.name, role: row.role }
+    }
+  }
+  return null
+}
+
+export function disableMember(database: SpecraftDatabase, id: string): void {
+  database
+    .prepare<[string, string]>(
+      "UPDATE members SET disabled_at = ? WHERE id = ? AND role <> 'admin'",
+    )
+    .run(now(), id)
+}
+
+export function updateSettings(
+  database: SpecraftDatabase,
+  settings: AdminSettingsRequest,
+  credentialKey: string,
+): void {
   const statement = database.prepare<[string, string]>(
     "INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
   )
   for (const [key, value] of Object.entries(settings)) {
     if (value !== undefined) {
-      statement.run(key, value)
+      statement.run(key, key === "git_credential" ? encryptCredential(credentialKey, value) : value)
     }
   }
 }

@@ -5,19 +5,20 @@ import {
   AuthLoginRequestSchema,
   AuthSignupRequestSchema,
 } from "@specraft/shared"
-import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
+import type { FastifyInstance } from "fastify"
 import { z } from "zod"
 
 import { sendConflict, sendUnauthorized, sendValidationFailed } from "../http/errors.js"
 import type { SpecraftDatabase } from "../storage/database.js"
-import { readSessionMemberId, setSessionCookie } from "./session.js"
+import { requireAdmin, requireMember } from "./identity.js"
+import { setSessionCookie } from "./session.js"
 import {
   authenticateMember,
   consumeInvite,
   createApiKey,
   createInvite,
   createMember,
-  getMember,
+  disableMember,
   hasMembers,
   listApiKeys,
   revokeApiKey,
@@ -32,24 +33,7 @@ const BootstrapAdminSchema = z.object({
 
 type AuthContext = {
   readonly database: SpecraftDatabase
-}
-
-function currentMember(request: FastifyRequest, database: SpecraftDatabase) {
-  const memberId = readSessionMemberId(request)
-  return memberId ? getMember(database, memberId) : null
-}
-
-function requireMember(request: FastifyRequest, reply: FastifyReply, database: SpecraftDatabase) {
-  const member = currentMember(request, database)
-  return member ?? sendUnauthorized(reply)
-}
-
-function requireAdmin(request: FastifyRequest, reply: FastifyReply, database: SpecraftDatabase) {
-  const member = currentMember(request, database)
-  if (member?.role !== "admin") {
-    return sendUnauthorized(reply)
-  }
-  return member
+  readonly credentialKey: string
 }
 
 export function registerAuthRoutes(server: FastifyInstance, context: AuthContext): void {
@@ -67,7 +51,7 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
   })
 
   server.post("/api/v1/admin/invites", async (request, reply) => {
-    const member = requireAdmin(request, reply, context.database)
+    const member = await requireAdmin(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -109,7 +93,7 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
   })
 
   server.post("/api/v1/keys", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -121,7 +105,7 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
   })
 
   server.get("/api/v1/keys", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -129,7 +113,7 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
   })
 
   server.delete("/api/v1/keys", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -142,7 +126,7 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
   })
 
   server.put("/api/v1/admin/settings", async (request, reply) => {
-    const member = requireAdmin(request, reply, context.database)
+    const member = await requireAdmin(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -150,7 +134,20 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
     if (!parsed.success) {
       return sendValidationFailed(reply)
     }
-    updateSettings(context.database, parsed.data)
+    updateSettings(context.database, parsed.data, context.credentialKey)
+    return { status: "ok" }
+  })
+
+  server.put("/api/v1/admin/members/:id/disable", async (request, reply) => {
+    const member = await requireAdmin(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const parsed = z.object({ id: z.string().min(1) }).safeParse(request.params)
+    if (!parsed.success) {
+      return sendValidationFailed(reply)
+    }
+    disableMember(context.database, parsed.data.id)
     return { status: "ok" }
   })
 }

@@ -88,7 +88,7 @@ function appendIngest(wiki: WikiRepository, member: Member, summary: string): st
 
 export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteContext): void {
   server.post("/api/v1/context", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -110,7 +110,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
   })
 
   server.post("/api/v1/query", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -136,7 +136,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
   })
 
   server.post("/api/v1/ingest", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -173,7 +173,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
   })
 
   server.get("/api/v1/logs/ingests", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -181,7 +181,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
   })
 
   server.get("/api/v1/logs/queries", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -189,7 +189,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
   })
 
   server.get("/api/v1/wiki/:branch/tree", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -206,7 +206,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
   })
 
   server.get("/api/v1/wiki/:branch/page", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -224,7 +224,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
   })
 
   server.get("/api/v1/conflicts", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
@@ -232,7 +232,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
   })
 
   server.post("/api/v1/conflicts/:id/resolve", async (request, reply) => {
-    const member = requireMember(request, reply, context.database)
+    const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
       return member
     }
