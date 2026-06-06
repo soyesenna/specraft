@@ -1,0 +1,26 @@
+{
+  "name": "@specraft/mcp-proxy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "specraft-mcp-proxy": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "pnpm --filter @specraft/shared build && tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@specraft/shared": "workspace:*",
+    "zod": "4.4.3"
+  }
+}

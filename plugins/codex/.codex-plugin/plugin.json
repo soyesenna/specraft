@@ -1,0 +1,14 @@
+{
+  "name": "specraft",
+  "version": "0.1.0",
+  "description": "Specraft context injection, MCP tools, setup/init skills, and stop gate hooks for Codex.",
+  "mcpServers": {
+    "specraft": {
+      "command": "specraft-mcp-proxy",
+      "env": {
+        "SPECRAFT_SERVER_URL": "${SPECRAFT_SERVER_URL}",
+        "SPECRAFT_API_KEY": "${SPECRAFT_API_KEY}"
+      }
+    }
+  }
+}
