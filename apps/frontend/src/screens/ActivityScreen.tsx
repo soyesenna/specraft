@@ -4,12 +4,12 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  GitBranch,
   Key,
   LogOut,
   MessageCircle,
   SlidersHorizontal,
 } from "lucide-react"
+import { GitBranchIcon } from "../components/GitBranchIcon.js"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { AppShell } from "../components/AppShell.js"
@@ -176,7 +176,7 @@ export function ActivityScreen() {
                   </span>
                   <span className="flex w-[170px] shrink-0 items-center">
                     <span className="flex items-center gap-[5px] rounded-[5px] bg-input px-2 py-[3px]">
-                      <GitBranch className="size-2.5 text-ink-tertiary" />
+                      <GitBranchIcon className="size-2.5 text-ink-tertiary" />
                       <span className="pen-text font-mono text-[11px] text-ink-secondary">
                         {row.branch}
                       </span>

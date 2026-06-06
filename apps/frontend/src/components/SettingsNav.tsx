@@ -1,20 +1,16 @@
-import {
-  Cpu,
-  GitBranch,
-  Key,
-  type LucideIcon,
-  SlidersHorizontal,
-  UserPlus,
-  Users,
-} from "lucide-react"
+import { Cpu, Key, SlidersHorizontal, UserPlus, Users } from "lucide-react"
+import type { ComponentType, SVGProps } from "react"
 import { Link } from "react-router-dom"
 import { cn } from "../lib/cn.js"
+import { GitBranchIcon } from "./GitBranchIcon.js"
 
 export type SettingsSection = "general" | "git" | "models" | "members" | "invites" | "keys"
 
-const ITEMS: Array<{ key: SettingsSection; icon: LucideIcon; label: string; to: string }> = [
+type NavIcon = ComponentType<SVGProps<SVGSVGElement>>
+
+const ITEMS: Array<{ key: SettingsSection; icon: NavIcon; label: string; to: string }> = [
   { key: "general", icon: SlidersHorizontal, label: "General", to: "/settings/general" },
-  { key: "git", icon: GitBranch, label: "Git integration", to: "/settings/git" },
+  { key: "git", icon: GitBranchIcon, label: "Git integration", to: "/settings/git" },
   { key: "models", icon: Cpu, label: "Models", to: "/settings/models" },
   { key: "members", icon: Users, label: "Members", to: "/settings/members" },
   { key: "invites", icon: UserPlus, label: "Invites", to: "/settings/invites" },

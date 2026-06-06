@@ -7,7 +7,7 @@ import {
   PanelLeftOpen,
   Waypoints,
 } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { cn } from "../lib/cn.js"
 
 export type SidebarSection = "specs" | "query" | "activity" | "conflicts"
@@ -31,17 +31,20 @@ type SidebarProps = {
  * 선택 = 화이트 필 + ink 아이콘 + 600 라벨 (03/04 화면 오버라이드 패턴)
  */
 export function Sidebar({ active, collapsed, onToggle, conflictCount = 1 }: SidebarProps) {
+  // ?tooltip=<key> 딥링크 — 04b 디자인(레일 hover 툴팁 노출 상태) 재현용
+  const [params] = useSearchParams()
+  const forcedTooltip = params.get("tooltip")
   if (collapsed) {
     return (
       <nav className="flex h-full w-16 shrink-0 flex-col items-center gap-1 border-r border-hairline pt-3.5 pb-2.5">
-        {ITEMS.map(({ key, icon: Icon, to }) => {
+        {ITEMS.map(({ key, icon: Icon, label, to }) => {
           const selected = key === active
           return (
             <Link
               key={key}
               to={to}
               className={cn(
-                "relative flex h-[38px] w-[38px] items-center justify-center rounded-[9px]",
+                "group relative flex h-[38px] w-[38px] items-center justify-center rounded-[9px]",
                 selected && "bg-surface",
               )}
             >
@@ -49,6 +52,17 @@ export function Sidebar({ active, collapsed, onToggle, conflictCount = 1 }: Side
               {key === "conflicts" && conflictCount > 0 && (
                 <span className="absolute top-[5px] left-[25px] size-[7px] rounded-full bg-danger" />
               )}
+              {/* 04b Hover Tooltip — 레일 우측 8px, 다크 캡션 */}
+              <span
+                className={cn(
+                  "pointer-events-none absolute top-1/2 left-[59px] z-50 -translate-y-1/2 items-center rounded-[6px] bg-dark-card px-2.5 py-[5px] whitespace-nowrap shadow-[0_2px_8px_#00000029]",
+                  forcedTooltip === key ? "flex" : "hidden group-hover:flex",
+                )}
+              >
+                <span className="pen-text text-[11.5px] font-medium tracking-[-0.1px] text-white">
+                  {label}
+                </span>
+              </span>
             </Link>
           )
         })}

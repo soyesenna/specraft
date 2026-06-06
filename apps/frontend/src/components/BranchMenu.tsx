@@ -1,4 +1,5 @@
-import { Check, GitBranch, Lock } from "lucide-react"
+import { Check, Lock } from "lucide-react"
+import { GitBranchIcon } from "./GitBranchIcon.js"
 import { cn } from "../lib/cn.js"
 
 export type BranchRow = {
@@ -54,7 +55,7 @@ export function BranchMenu({ rows = BRANCH_ROWS, width = 264, className }: Branc
               selected && "bg-bg",
             )}
           >
-            <GitBranch
+            <GitBranchIcon
               className={cn("size-[13px] shrink-0", selected ? "text-ink" : "text-ink-tertiary")}
             />
             <span
@@ -78,7 +79,7 @@ export function BranchMenu({ rows = BRANCH_ROWS, width = 264, className }: Branc
         )
       })}
       <div className="h-px w-full bg-hairline" />
-      <div className="w-full px-2.5 py-1.5">
+      <div className="flex w-full px-2.5 py-1.5">
         <span className="pen-text text-[10px] tracking-[-0.1px] text-ink-tertiary">
           코드 브랜치와 1:1 미러링 · 요청 시 동기화
         </span>

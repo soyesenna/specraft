@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, FileText, GitMerge, Lock } from "lucide-react"
 import { useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import { DirectiveBar } from "../components/DirectiveBar.js"
 import { AppShell } from "../components/AppShell.js"
 import { GlassNav } from "../components/GlassNav.js"
@@ -32,8 +33,14 @@ const STATE_TONE: Record<Conflict["state"], { dot: string; text: string }> = {
 
 /** 08 · Conflicts + 08b · No selection (1440) / M08 · M08b (390) */
 export function ConflictsScreen() {
-  const [selected, setSelected] = useState<string | null>("cfl_04a2")
-  const [mobileDetail, setMobileDetail] = useState<string | null>(null)
+  // ?selected=none → 08b 미선택 / ?detail=1 → M08b 상세 딥링크
+  const [params] = useSearchParams()
+  const [selected, setSelected] = useState<string | null>(
+    params.get("selected") === "none" ? null : "cfl_04a2",
+  )
+  const [mobileDetail, setMobileDetail] = useState<string | null>(
+    params.get("detail") === "1" ? "cfl_04a2" : null,
+  )
 
   return (
     <>

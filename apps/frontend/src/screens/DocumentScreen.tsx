@@ -123,13 +123,13 @@ export function DocumentScreen() {
               <DocBullet text="dirty-uncommitted는 면제가 아니다 — clean 검사(①)에서 차단" />
               <DocBullet text="서버 도달 불가 시에도 hard block 유지 — spec 무결성 > 가용성 (D1)" />
               <div className="flex w-full flex-col gap-[3px] rounded-s bg-dark-card px-[18px] py-3.5">
-                <code className="pen-text font-mono text-[12px] leading-[1.6] text-white-secondary">
+                <code className="pen-text font-mono text-[12px] leading-[1.6] whitespace-pre text-white-secondary">
                   {"// ~/.specraft/sessions/{session_id}.json"}
                 </code>
-                <code className="pen-text font-mono text-[12px] leading-[1.6] text-white-secondary">
+                <code className="pen-text font-mono text-[12px] leading-[1.6] whitespace-pre text-white-secondary">
                   {'{ "started_at": "2026-06-06T09:12:00Z", "branch": "dev",'}
                 </code>
-                <code className="pen-text font-mono text-[12px] leading-[1.6] text-white-secondary">
+                <code className="pen-text font-mono text-[12px] leading-[1.6] whitespace-pre text-white-secondary">
                   {'  "ingested": true, "resolved": true }'}
                 </code>
               </div>
@@ -251,13 +251,13 @@ export function DocumentScreen() {
             <MobileBullet text="dirty-uncommitted는 clean 검사에서 차단" />
             <MobileBullet text="서버 불가 시에도 hard block — D1" />
             <div className="flex w-full flex-col gap-0.5 overflow-hidden rounded-s bg-dark-card px-[13px] py-[11px]">
-              <code className="pen-text font-mono text-[10.5px] leading-[1.6] text-white-secondary">
+              <code className="pen-text font-mono text-[10.5px] leading-[1.6] whitespace-pre text-white-secondary">
                 {"// ~/.specraft/sessions/{id}.json"}
               </code>
-              <code className="pen-text font-mono text-[10.5px] leading-[1.6] text-white-secondary">
+              <code className="pen-text font-mono text-[10.5px] leading-[1.6] whitespace-pre text-white-secondary">
                 {'{ "branch": "dev",'}
               </code>
-              <code className="pen-text font-mono text-[10.5px] leading-[1.6] text-white-secondary">
+              <code className="pen-text font-mono text-[10.5px] leading-[1.6] whitespace-pre text-white-secondary">
                 {'  "ingested": true }'}
               </code>
             </div>

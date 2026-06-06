@@ -61,7 +61,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Pencil 텍스트 노드의 단일행 메트릭에 맞춘 기본 라인하이트 */
-.pen-text {
-  line-height: 1.25;
+/*
+ * Pencil 텍스트 노드의 단일행 메트릭에 맞춘 기본 라인하이트.
+ * 반드시 @layer base 안에 두어야 leading-* 유틸리티(@layer utilities)가 이긴다 —
+ * unlayered로 두면 멀티라인 텍스트의 디자인 lineHeight(1.5~1.7)가 전부 1.25로 무효화된다.
+ */
+@layer base {
+  .pen-text {
+    line-height: 1.25;
+  }
 }

@@ -1,4 +1,5 @@
-import { ChevronDown, GitBranch } from "lucide-react"
+import { ChevronDown } from "lucide-react"
+import { GitBranchIcon } from "./GitBranchIcon.js"
 import type { ButtonHTMLAttributes } from "react"
 import { cn } from "../lib/cn.js"
 
@@ -20,7 +21,7 @@ export function BranchChip({ branch, open = false, className, ...rest }: BranchC
       )}
       {...rest}
     >
-      <GitBranch className="size-[13px] text-ink" />
+      <GitBranchIcon className="size-[13px] text-ink" />
       <span className="pen-text text-[13px] font-medium tracking-[-0.2px] text-ink">{branch}</span>
       <ChevronDown className="size-[13px] text-ink-tertiary" />
     </button>

@@ -12,7 +12,7 @@ import {
 } from "lucide-react"
 import type { ReactNode } from "react"
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { AppShell, useSidebarCollapsed } from "../components/AppShell.js"
 import { Avatar } from "../components/Avatar.js"
 import { BranchChip } from "../components/BranchChip.js"
@@ -39,9 +39,11 @@ import {
 } from "../lib/graphData.js"
 
 export function SpecsScreen() {
-  const [view, setView] = useState<SpecsView>("graph")
-  const [dotMode, setDotMode] = useState(false)
-  const [branchOpen, setBranchOpen] = useState(false)
+  // ?view=list / ?dot=1 / ?branch=1 딥링크 — 04·03c·Branch Menu 변형 직접 진입
+  const [params] = useSearchParams()
+  const [view, setView] = useState<SpecsView>(params.get("view") === "list" ? "list" : "graph")
+  const [dotMode, setDotMode] = useState(params.get("dot") === "1")
+  const [branchOpen, setBranchOpen] = useState(params.get("branch") === "1")
   const [sheetOpen, setSheetOpen] = useState(true)
 
   return (
@@ -106,9 +108,10 @@ export function SpecsScreen() {
         <MobileTabBar active="spec" />
         <GlassNav active="specs" className="absolute bottom-[88px] left-4 z-20" />
         {view === "graph" && sheetOpen && (
+          // 디자인 좌표: 시트 top 520 고정(fit 높이) — 하단이 탭바(766~) 위에서 끝난다
           <DocSheet
             onClose={() => setSheetOpen(false)}
-            className="absolute bottom-2.5 left-2.5 z-30"
+            className="absolute top-[520px] left-2.5 z-30"
           />
         )}
         {branchOpen && (
@@ -309,7 +312,8 @@ function RingDot({ dot }: { dot: DotSpec }) {
         width: dot.size,
         height: dot.size,
         border: `${(dot.size * 0.29).toFixed(2)}px solid ${dot.color}`,
-        boxShadow: `0 0 ${dot.blurA.toString()}px ${dot.color}8C, 0 0 ${dot.blurB.toString()}px ${dot.color}40`,
+        // inset 글로우 — Pencil outer shadow는 도넛 구멍 안에도 비치므로 동일한 할로를 재현
+        boxShadow: `0 0 ${dot.blurA.toString()}px ${dot.color}8C, 0 0 ${dot.blurB.toString()}px ${dot.color}40, inset 0 0 ${dot.blurA.toString()}px ${dot.color}66`,
       }}
     />
   )
@@ -380,7 +384,7 @@ function SelectedRingDot({
           width: dot.size,
           height: dot.size,
           border: `${(dot.size * 0.3).toFixed(2)}px solid #0071E3`,
-          boxShadow: `0 0 4px #0071E3B3, 0 0 ${glowB.toString()}px #0071E34D`,
+          boxShadow: `0 0 4px #0071E3B3, 0 0 ${glowB.toString()}px #0071E34D, inset 0 0 4px #0071E380`,
         }}
       />
     </>
@@ -423,7 +427,7 @@ function DesktopDotCanvas({ onZoomIn }: { onZoomIn: () => void }) {
             width: c.size,
             height: c.size,
             border: `${(c.size * 0.29).toFixed(2)}px solid #F26B1D`,
-            boxShadow: "0 0 3px #F26B1D8C, 0 0 9px #F26B1D40",
+            boxShadow: "0 0 3px #F26B1D8C, 0 0 9px #F26B1D40, inset 0 0 3px #F26B1D66",
           }}
         />
       ))}

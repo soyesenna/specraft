@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import type { ReactNode } from "react"
 import { useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import { AppShell } from "../components/AppShell.js"
 import { BranchChip } from "../components/BranchChip.js"
 import { GlassNav } from "../components/GlassNav.js"
@@ -18,7 +19,9 @@ import { cn } from "../lib/cn.js"
 
 /** 06 · Query (1440) + M06/M06b (390) */
 export function QueryScreen() {
-  const [typing, setTyping] = useState(false)
+  // ?typing=1 → M06b 키보드 업 상태 딥링크
+  const [params] = useSearchParams()
+  const [typing, setTyping] = useState(params.get("typing") === "1")
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { Check, ChevronDown, ChevronLeft, GitMerge, History } from "lucide-react"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { AppShell } from "../components/AppShell.js"
 import { BranchChip } from "../components/BranchChip.js"
 import { IconButton } from "../components/IconButton.js"
@@ -31,7 +31,9 @@ const VERSIONS: Version[] = [
 /** 05b · Document — History (1440) + M05b/M05c (390) */
 export function DocumentHistoryScreen() {
   const navigate = useNavigate()
-  const [versionMenuOpen, setVersionMenuOpen] = useState(false)
+  // ?vmenu=1 → M05c 버전 메뉴 열림 딥링크
+  const [params] = useSearchParams()
+  const [versionMenuOpen, setVersionMenuOpen] = useState(params.get("vmenu") === "1")
 
   return (
     <>
@@ -233,9 +235,7 @@ export function DocumentHistoryScreen() {
             <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-secondary">
               버전 a1b2c3d을 보는 중 — 수연 · 2시간 전
             </span>
-            <ChevronDown
-              className={cn("size-[13px] text-ink-tertiary", versionMenuOpen && "rotate-180")}
-            />
+            <ChevronDown className="size-[13px] text-ink-tertiary" />
             <span className="h-px flex-1" />
             <span className="pen-text text-[11.5px] font-medium tracking-[-0.1px] text-link">
               최신으로
@@ -329,7 +329,7 @@ export function DocumentHistoryScreen() {
               </button>
             ))}
             <div className="h-px w-full bg-hairline" />
-            <div className="w-full px-2.5 py-1.5">
+            <div className="flex w-full px-2.5 py-1.5">
               <span className="pen-text text-[10px] tracking-[-0.1px] text-ink-tertiary">
                 wiki.git의 커밋 하나가 하나의 버전입니다
               </span>

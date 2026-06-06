@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import { createContext, useContext, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import { Sidebar, type SidebarSection } from "./Sidebar.js"
 import { TopNav } from "./TopNav.js"
 
@@ -24,7 +25,11 @@ type AppShellProps = {
 
 /** 데스크톱 공통 셸 — TopNav + Sidebar + Main (01/02/Settings 제외 전 화면) */
 export function AppShell({ active, onAvatarClick, topNavOverlay, children }: AppShellProps) {
-  const [collapsed, setCollapsed] = useState(sidebarCollapsed)
+  const [params] = useSearchParams()
+  const [collapsed, setCollapsed] = useState(
+    // ?sidebar=collapsed 딥링크 — 03b/04b 변형 직접 진입
+    params.get("sidebar") === "collapsed" ? true : sidebarCollapsed,
+  )
   const toggle = () => {
     sidebarCollapsed = !sidebarCollapsed
     setCollapsed(sidebarCollapsed)

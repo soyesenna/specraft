@@ -5,17 +5,16 @@ import {
   Copy,
   Cpu,
   EyeOff,
-  GitBranch,
   Key,
   Link2,
   LogOut,
-  type LucideIcon,
   SlidersHorizontal,
   UserPlus,
   Users,
   X,
 } from "lucide-react"
-import type { ReactNode } from "react"
+import type { ComponentType, ReactNode, SVGProps } from "react"
+import { GitBranchIcon } from "../components/GitBranchIcon.js"
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
 import { IconButton } from "../components/IconButton.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
@@ -637,9 +636,10 @@ function DesktopInvites() {
                 {inv.expires}
               </span>
             </span>
+            {/* 디자인은 셀이 아닌 카드 경계에서 클립 — overflow-hidden을 셀에 주지 않는다 */}
             <span className="flex min-w-0 flex-1 items-center gap-1.5">
-              <span className={cn("size-[7px] rounded-full", INVITE_DOT[inv.status])} />
-              <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink-secondary">
+              <span className={cn("size-[7px] shrink-0 rounded-full", INVITE_DOT[inv.status])} />
+              <span className="pen-text text-[12px] font-medium tracking-[-0.12px] whitespace-nowrap text-ink-secondary">
                 {inv.status}
               </span>
             </span>
@@ -676,9 +676,13 @@ function MobileNavRow({ title, badge }: { title: string; badge?: ReactNode }) {
 }
 
 function MobileHub() {
-  const hubItems: Array<{ icon: LucideIcon; label: string; to: string }> = [
+  const hubItems: Array<{
+    icon: ComponentType<SVGProps<SVGSVGElement>>
+    label: string
+    to: string
+  }> = [
     { icon: SlidersHorizontal, label: "General", to: "/settings/general" },
-    { icon: GitBranch, label: "Git integration", to: "/settings/git" },
+    { icon: GitBranchIcon, label: "Git integration", to: "/settings/git" },
     { icon: Cpu, label: "Models", to: "/settings/models" },
     { icon: Users, label: "Members", to: "/settings/members" },
     { icon: UserPlus, label: "Invites", to: "/settings/invites" },
@@ -793,7 +797,8 @@ function InfoRow({
 
 function SectionLabel({ children, first }: { children: string; first?: boolean }) {
   return (
-    <div className={cn("w-full px-1", first ? "pt-1" : "pt-1.5")}>
+    // flex 필수 — block 안 inline span은 부모 strut(16px×1.5)로 높이가 부풀어 섹션마다 +12px 누적된다
+    <div className={cn("flex w-full px-1", first ? "pt-1" : "pt-1.5")}>
       <span className="pen-text text-[10px] font-semibold tracking-[0.8px] text-ink-tertiary">
         {children}
       </span>
