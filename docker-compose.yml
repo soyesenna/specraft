@@ -1,5 +1,5 @@
 services:
-  server:
+  backend:
     build: .
     environment:
       HOST: 0.0.0.0

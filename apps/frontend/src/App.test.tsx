@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest"
 
 import { App } from "./App.js"
 
-describe("dashboard shell", () => {
-  it("renders M1 dashboard shell", () => {
+describe("frontend shell", () => {
+  it("renders M1 frontend shell", () => {
     render(<App />)
 
     expect(screen.getByRole("heading", { name: "specraft" })).toBeTruthy()

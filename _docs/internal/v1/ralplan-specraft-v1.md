@@ -69,8 +69,8 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 
 ### M0. 모노레포 스캐폴딩
 - [ ] pnpm workspace + TypeScript strict + ESLint/Prettier + vitest 셋업
-- [ ] 구조: `apps/server`(**Fastify** — 2026-06-06 확정), `apps/dashboard`(React/Vite), `packages/shared`, `packages/mcp-proxy`, `plugins/claude-code`, `plugins/codex` (spec §9.9)
-- [ ] `docker-compose.yml` 골격 (server + `/data` 볼륨), `Dockerfile` (멀티스테이지: dashboard 빌드 → server가 정적 서빙)
+- [ ] 구조: `apps/backend`(**Fastify** — 2026-06-06 확정), `apps/frontend`(React/Vite), `packages/shared`, `packages/mcp-proxy`, `plugins/claude-code`, `plugins/codex` (spec §9.9)
+- [ ] `docker-compose.yml` 골격 (backend + `/data` 볼륨), `Dockerfile` (멀티스테이지: frontend 빌드 → backend가 정적 서빙)
 - 검증: `pnpm -r build` 통과, `docker compose up`으로 Fastify 헬스 엔드포인트 응답
 
 ### M0.5. Walking-Skeleton Spike (Architect 합의 반영 — 최대 통합 리스크 선검증)
@@ -85,11 +85,11 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 ### M1. 계약 고정 (packages/shared)
 - [ ] spec §9.3 REST API 전체의 요청/응답 TS 타입 + zod 스키마 (M0.5의 검증된 훅 I/O 스키마 반영)
 - [ ] spec §9.4 `IngestPayload` zod 스키마
-- [ ] **에러 표현 통일** (Architect m-1 반영): 락 = HTTP 409 + body `{error:"branch_locked", conflict_id}`, P2 커밋 미발견 = HTTP 422 + body `{status:"rejected", reason:"commit_not_found"}`, 인증 = 401. ingest 거부는 "HTTP 4xx + body status/reason 병행" 단일 표현으로 고정 — spec §9.3·§9.4와 정합, mcp-proxy/dashboard 클라이언트 처리 일원화
-- [ ] API 클라이언트(fetch 래퍼) — mcp-proxy·dashboard·훅 스크립트 공용
+- [ ] **에러 표현 통일** (Architect m-1 반영): 락 = HTTP 409 + body `{error:"branch_locked", conflict_id}`, P2 커밋 미발견 = HTTP 422 + body `{status:"rejected", reason:"commit_not_found"}`, 인증 = 401. ingest 거부는 "HTTP 4xx + body status/reason 병행" 단일 표현으로 고정 — spec §9.3·§9.4와 정합, mcp-proxy/frontend 클라이언트 처리 일원화
+- [ ] API 클라이언트(fetch 래퍼) — mcp-proxy·frontend·훅 스크립트 공용
 - 검증: 타입 체크 통과, 스키마 단위 테스트 (P2 거부 케이스 포함)
 
-### M2. auth + 운영 DB (apps/server) → **S1 체크포인트**
+### M2. auth + 운영 DB (apps/backend) → **S1 체크포인트**
 - [ ] SQLite 스키마 마이그레이션 (spec §9.8: members/invites/api_keys/ingest_logs/query_logs/conflicts/branch_locks/settings)
 - [ ] 최초 기동 감지 → admin 생성 플로우, 초대 링크 발급/검증/가입, 로그인(세션 쿠키)
 - [ ] api-key 발급(1회 노출·argon2 해시·`sk-spcrft-` prefix)/폐기, Bearer 인증 미들웨어
@@ -97,7 +97,7 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 - [ ] **서버 시크릿 정의** (Architect m-3 반영): `SPECRAFT_SECRET` 필수 env(부재 시 기동 거부 fail-fast), credential 암호화 키와 세션 서명 키를 이로부터 파생(HKDF), 시크릿 분실 시 결과(저장 credential 복호 불가 → admin 재입력) 문서화
 - 검증: **S1 통합 테스트** (기동→admin→초대→가입→key 발급) + 시크릿 부재 fail-fast 테스트
 
-### M3. git-sync 코어 (apps/server)
+### M3. git-sync 코어 (apps/backend)
 - [ ] code-mirror bare clone/fetch (simple-git; credential은 settings에서)
 - [ ] wiki.git 초기화 (골격 3파일 커밋: index.md/log.md/overview.md 템플릿)
 - [ ] **Worktree & Concurrency Model** (Architect B-1·M-2 반영 — 설계 선행 태스크):
@@ -113,7 +113,7 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 - [ ] force-push 감지(non-fast-forward) → 브랜치 락 (D3)
 - 검증: P1·P2 단위 테스트 (fixture repo로 역순 ingest·미push 커밋 시뮬레이션) + worktree 크래시 복구 테스트 + 락 레이스 테스트(merge 락 적재 중 동시 ingest)
 
-### M4. LLM 엔진 (apps/server)
+### M4. LLM 엔진 (apps/backend)
 - [ ] `LLMProvider` 인터페이스 + `MockProvider`(테스트·CI용 결정적 스파인)
 - [ ] **OpenRouter 구현체** (Architect M-3 반영: `docs/external/openrouter/` 13개 문서 **이미 존재 확인** — "도착 대기" 전제 폐기, 본 마일스톤에서 즉시 구현. 도구 호출은 `03-tool-calling.md`의 에이전트 루프 패턴 준수)
 - [ ] 도구 실행 루프 (tool-call 파싱·실행·재투입, max-turns 가드)
@@ -124,14 +124,14 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 - [ ] **실 LLM 품질 평가 하네스 병행 트랙** (Architect Tension 2 반영): 진짜 충돌하는 마크다운 spec 페이지 fixture 세트로 Merge/Ingest Agent의 fail-closed율·품질을 실 OpenRouter 모델로 측정 — CI 블로킹 아님, M6 Merge Agent 프롬프트 튜닝의 입력 (R1을 M10 절벽에서 연속 신호로 전환). **M6 진입 게이트 (Critic 반영): 충돌 fixture에서 fail-closed율 ≥95% (잘못된 자동 병합 ≤5%, 미달 시 프롬프트 튜닝 후 재측정)**
 - 검증: MockProvider로 에이전트 루프 단위 테스트 (도구 호출 시퀀스·커밋 산출 검증) + 실 provider 평가 하네스 1회전 결과
 
-### M5. REST API 조립 (apps/server) → **S3·P1·P2 체크포인트**
+### M5. REST API 조립 (apps/backend) → **S3·P1·P2 체크포인트**
 *(경로는 spec §9.3의 `/api/v1` prefix 축약 표기 — 정본은 M1 계약)*
 - [ ] `POST /context` (lazy 감지 트리거 + overview/index 반환), `POST /query`, `POST /ingest`, `GET /status`
 - [ ] 락 검사 미들웨어 (409 BRANCH_LOCKED), ingest/query 로그 기록
 - [ ] wiki 열람 API (`/wiki/:branch/tree`, `/wiki/:branch/page`)
 - 검증: **S3 통합 테스트** + P1·P2 시나리오 테스트 (MockProvider)
 
-### M6. merge 전파 + conflict (apps/server) → **S5·S6(서버측) 체크포인트**
+### M6. merge 전파 + conflict (apps/backend) → **S5·S6(서버측) 체크포인트**
 - [ ] **Merge Agent**: git merge conflict 파일 의미 병합 시도 → 불확실 시 실패 선언(보수적 프롬프트)
 - [ ] 실패 시: conflicts 레코드 + branch_locks + 409 응답 체계
 - [ ] `POST /conflicts/:id/resolve` — ResolutionDirective 반영 재시도 → 성공 시 락 해제
@@ -149,7 +149,7 @@ specraft는 AI-Driven Development 팀의 단일 spec source 서버다. 5개 컴�
 - [ ] plugins/codex: `.codex-plugin` 매니페스트, hooks.json (JSON stdin/stdout 프로토콜), skills(`specraft-setup`/`specraft-init`), MCP 등록 — mcp-proxy·게이트 로직 재사용, 훅 스키마는 M0.5 산출물 사용
 - 검증: **S2·S4 수동 E2E** (실제 Codex 세션)
 
-### M9. 대시보드 (apps/dashboard) → **S6·S7 체크포인트**
+### M9. 프론트엔드 (apps/frontend) → **S6·S7 체크포인트**
 - [ ] React(Vite) + 세션 인증: 로그인/가입(초대 링크 랜딩) 페이지
 - [ ] wiki 뷰어 (브랜치 선택, 마크다운 렌더, 내부 링크 탐색), 자연어 쿼리 패널, ingest/query 로그 테이블, conflict 센터(목록·상세·지시 입력), admin 설정·멤버·초대 관리, api-key 관리
 - [ ] UI 세부는 구현 재량 (spec §9.10 위임)

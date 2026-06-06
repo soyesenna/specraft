@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest"
 
 import { buildServer } from "./server.js"
 
-describe("server skeleton", () => {
+describe("backend skeleton", () => {
   it("serves health and status skeleton", async () => {
     const server = buildServer()
 
