@@ -6,6 +6,7 @@
   "packageManager": "pnpm@10.15.1",
   "scripts": {
     "build": "pnpm -r build",
+    "dev": "pnpm --filter @specraft/shared build && SPECRAFT_SECRET=specraft-local-dev-secret SPECRAFT_DATA_DIR=${TMPDIR:-/tmp}/specraft-dev-data PORT=4174 pnpm -r --parallel --filter @specraft/backend --filter @specraft/frontend dev",
     "test": "pnpm -r --workspace-concurrency=1 test",
     "typecheck": "pnpm -r --workspace-concurrency=1 typecheck",
     "lint": "pnpm biome check .",
