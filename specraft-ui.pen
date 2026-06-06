@@ -18717,6 +18717,1735 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "P6hVv5",
+      "x": 10640,
+      "y": 340,
+      "name": "03c · Specs — Graph (Zoomed out · dot mode)",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "W3A753",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "zi4U3",
+          "name": "Shell",
+          "width": "fill_container",
+          "height": "fill_container",
+          "children": [
+            {
+              "id": "S7GCD",
+              "type": "ref",
+              "ref": "rbjMR",
+              "name": "Sidebar",
+              "height": "fill_container",
+              "descendants": {
+                "Jizja": {
+                  "fill": "$surface"
+                },
+                "aaROC": {
+                  "fill": "$ink"
+                },
+                "ZbeNo": {
+                  "fontWeight": "600",
+                  "fill": "$ink"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "PYPUC",
+              "name": "Main",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "X4EmPD",
+                  "name": "Toolbar",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "padding": [
+                    18,
+                    28
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hp24M",
+                      "name": "Page Title",
+                      "fill": "$ink",
+                      "content": "Specs",
+                      "fontFamily": "$font-display",
+                      "fontSize": 28,
+                      "fontWeight": "600",
+                      "letterSpacing": -0.4
+                    },
+                    {
+                      "id": "r1jiDn",
+                      "type": "ref",
+                      "ref": "kKsa7",
+                      "name": "Branch Picker"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MoFrj",
+                      "name": "Sync Status",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "ellipse",
+                          "id": "xSyaY",
+                          "name": "Sync Dot",
+                          "fill": "$success",
+                          "width": 6,
+                          "height": 6
+                        },
+                        {
+                          "type": "text",
+                          "id": "WmbiW",
+                          "name": "Sync Label",
+                          "fill": "$ink-tertiary",
+                          "content": "Synced 2 min ago",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "TWLAj",
+                      "name": "Toolbar Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "e2HjZi",
+                      "name": "Search Field",
+                      "width": 240,
+                      "height": 32,
+                      "fill": "$input-bg",
+                      "cornerRadius": "$radius-s",
+                      "gap": 7,
+                      "padding": [
+                        0,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "H57cOy",
+                          "name": "Search Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "search",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
+                        },
+                        {
+                          "type": "text",
+                          "id": "zFjeZ",
+                          "name": "Search Placeholder",
+                          "fill": "$ink-tertiary",
+                          "content": "Search specs",
+                          "fontFamily": "$font-text",
+                          "fontSize": 13,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "a3J10",
+                      "name": "View Switcher",
+                      "fill": "$input-bg",
+                      "cornerRadius": 9,
+                      "gap": 2,
+                      "padding": 2,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "vOF2O",
+                          "name": "Segment Graph",
+                          "fill": "$surface",
+                          "cornerRadius": 7,
+                          "effect": {
+                            "type": "shadow",
+                            "shadowType": "outer",
+                            "color": "#0000001F",
+                            "offset": {
+                              "x": 0,
+                              "y": 1
+                            },
+                            "blur": 3
+                          },
+                          "gap": 6,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "VXKfU",
+                              "name": "Graph Icon",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "waypoints",
+                              "library": "lucide",
+                              "fill": "$ink"
+                            },
+                            {
+                              "type": "text",
+                              "id": "iaRXb",
+                              "name": "Graph Label",
+                              "fill": "$ink",
+                              "content": "Graph",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "UtBRj",
+                          "name": "Segment List",
+                          "cornerRadius": 7,
+                          "gap": 6,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "f3FH9",
+                              "name": "List Icon",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "list",
+                              "library": "lucide",
+                              "fill": "$ink-tertiary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "HxiFl",
+                              "name": "List Label",
+                              "fill": "$ink-tertiary",
+                              "content": "List",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Fjmzx",
+                  "name": "Cosmos Canvas",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$bg",
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "A39Yeo",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Inter Edges",
+                      "geometry": "M640 200l-140 130m140-130l180 100m-180-100l-400 20m400-20l240 360m-240-360l420-60m-420 60l440 230m-440-230l-210-90m70 220l320-30m-320 30l-260-110m260 110l-200 230m200-230l100 310m-100-310l220 140m-480-250l-100 200m740 140l200-130m-780 130l-160-140m460 220l120-170",
+                      "viewBox": [
+                        0,
+                        0,
+                        1224,
+                        782
+                      ],
+                      "fill": "#FFFFFF00",
+                      "width": 1224,
+                      "height": 782,
+                      "stroke": "#0000000F",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "path",
+                      "id": "G6xpCi",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Cluster Spokes",
+                      "geometry": "M500 330l57 10m-57-10l44 63m-44-63l-11 61m11-61l-66 46m66-46l-65-11m65 11l-49-70m49 70l12-69m-12 69l73-51m67-79l70 37m-70-37l28 58m-28-58l-14 82m14-82l-49 47m49-47l-86 12m86-12l-64-34m64 34l-40-82m40 82l13-75m-13 75l68-66m-68 66l79-11m-419 371l39 39m-39-39l-34 66m34-66l-58-9m58 9l-12-77m12 77l56-29m464-231l79 0m-79 0l40 50m-40-50l-18 81m18-81l-61 30m61-30l-78-38m78 38l-16-70m16 70l57-71m-637-9l58 16m-58-16l20 76m-20-76l-45 45m45-45l-80-21m80 21l-18-66m18 66l62-62m578 402l63 37m-63-37l-29 50m29-50l-67-38m67 38l31-54m-311 134l26 45m-26-45l-71 0m71 0l28-48m-488-172l70 26m-70-26l-2 60m2-60l-76 22m76-22l-36-53m36 53l51-65m869-215l50 4m-50-4l16 67m-16-67l-46 28m46-28l-55-48m55 48l23-53m-3 343l59 49m-59-49l-11 61m11-61l-76 28m76-28l-51-42m51 42l15-84m-15 84l66-24m-716-296l16 45m-16-45l-63 23m63-23l-18-49m18 49l67-24m223 384l60 39m-60-39l-14 54m14-54l-75 4m75-4l-22-56m22 56l61-50",
+                      "viewBox": [
+                        0,
+                        0,
+                        1224,
+                        782
+                      ],
+                      "fill": "#FFFFFF00",
+                      "width": 1224,
+                      "height": 782,
+                      "stroke": "#00000030",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "path",
+                      "id": "K5EZu0",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Conflict Edge",
+                      "geometry": "M380 430l65 45",
+                      "viewBox": [
+                        0,
+                        0,
+                        1224,
+                        782
+                      ],
+                      "fill": "#FFFFFF00",
+                      "width": 1224,
+                      "height": 782,
+                      "stroke": "#ED6A1C66",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "path",
+                      "id": "bzDPP",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Selected Edges",
+                      "geometry": "M900 250l-80 50m80-50l-400 80m400-80l-20 310m20-310l-180 220",
+                      "viewBox": [
+                        0,
+                        0,
+                        1224,
+                        782
+                      ],
+                      "fill": "#FFFFFF00",
+                      "width": 1224,
+                      "height": 782,
+                      "stroke": "$accent",
+                      "strokeWidth": 1.5
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "leUc0",
+                      "x": 552.5,
+                      "y": 335.5,
+                      "name": "Dot ov-0",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "ciqoy",
+                      "x": 539.5,
+                      "y": 388.5,
+                      "name": "Dot ov-1",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "p8c32z",
+                      "x": 484.5,
+                      "y": 386.5,
+                      "name": "Dot ov-2",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "Qiv5M",
+                      "x": 429.5,
+                      "y": 371.5,
+                      "name": "Dot ov-3",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "Gz4Gu",
+                      "x": 430.5,
+                      "y": 314.5,
+                      "name": "Dot ov-4",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "gmGUl",
+                      "x": 446.5,
+                      "y": 255.5,
+                      "name": "Dot ov-5",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "f4c7Lm",
+                      "x": 507.5,
+                      "y": 256.5,
+                      "name": "Dot ov-6",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "U8u6U",
+                      "x": 568.5,
+                      "y": 274.5,
+                      "name": "Dot ov-7",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "u81SN",
+                      "x": 705.5,
+                      "y": 232.5,
+                      "name": "Dot idx-8",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "T1Ctpi",
+                      "x": 663.5,
+                      "y": 253.5,
+                      "name": "Dot idx-9",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "QDsbU",
+                      "x": 621.5,
+                      "y": 277.5,
+                      "name": "Dot idx-10",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "d4ghrH",
+                      "x": 586.5,
+                      "y": 242.5,
+                      "name": "Dot idx-11",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "LSPCk",
+                      "x": 549.5,
+                      "y": 207.5,
+                      "name": "Dot idx-12",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "rtbEk",
+                      "x": 571.5,
+                      "y": 161.5,
+                      "name": "Dot idx-13",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "Wsblr",
+                      "x": 595.5,
+                      "y": 113.5,
+                      "name": "Dot idx-14",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "mbchq",
+                      "x": 648.5,
+                      "y": 120.5,
+                      "name": "Dot idx-15",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "VvUfx",
+                      "x": 703.5,
+                      "y": 129.5,
+                      "name": "Dot idx-16",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "uhvRz",
+                      "x": 714.5,
+                      "y": 184.5,
+                      "name": "Dot idx-17",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "iD6OT",
+                      "x": 334.5,
+                      "y": 594.5,
+                      "name": "Dot log-18",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "d5QZjO",
+                      "x": 261.5,
+                      "y": 621.5,
+                      "name": "Dot log-19",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "C5lAlR",
+                      "x": 237.5,
+                      "y": 546.5,
+                      "name": "Dot log-20",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "yVBge",
+                      "x": 283.5,
+                      "y": 478.5,
+                      "name": "Dot log-21",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "i4dRMT",
+                      "x": 351.5,
+                      "y": 526.5,
+                      "name": "Dot log-22",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "C937n",
+                      "x": 894.5,
+                      "y": 295.5,
+                      "name": "Dot specs-23",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "TbuN1",
+                      "x": 855.5,
+                      "y": 345.5,
+                      "name": "Dot specs-24",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "FYi49",
+                      "x": 797.5,
+                      "y": 376.5,
+                      "name": "Dot specs-25",
+                      "innerRadius": 0.42,
+                      "fill": "#2FA8A2",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "N765Bj",
+                      "x": 754.5,
+                      "y": 325.5,
+                      "name": "Dot specs-26",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "ekS6w",
+                      "x": 737.5,
+                      "y": 257.5,
+                      "name": "Dot specs-27",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "reSY6",
+                      "x": 799.5,
+                      "y": 225.5,
+                      "name": "Dot specs-28",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "VDoT2",
+                      "x": 872.5,
+                      "y": 224.5,
+                      "name": "Dot specs-29",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "g97UvI",
+                      "x": 293.5,
+                      "y": 231.5,
+                      "name": "Dot arch-30",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "bscek",
+                      "x": 255.5,
+                      "y": 291.5,
+                      "name": "Dot arch-31",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "zGQLF",
+                      "x": 190.5,
+                      "y": 260.5,
+                      "name": "Dot arch-32",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "djxxU",
+                      "x": 155.5,
+                      "y": 194.5,
+                      "name": "Dot arch-33",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "aXmYJ",
+                      "x": 217.5,
+                      "y": 149.5,
+                      "name": "Dot arch-34",
+                      "innerRadius": 0.42,
+                      "fill": "#2FA8A2",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "xv9gV",
+                      "x": 297.5,
+                      "y": 153.5,
+                      "name": "Dot arch-35",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "RRkUt",
+                      "x": 938.5,
+                      "y": 592.5,
+                      "name": "Dot dec-36",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "Ebb9x",
+                      "x": 846.5,
+                      "y": 605.5,
+                      "name": "Dot dec-37",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "ksTbs",
+                      "x": 808.5,
+                      "y": 517.5,
+                      "name": "Dot dec-38",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "b5Osju",
+                      "x": 906.5,
+                      "y": 501.5,
+                      "name": "Dot dec-39",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "z0bhcn",
+                      "x": 621.5,
+                      "y": 680.5,
+                      "name": "Dot pro-40",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "UUPJy",
+                      "x": 524.5,
+                      "y": 635.5,
+                      "name": "Dot pro-41",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "NNvni",
+                      "x": 623.5,
+                      "y": 587.5,
+                      "name": "Dot pro-42",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "I3b9h",
+                      "x": 205.5,
+                      "y": 441.5,
+                      "name": "Dot c8-43",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "F4YTO0",
+                      "x": 133.5,
+                      "y": 475.5,
+                      "name": "Dot c8-44",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "RofZ2",
+                      "x": 59.5,
+                      "y": 437.5,
+                      "name": "Dot c8-45",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "SyRDJ",
+                      "x": 99.5,
+                      "y": 362.5,
+                      "name": "Dot c8-46",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "mHr0U",
+                      "x": 186.5,
+                      "y": 350.5,
+                      "name": "Dot c8-47",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "rDCpA",
+                      "x": 1105.5,
+                      "y": 139.5,
+                      "name": "Dot c9-48",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "zVkFz",
+                      "x": 1071.5,
+                      "y": 202.5,
+                      "name": "Dot c9-49",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "qV9TK",
+                      "x": 1009.5,
+                      "y": 163.5,
+                      "name": "Dot c9-50",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "YrSjm",
+                      "x": 1000.5,
+                      "y": 87.5,
+                      "name": "Dot c9-51",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "g9OA1H",
+                      "x": 1078.5,
+                      "y": 82.5,
+                      "name": "Dot c9-52",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "hoGB6",
+                      "x": 1134.5,
+                      "y": 474.5,
+                      "name": "Dot c10-53",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "M1gY4",
+                      "x": 1064.5,
+                      "y": 486.5,
+                      "name": "Dot c10-54",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "Uz3VO",
+                      "x": 999.5,
+                      "y": 453.5,
+                      "name": "Dot c10-55",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "t3Hl9N",
+                      "x": 1024.5,
+                      "y": 383.5,
+                      "name": "Dot c10-56",
+                      "innerRadius": 0.42,
+                      "fill": "#2FA8A2",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "i1r8pm",
+                      "x": 1090.5,
+                      "y": 341.5,
+                      "name": "Dot c10-57",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "S6h1u",
+                      "x": 1141.5,
+                      "y": 401.5,
+                      "name": "Dot c10-58",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "lqUbk",
+                      "x": 441.5,
+                      "y": 150.5,
+                      "name": "Dot c11-59",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "bAo4p",
+                      "x": 362.5,
+                      "y": 128.5,
+                      "name": "Dot c11-60",
+                      "innerRadius": 0.42,
+                      "fill": "#2FA8A2",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "nwTDD",
+                      "x": 407.5,
+                      "y": 56.5,
+                      "name": "Dot c11-61",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "nlqjS",
+                      "x": 492.5,
+                      "y": 81.5,
+                      "name": "Dot c11-62",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "u5Dj0s",
+                      "x": 775.5,
+                      "y": 504.5,
+                      "name": "Dot c12-63",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "PaH9U",
+                      "x": 701.5,
+                      "y": 519.5,
+                      "name": "Dot c12-64",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "nRBdr",
+                      "x": 640.5,
+                      "y": 469.5,
+                      "name": "Dot c12-65",
+                      "innerRadius": 0.42,
+                      "fill": "#76819F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "zKPte",
+                      "x": 693.5,
+                      "y": 409.5,
+                      "name": "Dot c12-66",
+                      "innerRadius": 0.42,
+                      "fill": "#A6AFC8",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "UAUca",
+                      "x": 776.5,
+                      "y": 415.5,
+                      "name": "Dot c12-67",
+                      "innerRadius": 0.42,
+                      "fill": "#8C97B4",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2.5,
+                      "id": "T7we7b",
+                      "x": 494,
+                      "y": 324,
+                      "name": "Hub ov",
+                      "fill": "$dark-card",
+                      "width": 12,
+                      "height": 12
+                    },
+                    {
+                      "type": "text",
+                      "id": "xWTOU",
+                      "x": 512,
+                      "y": 310,
+                      "name": "Label ov",
+                      "fill": "$ink-secondary",
+                      "content": "overview",
+                      "fontFamily": "$font-text",
+                      "fontSize": 9.5,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2.5,
+                      "id": "ebPlO",
+                      "x": 634,
+                      "y": 194,
+                      "name": "Hub idx",
+                      "fill": "$dark-card",
+                      "width": 12,
+                      "height": 12
+                    },
+                    {
+                      "type": "text",
+                      "id": "QDcxU",
+                      "x": 652,
+                      "y": 180,
+                      "name": "Label idx",
+                      "fill": "$ink-secondary",
+                      "content": "index",
+                      "fontFamily": "$font-text",
+                      "fontSize": 9.5,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2.5,
+                      "id": "C6BTqH",
+                      "x": 294,
+                      "y": 554,
+                      "name": "Hub log",
+                      "fill": "$dark-card",
+                      "width": 12,
+                      "height": 12
+                    },
+                    {
+                      "type": "text",
+                      "id": "D3Bf8",
+                      "x": 312,
+                      "y": 540,
+                      "name": "Label log",
+                      "fill": "$ink-secondary",
+                      "content": "log",
+                      "fontFamily": "$font-text",
+                      "fontSize": 9.5,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "LNzJs",
+                      "x": 815.5,
+                      "y": 295.5,
+                      "name": "Hub specs",
+                      "fill": "#59616F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "text",
+                      "id": "oYmYy",
+                      "x": 832,
+                      "y": 280,
+                      "name": "Label specs",
+                      "fill": "$ink-tertiary",
+                      "content": "specs/",
+                      "fontFamily": "$font-text",
+                      "fontSize": 9.5,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "LIsiq",
+                      "x": 235.5,
+                      "y": 215.5,
+                      "name": "Hub arch",
+                      "fill": "#59616F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "text",
+                      "id": "LyQa1",
+                      "x": 252,
+                      "y": 200,
+                      "name": "Label arch",
+                      "fill": "$ink-tertiary",
+                      "content": "architecture/",
+                      "fontFamily": "$font-text",
+                      "fontSize": 9.5,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "ohWy3",
+                      "x": 875.5,
+                      "y": 555.5,
+                      "name": "Hub dec",
+                      "fill": "#59616F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "text",
+                      "id": "s6PAF",
+                      "x": 892,
+                      "y": 540,
+                      "name": "Label dec",
+                      "fill": "$ink-tertiary",
+                      "content": "decisions/",
+                      "fontFamily": "$font-text",
+                      "fontSize": 9.5,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "CDhiZ",
+                      "x": 595.5,
+                      "y": 635.5,
+                      "name": "Hub pro",
+                      "fill": "#59616F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "y6aSU",
+                      "x": 135.5,
+                      "y": 415.5,
+                      "name": "Hub c8",
+                      "fill": "#59616F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "fZz8X",
+                      "x": 1055.5,
+                      "y": 135.5,
+                      "name": "Hub c9",
+                      "fill": "#59616F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "WQGrr",
+                      "x": 1075.5,
+                      "y": 425.5,
+                      "name": "Hub c10",
+                      "fill": "#59616F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "bb6dF",
+                      "x": 425.5,
+                      "y": 105.5,
+                      "name": "Hub c11",
+                      "fill": "#59616F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "ennRx",
+                      "x": 715.5,
+                      "y": 465.5,
+                      "name": "Hub c12",
+                      "fill": "#59616F",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "mcSyQ",
+                      "x": 889,
+                      "y": 239,
+                      "name": "Selected Outer Ring",
+                      "fill": "#00000000",
+                      "width": 22,
+                      "height": 22,
+                      "stroke": "#0071E359",
+                      "strokeWidth": 1.5
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "T6yci",
+                      "x": 894.5,
+                      "y": 244.5,
+                      "name": "Selected Dot",
+                      "innerRadius": 0.4,
+                      "fill": "$accent",
+                      "width": 11,
+                      "height": 11
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "uVn8y",
+                      "x": 375.5,
+                      "y": 425.5,
+                      "name": "Conflict Dot 1",
+                      "innerRadius": 0.42,
+                      "fill": "#ED6A1C",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "yPr3M",
+                      "x": 440.5,
+                      "y": 470.5,
+                      "name": "Conflict Dot 2",
+                      "innerRadius": 0.42,
+                      "fill": "#ED6A1C",
+                      "width": 9,
+                      "height": 9
+                    },
+                    {
+                      "type": "frame",
+                      "id": "V6WEaB",
+                      "x": 920,
+                      "y": 276,
+                      "name": "Selected Callout",
+                      "fill": "$surface",
+                      "cornerRadius": 10,
+                      "stroke": "#00000000",
+                      "strokeWidth": 1,
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#00000014",
+                        "offset": {
+                          "x": 0,
+                          "y": 2
+                        },
+                        "blur": 12
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "padding": [
+                        8,
+                        12
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "c52V5",
+                          "name": "Callout Title",
+                          "fill": "$ink",
+                          "content": "specs/stop-gate.md",
+                          "fontFamily": "$font-text",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.12
+                        },
+                        {
+                          "type": "text",
+                          "id": "xvY5H",
+                          "name": "Callout Sub",
+                          "fill": "$ink-tertiary",
+                          "content": "4 connections · 마지막 ingest 2시간 전",
+                          "fontFamily": "$font-text",
+                          "fontSize": 10.5,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "jJPYv",
+                      "x": 512,
+                      "y": 16,
+                      "name": "Compact Hint",
+                      "fill": "$surface",
+                      "cornerRadius": "$radius-pill",
+                      "stroke": "#00000000",
+                      "strokeWidth": 1,
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#00000014",
+                        "offset": {
+                          "x": 0,
+                          "y": 1
+                        },
+                        "blur": 6
+                      },
+                      "gap": 6,
+                      "padding": [
+                        5,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "g0PuB",
+                          "name": "Hint Icon",
+                          "width": 12,
+                          "height": 12,
+                          "icon": "zoom-out",
+                          "library": "lucide",
+                          "fill": "$ink-secondary"
+                        },
+                        {
+                          "type": "text",
+                          "id": "JNJAa",
+                          "name": "Hint Label",
+                          "fill": "$ink-secondary",
+                          "content": "Compact view — zoom 24%",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11.5,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RrbDU",
+                      "x": 24,
+                      "y": 600,
+                      "name": "Zoom Controls",
+                      "fill": "$surface",
+                      "cornerRadius": "$radius-s",
+                      "stroke": "#00000000",
+                      "strokeWidth": 1,
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#00000014",
+                        "offset": {
+                          "x": 0,
+                          "y": 2
+                        },
+                        "blur": 8
+                      },
+                      "layout": "vertical",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Wg9af",
+                          "name": "Zoom plus",
+                          "width": 34,
+                          "height": 32,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "n2rQxU",
+                              "name": "Icon plus",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "plus",
+                              "library": "lucide",
+                              "fill": "$ink-secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "cByvf",
+                          "name": "Zoom minus",
+                          "width": 34,
+                          "height": 32,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "I88xJ",
+                              "name": "Icon minus",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "minus",
+                              "library": "lucide",
+                              "fill": "$ink-secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "m6ulX",
+                          "name": "Zoom scan",
+                          "width": 34,
+                          "height": 32,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "bpT6Q",
+                              "name": "Icon scan",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "scan",
+                              "library": "lucide",
+                              "fill": "$ink-secondary"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "paBER",
+                      "x": 24,
+                      "y": 704,
+                      "name": "Zoom Pct",
+                      "width": 34,
+                      "fill": "$surface",
+                      "cornerRadius": 6,
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#00000014",
+                        "offset": {
+                          "x": 0,
+                          "y": 1
+                        },
+                        "blur": 4
+                      },
+                      "padding": [
+                        3,
+                        0
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "kA9oG",
+                          "name": "Zoom Pct Label",
+                          "fill": "$ink-tertiary",
+                          "content": "24%",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 10,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "t5Gb7",
+                      "x": 72,
+                      "y": 740,
+                      "name": "Legend",
+                      "gap": 16,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Hgm1X",
+                          "name": "Lg Document",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "h3Xs7x",
+                              "name": "Sw Doc",
+                              "innerRadius": 0.42,
+                              "fill": "#76819F",
+                              "width": 9,
+                              "height": 9
+                            },
+                            {
+                              "type": "text",
+                              "id": "E6z8n",
+                              "name": "Lg Label Document",
+                              "fill": "$ink-tertiary",
+                              "content": "Document",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "oeO0c",
+                          "name": "Lg Hub",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "pJXMm",
+                              "name": "Sw Hub",
+                              "fill": "#59616F",
+                              "width": 9,
+                              "height": 9
+                            },
+                            {
+                              "type": "text",
+                              "id": "y84sg",
+                              "name": "Lg Label Hub",
+                              "fill": "$ink-tertiary",
+                              "content": "Hub",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "pydIJ",
+                          "name": "Lg Core",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "FyNMZ",
+                              "name": "Sw Core",
+                              "fill": "$dark-card",
+                              "width": 9,
+                              "height": 9
+                            },
+                            {
+                              "type": "text",
+                              "id": "dbxeD",
+                              "name": "Lg Label Core",
+                              "fill": "$ink-tertiary",
+                              "content": "Core",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "mNBLV",
+                          "name": "Lg Selected",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "Lwa6h",
+                              "name": "Sw Sel",
+                              "innerRadius": 0.4,
+                              "fill": "$accent",
+                              "width": 9,
+                              "height": 9
+                            },
+                            {
+                              "type": "text",
+                              "id": "m1hQLs",
+                              "name": "Lg Label Selected",
+                              "fill": "$ink-tertiary",
+                              "content": "Selected",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "kBGtT",
+                          "name": "Lg In conflict",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "lwyBf",
+                              "name": "Sw Conf",
+                              "innerRadius": 0.42,
+                              "fill": "#ED6A1C",
+                              "width": 9,
+                              "height": 9
+                            },
+                            {
+                              "type": "text",
+                              "id": "Kl7DO",
+                              "name": "Lg Label In conflict",
+                              "fill": "$ink-tertiary",
+                              "content": "In conflict",
+                              "fontFamily": "$font-text",
+                              "fontSize": 11,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "variables": {
