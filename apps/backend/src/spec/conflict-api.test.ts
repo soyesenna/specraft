@@ -1,0 +1,72 @@
+import { mkdtempSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+
+import { describe, expect, it } from "vitest"
+
+import { lockBranch } from "../git/sync.js"
+import { buildServer } from "../server.js"
+import { createDatabase } from "../storage/database.js"
+
+const secret = "0123456789abcdef0123456789abcdef"
+
+describe("conflict API", () => {
+  it("blocks locked branches and resolves them by member directive", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const server = buildServer({
+      database,
+      dataDir: mkdtempSync(join(tmpdir(), "specraft-conflict-data-")),
+      secret,
+    })
+    const admin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: { email: "admin@example.com", password: "password", name: "Admin" },
+    })
+    const cookie = admin.cookies[0]?.value ?? ""
+    lockBranch(database, {
+      branch: "main",
+      conflictId: "conf_1",
+      detail: "manual merge required",
+    })
+
+    const blocked = await server.inject({
+      method: "POST",
+      url: "/api/v1/query",
+      cookies: { specraft_session: cookie },
+      payload: { branch: "main", commit_hash: "abc", question: "Can I query?" },
+    })
+    expect(blocked.statusCode).toBe(409)
+    expect(blocked.json()).toEqual({ error: "branch_locked", conflict_id: "conf_1" })
+
+    const conflicts = await server.inject({
+      method: "GET",
+      url: "/api/v1/conflicts",
+      cookies: { specraft_session: cookie },
+    })
+    expect(conflicts.statusCode).toBe(200)
+    expect(conflicts.json()).toEqual({
+      conflicts: [{ id: "conf_1", branch: "main", state: "open", detail: "manual merge required" }],
+    })
+
+    const resolved = await server.inject({
+      method: "POST",
+      url: "/api/v1/conflicts/conf_1/resolve",
+      cookies: { specraft_session: cookie },
+      payload: { directive: "keep the target branch wording" },
+    })
+    expect(resolved.statusCode).toBe(200)
+    expect(resolved.json<{ status: string }>().status).toBe("resolved")
+
+    const allowed = await server.inject({
+      method: "POST",
+      url: "/api/v1/query",
+      cookies: { specraft_session: cookie },
+      payload: { branch: "main", commit_hash: "abc", question: "Can I query now?" },
+    })
+    expect(allowed.statusCode).toBe(200)
+
+    await server.close()
+    database.close()
+  })
+})

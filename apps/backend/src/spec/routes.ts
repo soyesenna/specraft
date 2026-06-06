@@ -31,6 +31,7 @@ import {
 import { sendValidationFailed } from "../http/errors.js"
 import type { SpecraftDatabase } from "../storage/database.js"
 import { requireMember } from "./auth.js"
+import { listConflicts, resolveConflict } from "./conflicts.js"
 import { listIngestLogs, listQueryLogs, recordIngestLog, recordQueryLog } from "./logs.js"
 
 export type SpecRouteContext = {
@@ -40,6 +41,8 @@ export type SpecRouteContext = {
 }
 
 const BranchParamsSchema = z.object({ branch: z.string().min(1) })
+const ConflictParamsSchema = z.object({ id: z.string().min(1) })
+const ConflictResolveBodySchema = z.object({ directive: z.string().min(1) })
 const WikiPageQuerySchema = z.object({ path: z.string().min(1) })
 
 function wikiFor(context: SpecRouteContext, branch: string): WikiRepository | null {
@@ -217,6 +220,31 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       branch: params.data.branch,
       content: wiki ? readWikiFile(wiki, query.data.path) : "",
       path: query.data.path,
+    })
+  })
+
+  server.get("/api/v1/conflicts", async (request, reply) => {
+    const member = requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    return { conflicts: listConflicts(context.database) }
+  })
+
+  server.post("/api/v1/conflicts/:id/resolve", async (request, reply) => {
+    const member = requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const params = ConflictParamsSchema.safeParse(request.params)
+    const body = ConflictResolveBodySchema.safeParse(request.body)
+    if (!params.success || !body.success) {
+      return sendValidationFailed(reply)
+    }
+    return resolveConflict(context.database, {
+      directive: body.data.directive,
+      id: params.data.id,
+      memberId: member.id,
     })
   })
 
