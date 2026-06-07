@@ -446,7 +446,7 @@
                           "height": 6
                         },
                         "bWLVi": {
-                          "content": "Synced 2 min ago",
+                          "content": "Synced 43 min ago",
                           "fill": "$ink-tertiary",
                           "fontWeight": "normal",
                           "fontSize": 12,
@@ -16945,7 +16945,7 @@
                           "height": 6
                         },
                         "bWLVi": {
-                          "content": "Synced 2 min ago",
+                          "content": "Synced 43 min ago",
                           "fill": "$ink-tertiary",
                           "fontWeight": "normal",
                           "fontSize": 12,
@@ -19059,57 +19059,6 @@
                     },
                     {
                       "type": "frame",
-                      "id": "V6WEaB",
-                      "x": 920,
-                      "y": 276,
-                      "name": "Selected Callout",
-                      "fill": "$surface",
-                      "cornerRadius": 10,
-                      "stroke": "#00000000",
-                      "strokeWidth": 1,
-                      "effect": {
-                        "type": "shadow",
-                        "shadowType": "outer",
-                        "color": "#00000014",
-                        "offset": {
-                          "x": 0,
-                          "y": 2
-                        },
-                        "blur": 12
-                      },
-                      "layout": "vertical",
-                      "gap": 2,
-                      "padding": [
-                        8,
-                        12
-                      ],
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "c52V5",
-                          "name": "Callout Title",
-                          "fill": "$ink",
-                          "content": "specs/stop-gate.md",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12,
-                          "fontWeight": "600",
-                          "letterSpacing": -0.12
-                        },
-                        {
-                          "type": "text",
-                          "id": "xvY5H",
-                          "name": "Callout Sub",
-                          "fill": "$ink-tertiary",
-                          "content": "4 connections · 마지막 ingest 2시간 전",
-                          "fontFamily": "$font-text",
-                          "fontSize": 10.5,
-                          "fontWeight": "normal",
-                          "letterSpacing": -0.1
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
                       "id": "jJPYv",
                       "x": 512,
                       "y": 16,
@@ -19518,6 +19467,395 @@
                       "fill": "#7E92CE4D",
                       "width": 4,
                       "height": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "X64kS",
+                      "x": 860,
+                      "y": 20,
+                      "name": "Detail Panel",
+                      "width": 344,
+                      "fill": "$surface",
+                      "cornerRadius": "$radius-l",
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#00000038",
+                        "offset": {
+                          "x": 3,
+                          "y": 5
+                        },
+                        "blur": 30
+                      },
+                      "layout": "vertical",
+                      "gap": 14,
+                      "padding": 22,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "LFdlT",
+                          "name": "Panel Head",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 5,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "eqRTL",
+                              "name": "Panel Dir",
+                              "fill": "$ink-tertiary",
+                              "content": "SPECS",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.8
+                            },
+                            {
+                              "type": "text",
+                              "id": "XQYd4",
+                              "name": "Panel Title",
+                              "fill": "$ink",
+                              "content": "stop-gate.md",
+                              "fontFamily": "$font-display",
+                              "fontSize": 21,
+                              "fontWeight": "600",
+                              "letterSpacing": -0.3
+                            },
+                            {
+                              "type": "text",
+                              "id": "zc65d",
+                              "name": "Panel Summary",
+                              "fill": "$ink-secondary",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "세션 종료를 차단하는 Stop 게이트의 3중 검사(clean · pushed · ingested)와 read-only 세션 면제(D9) 규칙.",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "uaY8q",
+                          "name": "Panel Meta",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "PXYuB",
+                              "name": "Meta Avatar",
+                              "width": 20,
+                              "height": 20,
+                              "fill": "$input-bg",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "nJ3o6",
+                                  "name": "Meta Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "IO8ev",
+                              "name": "Meta Text",
+                              "fill": "$ink-tertiary",
+                              "content": "soyesenna · 2시간 전",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "P4vQG",
+                              "name": "Commit Chip",
+                              "fill": "$input-bg",
+                              "cornerRadius": 4,
+                              "padding": [
+                                2,
+                                7
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "GKB6j",
+                                  "name": "Commit Hash",
+                                  "fill": "$ink-secondary",
+                                  "content": "a1b2c3d",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 10.5,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "eogex",
+                          "name": "Divider 1",
+                          "fill": "$hairline",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "frame",
+                          "id": "P6WwR",
+                          "name": "Connected Section",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 10,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "NoxzX",
+                              "name": "Connected Label",
+                              "fill": "$ink-tertiary",
+                              "content": "CONNECTED · 4",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.8
+                            },
+                            {
+                              "type": "frame",
+                              "id": "YKy9i",
+                              "name": "Link overview.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "mAY3b",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "z5CJQ",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "overview.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "q6RxJ",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "wg3GH",
+                                  "name": "Arrow",
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "pSSg5",
+                              "name": "Link mcp-proxy.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "R3R1S",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "h8ktv",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "mcp-proxy.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "A9yaeE",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "OpgQd",
+                                  "name": "Arrow",
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "dDkkr",
+                              "name": "Link ingest-pipeline.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "yFlYH",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "zgjZf",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "ingest-pipeline.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "hp1Cf",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "Tf3jp",
+                                  "name": "Arrow",
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "FjrGD",
+                              "name": "Link adr-002-hard-gate.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "KqAtE",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "bMmSO",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "adr-002-hard-gate.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "HeGWz",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "h0azt6",
+                                  "name": "Arrow",
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "P12SFc",
+                          "name": "Divider 2",
+                          "fill": "$hairline",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "frame",
+                          "id": "bhb24",
+                          "name": "Panel Actions",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "id": "ETP1S",
+                              "type": "ref",
+                              "ref": "XufQA",
+                              "name": "Open Doc Btn",
+                              "width": "fill_container",
+                              "descendants": {
+                                "VGKQ2": {
+                                  "content": "Open document"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
