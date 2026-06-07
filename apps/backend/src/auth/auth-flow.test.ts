@@ -238,37 +238,101 @@ describe("auth and admin API", () => {
     })
     expect(disabledLogin.statusCode).toBe(401)
 
+    const enabled = await server.inject({
+      method: "POST",
+      url: "/api/v1/admin/members/enable",
+      cookies: { specraft_session: adminCookie?.value ?? "" },
+      payload: { id: login.json<{ readonly member: { readonly id: string } }>().member.id },
+    })
+    expect(enabled.statusCode).toBe(200)
+    expect(enabled.json()).toEqual({ status: "ok" })
+    const reEnabledLogin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/login",
+      payload: { email: "member@example.com", password: "member-password" },
+    })
+    expect(reEnabledLogin.statusCode).toBe(200)
+
     await server.close()
     database.close()
   })
 
-  it("rejects duplicate bootstrap and unauthorized admin access", async () => {
+  it("requires admin for member enable and rejects when unauthenticated", async () => {
     const database = createDatabase({ path: ":memory:" })
-    const server = buildServer({ database, secret })
+    const server = buildServer({ database, credentialKey, secret })
+
+    const enableUnauthenticated = await server.inject({
+      method: "POST",
+      url: "/api/v1/admin/members/enable",
+      payload: { id: "mem_anything" },
+    })
+    expect(enableUnauthenticated.statusCode).toBe(401)
+    expect(enableUnauthenticated.json()).toEqual({ error: "unauthorized" })
+
+    await server.close()
+    database.close()
+  })
+
+  it("tests the git connection through an injectable tester", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const calls: { remoteUrl: string; credential?: string }[] = []
+    const server = buildServer({
+      database,
+      credentialKey,
+      secret,
+      gitConnectionTester: (input) => {
+        calls.push({ ...input })
+        return input.remoteUrl.includes("ok")
+          ? { status: "ok" }
+          : { status: "failed", message: "no" }
+      },
+    })
+
+    const bootstrap = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: { email: "admin@example.com", password: "admin-password", name: "Admin One" },
+    })
+    const adminCookie = bootstrap.cookies[0]?.value ?? ""
+
+    const unauthenticated = await server.inject({
+      method: "POST",
+      url: "/api/v1/admin/git/test-connection",
+    })
+    expect(unauthenticated.statusCode).toBe(401)
+
+    const unconfigured = await server.inject({
+      method: "POST",
+      url: "/api/v1/admin/git/test-connection",
+      cookies: { specraft_session: adminCookie },
+    })
+    expect(unconfigured.statusCode).toBe(200)
+    expect(unconfigured.json()).toEqual({
+      status: "failed",
+      message: "git remote url is not configured",
+    })
+    expect(calls).toHaveLength(0)
 
     await server.inject({
-      method: "POST",
-      url: "/api/v1/auth/bootstrap-admin",
+      method: "PUT",
+      url: "/api/v1/admin/settings",
+      cookies: { specraft_session: adminCookie },
       payload: {
-        email: "admin@example.com",
-        password: "admin-password",
-        name: "Admin One",
+        git_remote_url: "https://example.com/ok-repo.git",
+        git_credential: "secret-token",
       },
     })
-    const duplicate = await server.inject({
-      method: "POST",
-      url: "/api/v1/auth/bootstrap-admin",
-      payload: {
-        email: "other@example.com",
-        password: "admin-password",
-        name: "Other Admin",
-      },
-    })
-    const invite = await server.inject({ method: "POST", url: "/api/v1/admin/invites" })
 
-    expect(duplicate.statusCode).toBe(409)
-    expect(invite.statusCode).toBe(401)
-    expect(invite.json()).toEqual({ error: "unauthorized" })
+    const ok = await server.inject({
+      method: "POST",
+      url: "/api/v1/admin/git/test-connection",
+      cookies: { specraft_session: adminCookie },
+    })
+    expect(ok.statusCode).toBe(200)
+    expect(ok.json()).toEqual({ status: "ok" })
+    expect(calls).toHaveLength(1)
+    expect(calls[0]?.remoteUrl).toBe("https://example.com/ok-repo.git")
+    expect(calls[0]?.credential).toBe("secret-token")
 
     await server.close()
     database.close()

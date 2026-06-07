@@ -15,7 +15,7 @@ export function BranchChip({ branch, open = false, className, ...rest }: BranchC
     <button
       type="button"
       className={cn(
-        "flex items-center gap-[7px] rounded-pill px-[13px] py-[7px]",
+        "flex items-center gap-[7px] rounded-pill px-[13px] py-[7px] transition duration-150 ease-[var(--ease-standard)] hover:brightness-95 active:scale-[0.97]",
         open ? "bg-input" : "bg-surface",
         className,
       )}

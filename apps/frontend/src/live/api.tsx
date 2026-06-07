@@ -18,6 +18,7 @@ type SpecraftSession = {
   readonly login: (request: AuthLoginRequest) => Promise<AuthSessionResponse>
   readonly bootstrapAdmin: (request: BootstrapAdminRequest) => Promise<AuthSessionResponse>
   readonly signup: (request: AuthSignupRequest) => Promise<AuthSessionResponse>
+  readonly logout: () => Promise<void>
 }
 
 const SpecraftContext = createContext<SpecraftSession | null>(null)
@@ -90,9 +91,24 @@ export function SpecraftProvider({ children }: { readonly children: ReactNode })
     return session
   }
 
+  async function logout(): Promise<void> {
+    await client.authLogout()
+    setMember(null)
+    setSessionError(null)
+  }
+
   return (
     <SpecraftContext.Provider
-      value={{ client, member, sessionChecked, sessionError, login, bootstrapAdmin, signup }}
+      value={{
+        client,
+        member,
+        sessionChecked,
+        sessionError,
+        login,
+        bootstrapAdmin,
+        signup,
+        logout,
+      }}
     >
       {children}
     </SpecraftContext.Provider>

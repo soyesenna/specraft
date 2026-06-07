@@ -446,7 +446,7 @@
                           "height": 6
                         },
                         "bWLVi": {
-                          "content": "Synced 2 min ago",
+                          "content": "Synced 43 min ago",
                           "fill": "$ink-tertiary",
                           "fontWeight": "normal",
                           "fontSize": 12,
@@ -482,6 +482,19 @@
                   "clip": true,
                   "width": "fill_container",
                   "height": "fill_container",
+                  "fill": [
+                    "#F5F5F7",
+                    {
+                      "type": "shader",
+                      "enabled": true,
+                      "url": "specraft-grid.glsl",
+                      "uniforms": {
+                        "u_size": 44,
+                        "u_line_color": "#000000",
+                        "u_alpha": 0.075
+                      }
+                    }
+                  ],
                   "layout": "none",
                   "children": [
                     {
@@ -823,6 +836,11 @@
                           "name": "Zoom minus",
                           "width": 34,
                           "height": 32,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "top": 1,
+                            "bottom": 1
+                          },
                           "justifyContent": "center",
                           "alignItems": "center",
                           "children": [
@@ -935,8 +953,8 @@
                     {
                       "type": "frame",
                       "id": "rMwHo",
-                      "x": 860,
-                      "y": 20,
+                      "x": 852,
+                      "y": 28,
                       "name": "Detail Panel",
                       "width": 344,
                       "fill": "$surface",
@@ -1135,7 +1153,10 @@
                                 {
                                   "type": "icon",
                                   "id": "j9S93",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -1183,7 +1204,10 @@
                                 {
                                   "type": "icon",
                                   "id": "GBlLz",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -1231,7 +1255,10 @@
                                 {
                                   "type": "icon",
                                   "id": "rKTi8",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -1279,7 +1306,10 @@
                                 {
                                   "type": "icon",
                                   "id": "Y24Sx",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -8818,43 +8848,6 @@
               ]
             },
             {
-              "type": "frame",
-              "id": "R7Q9Km",
-              "name": "PM API keys",
-              "width": "fill_container",
-              "height": 32,
-              "cornerRadius": 7,
-              "gap": 9,
-              "padding": [
-                0,
-                10
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "Ekwad",
-                  "name": "PM Icon API keys",
-                  "width": 14,
-                  "height": 14,
-                  "icon": "key",
-                  "library": "lucide",
-                  "fill": "$ink-secondary"
-                },
-                {
-                  "type": "text",
-                  "id": "f9HhEp",
-                  "name": "PM Label API keys",
-                  "fill": "$ink",
-                  "content": "API keys",
-                  "fontFamily": "$font-text",
-                  "fontSize": 13,
-                  "fontWeight": "normal",
-                  "letterSpacing": -0.2
-                }
-              ]
-            },
-            {
               "type": "rectangle",
               "id": "X1uiZt",
               "name": "PM Div 2",
@@ -9692,7 +9685,7 @@
       "id": "QDEUK",
       "x": 1520,
       "y": 1320,
-      "name": "09 · Settings — Git & Models",
+      "name": "09 · Settings — Git integration",
       "clip": true,
       "width": 1440,
       "height": 900,
@@ -10120,198 +10113,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "type": "frame",
-                  "id": "NU6iz",
-                  "name": "Models Card",
-                  "width": "fill_container",
-                  "fill": "$surface",
-                  "cornerRadius": "$radius-m",
-                  "layout": "vertical",
-                  "gap": 16,
-                  "padding": [
-                    22,
-                    24
-                  ],
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "D7sUhN",
-                      "name": "Models Head",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 4,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "z6DeAO",
-                          "name": "Models Title",
-                          "fill": "$ink",
-                          "content": "Models",
-                          "fontFamily": "$font-text",
-                          "fontSize": 16,
-                          "fontWeight": "600",
-                          "letterSpacing": -0.26
-                        },
-                        {
-                          "type": "text",
-                          "id": "jnzrr",
-                          "name": "Models Desc",
-                          "fill": "$ink-tertiary",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "OpenRouter 모델 슬러그 — ingest용과 query용을 분리 설정할 수 있습니다.",
-                          "lineHeight": 1.5,
-                          "fontFamily": "$font-text",
-                          "fontSize": 12.5,
-                          "fontWeight": "normal",
-                          "letterSpacing": -0.12
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "jmvuD",
-                      "name": "Model Fields",
-                      "width": "fill_container",
-                      "gap": 14,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "Ko6Kj",
-                          "name": "Field Ingest model",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "TiLaC",
-                              "name": "MF Label",
-                              "fill": "$ink",
-                              "content": "Ingest model",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            },
-                            {
-                              "type": "frame",
-                              "id": "NnUoT",
-                              "name": "MF Input",
-                              "width": "fill_container",
-                              "height": 36,
-                              "fill": "#F5F5F7",
-                              "cornerRadius": "$radius-s",
-                              "padding": [
-                                0,
-                                12
-                              ],
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "text",
-                                  "id": "D6seY",
-                                  "name": "MF Value",
-                                  "fill": "$ink",
-                                  "content": "anthropic/claude-sonnet-4.6",
-                                  "fontFamily": "$font-mono",
-                                  "fontSize": 12,
-                                  "fontWeight": "normal"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "rfUJW",
-                          "name": "Field Query model",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "Q1lsRU",
-                              "name": "MF Label",
-                              "fill": "$ink",
-                              "content": "Query model",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            },
-                            {
-                              "type": "frame",
-                              "id": "n8zeG",
-                              "name": "MF Input",
-                              "width": "fill_container",
-                              "height": 36,
-                              "fill": "#F5F5F7",
-                              "cornerRadius": "$radius-s",
-                              "padding": [
-                                0,
-                                12
-                              ],
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "text",
-                                  "id": "t5aVSe",
-                                  "name": "MF Value",
-                                  "fill": "$ink",
-                                  "content": "anthropic/claude-haiku-4.5",
-                                  "fontFamily": "$font-mono",
-                                  "fontSize": 12,
-                                  "fontWeight": "normal"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "G5SgI",
-                      "name": "Models Note",
-                      "fill": "$ink-tertiary",
-                      "content": "OPENROUTER_API_KEY는 서버 env에서 관리됩니다 — 대시보드에는 노출되지 않습니다",
-                      "fontFamily": "$font-text",
-                      "fontSize": 11.5,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.1
-                    },
-                    {
-                      "type": "frame",
-                      "id": "d2eZF7",
-                      "name": "Models Actions",
-                      "width": "fill_container",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "m9ve0",
-                          "name": "MA Spacer",
-                          "width": "fill_container",
-                          "height": 1
-                        },
-                        {
-                          "id": "l2ZgP",
-                          "type": "ref",
-                          "ref": "XufQA",
-                          "name": "Save Models Btn",
-                          "descendants": {
-                            "VGKQ2": {
-                              "content": "Save"
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  ]
                 }
               ]
             }
@@ -10597,353 +10398,24 @@
                   "children": [
                     {
                       "type": "frame",
-                      "id": "ndG0c",
-                      "name": "K Header",
-                      "width": "fill_container",
-                      "height": 36,
-                      "stroke": "$hairline",
-                      "strokeWidth": {
-                        "bottom": 1
-                      },
-                      "gap": 14,
-                      "padding": [
-                        0,
-                        18
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "iq7fY",
-                          "name": "KH NAME",
-                          "width": 170,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "HjiAj",
-                              "name": "KHL NAME",
-                              "fill": "$ink-tertiary",
-                              "content": "NAME",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10.5,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.6
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "lLNWH",
-                          "name": "KH KEY",
-                          "width": 190,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "RTEiz",
-                              "name": "KHL KEY",
-                              "fill": "$ink-tertiary",
-                              "content": "KEY",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10.5,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.6
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "X8QtxU",
-                          "name": "KH CREATED",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "oWC0U",
-                              "name": "KHL CREATED",
-                              "fill": "$ink-tertiary",
-                              "content": "CREATED",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10.5,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.6
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "lGITW",
-                          "name": "KH LAST USED",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "q3gmt",
-                              "name": "KHL LAST USED",
-                              "fill": "$ink-tertiary",
-                              "content": "LAST USED",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10.5,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.6
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "pQnqI",
-                          "name": "KH Spacer",
-                          "width": "fill_container",
-                          "height": 1
-                        }
-                      ]
+                      "id": "g60ZQ",
+                      "width": "fit_content(0)",
+                      "height": "fit_content(0)",
+                      "gap": 12
                     },
                     {
                       "type": "frame",
-                      "id": "iL1MB",
-                      "name": "Key MacBook Pro · Claude Code",
-                      "width": "fill_container",
-                      "height": 46,
-                      "stroke": "$hairline",
-                      "strokeWidth": {
-                        "bottom": 1
-                      },
-                      "gap": 14,
-                      "padding": [
-                        0,
-                        18
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "JYGaY",
-                          "name": "KC Name",
-                          "clip": true,
-                          "width": 170,
-                          "gap": 8,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "VitS5",
-                              "name": "K Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "key",
-                              "library": "lucide",
-                              "fill": "$ink-tertiary"
-                            },
-                            {
-                              "type": "text",
-                              "id": "Z0L53",
-                              "name": "K Name",
-                              "fill": "$ink",
-                              "content": "MacBook Pro · Claude Code",
-                              "fontFamily": "$font-text",
-                              "fontSize": 13,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.2
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "wg655",
-                          "name": "KC Prefix",
-                          "width": 190,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "jRpbK",
-                              "name": "K Prefix",
-                              "fill": "$ink-secondary",
-                              "content": "sk-spcrft-9f3e…b1d",
-                              "fontFamily": "$font-mono",
-                              "fontSize": 11.5,
-                              "fontWeight": "normal"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "Kuoxd",
-                          "name": "KC Created",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "x5xSm",
-                              "name": "K Created",
-                              "fill": "$ink-tertiary",
-                              "content": "오늘",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "U9Uf7j",
-                          "name": "KC Used",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "NhJHp",
-                              "name": "K Used",
-                              "fill": "$ink-tertiary",
-                              "content": "방금",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "Htlt0",
-                          "name": "KC Spacer",
-                          "width": "fill_container",
-                          "height": 1
-                        },
-                        {
-                          "type": "text",
-                          "id": "ddE4V",
-                          "name": "K Revoke",
-                          "fill": "$danger",
-                          "content": "Revoke",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12.5,
-                          "fontWeight": "500",
-                          "letterSpacing": -0.12
-                        }
-                      ]
+                      "id": "pNkLk",
+                      "width": "fit_content(0)",
+                      "height": "fit_content(0)",
+                      "gap": 12
                     },
                     {
                       "type": "frame",
-                      "id": "h1OT3w",
-                      "name": "Key Codex CLI",
-                      "width": "fill_container",
-                      "height": 46,
-                      "gap": 14,
-                      "padding": [
-                        0,
-                        18
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "OyVwe",
-                          "name": "KC Name",
-                          "clip": true,
-                          "width": 170,
-                          "gap": 8,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "JRq9i",
-                              "name": "K Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "key",
-                              "library": "lucide",
-                              "fill": "$ink-tertiary"
-                            },
-                            {
-                              "type": "text",
-                              "id": "RVFHz",
-                              "name": "K Name",
-                              "fill": "$ink",
-                              "content": "Codex CLI",
-                              "fontFamily": "$font-text",
-                              "fontSize": 13,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.2
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "MY7hx",
-                          "name": "KC Prefix",
-                          "width": 190,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "f8zrV",
-                              "name": "K Prefix",
-                              "fill": "$ink-secondary",
-                              "content": "sk-spcrft-77ab…e42",
-                              "fontFamily": "$font-mono",
-                              "fontSize": 11.5,
-                              "fontWeight": "normal"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "ToEtd",
-                          "name": "KC Created",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "n6q4b",
-                              "name": "K Created",
-                              "fill": "$ink-tertiary",
-                              "content": "3월 12일",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "oMGPv",
-                          "name": "KC Used",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "Jd2ij",
-                              "name": "K Used",
-                              "fill": "$ink-tertiary",
-                              "content": "어제",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "wCY1B",
-                          "name": "KC Spacer",
-                          "width": "fill_container",
-                          "height": 1
-                        },
-                        {
-                          "type": "text",
-                          "id": "PnoWo",
-                          "name": "K Revoke",
-                          "fill": "$danger",
-                          "content": "Revoke",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12.5,
-                          "fontWeight": "500",
-                          "letterSpacing": -0.12
-                        }
-                      ]
+                      "id": "tbHX6",
+                      "width": "fit_content(0)",
+                      "height": "fit_content(0)",
+                      "gap": 12
                     }
                   ]
                 },
@@ -11116,6 +10588,7 @@
                   "height": 38,
                   "fill": "#F5F5F7",
                   "cornerRadius": "$radius-s",
+                  "gap": 8,
                   "padding": [
                     0,
                     12
@@ -11132,6 +10605,23 @@
                       "fontSize": 13.5,
                       "fontWeight": "normal",
                       "letterSpacing": -0.2
+                    },
+                    {
+                      "type": "frame",
+                      "id": "rUAM4",
+                      "name": "FI Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "icon",
+                      "id": "k8Hcl",
+                      "name": "Eye Toggle",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "eye-off",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
                     }
                   ]
                 }
@@ -11178,7 +10668,7 @@
           "type": "text",
           "id": "A1D7Kp",
           "name": "Footer Note",
-          "fill": "#00000052",
+          "fill": "$ink-tertiary",
           "content": "specraft v1 · self-hosted · spec integrity over availability",
           "fontFamily": "$font-text",
           "fontSize": 11,
@@ -11401,6 +10891,7 @@
                   "height": 38,
                   "fill": "#F5F5F7",
                   "cornerRadius": "$radius-s",
+                  "gap": 8,
                   "padding": [
                     0,
                     12
@@ -11412,11 +10903,28 @@
                       "id": "h8jKH",
                       "name": "FV Password",
                       "fill": "$ink-tertiary",
-                      "content": "최소 12자",
+                      "content": "At least 12 characters",
                       "fontFamily": "$font-text",
                       "fontSize": 13.5,
                       "fontWeight": "normal",
                       "letterSpacing": -0.2
+                    },
+                    {
+                      "type": "frame",
+                      "id": "w8OLsX",
+                      "name": "FI Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "icon",
+                      "id": "c0bSto",
+                      "name": "Eye Toggle",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "eye-off",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
                     }
                   ]
                 }
@@ -11443,7 +10951,7 @@
           "type": "text",
           "id": "VzDZm",
           "name": "Invite Note",
-          "fill": "#00000052",
+          "fill": "$ink-tertiary",
           "content": "가입은 초대 링크로만 가능합니다",
           "fontFamily": "$font-text",
           "fontSize": 11,
@@ -14469,6 +13977,19 @@
                   "clip": true,
                   "width": "fill_container",
                   "height": "fill_container",
+                  "fill": [
+                    "#F5F5F7",
+                    {
+                      "type": "shader",
+                      "enabled": true,
+                      "url": "specraft-grid.glsl",
+                      "uniforms": {
+                        "u_size": 44,
+                        "u_line_color": "#000000",
+                        "u_alpha": 0.075
+                      }
+                    }
+                  ],
                   "layout": "none",
                   "children": [
                     {
@@ -14810,6 +14331,11 @@
                           "name": "Zoom minus",
                           "width": 34,
                           "height": 32,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "top": 1,
+                            "bottom": 1
+                          },
                           "justifyContent": "center",
                           "alignItems": "center",
                           "children": [
@@ -14922,8 +14448,8 @@
                     {
                       "type": "frame",
                       "id": "FzMAU",
-                      "x": 1012,
-                      "y": 20,
+                      "x": 1004,
+                      "y": 28,
                       "name": "Detail Panel",
                       "width": 344,
                       "fill": "$surface",
@@ -15122,7 +14648,10 @@
                                 {
                                   "type": "icon",
                                   "id": "sQfMo",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -15170,7 +14699,10 @@
                                 {
                                   "type": "icon",
                                   "id": "RU9vQ",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -15218,7 +14750,10 @@
                                 {
                                   "type": "icon",
                                   "id": "VZntg",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -15266,7 +14801,10 @@
                                 {
                                   "type": "icon",
                                   "id": "NMdQv",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -17311,7 +16849,7 @@
                           "height": 6
                         },
                         "bWLVi": {
-                          "content": "Synced 2 min ago",
+                          "content": "Synced 43 min ago",
                           "fill": "$ink-tertiary",
                           "fontWeight": "normal",
                           "fontSize": 12,
@@ -17347,7 +16885,19 @@
                   "clip": true,
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "$bg",
+                  "fill": [
+                    "#F5F5F7",
+                    {
+                      "type": "shader",
+                      "enabled": true,
+                      "url": "specraft-grid.glsl",
+                      "uniforms": {
+                        "u_size": 22,
+                        "u_line_color": "#000000",
+                        "u_alpha": 0.075
+                      }
+                    }
+                  ],
                   "layout": "none",
                   "children": [
                     {
@@ -19425,57 +18975,6 @@
                     },
                     {
                       "type": "frame",
-                      "id": "V6WEaB",
-                      "x": 920,
-                      "y": 276,
-                      "name": "Selected Callout",
-                      "fill": "$surface",
-                      "cornerRadius": 10,
-                      "stroke": "#00000000",
-                      "strokeWidth": 1,
-                      "effect": {
-                        "type": "shadow",
-                        "shadowType": "outer",
-                        "color": "#00000014",
-                        "offset": {
-                          "x": 0,
-                          "y": 2
-                        },
-                        "blur": 12
-                      },
-                      "layout": "vertical",
-                      "gap": 2,
-                      "padding": [
-                        8,
-                        12
-                      ],
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "c52V5",
-                          "name": "Callout Title",
-                          "fill": "$ink",
-                          "content": "specs/stop-gate.md",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12,
-                          "fontWeight": "600",
-                          "letterSpacing": -0.12
-                        },
-                        {
-                          "type": "text",
-                          "id": "xvY5H",
-                          "name": "Callout Sub",
-                          "fill": "$ink-tertiary",
-                          "content": "4 connections · 마지막 ingest 2시간 전",
-                          "fontFamily": "$font-text",
-                          "fontSize": 10.5,
-                          "fontWeight": "normal",
-                          "letterSpacing": -0.1
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
                       "id": "jJPYv",
                       "x": 512,
                       "y": 16,
@@ -19516,7 +19015,7 @@
                           "id": "JNJAa",
                           "name": "Hint Label",
                           "fill": "$ink-secondary",
-                          "content": "Compact view — zoom 24%",
+                          "content": "Compact view — zoom 50%",
                           "fontFamily": "$font-text",
                           "fontSize": 11.5,
                           "fontWeight": "500",
@@ -19573,6 +19072,11 @@
                           "name": "Zoom minus",
                           "width": 34,
                           "height": 32,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "top": 1,
+                            "bottom": 1
+                          },
                           "justifyContent": "center",
                           "alignItems": "center",
                           "children": [
@@ -19642,7 +19146,7 @@
                           "id": "kA9oG",
                           "name": "Zoom Pct Label",
                           "fill": "$ink-tertiary",
-                          "content": "24%",
+                          "content": "50%",
                           "fontFamily": "$font-mono",
                           "fontSize": 10,
                           "fontWeight": "normal"
@@ -19884,6 +19388,407 @@
                       "fill": "#7E92CE4D",
                       "width": 4,
                       "height": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "X64kS",
+                      "x": 852,
+                      "y": 28,
+                      "name": "Detail Panel",
+                      "width": 344,
+                      "fill": "$surface",
+                      "cornerRadius": "$radius-l",
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#00000038",
+                        "offset": {
+                          "x": 3,
+                          "y": 5
+                        },
+                        "blur": 30
+                      },
+                      "layout": "vertical",
+                      "gap": 14,
+                      "padding": 22,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "LFdlT",
+                          "name": "Panel Head",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 5,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "eqRTL",
+                              "name": "Panel Dir",
+                              "fill": "$ink-tertiary",
+                              "content": "SPECS",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.8
+                            },
+                            {
+                              "type": "text",
+                              "id": "XQYd4",
+                              "name": "Panel Title",
+                              "fill": "$ink",
+                              "content": "stop-gate.md",
+                              "fontFamily": "$font-display",
+                              "fontSize": 21,
+                              "fontWeight": "600",
+                              "letterSpacing": -0.3
+                            },
+                            {
+                              "type": "text",
+                              "id": "zc65d",
+                              "name": "Panel Summary",
+                              "fill": "$ink-secondary",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "세션 종료를 차단하는 Stop 게이트의 3중 검사(clean · pushed · ingested)와 read-only 세션 면제(D9) 규칙.",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$font-text",
+                              "fontSize": 13,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "uaY8q",
+                          "name": "Panel Meta",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "PXYuB",
+                              "name": "Meta Avatar",
+                              "width": 20,
+                              "height": 20,
+                              "fill": "$input-bg",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "nJ3o6",
+                                  "name": "Meta Initials",
+                                  "fill": "$ink-secondary",
+                                  "content": "SY",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 8,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "IO8ev",
+                              "name": "Meta Text",
+                              "fill": "$ink-tertiary",
+                              "content": "soyesenna · 2시간 전",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12,
+                              "fontWeight": "normal",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "P4vQG",
+                              "name": "Commit Chip",
+                              "fill": "$input-bg",
+                              "cornerRadius": 4,
+                              "padding": [
+                                2,
+                                7
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "GKB6j",
+                                  "name": "Commit Hash",
+                                  "fill": "$ink-secondary",
+                                  "content": "a1b2c3d",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 10.5,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "eogex",
+                          "name": "Divider 1",
+                          "fill": "$hairline",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "frame",
+                          "id": "P6WwR",
+                          "name": "Connected Section",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 10,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "NoxzX",
+                              "name": "Connected Label",
+                              "fill": "$ink-tertiary",
+                              "content": "CONNECTED · 4",
+                              "fontFamily": "$font-text",
+                              "fontSize": 10,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.8
+                            },
+                            {
+                              "type": "frame",
+                              "id": "YKy9i",
+                              "name": "Link overview.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "mAY3b",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "z5CJQ",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "overview.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "q6RxJ",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "wg3GH",
+                                  "x": 289,
+                                  "y": 2.5,
+                                  "name": "Arrow",
+                                  "enabled": false,
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "pSSg5",
+                              "name": "Link mcp-proxy.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "R3R1S",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "h8ktv",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "mcp-proxy.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "A9yaeE",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "OpgQd",
+                                  "x": 289,
+                                  "y": 2.5,
+                                  "name": "Arrow",
+                                  "enabled": false,
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "dDkkr",
+                              "name": "Link ingest-pipeline.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "yFlYH",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "zgjZf",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "ingest-pipeline.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "hp1Cf",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "Tf3jp",
+                                  "x": 289,
+                                  "y": 2.5,
+                                  "name": "Arrow",
+                                  "enabled": false,
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "FjrGD",
+                              "name": "Link adr-002-hard-gate.md",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "KqAtE",
+                                  "name": "Doc Icon",
+                                  "width": 13,
+                                  "height": 13,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "bMmSO",
+                                  "name": "Link Text",
+                                  "fill": "$link",
+                                  "content": "adr-002-hard-gate.md",
+                                  "fontFamily": "$font-text",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal",
+                                  "letterSpacing": -0.2
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "HeGWz",
+                                  "name": "Link Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "h0azt6",
+                                  "x": 289,
+                                  "y": 2.5,
+                                  "name": "Arrow",
+                                  "enabled": false,
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "arrow-up-right",
+                                  "library": "lucide",
+                                  "fill": "$ink-tertiary"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "P12SFc",
+                          "name": "Divider 2",
+                          "fill": "$hairline",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "frame",
+                          "id": "bhb24",
+                          "name": "Panel Actions",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "id": "ETP1S",
+                              "type": "ref",
+                              "ref": "XufQA",
+                              "name": "Open Doc Btn",
+                              "width": "fill_container",
+                              "descendants": {
+                                "VGKQ2": {
+                                  "content": "Open document"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
@@ -20232,7 +20137,7 @@
                           "fill": "$ink",
                           "content": "senna@prompt.town",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
                         }
@@ -20267,6 +20172,7 @@
                       "height": 44,
                       "fill": "#F5F5F7",
                       "cornerRadius": 10,
+                      "gap": 8,
                       "padding": [
                         0,
                         14
@@ -20280,9 +20186,26 @@
                           "fill": "$ink",
                           "content": "••••••••••",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
+                        },
+                        {
+                          "type": "frame",
+                          "id": "VJf93",
+                          "name": "FI Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "icon",
+                          "id": "tJBQm",
+                          "name": "Eye Toggle",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "eye-off",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
                         }
                       ]
                     }
@@ -20340,7 +20263,7 @@
               "type": "text",
               "id": "PAn8D",
               "name": "Footer Note",
-              "fill": "#00000052",
+              "fill": "$ink-tertiary",
               "content": "specraft v1 · self-hosted",
               "fontFamily": "$font-text",
               "fontSize": 10.5,
@@ -20501,7 +20424,7 @@
                           "fill": "$ink",
                           "content": "민지",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
                         }
@@ -20549,7 +20472,7 @@
                           "fill": "$ink",
                           "content": "minji@prompt.town",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
                         }
@@ -20584,6 +20507,7 @@
                       "height": 44,
                       "fill": "#F5F5F7",
                       "cornerRadius": 10,
+                      "gap": 8,
                       "padding": [
                         0,
                         14
@@ -20595,11 +20519,28 @@
                           "id": "VGh3g",
                           "name": "FV Password",
                           "fill": "$ink-tertiary",
-                          "content": "최소 12자",
+                          "content": "At least 12 characters",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
+                        },
+                        {
+                          "type": "frame",
+                          "id": "nQXT0",
+                          "name": "FI Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "icon",
+                          "id": "Jj5Hb",
+                          "name": "Eye Toggle",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "eye-off",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
                         }
                       ]
                     }
@@ -20637,7 +20578,7 @@
               "type": "text",
               "id": "ZeroF",
               "name": "Invite Note",
-              "fill": "#00000052",
+              "fill": "$ink-tertiary",
               "content": "가입은 초대 링크로만 가능합니다",
               "fontFamily": "$font-text",
               "fontSize": 10.5,
@@ -26873,6 +26814,19 @@
           "clip": true,
           "width": "fill_container",
           "height": "fill_container",
+          "fill": [
+            "#F5F5F7",
+            {
+              "type": "shader",
+              "enabled": true,
+              "url": "specraft-grid.glsl",
+              "uniforms": {
+                "u_size": 22,
+                "u_line_color": "#000000",
+                "u_alpha": 0.075
+              }
+            }
+          ],
           "layout": "none",
           "children": [
             {
@@ -27988,7 +27942,7 @@
                   "id": "uVjYG",
                   "name": "Hint Label",
                   "fill": "$ink-secondary",
-                  "content": "Compact — zoom 32%",
+                  "content": "Compact view — zoom 50%",
                   "fontFamily": "$font-text",
                   "fontSize": 10.5,
                   "fontWeight": "500",
@@ -28868,7 +28822,7 @@
                       "fill": "$ink",
                       "content": "git@github.com:prompt-town/specraft.git",
                       "fontFamily": "$font-mono",
-                      "fontSize": 11,
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     }
                   ]
@@ -29016,7 +28970,7 @@
                       "fill": "$ink",
                       "content": "ssh-ed25519 ••••••••••••••",
                       "fontFamily": "$font-mono",
-                      "fontSize": 11,
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     },
                     {
@@ -29253,7 +29207,7 @@
                           "fill": "$ink",
                           "content": "anthropic/claude-sonnet-4.6",
                           "fontFamily": "$font-mono",
-                          "fontSize": 11,
+                          "fontSize": 16,
                           "fontWeight": "normal"
                         }
                       ]
@@ -29300,7 +29254,7 @@
                           "fill": "$ink",
                           "content": "anthropic/claude-haiku-4.5",
                           "fontFamily": "$font-mono",
-                          "fontSize": 11,
+                          "fontSize": 16,
                           "fontWeight": "normal"
                         }
                       ]
@@ -30870,7 +30824,7 @@
                   "name": "DS Title",
                   "fill": "$ink",
                   "content": "stop-gate.md",
-                  "fontFamily": "$font-display",
+                  "fontFamily": "$font-text",
                   "fontSize": 18,
                   "fontWeight": "600",
                   "letterSpacing": -0.28
@@ -31405,7 +31359,7 @@
                   "fill": "$ink",
                   "content": "Stop 게이트는 어떤 조",
                   "fontFamily": "$font-text",
-                  "fontSize": 13.5,
+                  "fontSize": 16,
                   "fontWeight": "normal",
                   "letterSpacing": -0.2
                 },
@@ -37992,6 +37946,623 @@
                         },
                         {
                           "id": "T0Seuu",
+                          "type": "ref",
+                          "ref": "XufQA",
+                          "name": "Save Models Btn",
+                          "descendants": {
+                            "VGKQ2": {
+                              "content": "Save"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "R0MWTM",
+      "x": 12160,
+      "y": 1320,
+      "name": "01b · Admin Setup",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "gap": 36,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "yB0R5",
+          "name": "Brand Lockup",
+          "layout": "vertical",
+          "gap": 14,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "fiNBZ",
+              "name": "Mark Row",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "tBQyV",
+                  "name": "Logo Glyph",
+                  "width": 30,
+                  "height": 30,
+                  "icon": "waypoints",
+                  "library": "lucide",
+                  "fill": "$ink"
+                },
+                {
+                  "type": "text",
+                  "id": "wGAcM",
+                  "name": "Wordmark",
+                  "fill": "$ink",
+                  "content": "specraft",
+                  "fontFamily": "$font-display",
+                  "fontSize": 40,
+                  "fontWeight": "600",
+                  "letterSpacing": -0.8
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "dHwuT",
+              "name": "Tagline",
+              "fill": "$ink-tertiary",
+              "content": "Single source of spec truth.",
+              "fontFamily": "$font-display",
+              "fontSize": 16,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "QqXDa",
+          "name": "Admin Setup Card",
+          "width": 360,
+          "fill": "$surface",
+          "cornerRadius": "$radius-l",
+          "layout": "vertical",
+          "gap": 14,
+          "padding": 26,
+          "children": [
+            {
+              "type": "frame",
+              "id": "eOw0t",
+              "name": "Card Head",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 5,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "wg0et",
+                  "name": "Card Title",
+                  "fill": "$ink",
+                  "content": "Admin setup",
+                  "fontFamily": "$font-display",
+                  "fontSize": 20,
+                  "fontWeight": "600",
+                  "letterSpacing": -0.3
+                },
+                {
+                  "type": "text",
+                  "id": "ee2sD",
+                  "name": "Card Sub",
+                  "fill": "$ink-tertiary",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "최초 관리자 계정을 생성합니다",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$font-text",
+                  "fontSize": 12.5,
+                  "fontWeight": "normal",
+                  "letterSpacing": -0.12
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "WJftz",
+              "name": "Field Name",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "fwLbl",
+                  "name": "FL Name",
+                  "fill": "$ink",
+                  "content": "Name",
+                  "fontFamily": "$font-text",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": -0.12
+                },
+                {
+                  "type": "frame",
+                  "id": "FM6E5",
+                  "name": "FI Name",
+                  "width": "fill_container",
+                  "height": 38,
+                  "fill": "#F5F5F7",
+                  "cornerRadius": "$radius-s",
+                  "padding": [
+                    0,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "D51tY",
+                      "name": "FV Name",
+                      "fill": "$ink",
+                      "content": "수연",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BTgep",
+              "name": "Field Email",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Q5QLo",
+                  "name": "FL Email",
+                  "fill": "$ink",
+                  "content": "Email",
+                  "fontFamily": "$font-text",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": -0.12
+                },
+                {
+                  "type": "frame",
+                  "id": "eQNsL",
+                  "name": "FI Email",
+                  "width": "fill_container",
+                  "height": 38,
+                  "fill": "#F5F5F7",
+                  "cornerRadius": "$radius-s",
+                  "padding": [
+                    0,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "AOHWM",
+                      "name": "FV Email",
+                      "fill": "$ink",
+                      "content": "senna@prompt.town",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "KQSw9",
+              "name": "Field Password",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "OJTPi",
+                  "name": "FL Password",
+                  "fill": "$ink",
+                  "content": "Password",
+                  "fontFamily": "$font-text",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": -0.12
+                },
+                {
+                  "type": "frame",
+                  "id": "vl30z",
+                  "name": "FI Password",
+                  "width": "fill_container",
+                  "height": 38,
+                  "fill": "#F5F5F7",
+                  "cornerRadius": "$radius-s",
+                  "gap": 8,
+                  "padding": [
+                    0,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Ld3GT",
+                      "name": "FV Password",
+                      "fill": "$ink-tertiary",
+                      "content": "At least 12 characters",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    },
+                    {
+                      "type": "frame",
+                      "id": "DwvAT",
+                      "name": "FI Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "icon",
+                      "id": "q2cqK",
+                      "name": "Eye Toggle",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "eye-off",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ndjC9",
+              "type": "ref",
+              "ref": "m2N0bx",
+              "name": "Create admin Btn",
+              "width": "fill_container",
+              "height": 40,
+              "descendants": {
+                "wSvQI": {
+                  "content": "Create admin",
+                  "fontWeight": "500",
+                  "letterSpacing": -0.24
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "FIfDU",
+          "name": "Footer Note",
+          "fill": "$ink-tertiary",
+          "content": "specraft v1 · self-hosted · spec integrity over availability",
+          "fontFamily": "$font-text",
+          "fontSize": 11,
+          "fontWeight": "normal",
+          "letterSpacing": -0.1
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "njQXE",
+      "x": 13680,
+      "y": 1320,
+      "name": "09b · Settings — Models",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "YMbOa",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "ufb2W",
+          "name": "Toolbar",
+          "width": "fill_container",
+          "gap": 14,
+          "padding": [
+            18,
+            28
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "id": "upFc7",
+              "type": "ref",
+              "ref": "fMa8O",
+              "name": "Back Button"
+            },
+            {
+              "type": "text",
+              "id": "Gzldo",
+              "name": "Page Title",
+              "fill": "$ink",
+              "content": "Settings",
+              "fontFamily": "$font-display",
+              "fontSize": 28,
+              "fontWeight": "600",
+              "letterSpacing": -0.4
+            },
+            {
+              "type": "frame",
+              "id": "ekvkr",
+              "name": "Admin Badge",
+              "fill": "$input-bg",
+              "cornerRadius": "$radius-pill",
+              "padding": [
+                3,
+                9
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rKvUS",
+                  "name": "Admin Label",
+                  "fill": "$ink-secondary",
+                  "content": "ADMIN",
+                  "fontFamily": "$font-text",
+                  "fontSize": 10.5,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yy44j",
+          "name": "Settings Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 26,
+          "padding": [
+            4,
+            28,
+            28,
+            28
+          ],
+          "children": [
+            {
+              "id": "OewKd",
+              "type": "ref",
+              "ref": "ttcaX",
+              "name": "Settings Nav",
+              "descendants": {
+                "bxOMS": {
+                  "fill": "$surface"
+                },
+                "p02Kex": {
+                  "fill": "$ink"
+                },
+                "R1efZ": {
+                  "fill": "$ink",
+                  "fontWeight": "600"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "fIyYt",
+              "name": "Settings Content",
+              "width": 660,
+              "layout": "vertical",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "bVj4e",
+                  "name": "Models Card",
+                  "width": "fill_container",
+                  "fill": "$surface",
+                  "cornerRadius": "$radius-m",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": [
+                    22,
+                    24
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Mpfcy",
+                      "name": "Models Head",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "M9XX1F",
+                          "name": "Models Title",
+                          "fill": "$ink",
+                          "content": "Models",
+                          "fontFamily": "$font-text",
+                          "fontSize": 16,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.26
+                        },
+                        {
+                          "type": "text",
+                          "id": "earQK",
+                          "name": "Models Desc",
+                          "fill": "$ink-tertiary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "OpenRouter 모델 슬러그 — ingest용과 query용을 분리 설정할 수 있습니다.",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$font-text",
+                          "fontSize": 12.5,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "dOhfw",
+                      "name": "Model Fields",
+                      "width": "fill_container",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "MhKbJ",
+                          "name": "Field Ingest model",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "A1kCqC",
+                              "name": "MF Label",
+                              "fill": "$ink",
+                              "content": "Ingest model",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "O2iCsm",
+                              "name": "MF Input",
+                              "width": "fill_container",
+                              "height": 36,
+                              "fill": "#F5F5F7",
+                              "cornerRadius": "$radius-s",
+                              "padding": [
+                                0,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "gvN1f",
+                                  "name": "MF Value",
+                                  "fill": "$ink",
+                                  "content": "anthropic/claude-sonnet-4.6",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "k848Fs",
+                          "name": "Field Query model",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Q3XHY",
+                              "name": "MF Label",
+                              "fill": "$ink",
+                              "content": "Query model",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "kHtqk",
+                              "name": "MF Input",
+                              "width": "fill_container",
+                              "height": 36,
+                              "fill": "#F5F5F7",
+                              "cornerRadius": "$radius-s",
+                              "padding": [
+                                0,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "ytT7X",
+                                  "name": "MF Value",
+                                  "fill": "$ink",
+                                  "content": "anthropic/claude-haiku-4.5",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "asCql",
+                      "name": "Models Note",
+                      "fill": "$ink-tertiary",
+                      "content": "OPENROUTER_API_KEY는 서버 env에서 관리됩니다 — 대시보드에는 노출되지 않습니다",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xVPRE",
+                      "name": "Models Actions",
+                      "width": "fill_container",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "aL6tG",
+                          "name": "MA Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "id": "yZXye",
                           "type": "ref",
                           "ref": "XufQA",
                           "name": "Save Models Btn",

@@ -1,4 +1,5 @@
 import {
+  AdminMemberEnableRequestSchema,
   AdminSettingsRequestSchema,
   ApiKeyCreateRequestSchema,
   ApiKeyDeleteRequestSchema,
@@ -9,17 +10,24 @@ import {
 import type { FastifyInstance } from "fastify"
 import { z } from "zod"
 
+import {
+  testGitConnection as defaultTestGitConnection,
+  type GitConnectionTester,
+} from "../git/connection.js"
 import { sendConflict, sendUnauthorized, sendValidationFailed } from "../http/errors.js"
 import type { SpecraftDatabase } from "../storage/database.js"
+import { decryptCredential } from "./credentials.js"
 import { requireAdmin, requireMember } from "./identity.js"
 import { createInvite } from "./invites.js"
-import { setSessionCookie } from "./session.js"
+import { clearSessionCookie, setSessionCookie } from "./session.js"
 import {
   authenticateMember,
   createApiKey,
   createMember,
   createMemberWithInvite,
   disableMember,
+  enableMember,
+  getSetting,
   getSettingsView,
   hasMembers,
   listApiKeys,
@@ -32,6 +40,7 @@ import {
 type AuthContext = {
   readonly database: SpecraftDatabase
   readonly credentialKey: string
+  readonly gitConnectionTester?: GitConnectionTester
 }
 
 export function registerAuthRoutes(server: FastifyInstance, context: AuthContext): void {
@@ -110,6 +119,11 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
     return { member }
   })
 
+  server.post("/api/v1/auth/logout", async (_request, reply) => {
+    clearSessionCookie(reply)
+    return { status: "ok" }
+  })
+
   server.post("/api/v1/keys", async (request, reply) => {
     const member = await requireMember(request, reply, context.database)
     if ("statusCode" in member) {
@@ -183,5 +197,35 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
     }
     disableMember(context.database, parsed.data.id)
     return { status: "ok" }
+  })
+
+  server.post("/api/v1/admin/members/enable", async (request, reply) => {
+    const member = await requireAdmin(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const parsed = AdminMemberEnableRequestSchema.safeParse(request.body)
+    if (!parsed.success) {
+      return sendValidationFailed(reply)
+    }
+    enableMember(context.database, parsed.data.id)
+    return { status: "ok" }
+  })
+
+  server.post("/api/v1/admin/git/test-connection", async (request, reply) => {
+    const member = await requireAdmin(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const remoteUrl = getSetting(context.database, "git_remote_url")
+    if (!remoteUrl) {
+      return { status: "failed", message: "git remote url is not configured" }
+    }
+    const storedCredential = getSetting(context.database, "git_credential")
+    const credential = storedCredential
+      ? decryptCredential(context.credentialKey, storedCredential)
+      : undefined
+    const tester = context.gitConnectionTester ?? defaultTestGitConnection
+    return tester(credential ? { remoteUrl, credential } : { remoteUrl })
   })
 }

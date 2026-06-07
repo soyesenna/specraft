@@ -35,9 +35,10 @@ export function GlassNav({ active, conflictBadge = true, className }: GlassNavPr
           <Link
             key={key}
             to={to}
+            aria-current={selected ? "page" : undefined}
             className={cn(
-              "flex h-[46px] flex-1 flex-col items-center justify-center gap-0.5 rounded-pill",
-              selected && "bg-white shadow-[0_2px_8px_#0000001F]",
+              "flex h-[46px] flex-1 flex-col items-center justify-center gap-0.5 rounded-pill transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
+              selected ? "bg-white shadow-[0_2px_8px_#0000001F]" : "hover:bg-hairline",
             )}
           >
             <span className="relative size-5">

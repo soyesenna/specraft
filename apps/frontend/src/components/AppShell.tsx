@@ -1,18 +1,15 @@
 import type { ReactNode } from "react"
-import { createContext, useContext, useState } from "react"
+import { useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { Sidebar, type SidebarSection } from "./Sidebar.js"
+import { SidebarCollapsedContext, useSidebarCollapsed } from "./sidebarCollapsed.js"
 import { TopNav } from "./TopNav.js"
 
 // 사이드바 접힘 상태 — 라우트 전환 간 유지 (03b/04b 변형)
 let sidebarCollapsed = false
 
-const SidebarCollapsedContext = createContext(false)
-
-/** AppShell 하위에서 사이드바 접힘 여부 구독 (03/03b 그래프 좌표 스위칭용) */
-export function useSidebarCollapsed(): boolean {
-  return useContext(SidebarCollapsedContext)
-}
+// 기존 import 경로(`../components/AppShell.js`) 호환을 위한 재노출
+export { useSidebarCollapsed }
 
 type AppShellProps = {
   active: SidebarSection

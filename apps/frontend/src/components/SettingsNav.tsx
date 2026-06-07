@@ -24,16 +24,17 @@ type SettingsNavProps = {
 /** component/Settings Nav — 216px 세로 메뉴, 32px 행. 선택 = 화이트 필 + ink/600 */
 export function SettingsNav({ active }: SettingsNavProps) {
   return (
-    <nav className="flex w-[216px] shrink-0 flex-col gap-0.5">
+    <nav aria-label="Settings sections" className="flex w-[216px] shrink-0 flex-col gap-0.5">
       {ITEMS.map(({ key, icon: Icon, label, to }) => {
         const selected = key === active
         return (
           <Link
             key={key}
             to={to}
+            aria-current={selected ? "page" : undefined}
             className={cn(
-              "flex h-8 w-full items-center gap-[9px] rounded-[7px] px-[11px]",
-              selected && "bg-surface",
+              "flex h-8 w-full items-center gap-[9px] rounded-[7px] px-[11px] transition-[background-color,color] duration-150 ease-[var(--ease-standard)]",
+              selected ? "bg-surface" : "hover:bg-hairline",
             )}
           >
             <Icon className={cn("size-3.5", selected ? "text-ink" : "text-ink-tertiary")} />

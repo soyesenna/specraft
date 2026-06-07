@@ -233,6 +233,133 @@ export function wikiHead(wiki: WikiRepository): string {
   return git(wiki.root, ["rev-parse", "HEAD"])
 }
 
+export type WikiCommitMeta = {
+  readonly commitHash: string
+  readonly summary: string
+  readonly author: string
+  readonly timestamp: string
+  readonly addedLines: number
+  readonly removedLines: number
+}
+
+const historyRecordSeparator = "\x1e"
+const historyFieldSeparator = "\x1f"
+
+export type WikiFileTouch = {
+  readonly timestamp: string
+  readonly author: string
+  readonly commitHash: string
+}
+
+/** 브랜치 로그 한 번 순회로 파일별 마지막 수정 시각/author/커밋 해시를 수집한다. */
+export function listWikiLastModified(wiki: WikiRepository): ReadonlyMap<string, WikiFileTouch> {
+  const output = git(wiki.root, [
+    "log",
+    wiki.branch,
+    "--name-only",
+    `--pretty=format:${historyRecordSeparator}%aI${historyFieldSeparator}%an${historyFieldSeparator}%h`,
+  ])
+  const touched = new Map<string, WikiFileTouch>()
+  if (output === "") {
+    return touched
+  }
+  for (const block of output.split(historyRecordSeparator)) {
+    const trimmed = block.trim()
+    if (trimmed === "") {
+      continue
+    }
+    const [header, ...fileLines] = trimmed.split("\n")
+    const [timestamp, author, commitHash] = (header ?? "").split(historyFieldSeparator)
+    if (!timestamp) {
+      continue
+    }
+    for (const rawFile of fileLines) {
+      const file = rawFile.trim()
+      if (file !== "" && !touched.has(file)) {
+        touched.set(file, { timestamp, author: author ?? "", commitHash: commitHash ?? "" })
+      }
+    }
+  }
+  return touched
+}
+
+export function listWikiFileHistory(wiki: WikiRepository, path: string): readonly WikiCommitMeta[] {
+  const target = resolveWikiPath(wiki.root, path)
+  const output = git(wiki.root, [
+    "log",
+    wiki.branch,
+    "--numstat",
+    `--pretty=format:${historyRecordSeparator}%H${historyFieldSeparator}%s${historyFieldSeparator}%an${historyFieldSeparator}%aI`,
+    "--",
+    target,
+  ])
+  if (output === "") {
+    return []
+  }
+  const commits: WikiCommitMeta[] = []
+  for (const block of output.split(historyRecordSeparator)) {
+    const trimmed = block.trim()
+    if (trimmed === "") {
+      continue
+    }
+    const newlineIndex = trimmed.indexOf("\n")
+    const header = newlineIndex === -1 ? trimmed : trimmed.slice(0, newlineIndex)
+    const statBlock = newlineIndex === -1 ? "" : trimmed.slice(newlineIndex + 1)
+    const [commitHash, summary, author, timestamp] = header.split(historyFieldSeparator)
+    if (!commitHash || !timestamp) {
+      continue
+    }
+    const stat = statBlock
+      .split("\n")
+      .map((line) => line.trim())
+      .find((line) => line !== "")
+    const [addedRaw, removedRaw] = stat ? stat.split("\t") : ["0", "0"]
+    commits.push({
+      commitHash,
+      summary: summary ?? "",
+      author: author ?? "",
+      timestamp,
+      addedLines: Number.parseInt(addedRaw ?? "0", 10) || 0,
+      removedLines: Number.parseInt(removedRaw ?? "0", 10) || 0,
+    })
+  }
+  return commits
+}
+
+export function wikiFileDiff(
+  wiki: WikiRepository,
+  commitHash: string,
+  path: string,
+  maxLines: number,
+): { readonly added: readonly string[]; readonly removed: readonly string[] } {
+  const target = resolveWikiPath(wiki.root, path)
+  if (!/^[0-9a-f]{4,64}$/.test(commitHash)) {
+    return { added: [], removed: [] }
+  }
+  const output = git(wiki.root, [
+    "show",
+    commitHash,
+    "--format=",
+    "--unified=0",
+    "--no-color",
+    "--",
+    target,
+  ])
+  const added: string[] = []
+  const removed: string[] = []
+  for (const line of output.split("\n")) {
+    if (line.startsWith("+++") || line.startsWith("---")) {
+      continue
+    }
+    if (line.startsWith("+") && added.length < maxLines) {
+      added.push(line.slice(1))
+    } else if (line.startsWith("-") && removed.length < maxLines) {
+      removed.push(line.slice(1))
+    }
+  }
+  return { added, removed }
+}
+
 export function lockBranch(database: SpecraftDatabase, input: LockBranchInput): void {
   const now = new Date().toISOString()
   database

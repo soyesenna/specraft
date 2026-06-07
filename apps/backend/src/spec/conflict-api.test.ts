@@ -135,5 +135,5 @@ describe("conflict API", () => {
 
     await server.close()
     database.close()
-  }, 15_000)
+  })
 })

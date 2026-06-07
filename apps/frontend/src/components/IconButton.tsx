@@ -12,7 +12,7 @@ export function IconButton({ icon: Icon, className, ...rest }: IconButtonProps) 
     <button
       type="button"
       className={cn(
-        "flex size-7 shrink-0 items-center justify-center rounded-[14px] bg-input",
+        "flex size-7 shrink-0 items-center justify-center rounded-[14px] bg-input transition duration-150 ease-[var(--ease-standard)] hover:brightness-95 active:scale-[0.97]",
         className,
       )}
       {...rest}

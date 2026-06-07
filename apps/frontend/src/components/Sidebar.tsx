@@ -20,7 +20,7 @@ const ITEMS: Array<{ key: SidebarSection; icon: LucideIcon; label: string; to: s
 ]
 
 type SidebarProps = {
-  active: SidebarSection
+  active: SidebarSection | null
   collapsed: boolean
   onToggle: () => void
   conflictCount?: number
@@ -36,16 +36,20 @@ export function Sidebar({ active, collapsed, onToggle, conflictCount = 1 }: Side
   const forcedTooltip = params.get("tooltip")
   if (collapsed) {
     return (
-      <nav className="flex h-full w-16 shrink-0 flex-col items-center gap-1 border-r border-hairline pt-3.5 pb-2.5">
+      <nav
+        aria-label="앱 사이드바"
+        className="flex h-full w-16 shrink-0 flex-col items-center gap-1 border-r border-hairline pt-3.5 pb-2.5"
+      >
         {ITEMS.map(({ key, icon: Icon, label, to }) => {
           const selected = key === active
           return (
             <Link
               key={key}
               to={to}
+              aria-current={selected ? "page" : undefined}
               className={cn(
-                "group relative flex h-[38px] w-[38px] items-center justify-center rounded-[9px]",
-                selected && "bg-surface",
+                "group relative flex h-[38px] w-[38px] items-center justify-center rounded-[9px] transition-[background-color,color] duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+                selected ? "bg-surface" : "hover:bg-hairline",
               )}
             >
               <Icon className={cn("size-4", selected ? "text-ink" : "text-ink-tertiary")} />
@@ -55,8 +59,10 @@ export function Sidebar({ active, collapsed, onToggle, conflictCount = 1 }: Side
               {/* 04b Hover Tooltip — 레일 우측 8px, 다크 캡션 */}
               <span
                 className={cn(
-                  "pointer-events-none absolute top-1/2 left-[59px] z-50 -translate-y-1/2 items-center rounded-[6px] bg-dark-card px-2.5 py-[5px] whitespace-nowrap shadow-[0_2px_8px_#00000029]",
-                  forcedTooltip === key ? "flex" : "hidden group-hover:flex",
+                  "pointer-events-none absolute top-1/2 left-[59px] z-50 flex -translate-y-1/2 items-center rounded-[6px] bg-dark-card px-2.5 py-[5px] whitespace-nowrap shadow-[0_2px_8px_#00000029] transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+                  forcedTooltip === key
+                    ? "translate-x-0 opacity-100"
+                    : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100",
                 )}
               >
                 <span className="pen-text text-[11.5px] font-medium tracking-[-0.1px] text-white">
@@ -71,7 +77,7 @@ export function Sidebar({ active, collapsed, onToggle, conflictCount = 1 }: Side
         <button
           type="button"
           onClick={onToggle}
-          className="flex h-[38px] w-[38px] items-center justify-center rounded-[9px]"
+          className="flex h-[38px] w-[38px] items-center justify-center rounded-[9px] transition-colors duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:bg-hairline"
           aria-label="사이드바 펼치기"
         >
           <PanelLeftOpen className="size-[15px] text-ink-tertiary" />
@@ -81,16 +87,20 @@ export function Sidebar({ active, collapsed, onToggle, conflictCount = 1 }: Side
   }
 
   return (
-    <nav className="flex h-full w-[216px] shrink-0 flex-col gap-0.5 border-r border-hairline px-3 py-3.5">
+    <nav
+      aria-label="앱 사이드바"
+      className="flex h-full w-[216px] shrink-0 flex-col gap-0.5 border-r border-hairline px-3 py-3.5"
+    >
       {ITEMS.map(({ key, icon: Icon, label, to }) => {
         const selected = key === active
         return (
           <Link
             key={key}
             to={to}
+            aria-current={selected ? "page" : undefined}
             className={cn(
-              "flex h-9 w-full items-center gap-2.5 rounded-[7px] px-[11px]",
-              selected && "bg-surface",
+              "flex h-9 w-full items-center gap-2.5 rounded-[7px] px-[11px] transition-[background-color,color] duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+              selected ? "bg-surface" : "hover:bg-hairline",
             )}
           >
             <Icon className={cn("size-[15px]", selected ? "text-ink" : "text-ink-tertiary")} />
@@ -125,7 +135,7 @@ export function Sidebar({ active, collapsed, onToggle, conflictCount = 1 }: Side
         <button
           type="button"
           onClick={onToggle}
-          className="flex size-[26px] items-center justify-center rounded-[6px]"
+          className="flex size-[26px] items-center justify-center rounded-[6px] transition-colors duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:bg-hairline"
           aria-label="사이드바 접기"
         >
           <PanelLeftClose className="size-[15px] text-ink-tertiary" />

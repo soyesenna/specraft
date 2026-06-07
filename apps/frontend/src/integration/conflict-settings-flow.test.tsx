@@ -71,23 +71,40 @@ describe("frontend conflict and settings integration", () => {
     )
 
     expect(await screen.findByText("Live conflict detail from API")).toBeTruthy()
-    fireEvent.change(firstElement(screen.getAllByLabelText("해결 지시"), "해결 지시"), {
-      target: { value: "두 정책을 비교표로 병합" },
-    })
+    fireEvent.change(
+      firstElement(
+        screen.getAllByPlaceholderText(
+          '병합 방법을 자연어로 지시하세요 — 예: "dev의 TTL 300초를 기본으로 유지해줘"',
+        ),
+        "directive input",
+      ),
+      {
+        target: { value: "두 정책을 비교표로 병합" },
+      },
+    )
     fireEvent.click(
-      firstElement(screen.getAllByRole("button", { name: "Resolve conflict" }), "Resolve"),
+      firstElement(screen.getAllByRole("button", { name: "병합 지시 전송" }), "병합 지시 전송"),
     )
 
     expect(await screen.findByText("Live conflict resolved from API")).toBeTruthy()
-    expect(screen.getAllByText("resolved").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Resolved").length).toBeGreaterThan(0)
 
+    fireEvent.click(
+      firstElement(screen.getAllByRole("button", { name: "프로필 메뉴 열기" }), "프로필 메뉴"),
+    )
     fireEvent.click(firstElement(screen.getAllByRole("link", { name: "Settings" }), "Settings"))
-    expect(await screen.findByDisplayValue("ssh://git.example/specraft.git")).toBeTruthy()
+    // 데스크톱·모바일 분기가 동시에 마운트되므로 Remote URL 입력이 둘 이상이다.
+    expect(
+      firstElement(
+        await screen.findAllByDisplayValue("ssh://git.example/specraft.git"),
+        "Remote URL value",
+      ),
+    ).toBeTruthy()
     fireEvent.change(firstElement(screen.getAllByLabelText("Remote URL"), "Remote URL"), {
       target: { value: "ssh://git.example/specraft-next.git" },
     })
     fireEvent.click(
-      firstElement(screen.getAllByRole("button", { name: "Save settings" }), "Save settings"),
+      firstElement(screen.getAllByRole("button", { name: "Save", exact: true }), "Save settings"),
     )
 
     expect(await screen.findByText("Settings saved from API")).toBeTruthy()

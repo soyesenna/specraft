@@ -1,45 +1,13 @@
 import { type ClientConfig, createRequester } from "./client-core.js"
-import type {
-  AdminInviteCreateResponse,
-  AdminInviteListResponse,
-  AdminMemberDisableRequest,
-  AdminMemberDisableResponse,
-  AdminMemberListResponse,
-  AdminSettingsRequest,
-  AdminSettingsResponse,
-  AdminSettingsViewResponse,
-  ApiKeyCreatedResponse,
-  ApiKeyCreateRequest,
-  ApiKeyDeleteRequest,
-  ApiKeyDeleteResponse,
-  ApiKeyListResponse,
-  AuthLoginRequest,
-  AuthSessionResponse,
-  AuthSignupRequest,
-  BootstrapAdminRequest,
-  ConflictListResponse,
-  ConflictResolveRequest,
-  ConflictResolveResponse,
-  ContextRequest,
-  ContextResponse,
-  IngestLogListResponse,
-  IngestPayload,
-  IngestResponse,
-  PaginationRequest,
-  QueryLogListResponse,
-  QueryRequest,
-  QueryResponse,
-  StatusResponse,
-  WikiPageRequest,
-  WikiPageResponse,
-  WikiTreeRequest,
-  WikiTreeResponse,
-} from "./schemas.js"
+import type { SpecraftClient } from "./client-types.js"
 import {
+  AdminGitTestConnectionResponseSchema,
   AdminInviteCreateResponseSchema,
   AdminInviteListResponseSchema,
   AdminMemberDisableRequestSchema,
   AdminMemberDisableResponseSchema,
+  AdminMemberEnableRequestSchema,
+  AdminMemberEnableResponseSchema,
   AdminMemberListResponseSchema,
   AdminSettingsRequestSchema,
   AdminSettingsResponseSchema,
@@ -61,11 +29,16 @@ import {
   IngestLogListResponseSchema,
   IngestPayloadSchema,
   IngestResponseSchema,
+  OkResponseSchema,
   PaginationRequestSchema,
   QueryLogListResponseSchema,
   QueryRequestSchema,
   QueryResponseSchema,
   StatusResponseSchema,
+  WikiGraphRequestSchema,
+  WikiGraphResponseSchema,
+  WikiHistoryRequestSchema,
+  WikiHistoryResponseSchema,
   WikiPageRequestSchema,
   WikiPageResponseSchema,
   WikiTreeRequestSchema,
@@ -74,34 +47,7 @@ import {
 
 export type { ClientConfig } from "./client-core.js"
 export { SpecraftHttpError } from "./client-core.js"
-
-export type SpecraftClient = {
-  readonly context: (request: ContextRequest) => Promise<ContextResponse>
-  readonly query: (request: QueryRequest) => Promise<QueryResponse>
-  readonly ingest: (request: IngestPayload) => Promise<IngestResponse>
-  readonly status: () => Promise<StatusResponse>
-  readonly authSession: () => Promise<AuthSessionResponse>
-  readonly bootstrapAdmin: (request: BootstrapAdminRequest) => Promise<AuthSessionResponse>
-  readonly authSignup: (request: AuthSignupRequest) => Promise<AuthSessionResponse>
-  readonly authLogin: (request: AuthLoginRequest) => Promise<AuthSessionResponse>
-  readonly createApiKey: (request: ApiKeyCreateRequest) => Promise<ApiKeyCreatedResponse>
-  readonly listApiKeys: () => Promise<ApiKeyListResponse>
-  readonly deleteApiKey: (request: ApiKeyDeleteRequest) => Promise<ApiKeyDeleteResponse>
-  readonly createAdminInvite: () => Promise<AdminInviteCreateResponse>
-  readonly listAdminInvites: () => Promise<AdminInviteListResponse>
-  readonly getAdminSettings: () => Promise<AdminSettingsViewResponse>
-  readonly updateAdminSettings: (request: AdminSettingsRequest) => Promise<AdminSettingsResponse>
-  readonly listAdminMembers: () => Promise<AdminMemberListResponse>
-  readonly disableAdminMember: (
-    request: AdminMemberDisableRequest,
-  ) => Promise<AdminMemberDisableResponse>
-  readonly listConflicts: () => Promise<ConflictListResponse>
-  readonly resolveConflict: (request: ConflictResolveRequest) => Promise<ConflictResolveResponse>
-  readonly listIngestLogs: (request?: PaginationRequest) => Promise<IngestLogListResponse>
-  readonly listQueryLogs: (request?: PaginationRequest) => Promise<QueryLogListResponse>
-  readonly wikiTree: (request: WikiTreeRequest) => Promise<WikiTreeResponse>
-  readonly wikiPage: (request: WikiPageRequest) => Promise<WikiPageResponse>
-}
+export type { SpecraftClient } from "./client-types.js"
 
 export function createSpecraftClient(config: ClientConfig): SpecraftClient {
   const request = createRequester(config)
@@ -166,6 +112,12 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         requestSchema: AuthLoginRequestSchema,
         responseSchema: AuthSessionResponseSchema,
         body,
+      }),
+    authLogout: () =>
+      request({
+        path: "/api/v1/auth/logout",
+        method: "POST",
+        responseSchema: OkResponseSchema,
       }),
     createApiKey: (body) =>
       request({
@@ -283,6 +235,38 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         method: "GET",
         responseSchema: WikiPageResponseSchema,
         query: [["path", parsed.path]],
+      })
+    },
+    wikiGraph: (body) => {
+      const parsed = WikiGraphRequestSchema.parse(body)
+      return request({
+        path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/graph`,
+        method: "GET",
+        responseSchema: WikiGraphResponseSchema,
+      })
+    },
+    wikiHistory: (body) => {
+      const parsed = WikiHistoryRequestSchema.parse(body)
+      return request({
+        path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/history`,
+        method: "GET",
+        responseSchema: WikiHistoryResponseSchema,
+        query: [["path", parsed.path]],
+      })
+    },
+    testGitConnection: () =>
+      request({
+        path: "/api/v1/admin/git/test-connection",
+        method: "POST",
+        responseSchema: AdminGitTestConnectionResponseSchema,
+      }),
+    enableAdminMember: (body) => {
+      const parsed = AdminMemberEnableRequestSchema.parse(body)
+      return request({
+        path: "/api/v1/admin/members/enable",
+        method: "POST",
+        responseSchema: AdminMemberEnableResponseSchema,
+        body: { id: parsed.id },
       })
     },
   }

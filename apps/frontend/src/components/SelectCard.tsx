@@ -16,10 +16,12 @@ export function SelectCard({ selected, onClick, unpadded, className, children }:
   const Tag = onClick ? "button" : "div"
   return (
     <Tag
-      {...(onClick ? { type: "button" as const, onClick } : {})}
+      {...(onClick ? { type: "button" as const, onClick, "aria-pressed": selected } : {})}
       className={cn(
-        "flex w-full flex-col overflow-hidden rounded-md bg-surface text-left",
-        selected && "border-2 border-accent",
+        // 항상 border-2 border-transparent를 깔아 선택 시 레이아웃 시프트 방지.
+        // 선택은 보더 색만 전환, 색 전환은 fast(150ms) + ease-standard 모션 토큰.
+        "flex w-full flex-col overflow-hidden rounded-md border-2 border-transparent bg-surface text-left transition-colors duration-150 ease-[var(--ease-standard)]",
+        selected ? "border-accent" : onClick && "hover:border-separator active:border-accent/40",
         className,
       )}
     >

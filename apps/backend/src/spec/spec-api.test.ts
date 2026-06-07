@@ -193,7 +193,101 @@ describe("spec REST API", () => {
 
     await server.close()
     database.close()
-  }, 15_000)
+  })
+
+  it("serves wiki graph nodes/edges and per-document history with diffs", async () => {
+    const fixture = createRemote()
+    const database = createDatabase({ path: ":memory:" })
+    const dataDir = mkdtempSync(join(tmpdir(), "specraft-api-graph-"))
+    const server = buildServer({ database, secret, dataDir, codeRemoteUrl: fixture.remote })
+    const admin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: { email: "admin@example.com", password: "password", name: "Admin Author" },
+    })
+    const cookie = admin.cookies[0]?.value ?? ""
+
+    const ingest = async (sessionId: string, description: string): Promise<void> => {
+      const response = await server.inject({
+        method: "POST",
+        url: "/api/v1/ingest",
+        cookies: { specraft_session: cookie },
+        payload: {
+          branch: "main",
+          commit_hash: fixture.commit,
+          agent: "codex",
+          session_id: sessionId,
+          summary: `Ingest ${sessionId}`,
+          spec_changes: [{ type: "added", area: "backend", description, reasoning: "test." }],
+          progress_updates: [],
+          open_questions: [],
+        },
+      })
+      expect(response.statusCode).toBe(200)
+    }
+
+    await ingest("graph-1", "First ingest content.")
+    await ingest("graph-1", "Second ingest content with more lines.")
+
+    const graph = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/main/graph",
+      cookies: { specraft_session: cookie },
+    })
+    expect(graph.statusCode).toBe(200)
+    const graphBody = graph.json<{
+      nodes: readonly { path: string; title: string; dir: string; summary: string }[]
+      edges: readonly { from: string; to: string }[]
+    }>()
+    const indexNode = graphBody.nodes.find((node) => node.path === "index.md")
+    expect(indexNode?.dir).toBe("ROOT")
+    expect(indexNode?.title).toBe("Index")
+    const overviewNode = graphBody.nodes.find((node) => node.path === "overview.md")
+    expect(overviewNode?.summary.length).toBeGreaterThan(0)
+    expect(overviewNode?.summary.length).toBeLessThanOrEqual(100)
+    const changeNode = graphBody.nodes.find((node) => node.path === "changes/graph-1.md")
+    expect(changeNode?.dir).toBe("CHANGES")
+    expect(graphBody.edges).toContainEqual({ from: "index.md", to: "overview.md" })
+    expect(graphBody.edges).toContainEqual({ from: "index.md", to: "changes/graph-1.md" })
+
+    const history = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/main/history?path=changes/graph-1.md",
+      cookies: { specraft_session: cookie },
+    })
+    expect(history.statusCode).toBe(200)
+    const historyBody = history.json<{
+      versions: readonly {
+        commit_hash: string
+        summary: string
+        author: string
+        timestamp: string
+        added_lines: number
+        removed_lines: number
+        added: readonly string[]
+        removed: readonly string[]
+      }[]
+    }>()
+    expect(historyBody.versions.length).toBe(2)
+    expect(historyBody.versions[0]?.summary).toContain("Ingest graph-1")
+    expect(historyBody.versions[0]?.author).toBe("Admin Author")
+    expect(historyBody.versions[0]?.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/)
+    expect(historyBody.versions[0]?.added.length).toBeGreaterThan(0)
+    expect(
+      historyBody.versions[0]?.added.some((line) => line.includes("Second ingest content")),
+    ).toBe(true)
+    expect(historyBody.versions[1]?.added_lines).toBeGreaterThan(0)
+
+    const badHistory = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/main/history?path=../../../etc/passwd",
+      cookies: { specraft_session: cookie },
+    })
+    expect(badHistory.statusCode).toBe(422)
+
+    await server.close()
+    database.close()
+  })
 
   it("rejects ingest when commit validation cannot be configured", async () => {
     const database = createDatabase({ path: ":memory:" })

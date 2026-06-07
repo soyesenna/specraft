@@ -12,6 +12,10 @@ export function setSessionCookie(reply: FastifyReply, memberId: string): void {
   })
 }
 
+export function clearSessionCookie(reply: FastifyReply): void {
+  reply.clearCookie(sessionCookieName, { path: "/" })
+}
+
 export function readSessionMemberId(request: FastifyRequest): string | null {
   const cookie = request.cookies[sessionCookieName]
   if (!cookie) {

@@ -303,6 +303,10 @@ export function disableMember(database: SpecraftDatabase, id: string): void {
     .run(now(), id)
 }
 
+export function enableMember(database: SpecraftDatabase, id: string): void {
+  database.prepare<[string]>("UPDATE members SET disabled_at = NULL WHERE id = ?").run(id)
+}
+
 export function updateSettings(
   database: SpecraftDatabase,
   settings: AdminSettingsRequest,
