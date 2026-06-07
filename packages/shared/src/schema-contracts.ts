@@ -247,6 +247,10 @@ export const WikiGraphNodeSchema = z.object({
   title: z.string(),
   dir: NonEmptyStringSchema,
   summary: z.string(),
+  /** 마지막 수정 커밋 시각(ISO) — 04 리스트 뷰 UPDATED 컬럼용 */
+  updated: z.string().optional(),
+  /** 마지막 수정 커밋 author — 행 아바타 이니셜용 */
+  author: z.string().optional(),
 })
 
 export const WikiGraphEdgeSchema = z.object({

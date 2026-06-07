@@ -95,6 +95,35 @@ type GraphLayout = {
 const NODE_WIDTH = 212
 const NODE_HEIGHT = 78
 
+/** 04 리스트 UPDATED 컬럼 — 상대 시간 표기 */
+function relativeUpdated(iso: string | undefined): string {
+  if (!iso) {
+    return "—"
+  }
+  const elapsedMs = Date.now() - new Date(iso).getTime()
+  const minutes = Math.floor(elapsedMs / 60_000)
+  if (minutes < 1) {
+    return "방금"
+  }
+  if (minutes < 60) {
+    return `${minutes}분 전`
+  }
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) {
+    return `${hours}시간 전`
+  }
+  const days = Math.floor(hours / 24)
+  return `${days}일 전`
+}
+
+function authorInitials(author: string | undefined): string {
+  const trimmed = author?.trim() ?? ""
+  if (trimmed === "") {
+    return "—"
+  }
+  return trimmed.slice(0, 2).toUpperCase()
+}
+
 function hashString(value: string): number {
   let hash = 0
   for (let i = 0; i < value.length; i += 1) {
@@ -103,15 +132,25 @@ function hashString(value: string): number {
   return hash
 }
 
+type LayoutDims = {
+  width: number
+  height: number
+  nodeWidth: number
+  nodeHeight: number
+}
+
 function buildLayout(
   nodes: WikiGraphNode[],
   edges: WikiGraphResponse["edges"],
   selectedPath: string | null,
   collapsed: boolean,
+  dims?: LayoutDims,
 ): GraphLayout {
-  // 03/03b 의 viewBox 폭(펼침 1224 / 접힘 1376)을 그대로 따른다.
-  const width = collapsed ? 1376 : 1224
-  const height = 782
+  // 03/03b 의 viewBox 폭(펼침 1224 / 접힘 1376)을 그대로 따른다. (모바일은 dims 로 358 폭 미니 캔버스)
+  const width = dims?.width ?? (collapsed ? 1376 : 1224)
+  const height = dims?.height ?? 782
+  const nodeWidth = dims?.nodeWidth ?? NODE_WIDTH
+  const nodeHeight = dims?.nodeHeight ?? NODE_HEIGHT
   const cx0 = width / 2
   const cy0 = height / 2
 
@@ -157,7 +196,9 @@ function buildLayout(
     clusters.push({ dir, cx: clusterCx, cy: clusterCy })
 
     // 클러스터 내부는 부채꼴로 펼친다(단일 노드는 중심)
-    const memberRadius = members.length <= 1 ? 0 : 96 + members.length * 12
+    const radiusScale = width / 1224
+    const memberRadius =
+      members.length <= 1 ? 0 : Math.max((96 + members.length * 12) * radiusScale, nodeWidth * 0.62)
     members.forEach((node, memberIndex) => {
       let memberCx = clusterCx
       let memberCy = clusterCy
@@ -168,15 +209,16 @@ function buildLayout(
         memberCy = clusterCy + Math.sin(memberAngle) * (memberRadius * 0.74)
       }
       // 카드가 캔버스를 벗어나지 않도록 클램프
-      const x = Math.min(Math.max(memberCx - NODE_WIDTH / 2, 16), width - NODE_WIDTH - 16)
-      const y = Math.min(Math.max(memberCy - NODE_HEIGHT / 2, 16), height - NODE_HEIGHT - 16)
+      const margin = Math.min(16, width * 0.02)
+      const x = Math.min(Math.max(memberCx - nodeWidth / 2, margin), width - nodeWidth - margin)
+      const y = Math.min(Math.max(memberCy - nodeHeight / 2, margin), height - nodeHeight - margin)
       const entry: LaidOutNode = {
         node,
         x,
         y,
-        width: NODE_WIDTH,
-        cx: x + NODE_WIDTH / 2,
-        cy: y + NODE_HEIGHT / 2,
+        width: nodeWidth,
+        cx: x + nodeWidth / 2,
+        cy: y + nodeHeight / 2,
       }
       laidOut.push(entry)
       byPath.set(node.path, entry)
@@ -747,11 +789,11 @@ function DesktopListView({
               </span>
               <span className="flex w-[110px] shrink-0 items-center">
                 <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
-                  {node.dir.toLowerCase()}
+                  {relativeUpdated(node.updated)}
                 </span>
               </span>
               <span className="flex w-7 shrink-0 items-center">
-                <Avatar initials="SY" size={24} />
+                <Avatar initials={authorInitials(node.author)} size={24} />
               </span>
               <ChevronRight className="size-3.5 shrink-0 text-separator" />
             </button>
@@ -792,8 +834,15 @@ function MobileSpecs({
   const { selectedBranch, branches, setBranch } = useBranch()
   const [branchOpen, setBranchOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  // M03 Mini Canvas — 카드와 엣지가 같은 358 폭 좌표계를 공유한다
   const layout = useMemo(
-    () => buildLayout(nodes, edges, selectedNode?.path ?? null, false),
+    () =>
+      buildLayout(nodes, edges, selectedNode?.path ?? null, false, {
+        width: 358,
+        height: 520,
+        nodeWidth: 138,
+        nodeHeight: 52,
+      }),
     [nodes, edges, selectedNode],
   )
   const connectedNames = selectedNode
@@ -838,34 +887,36 @@ function MobileSpecs({
         <ViewSwitcher view={view} onChange={onViewChange} className="w-full" mobile />
       </div>
       {view === "graph" ? (
-        <div className="relative min-h-0 w-full flex-1 overflow-hidden">
-          <svg
-            viewBox={layout.viewBox}
-            className="pointer-events-none absolute top-0 left-0 h-full w-full"
-            preserveAspectRatio="xMidYMid meet"
-            aria-hidden
-            role="presentation"
-          >
-            {layout.edges.map((edge, i) => {
-              const active =
-                selectedNode !== null &&
-                (edge.from.node.path === selectedNode.path ||
-                  edge.to.node.path === selectedNode.path)
-              return (
-                <line
-                  key={`medge-${i.toString()}`}
-                  x1={edge.from.cx}
-                  y1={edge.from.cy}
-                  x2={edge.to.cx}
-                  y2={edge.to.cy}
-                  stroke={active ? "#0071E3" : "#D2D2D7"}
-                  strokeWidth={active ? 2 : 1.5}
-                />
-              )
-            })}
-          </svg>
-          <div className="absolute inset-0 flex flex-wrap content-start gap-2 overflow-y-auto p-4">
-            {nodes.map((node) => {
+        <div className="min-h-0 w-full flex-1 overflow-hidden">
+          {/* M03 Mini Canvas — 카드·엣지 동일 좌표계(358×520) */}
+          <div className="relative mx-auto h-[520px] w-[358px]">
+            <svg
+              viewBox={layout.viewBox}
+              width={layout.width}
+              height={layout.height}
+              className="pointer-events-none absolute top-0 left-0"
+              aria-hidden
+              role="presentation"
+            >
+              {layout.edges.map((edge, i) => {
+                const active =
+                  selectedNode !== null &&
+                  (edge.from.node.path === selectedNode.path ||
+                    edge.to.node.path === selectedNode.path)
+                return (
+                  <line
+                    key={`medge-${i.toString()}`}
+                    x1={edge.from.cx}
+                    y1={edge.from.cy}
+                    x2={edge.to.cx}
+                    y2={edge.to.cy}
+                    stroke={active ? "#0071E3" : "#D2D2D7"}
+                    strokeWidth={active ? 2 : 1.5}
+                  />
+                )
+              })}
+            </svg>
+            {layout.nodes.map(({ node, x, y }) => {
               const dark = isSkeleton(node)
               return (
                 <button
@@ -873,11 +924,11 @@ function MobileSpecs({
                   type="button"
                   onClick={() => onSheetOpen(node.path)}
                   className={cn(
-                    "flex flex-col gap-px overflow-hidden rounded-[9px] px-2.5 py-[7px] text-left shadow-[0_3px_14px_#00000017]",
+                    "absolute flex flex-col gap-px overflow-hidden rounded-[9px] px-2.5 py-[7px] text-left shadow-[0_3px_14px_#00000017]",
                     dark ? "bg-dark-card" : "bg-surface",
                     selectedNode?.path === node.path && "border-[1.5px] border-accent",
                   )}
-                  style={{ width: 138 }}
+                  style={{ width: 138, left: x, top: y }}
                 >
                   <span
                     className={cn(

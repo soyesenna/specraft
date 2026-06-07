@@ -1,6 +1,11 @@
 import type { WikiGraphEdge, WikiGraphNode, WikiGraphResponse } from "@specraft/shared"
 
-import { listWikiFiles, readWikiFile, type WikiRepository } from "../git/sync.js"
+import {
+  listWikiFiles,
+  listWikiLastModified,
+  readWikiFile,
+  type WikiRepository,
+} from "../git/sync.js"
 
 const summaryMaxLength = 100
 
@@ -79,15 +84,18 @@ function linkTargets(content: string): readonly string[] {
 export function buildWikiGraph(wiki: WikiRepository, branch: string): WikiGraphResponse {
   const files = listWikiFiles(wiki).filter((path) => path.endsWith(".md"))
   const known = new Set(files)
+  const lastModified = listWikiLastModified(wiki)
   const nodes: WikiGraphNode[] = []
   const edges: WikiGraphEdge[] = []
   for (const path of files) {
     const content = readWikiFile(wiki, path)
+    const touch = lastModified.get(path)
     nodes.push({
       path,
       title: titleOf(content, path),
       dir: dirOf(path),
       summary: summaryOf(content),
+      ...(touch ? { updated: touch.timestamp, author: touch.author } : {}),
     })
     for (const rawTarget of linkTargets(content)) {
       const target = normalizeLinkTarget(path, rawTarget)
