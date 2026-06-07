@@ -182,26 +182,12 @@ function nonEmpty(value: string): string | undefined {
 
 /* ───────────────────────── 데스크톱 콘텐츠 ───────────────────────── */
 
-function GitModelsContent({ data }: { data: SettingsData }) {
-  const {
-    client,
-    gitRemoteUrl,
-    setGitRemoteUrl,
-    credentialConfigured,
-    ingestModel,
-    setIngestModel,
-    queryModel,
-    setQueryModel,
-  } = data
+function GitContent({ data }: { data: SettingsData }) {
+  const { client, gitRemoteUrl, setGitRemoteUrl, credentialConfigured } = data
   const [credentialMode, setCredentialMode] = useState<"ssh" | "https">("ssh")
-  const ingestModelId = useId()
-  const queryModelId = useId()
   const [gitSaved, setGitSaved] = useState(false)
   const [gitSaving, setGitSaving] = useState(false)
   const [gitError, setGitError] = useState<string | null>(null)
-  const [modelsSaved, setModelsSaved] = useState(false)
-  const [modelsSaving, setModelsSaving] = useState(false)
-  const [modelsError, setModelsError] = useState<string | null>(null)
   const [testResult, setTestResult] = useState<"idle" | "ok" | "failed">("idle")
   const [testing, setTesting] = useState(false)
 
@@ -221,6 +207,161 @@ function GitModelsContent({ data }: { data: SettingsData }) {
       setGitSaving(false)
     }
   }
+
+  async function testConnection(): Promise<void> {
+    setTesting(true)
+    try {
+      const response = await client.testGitConnection()
+      setTestResult(response.status === "ok" ? "ok" : "failed")
+    } catch {
+      setTestResult("failed")
+    } finally {
+      setTesting(false)
+    }
+  }
+
+  return (
+    <section className="flex w-full flex-col gap-4 rounded-md bg-surface px-6 py-[22px]">
+      <div className="flex w-full flex-col gap-1">
+        <span className="pen-text text-[16px] font-semibold tracking-[-0.26px] text-ink">
+          Git integration
+        </span>
+        <span className="pen-text w-full text-[12.5px] leading-[1.5] tracking-[-0.12px] text-ink-tertiary">
+          코드 저장소 미러링에 사용할 remote와 credential — 서버는 코드 repo에 read-only로만
+          접근합니다.
+        </span>
+      </div>
+      <div className="flex w-full flex-col gap-1.5">
+        <label className="flex w-full flex-col gap-1.5">
+          <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
+            Remote URL
+          </span>
+          <div className="w-full rounded-sm focus-within:ring-2 focus-within:ring-accent">
+            <input
+              value={gitRemoteUrl}
+              onChange={(event) => {
+                setGitRemoteUrl(event.currentTarget.value)
+                setGitSaved(false)
+                setGitError(null)
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault()
+                  void saveGit()
+                }
+              }}
+              className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12.5px] text-ink outline-none"
+            />
+          </div>
+        </label>
+        <span className="flex items-center gap-1.5">
+          <span
+            className={cn(
+              "size-1.5 rounded-full",
+              credentialConfigured ? "bg-success" : "bg-separator",
+            )}
+          />
+          <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
+            {credentialConfigured ? "Connected · credential 등록됨" : "credential 미등록"}
+          </span>
+        </span>
+      </div>
+      <div className="flex w-full flex-col gap-1.5">
+        <div className="flex w-full items-center gap-2.5">
+          <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
+            Credential
+          </span>
+          <div className="flex items-center gap-0.5 rounded-sm bg-input p-0.5">
+            <button
+              type="button"
+              onClick={() => setCredentialMode("ssh")}
+              aria-pressed={credentialMode === "ssh"}
+              className={cn(
+                "flex items-center rounded-[6px] px-2.5 py-[3px] transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
+                credentialMode === "ssh" && "bg-surface shadow-[0_1px_3px_#0000001F]",
+              )}
+            >
+              <span
+                className={cn(
+                  "pen-text text-[11.5px] font-medium tracking-[-0.1px]",
+                  credentialMode === "ssh" ? "text-ink" : "text-ink-tertiary",
+                )}
+              >
+                SSH deploy key
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setCredentialMode("https")}
+              aria-pressed={credentialMode === "https"}
+              className={cn(
+                "flex items-center rounded-[6px] px-2.5 py-[3px] transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
+                credentialMode === "https" && "bg-surface shadow-[0_1px_3px_#0000001F]",
+              )}
+            >
+              <span
+                className={cn(
+                  "pen-text text-[11.5px] font-medium tracking-[-0.1px]",
+                  credentialMode === "https" ? "text-ink" : "text-ink-tertiary",
+                )}
+              >
+                HTTPS PAT
+              </span>
+            </button>
+          </div>
+        </div>
+        <div className="flex h-9 w-full items-center gap-2 rounded-sm bg-bg px-3">
+          <span className="pen-text font-mono text-[12.5px] text-ink">
+            {credentialConfigured
+              ? credentialMode === "ssh"
+                ? "ssh-ed25519 ••••••••••••••••••••"
+                : "ghp_••••••••••••••••••••"
+              : "미설정"}
+          </span>
+          <span className="h-px flex-1" />
+          <EyeOffIcon />
+        </div>
+        <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
+          credential은 SPECRAFT_SECRET 파생 키로 암호화 저장됩니다
+        </span>
+      </div>
+      <div className="flex w-full items-center gap-2.5">
+        <SecondaryButton onClick={testConnection} disabled={testing}>
+          Test connection
+        </SecondaryButton>
+        {testResult !== "idle" && (
+          <span
+            className={cn(
+              "pen-text text-[12px] tracking-[-0.12px]",
+              testResult === "ok" ? "text-success" : "text-danger",
+            )}
+          >
+            {testResult === "ok" ? "연결 성공" : "연결 실패"}
+          </span>
+        )}
+        <span className="h-px flex-1" />
+        <PrimaryButton onClick={saveGit} disabled={gitSaving}>
+          Save
+        </PrimaryButton>
+      </div>
+      {gitError ? (
+        <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{gitError}</span>
+      ) : gitSaved ? (
+        <span className="pen-text text-[12px] tracking-[-0.12px] text-success">
+          Settings saved from API
+        </span>
+      ) : null}
+    </section>
+  )
+}
+
+function ModelsContent({ data }: { data: SettingsData }) {
+  const { client, ingestModel, setIngestModel, queryModel, setQueryModel } = data
+  const ingestModelId = useId()
+  const queryModelId = useId()
+  const [modelsSaved, setModelsSaved] = useState(false)
+  const [modelsSaving, setModelsSaving] = useState(false)
+  const [modelsError, setModelsError] = useState<string | null>(null)
 
   async function saveModels(): Promise<void> {
     if (modelsSaving) {
@@ -242,234 +383,87 @@ function GitModelsContent({ data }: { data: SettingsData }) {
     }
   }
 
-  async function testConnection(): Promise<void> {
-    setTesting(true)
-    try {
-      const response = await client.testGitConnection()
-      setTestResult(response.status === "ok" ? "ok" : "failed")
-    } catch {
-      setTestResult("failed")
-    } finally {
-      setTesting(false)
-    }
-  }
-
   return (
-    <>
-      <section className="flex w-full flex-col gap-4 rounded-md bg-surface px-6 py-[22px]">
-        <div className="flex w-full flex-col gap-1">
-          <span className="pen-text text-[16px] font-semibold tracking-[-0.26px] text-ink">
-            Git integration
-          </span>
-          <span className="pen-text w-full text-[12.5px] leading-[1.5] tracking-[-0.12px] text-ink-tertiary">
-            코드 저장소 미러링에 사용할 remote와 credential — 서버는 코드 repo에 read-only로만
-            접근합니다.
-          </span>
-        </div>
-        <div className="flex w-full flex-col gap-1.5">
-          <label className="flex w-full flex-col gap-1.5">
-            <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
-              Remote URL
-            </span>
-            <div className="w-full rounded-sm focus-within:ring-2 focus-within:ring-accent">
-              <input
-                value={gitRemoteUrl}
-                onChange={(event) => {
-                  setGitRemoteUrl(event.currentTarget.value)
-                  setGitSaved(false)
-                  setGitError(null)
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault()
-                    void saveGit()
-                  }
-                }}
-                className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12.5px] text-ink outline-none"
-              />
-            </div>
+    <section className="flex w-full flex-col gap-4 rounded-md bg-surface px-6 py-[22px]">
+      <div className="flex w-full flex-col gap-1">
+        <span className="pen-text text-[16px] font-semibold tracking-[-0.26px] text-ink">
+          Models
+        </span>
+        <span className="pen-text w-full text-[12.5px] leading-[1.5] tracking-[-0.12px] text-ink-tertiary">
+          OpenRouter 모델 슬러그 — ingest용과 query용을 분리 설정할 수 있습니다.
+        </span>
+      </div>
+      <div className="flex w-full gap-3.5">
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <label
+            htmlFor={ingestModelId}
+            className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink"
+          >
+            Ingest model
           </label>
-          <span className="flex items-center gap-1.5">
-            <span
-              className={cn(
-                "size-1.5 rounded-full",
-                credentialConfigured ? "bg-success" : "bg-separator",
-              )}
+          <div className="w-full rounded-sm focus-within:ring-2 focus-within:ring-accent">
+            <input
+              id={ingestModelId}
+              value={ingestModel}
+              onChange={(event) => {
+                setIngestModel(event.currentTarget.value)
+                setModelsSaved(false)
+                setModelsError(null)
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault()
+                  void saveModels()
+                }
+              }}
+              className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12px] text-ink outline-none"
             />
-            <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
-              {credentialConfigured ? "Connected · credential 등록됨" : "credential 미등록"}
-            </span>
-          </span>
-        </div>
-        <div className="flex w-full flex-col gap-1.5">
-          <div className="flex w-full items-center gap-2.5">
-            <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
-              Credential
-            </span>
-            <div className="flex items-center gap-0.5 rounded-sm bg-input p-0.5">
-              <button
-                type="button"
-                onClick={() => setCredentialMode("ssh")}
-                aria-pressed={credentialMode === "ssh"}
-                className={cn(
-                  "flex items-center rounded-[6px] px-2.5 py-[3px] transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
-                  credentialMode === "ssh" && "bg-surface shadow-[0_1px_3px_#0000001F]",
-                )}
-              >
-                <span
-                  className={cn(
-                    "pen-text text-[11.5px] font-medium tracking-[-0.1px]",
-                    credentialMode === "ssh" ? "text-ink" : "text-ink-tertiary",
-                  )}
-                >
-                  SSH deploy key
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setCredentialMode("https")}
-                aria-pressed={credentialMode === "https"}
-                className={cn(
-                  "flex items-center rounded-[6px] px-2.5 py-[3px] transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
-                  credentialMode === "https" && "bg-surface shadow-[0_1px_3px_#0000001F]",
-                )}
-              >
-                <span
-                  className={cn(
-                    "pen-text text-[11.5px] font-medium tracking-[-0.1px]",
-                    credentialMode === "https" ? "text-ink" : "text-ink-tertiary",
-                  )}
-                >
-                  HTTPS PAT
-                </span>
-              </button>
-            </div>
           </div>
-          <div className="flex h-9 w-full items-center gap-2 rounded-sm bg-bg px-3">
-            <span className="pen-text font-mono text-[12.5px] text-ink">
-              {credentialConfigured
-                ? credentialMode === "ssh"
-                  ? "ssh-ed25519 ••••••••••••••••••••"
-                  : "ghp_••••••••••••••••••••"
-                : "미설정"}
-            </span>
-            <span className="h-px flex-1" />
-            <EyeOffIcon />
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <label
+            htmlFor={queryModelId}
+            className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink"
+          >
+            Query model
+          </label>
+          <div className="w-full rounded-sm focus-within:ring-2 focus-within:ring-accent">
+            <input
+              id={queryModelId}
+              value={queryModel}
+              onChange={(event) => {
+                setQueryModel(event.currentTarget.value)
+                setModelsSaved(false)
+                setModelsError(null)
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault()
+                  void saveModels()
+                }
+              }}
+              className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12px] text-ink outline-none"
+            />
           </div>
-          <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
-            credential은 SPECRAFT_SECRET 파생 키로 암호화 저장됩니다
-          </span>
         </div>
-        <div className="flex w-full items-center gap-2.5">
-          <SecondaryButton onClick={testConnection} disabled={testing}>
-            Test connection
-          </SecondaryButton>
-          {testResult !== "idle" && (
-            <span
-              className={cn(
-                "pen-text text-[12px] tracking-[-0.12px]",
-                testResult === "ok" ? "text-success" : "text-danger",
-              )}
-            >
-              {testResult === "ok" ? "연결 성공" : "연결 실패"}
-            </span>
-          )}
-          <span className="h-px flex-1" />
-          <PrimaryButton onClick={saveGit} disabled={gitSaving}>
-            Save
-          </PrimaryButton>
-        </div>
-        {gitError ? (
-          <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{gitError}</span>
-        ) : gitSaved ? (
+      </div>
+      <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
+        OPENROUTER_API_KEY는 서버 env에서 관리됩니다 — 대시보드에는 노출되지 않습니다
+      </span>
+      <div className="flex w-full items-center gap-2.5">
+        {modelsError ? (
+          <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{modelsError}</span>
+        ) : modelsSaved ? (
           <span className="pen-text text-[12px] tracking-[-0.12px] text-success">
-            Settings saved from API
+            Models saved from API
           </span>
         ) : null}
-      </section>
-      <section className="flex w-full flex-col gap-4 rounded-md bg-surface px-6 py-[22px]">
-        <div className="flex w-full flex-col gap-1">
-          <span className="pen-text text-[16px] font-semibold tracking-[-0.26px] text-ink">
-            Models
-          </span>
-          <span className="pen-text w-full text-[12.5px] leading-[1.5] tracking-[-0.12px] text-ink-tertiary">
-            OpenRouter 모델 슬러그 — ingest용과 query용을 분리 설정할 수 있습니다.
-          </span>
-        </div>
-        <div className="flex w-full gap-3.5">
-          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <label
-              htmlFor={ingestModelId}
-              className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink"
-            >
-              Ingest model
-            </label>
-            <div className="w-full rounded-sm focus-within:ring-2 focus-within:ring-accent">
-              <input
-                id={ingestModelId}
-                value={ingestModel}
-                onChange={(event) => {
-                  setIngestModel(event.currentTarget.value)
-                  setModelsSaved(false)
-                  setModelsError(null)
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault()
-                    void saveModels()
-                  }
-                }}
-                className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12px] text-ink outline-none"
-              />
-            </div>
-          </div>
-          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <label
-              htmlFor={queryModelId}
-              className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink"
-            >
-              Query model
-            </label>
-            <div className="w-full rounded-sm focus-within:ring-2 focus-within:ring-accent">
-              <input
-                id={queryModelId}
-                value={queryModel}
-                onChange={(event) => {
-                  setQueryModel(event.currentTarget.value)
-                  setModelsSaved(false)
-                  setModelsError(null)
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault()
-                    void saveModels()
-                  }
-                }}
-                className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12px] text-ink outline-none"
-              />
-            </div>
-          </div>
-        </div>
-        <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
-          OPENROUTER_API_KEY는 서버 env에서 관리됩니다 — 대시보드에는 노출되지 않습니다
-        </span>
-        <div className="flex w-full items-center gap-2.5">
-          {modelsError ? (
-            <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">
-              {modelsError}
-            </span>
-          ) : modelsSaved ? (
-            <span className="pen-text text-[12px] tracking-[-0.12px] text-success">
-              Models saved from API
-            </span>
-          ) : null}
-          <span className="h-px flex-1" />
-          <PrimaryButton onClick={saveModels} disabled={modelsSaving}>
-            Save
-          </PrimaryButton>
-        </div>
-      </section>
-    </>
+        <span className="h-px flex-1" />
+        <PrimaryButton onClick={saveModels} disabled={modelsSaving}>
+          Save
+        </PrimaryButton>
+      </div>
+    </section>
   )
 }
 
@@ -1451,9 +1445,8 @@ export function SettingsPage() {
             <SettingsNav active={desktopSection} />
             <div className="flex min-h-0 max-w-[660px] min-w-0 flex-1 flex-col gap-[18px] overflow-y-auto">
               {desktopSection === "general" && <GeneralContent />}
-              {(desktopSection === "git" || desktopSection === "models") && (
-                <GitModelsContent data={data} />
-              )}
+              {desktopSection === "git" && <GitContent data={data} />}
+              {desktopSection === "models" && <ModelsContent data={data} />}
               {desktopSection === "keys" && <KeysContent data={data} />}
               {desktopSection === "members" && <MembersContent data={data} />}
               {desktopSection === "invites" && <InvitesContent data={data} />}
