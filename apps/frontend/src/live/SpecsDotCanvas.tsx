@@ -3,7 +3,7 @@ import { Minus } from "lucide-react"
 import { useMemo } from "react"
 import { useSidebarCollapsed } from "../components/sidebarCollapsed.js"
 import { DetailPanel, ZoomControls } from "./SpecsGraphDetailPanel.js"
-import { buildLayout, fileNameOf } from "./specsGraphModel.js"
+import { buildLayout, fileNameOf, hashString } from "./specsGraphModel.js"
 import { type GraphViewport, graphZoomPercent, type ViewportUpdater } from "./specsGraphViewport.js"
 import { useGraphViewport } from "./useGraphViewport.js"
 
@@ -35,11 +35,8 @@ export function DesktopDotCanvas({
   const collapsed = useSidebarCollapsed()
   const controls = useGraphViewport(viewport, onViewportChange)
   const layout = useMemo(() => buildLayout(nodes, edges, collapsed), [nodes, edges, collapsed])
-  // 비선택 dot은 단일 accent 규칙(DESIGN.md §7/§12-6)을 지키기 위해 토큰화된 중립 ink로 통일한다.
-  // 선택 dot만 accent(#0071E3)를 사용해 chromatic budget을 단일 accent에 집중.
-  const dotColor = "#1D1D1F"
-  // 허브는 separator 토큰 회색으로 — 새 chromatic 색 도입 금지.
-  const hubColor = "#D2D2D7"
+  // 코스모스 dot 팔레트 — specraft-ui.pen 03c 화면 정본(파랑 계열 3색 + 글로우)과 1:1 정합.
+  const dotColors = ["#7E92CE", "#5F76B8", "#9AACE4"] as const
   const zoomPercent = graphZoomPercent(viewport.scale)
 
   return (
@@ -84,20 +81,16 @@ export function DesktopDotCanvas({
           <span
             key={`hub-${cluster.dir}`}
             aria-hidden
-            className="absolute rounded-[2.5px]"
-            style={{
-              left: cluster.cx - 6,
-              top: cluster.cy - 6,
-              width: 12,
-              height: 12,
-              background: hubColor,
-            }}
+            className="absolute rounded-[2.5px] bg-[#59616F]"
+            style={{ left: cluster.cx - 6, top: cluster.cy - 6, width: 12, height: 12 }}
           />
         ))}
         {layout.nodes.map((entry) => {
           const selected = selectedNode?.path === entry.node.path
           const size = 11
-          const color = selected ? "#0071E3" : dotColor
+          const color = selected
+            ? "#0071E3"
+            : (dotColors[hashString(entry.node.path) % dotColors.length] ?? "#7E92CE")
           return (
             <button
               key={`dot-${entry.node.path}`}
@@ -117,7 +110,8 @@ export function DesktopDotCanvas({
           )
         })}
       </div>
-      <div className="absolute top-4 left-6 flex items-center gap-1.5 rounded-pill bg-surface px-3 py-[5px] shadow-[0_1px_6px_#00000014]">
+      {/* 줌 배지 — 디자인 정본(M03c) 의도대로 상단 중앙, 뷰포트 폭과 무관하게 중앙 유지. */}
+      <div className="-translate-x-1/2 absolute top-4 left-1/2 flex items-center gap-1.5 rounded-pill bg-surface px-3 py-[5px] shadow-[0_1px_6px_#00000014]">
         <Minus className="size-3 text-ink-secondary" />
         <span className="pen-text text-[11.5px] font-medium tracking-[-0.1px] text-ink-secondary">
           Compact view — zoom {zoomPercent}
@@ -139,11 +133,11 @@ function DotLegend() {
   return (
     <div className="absolute bottom-7 left-[72px] flex items-center gap-4">
       <span className="flex items-center gap-1.5">
-        <span className="size-[9px] rounded-full border-[2.6px] border-ink" />
+        <span className="size-[9px] rounded-full border-[2.6px] border-[#5F76B8]" />
         <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">Document</span>
       </span>
       <span className="flex items-center gap-1.5">
-        <span className="size-[9px] rounded-[2px] bg-separator" />
+        <span className="size-[9px] rounded-[2px] bg-[#59616F]" />
         <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">Hub</span>
       </span>
       <span className="flex items-center gap-1.5">

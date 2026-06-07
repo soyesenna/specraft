@@ -99,7 +99,7 @@ export function JoinInviteScreen() {
           </span>
         </div>
         {card}
-        <span className="pen-text text-[11px] tracking-[-0.1px] text-[#00000052]">
+        <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">
           가입은 초대 링크로만 가능합니다
         </span>
       </div>
@@ -117,7 +117,7 @@ export function JoinInviteScreen() {
           {card}
         </div>
         <div className="flex h-14 w-full shrink-0 items-center justify-center">
-          <span className="pen-text text-[10.5px] tracking-[-0.1px] text-[#00000052]">
+          <span className="pen-text text-[10.5px] tracking-[-0.1px] text-ink-tertiary">
             가입은 초대 링크로만 가능합니다
           </span>
         </div>
