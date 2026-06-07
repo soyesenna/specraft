@@ -10560,353 +10560,24 @@
                   "children": [
                     {
                       "type": "frame",
-                      "id": "ndG0c",
-                      "name": "K Header",
-                      "width": "fill_container",
-                      "height": 36,
-                      "stroke": "$hairline",
-                      "strokeWidth": {
-                        "bottom": 1
-                      },
-                      "gap": 14,
-                      "padding": [
-                        0,
-                        18
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "iq7fY",
-                          "name": "KH NAME",
-                          "width": 170,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "HjiAj",
-                              "name": "KHL NAME",
-                              "fill": "$ink-tertiary",
-                              "content": "NAME",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10.5,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.6
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "lLNWH",
-                          "name": "KH KEY",
-                          "width": 190,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "RTEiz",
-                              "name": "KHL KEY",
-                              "fill": "$ink-tertiary",
-                              "content": "KEY",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10.5,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.6
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "X8QtxU",
-                          "name": "KH CREATED",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "oWC0U",
-                              "name": "KHL CREATED",
-                              "fill": "$ink-tertiary",
-                              "content": "CREATED",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10.5,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.6
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "lGITW",
-                          "name": "KH LAST USED",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "q3gmt",
-                              "name": "KHL LAST USED",
-                              "fill": "$ink-tertiary",
-                              "content": "LAST USED",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10.5,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.6
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "pQnqI",
-                          "name": "KH Spacer",
-                          "width": "fill_container",
-                          "height": 1
-                        }
-                      ]
+                      "id": "g60ZQ",
+                      "width": "fit_content(0)",
+                      "height": "fit_content(0)",
+                      "gap": 12
                     },
                     {
                       "type": "frame",
-                      "id": "iL1MB",
-                      "name": "Key MacBook Pro · Claude Code",
-                      "width": "fill_container",
-                      "height": 46,
-                      "stroke": "$hairline",
-                      "strokeWidth": {
-                        "bottom": 1
-                      },
-                      "gap": 14,
-                      "padding": [
-                        0,
-                        18
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "JYGaY",
-                          "name": "KC Name",
-                          "clip": true,
-                          "width": 170,
-                          "gap": 8,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "VitS5",
-                              "name": "K Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "key",
-                              "library": "lucide",
-                              "fill": "$ink-tertiary"
-                            },
-                            {
-                              "type": "text",
-                              "id": "Z0L53",
-                              "name": "K Name",
-                              "fill": "$ink",
-                              "content": "MacBook Pro · Claude Code",
-                              "fontFamily": "$font-text",
-                              "fontSize": 13,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.2
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "wg655",
-                          "name": "KC Prefix",
-                          "width": 190,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "jRpbK",
-                              "name": "K Prefix",
-                              "fill": "$ink-secondary",
-                              "content": "sk-spcrft-9f3e…b1d",
-                              "fontFamily": "$font-mono",
-                              "fontSize": 11.5,
-                              "fontWeight": "normal"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "Kuoxd",
-                          "name": "KC Created",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "x5xSm",
-                              "name": "K Created",
-                              "fill": "$ink-tertiary",
-                              "content": "오늘",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "U9Uf7j",
-                          "name": "KC Used",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "NhJHp",
-                              "name": "K Used",
-                              "fill": "$ink-tertiary",
-                              "content": "방금",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "Htlt0",
-                          "name": "KC Spacer",
-                          "width": "fill_container",
-                          "height": 1
-                        },
-                        {
-                          "type": "text",
-                          "id": "ddE4V",
-                          "name": "K Revoke",
-                          "fill": "$danger",
-                          "content": "Revoke",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12.5,
-                          "fontWeight": "500",
-                          "letterSpacing": -0.12
-                        }
-                      ]
+                      "id": "pNkLk",
+                      "width": "fit_content(0)",
+                      "height": "fit_content(0)",
+                      "gap": 12
                     },
                     {
                       "type": "frame",
-                      "id": "h1OT3w",
-                      "name": "Key Codex CLI",
-                      "width": "fill_container",
-                      "height": 46,
-                      "gap": 14,
-                      "padding": [
-                        0,
-                        18
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "OyVwe",
-                          "name": "KC Name",
-                          "clip": true,
-                          "width": 170,
-                          "gap": 8,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "JRq9i",
-                              "name": "K Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "key",
-                              "library": "lucide",
-                              "fill": "$ink-tertiary"
-                            },
-                            {
-                              "type": "text",
-                              "id": "RVFHz",
-                              "name": "K Name",
-                              "fill": "$ink",
-                              "content": "Codex CLI",
-                              "fontFamily": "$font-text",
-                              "fontSize": 13,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.2
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "MY7hx",
-                          "name": "KC Prefix",
-                          "width": 190,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "f8zrV",
-                              "name": "K Prefix",
-                              "fill": "$ink-secondary",
-                              "content": "sk-spcrft-77ab…e42",
-                              "fontFamily": "$font-mono",
-                              "fontSize": 11.5,
-                              "fontWeight": "normal"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "ToEtd",
-                          "name": "KC Created",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "n6q4b",
-                              "name": "K Created",
-                              "fill": "$ink-tertiary",
-                              "content": "3월 12일",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "oMGPv",
-                          "name": "KC Used",
-                          "width": 90,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "Jd2ij",
-                              "name": "K Used",
-                              "fill": "$ink-tertiary",
-                              "content": "어제",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "normal",
-                              "letterSpacing": -0.12
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "wCY1B",
-                          "name": "KC Spacer",
-                          "width": "fill_container",
-                          "height": 1
-                        },
-                        {
-                          "type": "text",
-                          "id": "PnoWo",
-                          "name": "K Revoke",
-                          "fill": "$danger",
-                          "content": "Revoke",
-                          "fontFamily": "$font-text",
-                          "fontSize": 12.5,
-                          "fontWeight": "500",
-                          "letterSpacing": -0.12
-                        }
-                      ]
+                      "id": "tbHX6",
+                      "width": "fit_content(0)",
+                      "height": "fit_content(0)",
+                      "gap": 12
                     }
                   ]
                 },
@@ -37971,6 +37642,292 @@
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "R0MWTM",
+      "x": 12160,
+      "y": 1320,
+      "name": "01b · Admin Setup",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "gap": 36,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "yB0R5",
+          "name": "Brand Lockup",
+          "layout": "vertical",
+          "gap": 14,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "fiNBZ",
+              "name": "Mark Row",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "tBQyV",
+                  "name": "Logo Glyph",
+                  "width": 30,
+                  "height": 30,
+                  "icon": "waypoints",
+                  "library": "lucide",
+                  "fill": "$ink"
+                },
+                {
+                  "type": "text",
+                  "id": "wGAcM",
+                  "name": "Wordmark",
+                  "fill": "$ink",
+                  "content": "specraft",
+                  "fontFamily": "$font-display",
+                  "fontSize": 40,
+                  "fontWeight": "600",
+                  "letterSpacing": -0.8
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "dHwuT",
+              "name": "Tagline",
+              "fill": "$ink-tertiary",
+              "content": "Single source of spec truth.",
+              "fontFamily": "$font-display",
+              "fontSize": 16,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "QqXDa",
+          "name": "Admin Setup Card",
+          "width": 360,
+          "fill": "$surface",
+          "cornerRadius": "$radius-l",
+          "layout": "vertical",
+          "gap": 14,
+          "padding": 26,
+          "children": [
+            {
+              "type": "frame",
+              "id": "eOw0t",
+              "name": "Card Head",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 5,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "wg0et",
+                  "name": "Card Title",
+                  "fill": "$ink",
+                  "content": "Admin setup",
+                  "fontFamily": "$font-display",
+                  "fontSize": 20,
+                  "fontWeight": "600",
+                  "letterSpacing": -0.3
+                },
+                {
+                  "type": "text",
+                  "id": "ee2sD",
+                  "name": "Card Sub",
+                  "fill": "$ink-tertiary",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "최초 관리자 계정을 생성합니다",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$font-text",
+                  "fontSize": 12.5,
+                  "fontWeight": "normal",
+                  "letterSpacing": -0.12
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "WJftz",
+              "name": "Field Name",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "fwLbl",
+                  "name": "FL Name",
+                  "fill": "$ink",
+                  "content": "Name",
+                  "fontFamily": "$font-text",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": -0.12
+                },
+                {
+                  "type": "frame",
+                  "id": "FM6E5",
+                  "name": "FI Name",
+                  "width": "fill_container",
+                  "height": 38,
+                  "fill": "#F5F5F7",
+                  "cornerRadius": "$radius-s",
+                  "padding": [
+                    0,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "D51tY",
+                      "name": "FV Name",
+                      "fill": "$ink",
+                      "content": "수연",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BTgep",
+              "name": "Field Email",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Q5QLo",
+                  "name": "FL Email",
+                  "fill": "$ink",
+                  "content": "Email",
+                  "fontFamily": "$font-text",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": -0.12
+                },
+                {
+                  "type": "frame",
+                  "id": "eQNsL",
+                  "name": "FI Email",
+                  "width": "fill_container",
+                  "height": 38,
+                  "fill": "#F5F5F7",
+                  "cornerRadius": "$radius-s",
+                  "padding": [
+                    0,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "AOHWM",
+                      "name": "FV Email",
+                      "fill": "$ink",
+                      "content": "senna@prompt.town",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "KQSw9",
+              "name": "Field Password",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "OJTPi",
+                  "name": "FL Password",
+                  "fill": "$ink",
+                  "content": "Password",
+                  "fontFamily": "$font-text",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": -0.12
+                },
+                {
+                  "type": "frame",
+                  "id": "vl30z",
+                  "name": "FI Password",
+                  "width": "fill_container",
+                  "height": 38,
+                  "fill": "#F5F5F7",
+                  "cornerRadius": "$radius-s",
+                  "padding": [
+                    0,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Ld3GT",
+                      "name": "FV Password",
+                      "fill": "$ink-tertiary",
+                      "content": "최소 12자",
+                      "fontFamily": "$font-text",
+                      "fontSize": 13.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ndjC9",
+              "type": "ref",
+              "ref": "m2N0bx",
+              "name": "Create admin Btn",
+              "width": "fill_container",
+              "height": 40,
+              "descendants": {
+                "wSvQI": {
+                  "content": "Create admin",
+                  "fontWeight": "500",
+                  "letterSpacing": -0.24
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "FIfDU",
+          "name": "Footer Note",
+          "fill": "#00000052",
+          "content": "specraft v1 · self-hosted · spec integrity over availability",
+          "fontFamily": "$font-text",
+          "fontSize": 11,
+          "fontWeight": "normal",
+          "letterSpacing": -0.1
         }
       ]
     }
