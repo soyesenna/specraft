@@ -982,26 +982,68 @@
                           "gap": 5,
                           "children": [
                             {
-                              "type": "text",
-                              "id": "sjkvp",
-                              "name": "Panel Dir",
-                              "fill": "$ink-tertiary",
-                              "content": "SPECS",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.8
-                            },
-                            {
-                              "type": "text",
-                              "id": "o067Eu",
-                              "name": "Panel Title",
-                              "fill": "$ink",
-                              "content": "stop-gate.md",
-                              "fontFamily": "$font-display",
-                              "fontSize": 21,
-                              "fontWeight": "600",
-                              "letterSpacing": -0.3
+                              "type": "frame",
+                              "id": "Yo6LU",
+                              "name": "Panel Head Row",
+                              "width": "fill_container",
+                              "gap": 10,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "kecEx",
+                                  "name": "Panel Head Col",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 5,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "sjkvp",
+                                      "name": "Panel Dir",
+                                      "fill": "$ink-tertiary",
+                                      "content": "SPECS",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 10,
+                                      "fontWeight": "600",
+                                      "letterSpacing": 0.8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "o067Eu",
+                                      "name": "Panel Title",
+                                      "fill": "$ink",
+                                      "content": "stop-gate.md",
+                                      "fontFamily": "$font-display",
+                                      "fontSize": 21,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.3
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "XgwT7",
+                                  "name": "Panel Close",
+                                  "width": 28,
+                                  "height": 28,
+                                  "fill": "#F5F5F7",
+                                  "cornerRadius": 14,
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "Ninnl",
+                                      "name": "Panel Close Icon",
+                                      "width": 13,
+                                      "height": 13,
+                                      "icon": "x",
+                                      "library": "lucide",
+                                      "fill": "$ink-tertiary"
+                                    }
+                                  ]
+                                }
+                              ]
                             },
                             {
                               "type": "text",
@@ -14477,26 +14519,68 @@
                           "gap": 5,
                           "children": [
                             {
-                              "type": "text",
-                              "id": "mLdLw",
-                              "name": "Panel Dir",
-                              "fill": "$ink-tertiary",
-                              "content": "SPECS",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.8
-                            },
-                            {
-                              "type": "text",
-                              "id": "d4QZm",
-                              "name": "Panel Title",
-                              "fill": "$ink",
-                              "content": "stop-gate.md",
-                              "fontFamily": "$font-display",
-                              "fontSize": 21,
-                              "fontWeight": "600",
-                              "letterSpacing": -0.3
+                              "type": "frame",
+                              "id": "N6xxf",
+                              "name": "Panel Head Row",
+                              "width": "fill_container",
+                              "gap": 10,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Q50uc",
+                                  "name": "Panel Head Col",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 5,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "mLdLw",
+                                      "name": "Panel Dir",
+                                      "fill": "$ink-tertiary",
+                                      "content": "SPECS",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 10,
+                                      "fontWeight": "600",
+                                      "letterSpacing": 0.8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "d4QZm",
+                                      "name": "Panel Title",
+                                      "fill": "$ink",
+                                      "content": "stop-gate.md",
+                                      "fontFamily": "$font-display",
+                                      "fontSize": 21,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.3
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "X2H9s",
+                                  "name": "Panel Close",
+                                  "width": 28,
+                                  "height": 28,
+                                  "fill": "#F5F5F7",
+                                  "cornerRadius": 14,
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "VyD3h",
+                                      "name": "Panel Close Icon",
+                                      "width": 13,
+                                      "height": 13,
+                                      "icon": "x",
+                                      "library": "lucide",
+                                      "fill": "$ink-tertiary"
+                                    }
+                                  ]
+                                }
+                              ]
                             },
                             {
                               "type": "text",
@@ -19421,26 +19505,68 @@
                           "gap": 5,
                           "children": [
                             {
-                              "type": "text",
-                              "id": "eqRTL",
-                              "name": "Panel Dir",
-                              "fill": "$ink-tertiary",
-                              "content": "SPECS",
-                              "fontFamily": "$font-text",
-                              "fontSize": 10,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.8
-                            },
-                            {
-                              "type": "text",
-                              "id": "XQYd4",
-                              "name": "Panel Title",
-                              "fill": "$ink",
-                              "content": "stop-gate.md",
-                              "fontFamily": "$font-display",
-                              "fontSize": 21,
-                              "fontWeight": "600",
-                              "letterSpacing": -0.3
+                              "type": "frame",
+                              "id": "u3GR1z",
+                              "name": "Panel Head Row",
+                              "width": "fill_container",
+                              "gap": 10,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "xrltp",
+                                  "name": "Panel Head Col",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 5,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "eqRTL",
+                                      "name": "Panel Dir",
+                                      "fill": "$ink-tertiary",
+                                      "content": "SPECS",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 10,
+                                      "fontWeight": "600",
+                                      "letterSpacing": 0.8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "XQYd4",
+                                      "name": "Panel Title",
+                                      "fill": "$ink",
+                                      "content": "stop-gate.md",
+                                      "fontFamily": "$font-display",
+                                      "fontSize": 21,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.3
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "XgwNM",
+                                  "name": "Panel Close",
+                                  "width": 28,
+                                  "height": 28,
+                                  "fill": "#F5F5F7",
+                                  "cornerRadius": 14,
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "w43RnL",
+                                      "name": "Panel Close Icon",
+                                      "width": 13,
+                                      "height": 13,
+                                      "icon": "x",
+                                      "library": "lucide",
+                                      "fill": "$ink-tertiary"
+                                    }
+                                  ]
+                                }
+                              ]
                             },
                             {
                               "type": "text",
