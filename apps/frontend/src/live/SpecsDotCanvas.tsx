@@ -1,0 +1,120 @@
+import type { WikiGraphNode, WikiGraphResponse } from "@specraft/shared"
+import { Minus } from "lucide-react"
+import { useMemo } from "react"
+import { useSidebarCollapsed } from "../components/sidebarCollapsed.js"
+import { DetailPanel, ZoomControls } from "./SpecsGraphDetailPanel.js"
+import { buildLayout, fileNameOf, hashString } from "./specsGraphModel.js"
+
+type DesktopDotCanvasProps = {
+  readonly nodes: readonly WikiGraphNode[]
+  readonly edges: WikiGraphResponse["edges"]
+  readonly selectedNode: WikiGraphNode | null
+  readonly onSelectNode: (path: string) => void
+  readonly onOpenDoc: (path: string) => void
+  readonly onZoomIn: () => void
+}
+
+export function DesktopDotCanvas({
+  nodes,
+  edges,
+  selectedNode,
+  onSelectNode,
+  onOpenDoc,
+  onZoomIn,
+}: DesktopDotCanvasProps) {
+  const collapsed = useSidebarCollapsed()
+  const layout = useMemo(() => buildLayout(nodes, edges, collapsed), [nodes, edges, collapsed])
+  const dotColors = ["#7E92CE", "#5F76B8", "#9AACE4"] as const
+
+  return (
+    <div
+      data-testid="specs-dot-canvas"
+      className="relative min-h-0 w-full flex-1 overflow-hidden bg-bg"
+    >
+      <svg
+        viewBox={layout.viewBox}
+        className="pointer-events-none absolute top-0 left-0"
+        style={{ width: layout.width, height: layout.height }}
+        aria-hidden
+        role="presentation"
+      >
+        {layout.edges.map((edge, i) => {
+          const active =
+            selectedNode !== null &&
+            (edge.from.node.path === selectedNode.path || edge.to.node.path === selectedNode.path)
+          return (
+            <line
+              key={`dotedge-${i.toString()}`}
+              x1={edge.from.cx}
+              y1={edge.from.cy}
+              x2={edge.to.cx}
+              y2={edge.to.cy}
+              stroke={active ? "#0071E3" : "#0000000F"}
+              strokeWidth={active ? 1.5 : 1}
+            />
+          )
+        })}
+      </svg>
+      {layout.clusters.map((cluster) => (
+        <span
+          key={`hub-${cluster.dir}`}
+          aria-hidden
+          className="absolute rounded-[2.5px] bg-[#59616F]"
+          style={{ left: cluster.cx - 6, top: cluster.cy - 6, width: 12, height: 12 }}
+        />
+      ))}
+      {layout.nodes.map((entry) => {
+        const selected = selectedNode?.path === entry.node.path
+        const size = 11
+        const color = selected
+          ? "#0071E3"
+          : (dotColors[hashString(entry.node.path) % dotColors.length] ?? "#7E92CE")
+        return (
+          <button
+            key={`dot-${entry.node.path}`}
+            type="button"
+            aria-label={`${fileNameOf(entry.node.path)} details`}
+            onClick={() => onSelectNode(entry.node.path)}
+            className="absolute rounded-full bg-transparent p-0"
+            style={{
+              left: entry.cx - size / 2,
+              top: entry.cy - size / 2,
+              width: size,
+              height: size,
+              border: `${(size * 0.3).toFixed(2)}px solid ${color}`,
+              boxShadow: `0 0 3px ${color}8C, 0 0 9px ${color}40, inset 0 0 3px ${color}66`,
+            }}
+          />
+        )
+      })}
+      <div className="absolute top-4 left-[512px] flex items-center gap-1.5 rounded-pill bg-surface px-3 py-[5px] shadow-[0_1px_6px_#00000014]">
+        <Minus className="size-3 text-ink-secondary" />
+        <span className="pen-text text-[11.5px] font-medium tracking-[-0.1px] text-ink-secondary">
+          Compact view — zoom 24%
+        </span>
+      </div>
+      <ZoomControls onZoomIn={onZoomIn} className="bottom-[86px] left-6" />
+      <DotLegend />
+      {selectedNode && <DetailPanel node={selectedNode} edges={edges} onOpenDoc={onOpenDoc} />}
+    </div>
+  )
+}
+
+function DotLegend() {
+  return (
+    <div className="absolute bottom-7 left-[72px] flex items-center gap-4">
+      <span className="flex items-center gap-1.5">
+        <span className="size-[9px] rounded-full border-[2.6px] border-[#5F76B8]" />
+        <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">Document</span>
+      </span>
+      <span className="flex items-center gap-1.5">
+        <span className="size-[9px] rounded-[2px] bg-[#59616F]" />
+        <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">Hub</span>
+      </span>
+      <span className="flex items-center gap-1.5">
+        <span className="size-[9px] rounded-full border-[2.7px] border-accent" />
+        <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">Selected</span>
+      </span>
+    </div>
+  )
+}
