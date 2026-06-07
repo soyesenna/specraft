@@ -51,12 +51,27 @@
     -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica,
     Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Monaco, monospace;
+
+  /*
+   * Motion 토큰 — DESIGN.md §15 Motion & Easing 1:1 매핑.
+   * hover/탭은 fast(150ms), 시트/모달 진입은 standard(300ms) + ease-enter.
+   */
+  --ease-enter: cubic-bezier(0.2, 0.6, 0.25, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 html,
 body,
 #root {
-  height: 100%;
+  /*
+   * iOS Safari 동적 툴바(주소창 펼침) 대응 — 100%는 가시영역보다 커져
+   * 하단 고정 요소(탭바·GlassNav)가 화면 밖으로 잘린다. dvh로 동적 추종.
+   * 미지원 브라우저는 vh 폴백.
+   */
+  height: 100vh;
+  /* biome-ignore lint/suspicious/noDuplicateProperties: dvh 미지원 브라우저용 vh 폴백 뒤 의도적 재선언. */
+  height: 100dvh;
 }
 
 body {
@@ -77,5 +92,24 @@ body {
 @layer base {
   .pen-text {
     line-height: 1.25;
+  }
+
+  /*
+   * 글로벌 키보드 포커스 링 — DESIGN.md §6 Depth & Elevation
+   * "Focus (Accessibility): 2px solid #0071e3 outline" 정본 충족.
+   * accent 토큰을 사용해 임의 hex 없이 모든 상호작용 요소에 일관 적용.
+   * outline-offset 2px로 pill/카드 라운드에서 링이 콘텐츠를 가리지 않게 한다.
+   */
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /*
+   * 전역 버튼 커서 — Tailwind v4 preflight는 button을 cursor: default로 두므로
+   * 비활성을 제외한 모든 버튼에 포인터 피드백을 일괄 보장한다.
+   */
+  button:not(:disabled) {
+    cursor: pointer;
   }
 }
