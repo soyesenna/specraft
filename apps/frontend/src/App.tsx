@@ -3,6 +3,8 @@ import { ActivityPage } from "./live/ActivityPage.js"
 import { SpecraftProvider } from "./live/api.js"
 import { BranchProvider } from "./live/branch.js"
 import { ConflictsPage } from "./live/ConflictsPage.js"
+import { DocumentHistoryPage } from "./live/DocumentHistoryPage.js"
+import { DocumentPage } from "./live/DocumentPage.js"
 import { QueryPage } from "./live/QueryPage.js"
 import { SettingsPage } from "./live/SettingsPage.js"
 import { SpecsPage } from "./live/SpecsPage.js"
@@ -21,7 +23,8 @@ export function App() {
           <Route path="/join" element={<JoinInviteScreen />} />
           <Route path="/invite/:token" element={<JoinInviteScreen />} />
           <Route path="/specs" element={<SpecsPage />} />
-          <Route path="/specs/doc/:docId" element={<SpecsPage />} />
+          <Route path="/specs/doc/:docId" element={<DocumentPage />} />
+          <Route path="/specs/doc/:docId/history" element={<DocumentHistoryPage />} />
           <Route path="/query" element={<QueryPage />} />
           <Route path="/activity" element={<ActivityPage />} />
           <Route path="/conflicts" element={<ConflictsPage />} />
