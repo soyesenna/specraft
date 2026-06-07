@@ -93,7 +93,13 @@ describe("frontend conflict and settings integration", () => {
       firstElement(screen.getAllByRole("button", { name: "프로필 메뉴 열기" }), "프로필 메뉴"),
     )
     fireEvent.click(firstElement(screen.getAllByRole("link", { name: "Settings" }), "Settings"))
-    expect(await screen.findByDisplayValue("ssh://git.example/specraft.git")).toBeTruthy()
+    // 데스크톱·모바일 분기가 동시에 마운트되므로 Remote URL 입력이 둘 이상이다.
+    expect(
+      firstElement(
+        await screen.findAllByDisplayValue("ssh://git.example/specraft.git"),
+        "Remote URL value",
+      ),
+    ).toBeTruthy()
     fireEvent.change(firstElement(screen.getAllByLabelText("Remote URL"), "Remote URL"), {
       target: { value: "ssh://git.example/specraft-next.git" },
     })

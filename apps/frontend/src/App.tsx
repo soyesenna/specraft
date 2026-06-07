@@ -28,7 +28,7 @@ export function App() {
           <Route path="/query" element={<QueryPage />} />
           <Route path="/activity" element={<ActivityPage />} />
           <Route path="/conflicts" element={<ConflictsPage />} />
-          <Route path="/settings" element={<Navigate to="/settings/git" replace />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/settings/:section" element={<SettingsPage />} />
           <Route path="*" element={<Navigate to="/specs" replace />} />
         </Routes>

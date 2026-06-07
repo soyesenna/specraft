@@ -99,7 +99,7 @@ describe("frontend navigation shell integration", () => {
     expect(within(settingsNav).getByRole("link", { name: "API keys" })).toBeTruthy()
   })
 
-  it("Given models settings route When rendered Then model controls are not replaced by Git fields", async () => {
+  it("Given models settings route When rendered Then model controls show ingest and query slugs", async () => {
     installFetchMock({
       routes: new Map([
         ["GET /api/v1/auth/session", { member }],
@@ -121,9 +121,12 @@ describe("frontend navigation shell integration", () => {
       </MemoryRouter>,
     )
 
-    expect(await screen.findByDisplayValue("openrouter/ingest")).toBeTruthy()
-    expect(screen.getByDisplayValue("openrouter/query")).toBeTruthy()
-    expect(screen.queryByLabelText("Remote URL")).toBeNull()
+    // 디자인 09(Git & Models) 는 /settings/git 과 /settings/models 모두 Git·Models 두 카드를
+    // 함께 렌더하며, 데스크톱·모바일 분기가 동시에 마운트되므로 입력이 둘 이상이다.
+    expect((await screen.findAllByDisplayValue("openrouter/ingest")).length).toBeGreaterThan(0)
+    expect(screen.getAllByDisplayValue("openrouter/query").length).toBeGreaterThan(0)
+    const settingsNav = await screen.findByRole("navigation", { name: "Settings sections" })
+    expect(within(settingsNav).getByRole("link", { name: "Models" })).toBeTruthy()
   })
 
   it("Given live shell When sidebar toggle is clicked Then collapsed rail can expand", async () => {
