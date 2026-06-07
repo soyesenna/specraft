@@ -81,6 +81,9 @@ describe("frontend conflict and settings integration", () => {
     expect(await screen.findByText("Live conflict resolved from API")).toBeTruthy()
     expect(screen.getAllByText("resolved").length).toBeGreaterThan(0)
 
+    fireEvent.click(
+      firstElement(screen.getAllByRole("button", { name: "프로필 메뉴 열기" }), "프로필 메뉴"),
+    )
     fireEvent.click(firstElement(screen.getAllByRole("link", { name: "Settings" }), "Settings"))
     expect(await screen.findByDisplayValue("ssh://git.example/specraft.git")).toBeTruthy()
     fireEvent.change(firstElement(screen.getAllByLabelText("Remote URL"), "Remote URL"), {

@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
+import { expect, test } from "vitest"
 import { App } from "./App.js"
 
 test("App이 라우터 안에서 크래시 없이 렌더된다", () => {
