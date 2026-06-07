@@ -71,15 +71,23 @@ describe("frontend conflict and settings integration", () => {
     )
 
     expect(await screen.findByText("Live conflict detail from API")).toBeTruthy()
-    fireEvent.change(firstElement(screen.getAllByLabelText("해결 지시"), "해결 지시"), {
-      target: { value: "두 정책을 비교표로 병합" },
-    })
+    fireEvent.change(
+      firstElement(
+        screen.getAllByPlaceholderText(
+          '병합 방법을 자연어로 지시하세요 — 예: "dev의 TTL 300초를 기본으로 유지해줘"',
+        ),
+        "directive input",
+      ),
+      {
+        target: { value: "두 정책을 비교표로 병합" },
+      },
+    )
     fireEvent.click(
-      firstElement(screen.getAllByRole("button", { name: "Resolve conflict" }), "Resolve"),
+      firstElement(screen.getAllByRole("button", { name: "병합 지시 전송" }), "병합 지시 전송"),
     )
 
     expect(await screen.findByText("Live conflict resolved from API")).toBeTruthy()
-    expect(screen.getAllByText("resolved").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Resolved").length).toBeGreaterThan(0)
 
     fireEvent.click(
       firstElement(screen.getAllByRole("button", { name: "프로필 메뉴 열기" }), "프로필 메뉴"),

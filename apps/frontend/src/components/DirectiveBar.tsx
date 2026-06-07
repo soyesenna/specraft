@@ -6,6 +6,14 @@ type DirectiveBarProps = {
   /** 헬퍼 라인 숨김 (모바일 M08b는 바만) */
   helper?: boolean
   className?: string
+  /** controlled 입력값 */
+  value?: string
+  /** 입력 변경 핸들러 */
+  onChange?: (value: string) => void
+  /** 전송(Enter·git-merge 버튼) 핸들러 */
+  onSubmit?: () => void
+  /** 입력·전송 비활성화 */
+  disabled?: boolean
 }
 
 /**
@@ -16,6 +24,10 @@ export function DirectiveBar({
   placeholder = '병합 방법을 자연어로 지시하세요 — 예: "dev의 TTL 300초를 기본으로 유지해줘"',
   helper = true,
   className,
+  value,
+  onChange,
+  onSubmit,
+  disabled = false,
 }: DirectiveBarProps) {
   return (
     <div className={cn("flex w-full flex-col items-center gap-1.5", className)}>
@@ -23,12 +35,27 @@ export function DirectiveBar({
         <Sparkles className="size-3.5 shrink-0 text-accent" />
         <input
           type="text"
+          value={value}
+          onChange={onChange ? (event) => onChange(event.currentTarget.value) : undefined}
+          onKeyDown={
+            onSubmit
+              ? (event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault()
+                    onSubmit()
+                  }
+                }
+              : undefined
+          }
+          disabled={disabled}
           placeholder={placeholder}
           className="pen-text w-full min-w-0 border-none bg-transparent text-[13.5px] tracking-[-0.2px] text-ink outline-none placeholder:text-ink-tertiary"
         />
         <button
           type="button"
-          className="flex size-8 shrink-0 items-center justify-center rounded-2xl bg-accent"
+          onClick={onSubmit}
+          disabled={disabled}
+          className="flex size-8 shrink-0 items-center justify-center rounded-2xl bg-accent disabled:opacity-60"
           aria-label="병합 지시 전송"
         >
           <GitMerge className="size-[15px] text-white" />
