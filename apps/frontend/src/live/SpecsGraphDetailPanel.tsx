@@ -1,5 +1,5 @@
 import type { WikiGraphNode, WikiGraphResponse } from "@specraft/shared"
-import { FileText, Minus, Plus, Scan } from "lucide-react"
+import { FileText, Minus, Plus, Scan, X } from "lucide-react"
 import { Avatar } from "../components/Avatar.js"
 import { cn } from "../lib/cn.js"
 import { authorInitials, fileNameOf, relativeUpdated } from "./specsGraphModel.js"
@@ -51,9 +51,10 @@ type DetailPanelProps = {
   readonly node: WikiGraphNode
   readonly edges: WikiGraphResponse["edges"]
   readonly onOpenDoc: (path: string) => void
+  readonly onClose: () => void
 }
 
-export function DetailPanel({ node, edges, onOpenDoc }: DetailPanelProps) {
+export function DetailPanel({ node, edges, onOpenDoc, onClose }: DetailPanelProps) {
   const connected = edges
     .filter((edge) => edge.from === node.path || edge.to === node.path)
     .map((edge) => (edge.from === node.path ? edge.to : edge.from))
@@ -65,12 +66,25 @@ export function DetailPanel({ node, edges, onOpenDoc }: DetailPanelProps) {
       className="absolute top-7 right-7 z-20 flex w-[344px] flex-col gap-3.5 rounded-lg bg-surface p-[22px] shadow-[3px_5px_30px_#00000038]"
     >
       <div className="flex w-full flex-col gap-[5px]">
-        <span className="pen-text text-[10px] font-semibold tracking-[0.8px] text-ink-tertiary">
-          {node.dir}
-        </span>
-        <span className="pen-text w-full truncate font-display text-[21px] font-semibold tracking-[-0.3px] text-ink">
-          {fileNameOf(node.path)}
-        </span>
+        <div className="flex w-full items-start gap-2.5">
+          <div className="flex min-w-0 flex-1 flex-col gap-[5px]">
+            <span className="pen-text text-[10px] font-semibold tracking-[0.8px] text-ink-tertiary">
+              {node.dir}
+            </span>
+            <span className="pen-text w-full truncate font-display text-[21px] font-semibold tracking-[-0.3px] text-ink">
+              {fileNameOf(node.path)}
+            </span>
+          </div>
+          {/* 닫기 — 모바일 Doc Sheet의 X 버튼과 동일한 28px bg 필 디자인 */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex size-7 shrink-0 items-center justify-center rounded-[14px] bg-bg transition-colors duration-150 ease-[var(--ease-standard)] hover:bg-input"
+            aria-label="상세 패널 닫기"
+          >
+            <X className="size-[13px] text-ink-tertiary" />
+          </button>
+        </div>
         <p className="pen-text m-0 w-full text-[13px] leading-[1.5] tracking-[-0.2px] text-ink-secondary">
           {node.summary || node.title}
         </p>

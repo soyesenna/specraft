@@ -1,6 +1,12 @@
 import { FileText, X } from "lucide-react"
-import { useCallback, useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
+import {
+  type PointerEvent as ReactPointerEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
+import { Link, useNavigate } from "react-router-dom"
 import { cn } from "../lib/cn.js"
 import { Avatar } from "./Avatar.js"
 
@@ -20,6 +26,10 @@ type DocSheetProps = {
 
 /** 바텀시트 슬라이드 모션 길이 — DESIGN.md §15 motion-standard(300ms). */
 const SHEET_MOTION_MS = 300
+/** 그래버를 이 거리(px) 이상 위로 끌어올리면 문서 상세로 이동한다. */
+const SWIPE_UP_OPEN_THRESHOLD = 64
+/** 드래그 추종 감쇠 — 시트가 손가락의 절반만 따라와 러버밴드 느낌을 준다. */
+const SWIPE_DAMPING = 0.5
 
 /**
  * component/Doc Sheet — 모바일 디태치드 플로팅 바텀시트 (r22, 0 10px 30px 섀도).
@@ -45,6 +55,45 @@ export function DocSheet({
   const sheetRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const navigate = useNavigate()
+  const docPath = `/specs/doc/${docId ?? name.replace(/\.md$/, "")}`
+
+  // 그래버 스와이프-업: 위로 끌어올리면 문서 상세로 이동 (iOS 시트 확장 관습).
+  const dragStartY = useRef<number | null>(null)
+  const [dragOffset, setDragOffset] = useState<number | null>(null)
+
+  function onGrabberPointerDown(event: ReactPointerEvent<HTMLDivElement>): void {
+    if (typeof event.currentTarget.setPointerCapture === "function") {
+      event.currentTarget.setPointerCapture(event.pointerId)
+    }
+    dragStartY.current = event.clientY
+    setDragOffset(0)
+  }
+
+  function onGrabberPointerMove(event: ReactPointerEvent<HTMLDivElement>): void {
+    if (dragStartY.current === null) {
+      return
+    }
+    // 위 방향만 허용 + 감쇠 — 아래로는 끌리지 않는다.
+    setDragOffset(Math.min(0, event.clientY - dragStartY.current) * SWIPE_DAMPING)
+  }
+
+  function onGrabberPointerUp(event: ReactPointerEvent<HTMLDivElement>): void {
+    if (dragStartY.current === null) {
+      return
+    }
+    const rawDelta = event.clientY - dragStartY.current
+    dragStartY.current = null
+    setDragOffset(null)
+    if (rawDelta <= -SWIPE_UP_OPEN_THRESHOLD) {
+      navigate(docPath)
+    }
+  }
+
+  function onGrabberPointerCancel(): void {
+    dragStartY.current = null
+    setDragOffset(null)
+  }
 
   // entered: 진입 트랜지션 트리거(마운트 다음 프레임에 on). closing: 퇴장 트랜지션 트리거.
   const [entered, setEntered] = useState(false)
@@ -144,8 +193,23 @@ export function DocSheet({
         visible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
         className,
       )}
+      // 드래그 중에는 인라인 transform이 클래스 트랜지션을 덮어 손가락을 즉시 추종한다.
+      style={
+        dragOffset !== null
+          ? { transform: `translateY(${dragOffset}px)`, transitionProperty: "none" }
+          : undefined
+      }
     >
-      <div className="flex w-full justify-center">
+      {/* 그래버 — 위로 끌어올리면 문서 상세로 이동. 히트 영역은 시각 변화 없이 상하로 확장. */}
+      <div
+        role="presentation"
+        data-testid="doc-sheet-grabber"
+        onPointerDown={onGrabberPointerDown}
+        onPointerMove={onGrabberPointerMove}
+        onPointerUp={onGrabberPointerUp}
+        onPointerCancel={onGrabberPointerCancel}
+        className="-my-2 flex w-full cursor-grab touch-none select-none justify-center py-2 active:cursor-grabbing"
+      >
         <span className="h-[4.5px] w-9 rounded-[2.5px] bg-separator" />
       </div>
       <div className="flex w-full items-center gap-2.5">
@@ -194,7 +258,7 @@ export function DocSheet({
         )}
       </div>
       <Link
-        to={`/specs/doc/${docId ?? name.replace(/\.md$/, "")}`}
+        to={docPath}
         className="flex h-[46px] w-full items-center justify-center rounded-xl bg-accent"
       >
         <span className="pen-text text-[14.5px] font-medium tracking-[-0.22px] text-white">

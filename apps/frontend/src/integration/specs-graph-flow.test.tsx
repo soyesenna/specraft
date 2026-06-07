@@ -178,6 +178,43 @@ describe("frontend specs graph interaction", () => {
     expect(currentPath()).toBe("/specs/doc/specs%2Fstop-gate.md")
   })
 
+  it("Given detail panel When close button clicked Then panel hides until a node is reselected", async () => {
+    renderSpecs()
+
+    const panel = await screen.findByTestId("specs-detail-panel")
+    fireEvent.click(within(panel).getByRole("button", { name: "상세 패널 닫기" }))
+
+    expect(screen.queryByTestId("specs-detail-panel")).toBeNull()
+
+    fireEvent.click(
+      firstElement(
+        await screen.findAllByRole("button", { name: /stop-gate\.md/i }),
+        "stop-gate graph node",
+      ),
+    )
+
+    expect(await screen.findByTestId("specs-detail-panel")).toBeTruthy()
+  })
+
+  it("Given mobile doc sheet When grabber is swiped up past threshold Then navigates to the document", async () => {
+    renderSpecs()
+
+    // jsdom은 데스크톱·모바일 트리를 동시 렌더한다 — 마지막 매치가 모바일 그래프 노드.
+    const nodes = await screen.findAllByRole("button", { name: /stop-gate\.md/i })
+    const mobileNode = nodes[nodes.length - 1]
+    if (mobileNode === undefined) {
+      throw new Error("missing mobile graph node")
+    }
+    fireEvent.click(mobileNode)
+
+    const grabber = await screen.findByTestId("doc-sheet-grabber")
+    fireEvent.pointerDown(grabber, { pointerId: 1, clientY: 500 })
+    fireEvent.pointerMove(grabber, { pointerId: 1, clientY: 400 })
+    fireEvent.pointerUp(grabber, { pointerId: 1, clientY: 400 })
+
+    expect(currentPath()).toBe("/specs/doc/specs%2Fstop-gate.md")
+  })
+
   it("Given detail panel When connected doc clicked Then navigates straight to that document", async () => {
     renderSpecs()
 

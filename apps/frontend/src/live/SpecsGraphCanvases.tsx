@@ -18,6 +18,9 @@ type DesktopGraphCanvasProps = {
   readonly onZoomOut: () => void
   readonly onZoomIn: () => void
   readonly onFit: () => void
+  /** 상세 패널 표시 여부 — X 닫기 후 노드 재클릭 전까지 false */
+  readonly detailOpen: boolean
+  readonly onCloseDetail: () => void
 }
 
 export function DesktopGraphCanvas({
@@ -31,6 +34,8 @@ export function DesktopGraphCanvas({
   onZoomOut,
   onZoomIn,
   onFit,
+  detailOpen,
+  onCloseDetail,
 }: DesktopGraphCanvasProps) {
   const collapsed = useSidebarCollapsed()
   const controls = useGraphViewport(viewport, onViewportChange)
@@ -100,7 +105,14 @@ export function DesktopGraphCanvas({
         className="bottom-[72px] left-6"
       />
       <GraphLegend />
-      {selectedNode && <DetailPanel node={selectedNode} edges={edges} onOpenDoc={onOpenDoc} />}
+      {selectedNode && detailOpen && (
+        <DetailPanel
+          node={selectedNode}
+          edges={edges}
+          onOpenDoc={onOpenDoc}
+          onClose={onCloseDetail}
+        />
+      )}
     </div>
   )
 }

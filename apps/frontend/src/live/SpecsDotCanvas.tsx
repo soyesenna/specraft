@@ -18,6 +18,9 @@ type DesktopDotCanvasProps = {
   readonly onZoomIn: () => void
   readonly onZoomOut: () => void
   readonly onFit: () => void
+  /** 상세 패널 표시 여부 — X 닫기 후 노드 재클릭 전까지 false */
+  readonly detailOpen: boolean
+  readonly onCloseDetail: () => void
 }
 
 export function DesktopDotCanvas({
@@ -31,6 +34,8 @@ export function DesktopDotCanvas({
   onZoomIn,
   onZoomOut,
   onFit,
+  detailOpen,
+  onCloseDetail,
 }: DesktopDotCanvasProps) {
   const collapsed = useSidebarCollapsed()
   const controls = useGraphViewport(viewport, onViewportChange)
@@ -125,7 +130,14 @@ export function DesktopDotCanvas({
         className="bottom-[86px] left-6"
       />
       <DotLegend />
-      {selectedNode && <DetailPanel node={selectedNode} edges={edges} onOpenDoc={onOpenDoc} />}
+      {selectedNode && detailOpen && (
+        <DetailPanel
+          node={selectedNode}
+          edges={edges}
+          onOpenDoc={onOpenDoc}
+          onClose={onCloseDetail}
+        />
+      )}
     </div>
   )
 }

@@ -40,6 +40,8 @@ export function SpecsPage() {
   const [viewport, setViewport] = useState(DEFAULT_GRAPH_VIEWPORT)
   const [query, setQuery] = useState("")
   const [selectedPath, setSelectedPath] = useState<string | null>(null)
+  // 데스크톱 상세 패널 표시 여부 — X로 닫으면 노드를 다시 클릭할 때까지 숨긴다.
+  const [detailOpen, setDetailOpen] = useState(true)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(SYNC_LOADING)
 
@@ -152,6 +154,11 @@ export function SpecsPage() {
     setParams(nextParams, { replace: true })
   }
 
+  const selectNode = (path: string) => {
+    setSelectedPath(path)
+    setDetailOpen(true)
+  }
+
   const openDoc = (path: string) => {
     navigate(`/specs/doc/${docIdOf(path)}`)
   }
@@ -192,11 +199,13 @@ export function SpecsPage() {
                 selectedNode={selectedNode}
                 viewport={viewport}
                 onViewportChange={updateViewport}
-                onSelectNode={setSelectedPath}
+                onSelectNode={selectNode}
                 onOpenDoc={openDoc}
                 onZoomIn={zoomIn}
                 onZoomOut={zoomOut}
                 onFit={() => setViewport(DEFAULT_GRAPH_VIEWPORT)}
+                detailOpen={detailOpen}
+                onCloseDetail={() => setDetailOpen(false)}
               />
             ) : (
               <DesktopGraphCanvas
@@ -205,11 +214,13 @@ export function SpecsPage() {
                 selectedNode={selectedNode}
                 viewport={viewport}
                 onViewportChange={updateViewport}
-                onSelectNode={setSelectedPath}
+                onSelectNode={selectNode}
                 onOpenDoc={openDoc}
                 onZoomIn={zoomIn}
                 onZoomOut={zoomOut}
                 onFit={() => setViewport(DEFAULT_GRAPH_VIEWPORT)}
+                detailOpen={detailOpen}
+                onCloseDetail={() => setDetailOpen(false)}
               />
             )
           ) : (
