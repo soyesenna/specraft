@@ -95,12 +95,18 @@ describe("frontend wiki and query integration", () => {
     })
     fireEvent.click(firstElement(screen.getAllByRole("button", { name: "질문 전송" }), "질문 전송"))
 
-    expect(await screen.findByText("Live answer from API about Stop gate.")).toBeTruthy()
-    expect(screen.getByText("overview.md#Goal")).toBeTruthy()
+    // 반응형 분기(데스크톱 hidden md:block + 모바일 md:hidden)가 jsdom 에서 동시 렌더되어
+    // 동일 텍스트가 양쪽에 존재하므로 findAllByText 로 단언한다.
+    expect(
+      (await screen.findAllByText("Live answer from API about Stop gate.")).length,
+    ).toBeGreaterThan(0)
+    expect(screen.getAllByText("overview.md#Goal").length).toBeGreaterThan(0)
 
     fireEvent.click(firstElement(screen.getAllByRole("link", { name: "Activity" }), "Activity"))
-    expect(await screen.findByText("Stop 게이트 조건은?")).toBeTruthy()
-    expect(screen.getByText("qry-log-live")).toBeTruthy()
+    // Activity 로그가 API 응답에서 온다는 시나리오 단언.
+    // (디자인 정합 후 Activity 테이블은 UUID ID 컬럼 대신 질문·작성자를 렌더한다.)
+    expect((await screen.findAllByText("Stop 게이트 조건은?")).length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Admin API User").length).toBeGreaterThan(0)
   })
 
   it("Given query API returns HTTP 500 When user asks a question Then inline error renders without static fallback answer or citation", async () => {
@@ -128,7 +134,9 @@ describe("frontend wiki and query integration", () => {
     })
     fireEvent.click(firstElement(screen.getAllByRole("button", { name: "질문 전송" }), "질문 전송"))
 
-    expect(await screen.findByText("specraft request failed with HTTP 500")).toBeTruthy()
+    expect(
+      (await screen.findAllByText("specraft request failed with HTTP 500")).length,
+    ).toBeGreaterThan(0)
     expect(
       screen.queryByText(/Stop 게이트는 .*워킹트리 clean .*3중 검사를 순서대로 수행/),
     ).toBeNull()

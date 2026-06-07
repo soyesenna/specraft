@@ -1,8 +1,8 @@
 import type { ReactNode } from "react"
 import { useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { SidebarCollapsedContext, useSidebarCollapsed } from "./sidebarCollapsed.js"
 import { Sidebar, type SidebarSection } from "./Sidebar.js"
+import { SidebarCollapsedContext, useSidebarCollapsed } from "./sidebarCollapsed.js"
 import { TopNav } from "./TopNav.js"
 
 // 사이드바 접힘 상태 — 라우트 전환 간 유지 (03b/04b 변형)

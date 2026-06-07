@@ -3,8 +3,8 @@ import { type ReactNode, useEffect, useRef, useState } from "react"
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import { BranchChip } from "../components/BranchChip.js"
 import { BranchMenu } from "../components/BranchMenu.js"
-import { SidebarCollapsedContext } from "../components/sidebarCollapsed.js"
 import { Sidebar, type SidebarSection } from "../components/Sidebar.js"
+import { SidebarCollapsedContext } from "../components/sidebarCollapsed.js"
 import { TopNav } from "../components/TopNav.js"
 import { useSpecraft } from "./api.js"
 import { useBranch } from "./branch.js"
@@ -37,12 +37,15 @@ export function LiveShell({
   showSidebar = true,
   titleMeta,
   titlePrefix,
+  titleRight,
   children,
 }: {
   readonly title: string
   readonly showSidebar?: boolean
   readonly titleMeta?: ReactNode
   readonly titlePrefix?: ReactNode
+  /** 타이틀 행 우측 끝 요소 (예: View full log 링크, 툴바 컨트롤) */
+  readonly titleRight?: ReactNode
   readonly children: ReactNode
 }) {
   const { logout, member, sessionChecked } = useSpecraft()
@@ -176,6 +179,12 @@ export function LiveShell({
                 {title}
               </h1>
               {headingMeta}
+              {titleRight && (
+                <>
+                  <div className="h-px flex-1" />
+                  {titleRight}
+                </>
+              )}
             </div>
             {children}
           </main>
