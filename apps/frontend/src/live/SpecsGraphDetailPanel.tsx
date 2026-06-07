@@ -93,12 +93,17 @@ export function DetailPanel({ node, edges, onOpenDoc }: DetailPanelProps) {
           CONNECTED · {uniqueConnected.length}
         </span>
         {uniqueConnected.map((doc) => (
-          <div key={doc} className="flex w-full items-center gap-2 text-left">
+          <button
+            key={doc}
+            type="button"
+            onClick={() => onOpenDoc(doc)}
+            className="group flex w-full items-center gap-2 text-left"
+          >
             <FileText className="size-[13px] shrink-0 text-ink-tertiary" />
-            <span className="pen-text min-w-0 flex-1 truncate text-[13px] tracking-[-0.2px] text-ink-secondary">
+            <span className="pen-text min-w-0 flex-1 truncate text-[13px] tracking-[-0.2px] text-link transition-colors duration-150 ease-[var(--ease-standard)] group-hover:underline">
               {fileNameOf(doc)}
             </span>
-          </div>
+          </button>
         ))}
       </div>
       <div className="h-px w-full bg-hairline" />

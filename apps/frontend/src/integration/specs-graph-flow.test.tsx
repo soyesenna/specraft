@@ -172,15 +172,25 @@ describe("frontend specs graph interaction", () => {
     const panel = await screen.findByTestId("specs-detail-panel")
     expect(textOf(panel)).toContain("stop-gate.md")
     expect(textOf(panel)).toContain("Stop 게이트 판정 규칙")
-    expect(within(panel).queryByRole("button", { name: /overview\.md/i })).toBeNull()
-
-    fireEvent.click(within(panel).getByText("overview.md"))
-
-    expect(currentPath()).toBe("/specs")
 
     fireEvent.click(within(panel).getByRole("button", { name: /Open document/i }))
 
     expect(currentPath()).toBe("/specs/doc/specs%2Fstop-gate.md")
+  })
+
+  it("Given detail panel When connected doc clicked Then navigates straight to that document", async () => {
+    renderSpecs()
+
+    const stopGateNode = firstElement(
+      await screen.findAllByRole("button", { name: /stop-gate\.md/i }),
+      "stop-gate graph node",
+    )
+    fireEvent.click(stopGateNode)
+
+    const panel = await screen.findByTestId("specs-detail-panel")
+    fireEvent.click(within(panel).getByRole("button", { name: /overview\.md/i }))
+
+    expect(currentPath()).toBe("/specs/doc/overview.md")
   })
 
   it("Given graph canvas When wheel and pointer drag fire Then viewport transform updates and remains bounded", async () => {

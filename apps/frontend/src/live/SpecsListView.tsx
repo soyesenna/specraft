@@ -95,6 +95,7 @@ function ListRow({
       onClick={() => onOpenDoc(node.path)}
       className={cn(
         "flex h-12 w-full shrink-0 items-center gap-3.5 px-5 text-left",
+        "transition-colors duration-150 ease-[var(--ease-standard)] hover:bg-hairline",
         !last && "border-b border-hairline",
       )}
     >
