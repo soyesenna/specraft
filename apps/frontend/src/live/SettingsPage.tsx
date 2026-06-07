@@ -533,10 +533,10 @@ function KeysContent({ data }: { data: SettingsData }) {
       <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         <div className="flex h-9 w-full items-center gap-3.5 border-b border-hairline px-[18px]">
           <ColumnHead w={170}>NAME</ColumnHead>
-          <ColumnHead w={190}>KEY</ColumnHead>
-          <ColumnHead w={90}>CREATED</ColumnHead>
-          <ColumnHead w={90}>LAST USED</ColumnHead>
-          <span className="h-px flex-1" />
+          <FlexColumnHead>KEY</FlexColumnHead>
+          <ColumnHead w={80}>CREATED</ColumnHead>
+          <ColumnHead w={80}>LAST USED</ColumnHead>
+          <span className="w-14 shrink-0" />
         </div>
         {keys.length === 0 ? (
           <div className="flex h-[46px] w-full items-center px-[18px]">
@@ -630,12 +630,12 @@ function MembersContent({ data }: { data: SettingsData }) {
       )}
       <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         <div className="flex h-9 w-full items-center gap-3.5 border-b border-hairline px-[18px]">
-          <ColumnHead w={170}>MEMBER</ColumnHead>
+          <ColumnHead w={164}>MEMBER</ColumnHead>
           <FlexColumnHead>EMAIL</FlexColumnHead>
-          <ColumnHead w={90}>ROLE</ColumnHead>
-          <ColumnHead w={110}>STATUS</ColumnHead>
-          <ColumnHead w={80}>JOINED</ColumnHead>
-          <span className="w-[60px] shrink-0" />
+          <ColumnHead w={56}>ROLE</ColumnHead>
+          <ColumnHead w={74}>STATUS</ColumnHead>
+          <ColumnHead w={56}>JOINED</ColumnHead>
+          <span className="w-[52px] shrink-0" />
         </div>
         {members.map((member, i) => (
           <MemberRow
@@ -704,10 +704,10 @@ function InvitesContent({ data }: { data: SettingsData }) {
       )}
       <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         <div className="flex h-9 w-full items-center gap-3.5 border-b border-hairline px-[18px]">
-          <ColumnHead w={200}>LINK</ColumnHead>
+          <ColumnHead w={140}>LINK</ColumnHead>
           <ColumnHead w={120}>CREATED BY</ColumnHead>
-          <ColumnHead w={80}>CREATED</ColumnHead>
-          <ColumnHead w={110}>EXPIRES</ColumnHead>
+          <ColumnHead w={70}>CREATED</ColumnHead>
+          <ColumnHead w={70}>EXPIRES</ColumnHead>
           <FlexColumnHead>STATUS</FlexColumnHead>
         </div>
         {invites.length === 0 ? (

@@ -132,6 +132,9 @@ export const AdminInviteCreateResponseSchema = z.object({
 
 export const AdminInviteSchema = z.object({
   token: NonEmptyStringSchema,
+  /** 생성 시각 — created_at 컬럼 도입 이전 레거시 행은 null */
+  created_at: NonEmptyStringSchema.nullable(),
+  created_by: MemberSchema.nullable(),
   expires_at: NonEmptyStringSchema,
   used_at: NonEmptyStringSchema.nullable(),
   used_by: MemberSchema.nullable(),

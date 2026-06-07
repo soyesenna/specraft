@@ -112,6 +112,8 @@ describe("M1 v1 contracts", () => {
       invites: [
         {
           token: "invite-token",
+          created_at: "2026-06-05T00:00:00Z",
+          created_by: member,
           expires_at: "2026-06-06T00:00:00Z",
           used_at: null,
           used_by: null,

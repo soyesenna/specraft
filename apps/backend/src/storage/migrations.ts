@@ -75,4 +75,12 @@ export function migrateDatabase(database: Database.Database): void {
       value TEXT NOT NULL
     );
   `)
+
+  // invites.created_at — 출시 후 추가된 컬럼. 기존 DB에는 ALTER로 보강한다 (레거시 행은 NULL 유지).
+  const inviteColumns = database.prepare("PRAGMA table_info(invites)").all() as Array<{
+    name: string
+  }>
+  if (!inviteColumns.some((column) => column.name === "created_at")) {
+    database.exec("ALTER TABLE invites ADD COLUMN created_at TEXT")
+  }
 }

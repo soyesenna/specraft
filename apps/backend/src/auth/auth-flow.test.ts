@@ -71,6 +71,13 @@ describe("auth and admin API", () => {
       invites: [
         {
           token: inviteToken,
+          created_at: expect.any(String),
+          created_by: {
+            id: expect.any(String),
+            email: "admin@example.com",
+            name: "Admin One",
+            role: "admin",
+          },
           expires_at: expect.any(String),
           used_at: null,
           used_by: null,

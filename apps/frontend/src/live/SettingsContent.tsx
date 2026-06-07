@@ -272,26 +272,29 @@ export function KeyRow({
           {apiKey.name}
         </span>
       </span>
-      <span className="flex w-[190px] shrink-0 items-center">
-        <span className="pen-text font-mono text-[11.5px] text-ink-secondary">{apiKey.prefix}</span>
+      <span className="flex min-w-0 flex-1 items-center overflow-hidden">
+        <span className="pen-text truncate font-mono text-[11.5px] text-ink-secondary">
+          {apiKey.prefix}
+        </span>
       </span>
-      <span className="w-[90px] shrink-0">
+      <span className="w-20 shrink-0">
         <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
           {relativeTime(apiKey.created_at)}
         </span>
       </span>
-      <span className="w-[90px] shrink-0">
+      <span className="w-20 shrink-0">
         <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">—</span>
       </span>
-      <span className="h-px flex-1" />
-      <button
-        type="button"
-        onClick={onRevoke}
-        disabled={revoked}
-        className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-danger transition-colors duration-150 ease-[var(--ease-standard)] hover:underline disabled:text-ink-tertiary disabled:no-underline"
-      >
-        {revoked ? "Revoked" : "Revoke"}
-      </button>
+      <span className="flex w-14 shrink-0 justify-end">
+        <button
+          type="button"
+          onClick={onRevoke}
+          disabled={revoked}
+          className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-danger transition-colors duration-150 ease-[var(--ease-standard)] hover:underline disabled:text-ink-tertiary disabled:no-underline"
+        >
+          {revoked ? "Revoked" : "Revoke"}
+        </button>
+      </span>
     </div>
   )
 }
@@ -321,7 +324,7 @@ export function MemberRow({
         status === "Disabled" && "opacity-60",
       )}
     >
-      <span className="flex w-[170px] shrink-0 items-center gap-2 overflow-hidden">
+      <span className="flex w-[164px] shrink-0 items-center gap-2 overflow-hidden">
         <span
           className={cn(
             "flex size-6 items-center justify-center rounded-xl",
@@ -351,7 +354,7 @@ export function MemberRow({
           {member.email}
         </span>
       </span>
-      <span className="flex w-[90px] shrink-0 items-center">
+      <span className="flex w-14 shrink-0 items-center">
         {isAdmin ? (
           <span className="flex items-center rounded-[4px] bg-input px-[7px] py-0.5">
             <span className="pen-text text-[9.5px] font-semibold tracking-[0.4px] text-ink-secondary">
@@ -364,10 +367,10 @@ export function MemberRow({
           </span>
         )}
       </span>
-      <span className="flex w-[110px] shrink-0 items-center gap-1.5">
+      <span className="flex w-[74px] shrink-0 items-center gap-1.5">
         <span
           className={cn(
-            "size-[7px] rounded-full",
+            "size-[7px] shrink-0 rounded-full",
             status === "Active" ? "bg-success" : "bg-separator",
           )}
         />
@@ -375,10 +378,10 @@ export function MemberRow({
           {status}
         </span>
       </span>
-      <span className="w-20 shrink-0">
+      <span className="w-14 shrink-0">
         <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">—</span>
       </span>
-      <span className="flex w-[60px] shrink-0 justify-end">
+      <span className="flex w-[52px] shrink-0 justify-end">
         {action && (
           <button
             type="button"
@@ -407,7 +410,7 @@ export function InviteRow({
 }) {
   const status = inviteStatus(invite, now)
   const dim = status !== "Active"
-  const createdBy = invite.used_by
+  const createdBy = invite.created_by
   return (
     <div
       className={cn(
@@ -416,8 +419,8 @@ export function InviteRow({
         dim && "opacity-[0.65]",
       )}
     >
-      <span className="flex w-[200px] shrink-0 items-center">
-        <span className="pen-text font-mono text-[11.5px] text-ink-secondary">
+      <span className="flex w-[140px] shrink-0 items-center overflow-hidden">
+        <span className="pen-text truncate font-mono text-[11.5px] text-ink-secondary">
           {inviteToken(invite)}
         </span>
       </span>
@@ -437,10 +440,12 @@ export function InviteRow({
           <span className="pen-text text-[13px] tracking-[-0.2px] text-ink-tertiary">—</span>
         )}
       </span>
-      <span className="w-20 shrink-0">
-        <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">—</span>
+      <span className="w-[70px] shrink-0">
+        <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
+          {invite.created_at ? relativeTime(invite.created_at, now) : "—"}
+        </span>
       </span>
-      <span className="w-[110px] shrink-0">
+      <span className="w-[70px] shrink-0">
         <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
           {status === "Used" ? "—" : relativeTime(invite.expires_at, now)}
         </span>

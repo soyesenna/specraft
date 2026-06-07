@@ -50,6 +50,11 @@ const InviteRowSchema = z.object({
 })
 
 const InviteListRowSchema = InviteRowSchema.extend({
+  created_at: z.string().nullable(),
+  created_by_id: z.string().nullable(),
+  created_by_email: z.string().email().nullable(),
+  created_by_name: z.string().nullable(),
+  created_by_role: z.enum(["admin", "member"]).nullable(),
   used_by_id: z.string().nullable(),
   used_by_email: z.string().email().nullable(),
   used_by_name: z.string().nullable(),
@@ -204,6 +209,15 @@ function isInviteUsable(database: SpecraftDatabase, token: string): boolean {
 }
 
 function toAdminInvite(row: z.infer<typeof InviteListRowSchema>): AdminInvite {
+  const createdBy =
+    row.created_by_id && row.created_by_email && row.created_by_name && row.created_by_role
+      ? {
+          id: row.created_by_id,
+          email: row.created_by_email,
+          name: row.created_by_name,
+          role: row.created_by_role,
+        }
+      : null
   const usedBy =
     row.used_by_id && row.used_by_email && row.used_by_name && row.used_by_role
       ? {
@@ -216,6 +230,8 @@ function toAdminInvite(row: z.infer<typeof InviteListRowSchema>): AdminInvite {
 
   return {
     token: row.token,
+    created_at: row.created_at,
+    created_by: createdBy,
     expires_at: row.expires_at,
     used_at: row.used_at,
     used_by: usedBy,
@@ -226,11 +242,14 @@ export function listInvites(database: SpecraftDatabase): readonly AdminInvite[] 
   const rows = z.array(InviteListRowSchema).parse(
     database
       .prepare<[], unknown>(
-        `SELECT invites.token, invites.expires_at, invites.used_at,
-                members.id AS used_by_id, members.email AS used_by_email,
-                members.name AS used_by_name, members.role AS used_by_role
+        `SELECT invites.token, invites.expires_at, invites.used_at, invites.created_at,
+                creators.id AS created_by_id, creators.email AS created_by_email,
+                creators.name AS created_by_name, creators.role AS created_by_role,
+                users.id AS used_by_id, users.email AS used_by_email,
+                users.name AS used_by_name, users.role AS used_by_role
          FROM invites
-         LEFT JOIN members ON members.id = invites.used_by
+         LEFT JOIN members AS creators ON creators.id = invites.created_by
+         LEFT JOIN members AS users ON users.id = invites.used_by
          ORDER BY invites.expires_at DESC`,
       )
       .all(),
