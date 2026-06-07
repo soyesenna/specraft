@@ -1,5 +1,5 @@
 import type { WikiGraphNode, WikiGraphResponse } from "@specraft/shared"
-import { ArrowUpRight, FileText, Minus, Plus, Scan } from "lucide-react"
+import { FileText, Minus, Plus, Scan } from "lucide-react"
 import { Avatar } from "../components/Avatar.js"
 import { cn } from "../lib/cn.js"
 import { authorInitials, fileNameOf, relativeUpdated } from "./specsGraphModel.js"
@@ -93,19 +93,13 @@ export function DetailPanel({ node, edges, onOpenDoc }: DetailPanelProps) {
           CONNECTED · {uniqueConnected.length}
         </span>
         {uniqueConnected.map((doc) => (
-          <button
-            key={doc}
-            type="button"
-            onClick={() => onOpenDoc(doc)}
-            className="flex w-full items-center gap-2 text-left"
-          >
+          <div key={doc} className="flex w-full items-center gap-2 text-left">
             <FileText className="size-[13px] shrink-0 text-ink-tertiary" />
-            <span className="pen-text truncate text-[13px] tracking-[-0.2px] text-link">
+            <span className="pen-text truncate text-[13px] tracking-[-0.2px] text-ink-secondary">
               {fileNameOf(doc)}
             </span>
             <span className="h-px flex-1" />
-            <ArrowUpRight className="size-[11px] shrink-0 text-ink-tertiary" />
-          </button>
+          </div>
         ))}
       </div>
       <div className="h-px w-full bg-hairline" />

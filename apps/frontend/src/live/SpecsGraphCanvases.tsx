@@ -1,15 +1,17 @@
 import type { WikiGraphNode, WikiGraphResponse } from "@specraft/shared"
-import { type PointerEvent, useMemo, useRef, useState, type WheelEvent } from "react"
+import { type PointerEvent, useMemo, useRef, type WheelEvent } from "react"
 import { SpecNode } from "../components/SpecNode.js"
 import { useSidebarCollapsed } from "../components/sidebarCollapsed.js"
 import { DetailPanel, ZoomControls } from "./SpecsGraphDetailPanel.js"
 import { buildLayout, fileNameOf, isSkeleton } from "./specsGraphModel.js"
-
-type Viewport = {
-  readonly x: number
-  readonly y: number
-  readonly scale: number
-}
+import {
+  formatGraphViewport,
+  type GraphViewport,
+  graphGridSize,
+  graphGridStyle,
+  type ViewportUpdater,
+  zoomGraphViewport,
+} from "./specsGraphViewport.js"
 
 type DragState = {
   readonly startX: number
@@ -18,40 +20,17 @@ type DragState = {
   readonly originY: number
 }
 
-const DEFAULT_VIEWPORT: Viewport = { x: 0, y: 0, scale: 1 }
-const MIN_SCALE = 0.24
-const MAX_SCALE = 2.4
-
-function clampScale(scale: number): number {
-  return Math.min(Math.max(scale, MIN_SCALE), MAX_SCALE)
-}
-
-function round(value: number): number {
-  return Math.round(value * 1000) / 1000
-}
-
-function formatViewport(viewport: Viewport): string {
-  return `x=${round(viewport.x)};y=${round(viewport.y)};scale=${round(viewport.scale)}`
-}
-
 function isInteractiveTarget(target: EventTarget | null): boolean {
   return target instanceof HTMLElement && target.closest("button,a") !== null
 }
 
-function useGraphViewport() {
-  const [viewport, setViewport] = useState<Viewport>(DEFAULT_VIEWPORT)
+function useGraphViewport(viewport: GraphViewport, onViewportChange: ViewportUpdater) {
   const drag = useRef<DragState | null>(null)
 
   function zoomBy(factor: number, originX = 0, originY = 0): void {
-    setViewport((current) => {
-      const nextScale = clampScale(current.scale * factor)
-      const ratio = nextScale / current.scale
-      return {
-        x: originX - (originX - current.x) * ratio,
-        y: originY - (originY - current.y) * ratio,
-        scale: nextScale,
-      }
-    })
+    onViewportChange((current) =>
+      zoomGraphViewport(current, current.scale * factor, originX, originY),
+    )
   }
 
   function onWheel(event: WheelEvent<HTMLDivElement>): void {
@@ -80,10 +59,12 @@ function useGraphViewport() {
     if (activeDrag === null || event.buttons === 0) {
       return
     }
-    setViewport({
-      x: activeDrag.originX + event.clientX - activeDrag.startX,
-      y: activeDrag.originY + event.clientY - activeDrag.startY,
-      scale: viewport.scale,
+    onViewportChange((current) => {
+      return {
+        x: activeDrag.originX + event.clientX - activeDrag.startX,
+        y: activeDrag.originY + event.clientY - activeDrag.startY,
+        scale: current.scale,
+      }
     })
   }
 
@@ -99,7 +80,9 @@ function useGraphViewport() {
 
   return {
     viewport,
-    transform: formatViewport(viewport),
+    gridSize: graphGridSize(viewport.scale),
+    gridStyle: graphGridStyle(viewport),
+    transform: formatGraphViewport(viewport),
     style: {
       transform: `translate3d(${viewport.x}px, ${viewport.y}px, 0) scale(${viewport.scale})`,
     },
@@ -107,8 +90,6 @@ function useGraphViewport() {
     onPointerDown,
     onPointerMove,
     onPointerUp,
-    reset: () => setViewport(DEFAULT_VIEWPORT),
-    zoomIn: () => zoomBy(1.14, 0, 0),
   }
 }
 
@@ -116,35 +97,44 @@ type DesktopGraphCanvasProps = {
   readonly nodes: readonly WikiGraphNode[]
   readonly edges: WikiGraphResponse["edges"]
   readonly selectedNode: WikiGraphNode | null
+  readonly viewport: GraphViewport
+  readonly onViewportChange: ViewportUpdater
   readonly onSelectNode: (path: string) => void
   readonly onOpenDoc: (path: string) => void
   readonly onZoomOut: () => void
+  readonly onZoomIn: () => void
+  readonly onFit: () => void
 }
 
 export function DesktopGraphCanvas({
   nodes,
   edges,
   selectedNode,
+  viewport,
+  onViewportChange,
   onSelectNode,
   onOpenDoc,
   onZoomOut,
+  onZoomIn,
+  onFit,
 }: DesktopGraphCanvasProps) {
   const collapsed = useSidebarCollapsed()
-  const viewport = useGraphViewport()
+  const controls = useGraphViewport(viewport, onViewportChange)
   const layout = useMemo(() => buildLayout(nodes, edges, collapsed), [nodes, edges, collapsed])
 
   return (
     <div
       data-testid="specs-graph-canvas"
-      data-viewport-transform={viewport.transform}
+      data-grid-size={controls.gridSize}
+      data-viewport-transform={controls.transform}
       className="relative min-h-0 w-full flex-1 touch-none overflow-hidden"
-      onWheel={viewport.onWheel}
-      onPointerDown={viewport.onPointerDown}
-      onPointerMove={viewport.onPointerMove}
-      onPointerUp={viewport.onPointerUp}
-      style={{ touchAction: "none" }}
+      onWheel={controls.onWheel}
+      onPointerDown={controls.onPointerDown}
+      onPointerMove={controls.onPointerMove}
+      onPointerUp={controls.onPointerUp}
+      style={{ ...controls.gridStyle, touchAction: "none" }}
     >
-      <div className="absolute top-0 left-0 origin-top-left" style={viewport.style}>
+      <div className="absolute top-0 left-0 origin-top-left" style={controls.style}>
         <svg
           viewBox={layout.viewBox}
           className="pointer-events-none absolute top-0 left-0"
@@ -185,9 +175,9 @@ export function DesktopGraphCanvas({
         ))}
       </div>
       <ZoomControls
-        onZoomIn={viewport.zoomIn}
+        onZoomIn={onZoomIn}
         onZoomOut={onZoomOut}
-        onFit={viewport.reset}
+        onFit={onFit}
         className="bottom-[72px] left-6"
       />
       <GraphLegend />

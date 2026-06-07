@@ -4,32 +4,48 @@ import { useMemo } from "react"
 import { useSidebarCollapsed } from "../components/sidebarCollapsed.js"
 import { DetailPanel, ZoomControls } from "./SpecsGraphDetailPanel.js"
 import { buildLayout, fileNameOf, hashString } from "./specsGraphModel.js"
+import {
+  type GraphViewport,
+  graphGridSize,
+  graphGridStyle,
+  graphZoomPercent,
+} from "./specsGraphViewport.js"
 
 type DesktopDotCanvasProps = {
   readonly nodes: readonly WikiGraphNode[]
   readonly edges: WikiGraphResponse["edges"]
   readonly selectedNode: WikiGraphNode | null
+  readonly viewport: GraphViewport
   readonly onSelectNode: (path: string) => void
   readonly onOpenDoc: (path: string) => void
   readonly onZoomIn: () => void
+  readonly onZoomOut: () => void
+  readonly onFit: () => void
 }
 
 export function DesktopDotCanvas({
   nodes,
   edges,
   selectedNode,
+  viewport,
   onSelectNode,
   onOpenDoc,
   onZoomIn,
+  onZoomOut,
+  onFit,
 }: DesktopDotCanvasProps) {
   const collapsed = useSidebarCollapsed()
   const layout = useMemo(() => buildLayout(nodes, edges, collapsed), [nodes, edges, collapsed])
   const dotColors = ["#7E92CE", "#5F76B8", "#9AACE4"] as const
+  const zoomPercent = graphZoomPercent(viewport.scale)
 
   return (
     <div
       data-testid="specs-dot-canvas"
-      className="relative min-h-0 w-full flex-1 overflow-hidden bg-bg"
+      data-grid-size={graphGridSize(viewport.scale)}
+      data-viewport-scale={viewport.scale}
+      className="relative min-h-0 w-full flex-1 overflow-hidden"
+      style={graphGridStyle(viewport)}
     >
       <svg
         viewBox={layout.viewBox}
@@ -90,10 +106,15 @@ export function DesktopDotCanvas({
       <div className="absolute top-4 left-[512px] flex items-center gap-1.5 rounded-pill bg-surface px-3 py-[5px] shadow-[0_1px_6px_#00000014]">
         <Minus className="size-3 text-ink-secondary" />
         <span className="pen-text text-[11.5px] font-medium tracking-[-0.1px] text-ink-secondary">
-          Compact view — zoom 24%
+          Compact view — zoom {zoomPercent}
         </span>
       </div>
-      <ZoomControls onZoomIn={onZoomIn} className="bottom-[86px] left-6" />
+      <ZoomControls
+        onZoomIn={onZoomIn}
+        onZoomOut={onZoomOut}
+        onFit={onFit}
+        className="bottom-[86px] left-6"
+      />
       <DotLegend />
       {selectedNode && <DetailPanel node={selectedNode} edges={edges} onOpenDoc={onOpenDoc} />}
     </div>

@@ -12,6 +12,13 @@ import { DesktopDotCanvas } from "./SpecsDotCanvas.js"
 import { DesktopGraphCanvas } from "./SpecsGraphCanvases.js"
 import { DesktopListView } from "./SpecsListView.js"
 import { docIdOf, matchesQuery, relativeSyncedLabel } from "./specsGraphModel.js"
+import {
+  DEFAULT_GRAPH_VIEWPORT,
+  GRAPH_COMPACT_THRESHOLD,
+  GRAPH_ZOOM_STEP,
+  stepGraphViewport,
+  type ViewportUpdater,
+} from "./specsGraphViewport.js"
 
 type SyncStatus = {
   readonly label: string
@@ -28,7 +35,7 @@ export function SpecsPage() {
   const [graph, setGraph] = useState<WikiGraphResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [view, setView] = useState<SpecsView>(params.get("view") === "list" ? "list" : "graph")
-  const [dotMode, setDotMode] = useState(false)
+  const [viewport, setViewport] = useState(DEFAULT_GRAPH_VIEWPORT)
   const [query, setQuery] = useState("")
   const [selectedPath, setSelectedPath] = useState<string | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -100,10 +107,22 @@ export function SpecsPage() {
     () => visibleNodes.find((node) => node.path === selectedPath) ?? visibleNodes[0] ?? null,
     [visibleNodes, selectedPath],
   )
+  const compactGraph = view === "graph" && viewport.scale <= GRAPH_COMPACT_THRESHOLD
+
+  const updateViewport: ViewportUpdater = (updater) => {
+    setViewport((current) => updater(current))
+  }
+
+  const zoomIn = () => {
+    updateViewport((current) => stepGraphViewport(current, GRAPH_ZOOM_STEP))
+  }
+
+  const zoomOut = () => {
+    updateViewport((current) => stepGraphViewport(current, -GRAPH_ZOOM_STEP))
+  }
 
   const changeView = (next: SpecsView) => {
     setView(next)
-    setDotMode(false)
     const nextParams = new URLSearchParams(params)
     if (next === "list") {
       nextParams.set("view", "list")
@@ -145,23 +164,30 @@ export function SpecsPage() {
             </div>
           )}
           {view === "graph" ? (
-            dotMode ? (
+            compactGraph ? (
               <DesktopDotCanvas
                 nodes={visibleNodes}
                 edges={visibleEdges}
                 selectedNode={selectedNode}
+                viewport={viewport}
                 onSelectNode={setSelectedPath}
                 onOpenDoc={openDoc}
-                onZoomIn={() => setDotMode(false)}
+                onZoomIn={zoomIn}
+                onZoomOut={zoomOut}
+                onFit={() => setViewport(DEFAULT_GRAPH_VIEWPORT)}
               />
             ) : (
               <DesktopGraphCanvas
                 nodes={visibleNodes}
                 edges={visibleEdges}
                 selectedNode={selectedNode}
+                viewport={viewport}
+                onViewportChange={updateViewport}
                 onSelectNode={setSelectedPath}
                 onOpenDoc={openDoc}
-                onZoomOut={() => setDotMode(true)}
+                onZoomIn={zoomIn}
+                onZoomOut={zoomOut}
+                onFit={() => setViewport(DEFAULT_GRAPH_VIEWPORT)}
               />
             )
           ) : (

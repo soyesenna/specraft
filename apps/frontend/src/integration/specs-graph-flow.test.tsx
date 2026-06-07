@@ -172,6 +172,11 @@ describe("frontend specs graph interaction", () => {
     const panel = await screen.findByTestId("specs-detail-panel")
     expect(textOf(panel)).toContain("stop-gate.md")
     expect(textOf(panel)).toContain("Stop 게이트 판정 규칙")
+    expect(within(panel).queryByRole("button", { name: /overview\.md/i })).toBeNull()
+
+    fireEvent.click(within(panel).getByText("overview.md"))
+
+    expect(currentPath()).toBe("/specs")
 
     fireEvent.click(within(panel).getByRole("button", { name: /Open document/i }))
 
@@ -215,7 +220,9 @@ describe("frontend specs graph interaction", () => {
     ).toBe("Synced 43 min ago")
     expect(screen.queryByText("Synced 2 min ago")).toBeNull()
 
-    fireEvent.click(firstElement(screen.getAllByRole("button", { name: "축소" }), "zoom out"))
+    for (let i = 0; i < 5; i += 1) {
+      fireEvent.click(firstElement(screen.getAllByRole("button", { name: "축소" }), "zoom out"))
+    }
 
     const dotCanvas = await screen.findByTestId("specs-dot-canvas")
     fireEvent.click(within(dotCanvas).getByRole("button", { name: /stop-gate\.md.*details/i }))

@@ -482,6 +482,19 @@
                   "clip": true,
                   "width": "fill_container",
                   "height": "fill_container",
+                  "fill": [
+                    "#F5F5F7",
+                    {
+                      "type": "shader",
+                      "enabled": true,
+                      "url": "specraft-grid.glsl",
+                      "uniforms": {
+                        "u_size": 44,
+                        "u_line_color": "#000000",
+                        "u_alpha": 0.075
+                      }
+                    }
+                  ],
                   "layout": "none",
                   "children": [
                     {
@@ -1118,7 +1131,7 @@
                                   "type": "text",
                                   "id": "P57Ta",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "overview.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -1135,7 +1148,10 @@
                                 {
                                   "type": "icon",
                                   "id": "j9S93",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -1166,7 +1182,7 @@
                                   "type": "text",
                                   "id": "NHc9h",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "mcp-proxy.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -1183,7 +1199,10 @@
                                 {
                                   "type": "icon",
                                   "id": "GBlLz",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -1214,7 +1233,7 @@
                                   "type": "text",
                                   "id": "ymOcU",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "ingest-pipeline.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -1231,7 +1250,10 @@
                                 {
                                   "type": "icon",
                                   "id": "rKTi8",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -1262,7 +1284,7 @@
                                   "type": "text",
                                   "id": "DPI7p",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "adr-002-hard-gate.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -1279,7 +1301,10 @@
                                 {
                                   "type": "icon",
                                   "id": "Y24Sx",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -14103,6 +14128,19 @@
                   "clip": true,
                   "width": "fill_container",
                   "height": "fill_container",
+                  "fill": [
+                    "#F5F5F7",
+                    {
+                      "type": "shader",
+                      "enabled": true,
+                      "url": "specraft-grid.glsl",
+                      "uniforms": {
+                        "u_size": 44,
+                        "u_line_color": "#000000",
+                        "u_alpha": 0.075
+                      }
+                    }
+                  ],
                   "layout": "none",
                   "children": [
                     {
@@ -14739,7 +14777,7 @@
                                   "type": "text",
                                   "id": "HOW3t",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "overview.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -14756,7 +14794,10 @@
                                 {
                                   "type": "icon",
                                   "id": "sQfMo",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -14787,7 +14828,7 @@
                                   "type": "text",
                                   "id": "ttu7W",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "mcp-proxy.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -14804,7 +14845,10 @@
                                 {
                                   "type": "icon",
                                   "id": "RU9vQ",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -14835,7 +14879,7 @@
                                   "type": "text",
                                   "id": "au1qS",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "ingest-pipeline.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -14852,7 +14896,10 @@
                                 {
                                   "type": "icon",
                                   "id": "VZntg",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -14883,7 +14930,7 @@
                                   "type": "text",
                                   "id": "e8v4X",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "adr-002-hard-gate.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -14900,7 +14947,10 @@
                                 {
                                   "type": "icon",
                                   "id": "NMdQv",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -16981,7 +17031,19 @@
                   "clip": true,
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "$bg",
+                  "fill": [
+                    "#F5F5F7",
+                    {
+                      "type": "shader",
+                      "enabled": true,
+                      "url": "specraft-grid.glsl",
+                      "uniforms": {
+                        "u_size": 22,
+                        "u_line_color": "#000000",
+                        "u_alpha": 0.075
+                      }
+                    }
+                  ],
                   "layout": "none",
                   "children": [
                     {
@@ -19099,7 +19161,7 @@
                           "id": "JNJAa",
                           "name": "Hint Label",
                           "fill": "$ink-secondary",
-                          "content": "Compact view — zoom 24%",
+                          "content": "Compact view — zoom 50%",
                           "fontFamily": "$font-text",
                           "fontSize": 11.5,
                           "fontWeight": "500",
@@ -19225,7 +19287,7 @@
                           "id": "kA9oG",
                           "name": "Zoom Pct Label",
                           "fill": "$ink-tertiary",
-                          "content": "24%",
+                          "content": "50%",
                           "fontFamily": "$font-mono",
                           "fontSize": 10,
                           "fontWeight": "normal"
@@ -19654,7 +19716,7 @@
                                   "type": "text",
                                   "id": "z5CJQ",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "overview.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -19671,7 +19733,10 @@
                                 {
                                   "type": "icon",
                                   "id": "wg3GH",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -19702,7 +19767,7 @@
                                   "type": "text",
                                   "id": "h8ktv",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "mcp-proxy.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -19719,7 +19784,10 @@
                                 {
                                   "type": "icon",
                                   "id": "OpgQd",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -19750,7 +19818,7 @@
                                   "type": "text",
                                   "id": "zgjZf",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "ingest-pipeline.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -19767,7 +19835,10 @@
                                 {
                                   "type": "icon",
                                   "id": "Tf3jp",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -19798,7 +19869,7 @@
                                   "type": "text",
                                   "id": "bMmSO",
                                   "name": "Link Text",
-                                  "fill": "$link",
+                                  "fill": "#000000CC",
                                   "content": "adr-002-hard-gate.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -19815,7 +19886,10 @@
                                 {
                                   "type": "icon",
                                   "id": "h0azt6",
+                                  "x": 289,
+                                  "y": 2.5,
                                   "name": "Arrow",
+                                  "enabled": false,
                                   "width": 11,
                                   "height": 11,
                                   "icon": "arrow-up-right",
@@ -26845,6 +26919,19 @@
           "clip": true,
           "width": "fill_container",
           "height": "fill_container",
+          "fill": [
+            "#F5F5F7",
+            {
+              "type": "shader",
+              "enabled": true,
+              "url": "specraft-grid.glsl",
+              "uniforms": {
+                "u_size": 22,
+                "u_line_color": "#000000",
+                "u_alpha": 0.075
+              }
+            }
+          ],
           "layout": "none",
           "children": [
             {
@@ -27960,7 +28047,7 @@
                   "id": "uVjYG",
                   "name": "Hint Label",
                   "fill": "$ink-secondary",
-                  "content": "Compact — zoom 32%",
+                  "content": "Compact view — zoom 50%",
                   "fontFamily": "$font-text",
                   "fontSize": 10.5,
                   "fontWeight": "500",
