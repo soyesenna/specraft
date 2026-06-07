@@ -65,7 +65,10 @@ type VelocitySample = {
 }
 
 function isInteractiveTarget(target: EventTarget | null): boolean {
-  return target instanceof HTMLElement && target.closest("button,a") !== null
+  // HTMLElement가 아니라 Element로 검사한다 — 버튼 안의 lucide 아이콘(<svg>/<path>)은
+  // SVGElement라서 HTMLElement 검사에 걸리지 않고, 글리프를 정확히 클릭하면
+  // 캔버스 드래그+포인터 캡처가 시작돼 버튼 클릭이 삼켜지는 간헐 버그가 있었다.
+  return target instanceof Element && target.closest("button,a") !== null
 }
 
 function clampFactor(factor: number): number {

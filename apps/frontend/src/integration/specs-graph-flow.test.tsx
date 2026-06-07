@@ -178,6 +178,29 @@ describe("frontend specs graph interaction", () => {
     expect(currentPath()).toBe("/specs/doc/specs%2Fstop-gate.md")
   })
 
+  it("Given pointer lands on a button's svg glyph When dragged Then canvas pan does not start", async () => {
+    renderSpecs()
+
+    const canvas = await screen.findByTestId("specs-graph-canvas")
+    const panel = await screen.findByTestId("specs-detail-panel")
+    const closeButton = within(panel).getByRole("button", { name: "상세 패널 닫기" })
+    const glyph = closeButton.querySelector("svg")
+    if (glyph === null) {
+      throw new Error("missing close button glyph")
+    }
+
+    // SVG 글리프를 정확히 누른 채 끌어도 캔버스 드래그로 오인하면 안 된다 (클릭 삼킴 회귀 방지).
+    const initial = canvas.getAttribute("data-viewport-transform")
+    fireEvent.pointerDown(glyph, { buttons: 1, clientX: 1200, clientY: 80, pointerId: 7 })
+    fireEvent.pointerMove(canvas, { buttons: 1, clientX: 1230, clientY: 120, pointerId: 7 })
+    fireEvent.pointerUp(canvas, { buttons: 0, clientX: 1230, clientY: 120, pointerId: 7 })
+
+    expect(canvas.getAttribute("data-viewport-transform")).toBe(initial)
+
+    fireEvent.click(closeButton)
+    expect(screen.queryByTestId("specs-detail-panel")).toBeNull()
+  })
+
   it("Given detail panel When close button clicked Then panel hides until a node is reselected", async () => {
     renderSpecs()
 
