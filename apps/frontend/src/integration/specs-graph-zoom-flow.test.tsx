@@ -176,4 +176,59 @@ describe("frontend specs graph zoom controls", () => {
     expect(screen.queryByTestId("specs-dot-canvas")).toBeNull()
     expect(graphTransformOf(graphCanvas).scale).toBeCloseTo(0.6)
   })
+
+  it("Given compact graph view When wheel zooms in Then default graph view is restored", async () => {
+    renderSpecs()
+
+    await screen.findByTestId("specs-graph-canvas")
+
+    clickZoom("축소", 5)
+
+    const dotCanvas = await screen.findByTestId("specs-dot-canvas")
+    fireEvent.wheel(dotCanvas, { clientX: 480, clientY: 280, deltaY: -180 })
+
+    const graphCanvas = await screen.findByTestId("specs-graph-canvas")
+    expect(screen.queryByTestId("specs-dot-canvas")).toBeNull()
+    expect(graphTransformOf(graphCanvas).scale).toBeGreaterThan(0.5)
+  })
+
+  it("Given compact graph view When zoom out is clicked Then compact viewport keeps shrinking", async () => {
+    renderSpecs()
+
+    await screen.findByTestId("specs-graph-canvas")
+
+    clickZoom("축소", 5)
+
+    const dotCanvas = await screen.findByTestId("specs-dot-canvas")
+    const compactGrid = graphGridSizeOf(dotCanvas)
+
+    clickZoom("축소", 1)
+
+    await waitFor(() => {
+      expect(graphTransformOf(dotCanvas).scale).toBeCloseTo(0.4)
+    })
+    expect(screen.queryByTestId("specs-graph-canvas")).toBeNull()
+    expect(graphGridSizeOf(dotCanvas)).toBeLessThan(compactGrid)
+  })
+
+  it("Given compact graph view When canvas is dragged Then viewport position changes", async () => {
+    renderSpecs()
+
+    await screen.findByTestId("specs-graph-canvas")
+
+    clickZoom("축소", 5)
+
+    const dotCanvas = await screen.findByTestId("specs-dot-canvas")
+    const initial = graphTransformOf(dotCanvas)
+
+    fireEvent.pointerDown(dotCanvas, { buttons: 1, clientX: 420, clientY: 280, pointerId: 1 })
+    fireEvent.pointerMove(dotCanvas, { buttons: 1, clientX: 467, clientY: 319, pointerId: 1 })
+    fireEvent.pointerUp(dotCanvas, { buttons: 0, clientX: 467, clientY: 319, pointerId: 1 })
+
+    await waitFor(() => {
+      const panned = graphTransformOf(dotCanvas)
+      expect(panned.x).not.toBe(initial.x)
+      expect(panned.y).not.toBe(initial.y)
+    })
+  })
 })

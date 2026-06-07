@@ -170,6 +170,7 @@ export function SpecsPage() {
                 edges={visibleEdges}
                 selectedNode={selectedNode}
                 viewport={viewport}
+                onViewportChange={updateViewport}
                 onSelectNode={setSelectedPath}
                 onOpenDoc={openDoc}
                 onZoomIn={zoomIn}
