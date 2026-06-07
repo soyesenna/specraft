@@ -836,6 +836,11 @@
                           "name": "Zoom minus",
                           "width": 34,
                           "height": 32,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "top": 1,
+                            "bottom": 1
+                          },
                           "justifyContent": "center",
                           "alignItems": "center",
                           "children": [
@@ -948,8 +953,8 @@
                     {
                       "type": "frame",
                       "id": "rMwHo",
-                      "x": 860,
-                      "y": 20,
+                      "x": 852,
+                      "y": 28,
                       "name": "Detail Panel",
                       "width": 344,
                       "fill": "$surface",
@@ -10775,6 +10780,7 @@
                   "height": 38,
                   "fill": "#F5F5F7",
                   "cornerRadius": "$radius-s",
+                  "gap": 8,
                   "padding": [
                     0,
                     12
@@ -10791,6 +10797,23 @@
                       "fontSize": 13.5,
                       "fontWeight": "normal",
                       "letterSpacing": -0.2
+                    },
+                    {
+                      "type": "frame",
+                      "id": "rUAM4",
+                      "name": "FI Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "icon",
+                      "id": "k8Hcl",
+                      "name": "Eye Toggle",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "eye-off",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
                     }
                   ]
                 }
@@ -10837,7 +10860,7 @@
           "type": "text",
           "id": "A1D7Kp",
           "name": "Footer Note",
-          "fill": "#00000052",
+          "fill": "$ink-tertiary",
           "content": "specraft v1 · self-hosted · spec integrity over availability",
           "fontFamily": "$font-text",
           "fontSize": 11,
@@ -11060,6 +11083,7 @@
                   "height": 38,
                   "fill": "#F5F5F7",
                   "cornerRadius": "$radius-s",
+                  "gap": 8,
                   "padding": [
                     0,
                     12
@@ -11071,11 +11095,28 @@
                       "id": "h8jKH",
                       "name": "FV Password",
                       "fill": "$ink-tertiary",
-                      "content": "최소 12자",
+                      "content": "At least 12 characters",
                       "fontFamily": "$font-text",
                       "fontSize": 13.5,
                       "fontWeight": "normal",
                       "letterSpacing": -0.2
+                    },
+                    {
+                      "type": "frame",
+                      "id": "w8OLsX",
+                      "name": "FI Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "icon",
+                      "id": "c0bSto",
+                      "name": "Eye Toggle",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "eye-off",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
                     }
                   ]
                 }
@@ -11102,7 +11143,7 @@
           "type": "text",
           "id": "VzDZm",
           "name": "Invite Note",
-          "fill": "#00000052",
+          "fill": "$ink-tertiary",
           "content": "가입은 초대 링크로만 가능합니다",
           "fontFamily": "$font-text",
           "fontSize": 11,
@@ -14482,6 +14523,11 @@
                           "name": "Zoom minus",
                           "width": 34,
                           "height": 32,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "top": 1,
+                            "bottom": 1
+                          },
                           "justifyContent": "center",
                           "alignItems": "center",
                           "children": [
@@ -14594,8 +14640,8 @@
                     {
                       "type": "frame",
                       "id": "FzMAU",
-                      "x": 1012,
-                      "y": 20,
+                      "x": 1004,
+                      "y": 28,
                       "name": "Detail Panel",
                       "width": 344,
                       "fill": "$surface",
@@ -19218,6 +19264,11 @@
                           "name": "Zoom minus",
                           "width": 34,
                           "height": 32,
+                          "stroke": "$hairline",
+                          "strokeWidth": {
+                            "top": 1,
+                            "bottom": 1
+                          },
                           "justifyContent": "center",
                           "alignItems": "center",
                           "children": [
@@ -19533,8 +19584,8 @@
                     {
                       "type": "frame",
                       "id": "X64kS",
-                      "x": 860,
-                      "y": 20,
+                      "x": 852,
+                      "y": 28,
                       "name": "Detail Panel",
                       "width": 344,
                       "fill": "$surface",
@@ -20278,7 +20329,7 @@
                           "fill": "$ink",
                           "content": "senna@prompt.town",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
                         }
@@ -20313,6 +20364,7 @@
                       "height": 44,
                       "fill": "#F5F5F7",
                       "cornerRadius": 10,
+                      "gap": 8,
                       "padding": [
                         0,
                         14
@@ -20326,9 +20378,26 @@
                           "fill": "$ink",
                           "content": "••••••••••",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
+                        },
+                        {
+                          "type": "frame",
+                          "id": "VJf93",
+                          "name": "FI Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "icon",
+                          "id": "tJBQm",
+                          "name": "Eye Toggle",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "eye-off",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
                         }
                       ]
                     }
@@ -20386,7 +20455,7 @@
               "type": "text",
               "id": "PAn8D",
               "name": "Footer Note",
-              "fill": "#00000052",
+              "fill": "$ink-tertiary",
               "content": "specraft v1 · self-hosted",
               "fontFamily": "$font-text",
               "fontSize": 10.5,
@@ -20547,7 +20616,7 @@
                           "fill": "$ink",
                           "content": "민지",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
                         }
@@ -20595,7 +20664,7 @@
                           "fill": "$ink",
                           "content": "minji@prompt.town",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
                         }
@@ -20630,6 +20699,7 @@
                       "height": 44,
                       "fill": "#F5F5F7",
                       "cornerRadius": 10,
+                      "gap": 8,
                       "padding": [
                         0,
                         14
@@ -20641,11 +20711,28 @@
                           "id": "VGh3g",
                           "name": "FV Password",
                           "fill": "$ink-tertiary",
-                          "content": "최소 12자",
+                          "content": "At least 12 characters",
                           "fontFamily": "$font-text",
-                          "fontSize": 14,
+                          "fontSize": 16,
                           "fontWeight": "normal",
                           "letterSpacing": -0.22
+                        },
+                        {
+                          "type": "frame",
+                          "id": "nQXT0",
+                          "name": "FI Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "icon",
+                          "id": "Jj5Hb",
+                          "name": "Eye Toggle",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "eye-off",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
                         }
                       ]
                     }
@@ -20683,7 +20770,7 @@
               "type": "text",
               "id": "ZeroF",
               "name": "Invite Note",
-              "fill": "#00000052",
+              "fill": "$ink-tertiary",
               "content": "가입은 초대 링크로만 가능합니다",
               "fontFamily": "$font-text",
               "fontSize": 10.5,
@@ -28927,7 +29014,7 @@
                       "fill": "$ink",
                       "content": "git@github.com:prompt-town/specraft.git",
                       "fontFamily": "$font-mono",
-                      "fontSize": 11,
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     }
                   ]
@@ -29075,7 +29162,7 @@
                       "fill": "$ink",
                       "content": "ssh-ed25519 ••••••••••••••",
                       "fontFamily": "$font-mono",
-                      "fontSize": 11,
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     },
                     {
@@ -29312,7 +29399,7 @@
                           "fill": "$ink",
                           "content": "anthropic/claude-sonnet-4.6",
                           "fontFamily": "$font-mono",
-                          "fontSize": 11,
+                          "fontSize": 16,
                           "fontWeight": "normal"
                         }
                       ]
@@ -29359,7 +29446,7 @@
                           "fill": "$ink",
                           "content": "anthropic/claude-haiku-4.5",
                           "fontFamily": "$font-mono",
-                          "fontSize": 11,
+                          "fontSize": 16,
                           "fontWeight": "normal"
                         }
                       ]
@@ -30929,7 +31016,7 @@
                   "name": "DS Title",
                   "fill": "$ink",
                   "content": "stop-gate.md",
-                  "fontFamily": "$font-display",
+                  "fontFamily": "$font-text",
                   "fontSize": 18,
                   "fontWeight": "600",
                   "letterSpacing": -0.28
@@ -31464,7 +31551,7 @@
                   "fill": "$ink",
                   "content": "Stop 게이트는 어떤 조",
                   "fontFamily": "$font-text",
-                  "fontSize": 13.5,
+                  "fontSize": 16,
                   "fontWeight": "normal",
                   "letterSpacing": -0.2
                 },
@@ -38305,6 +38392,7 @@
                   "height": 38,
                   "fill": "#F5F5F7",
                   "cornerRadius": "$radius-s",
+                  "gap": 8,
                   "padding": [
                     0,
                     12
@@ -38316,11 +38404,28 @@
                       "id": "Ld3GT",
                       "name": "FV Password",
                       "fill": "$ink-tertiary",
-                      "content": "최소 12자",
+                      "content": "At least 12 characters",
                       "fontFamily": "$font-text",
                       "fontSize": 13.5,
                       "fontWeight": "normal",
                       "letterSpacing": -0.2
+                    },
+                    {
+                      "type": "frame",
+                      "id": "DwvAT",
+                      "name": "FI Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "icon",
+                      "id": "q2cqK",
+                      "name": "Eye Toggle",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "eye-off",
+                      "library": "lucide",
+                      "fill": "$ink-tertiary"
                     }
                   ]
                 }
@@ -38347,7 +38452,7 @@
           "type": "text",
           "id": "FIfDU",
           "name": "Footer Note",
-          "fill": "#00000052",
+          "fill": "$ink-tertiary",
           "content": "specraft v1 · self-hosted · spec integrity over availability",
           "fontFamily": "$font-text",
           "fontSize": 11,
