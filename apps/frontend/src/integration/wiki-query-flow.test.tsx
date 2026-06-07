@@ -94,7 +94,7 @@ describe("frontend wiki and query integration", () => {
         "disabled",
       ),
     ).not.toBeNull()
-    fireEvent.change(firstElement(screen.getAllByLabelText("질문"), "질문"), {
+    fireEvent.change(firstElement(await screen.findAllByLabelText("질문"), "질문"), {
       target: { value: "Stop 게이트 조건은?" },
     })
     fireEvent.click(firstElement(screen.getAllByRole("button", { name: "질문 전송" }), "질문 전송"))
@@ -133,7 +133,8 @@ describe("frontend wiki and query integration", () => {
       </MemoryRouter>,
     )
 
-    fireEvent.change(firstElement(screen.getAllByLabelText("질문"), "질문"), {
+    // LiveShell 세션 확인 게이트가 풀린 뒤에야 AskBar가 렌더되므로 비동기로 조회한다.
+    fireEvent.change(firstElement(await screen.findAllByLabelText("질문"), "질문"), {
       target: { value: "Stop 게이트 조건은?" },
     })
     fireEvent.click(firstElement(screen.getAllByRole("button", { name: "질문 전송" }), "질문 전송"))

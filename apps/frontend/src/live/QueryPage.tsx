@@ -35,14 +35,20 @@ export function QueryPage() {
   const [turns, setTurns] = useState<QueryTurn[]>([])
   const [error, setError] = useState<string | null>(null)
   const [typing, setTyping] = useState(false)
+  const [pending, setPending] = useState(false)
+  const [pendingQuestion, setPendingQuestion] = useState<string | null>(null)
   const trimmedQuestion = question.trim()
 
   async function submit(): Promise<void> {
-    if (trimmedQuestion.length === 0) {
+    if (trimmedQuestion.length === 0 || pending) {
       return
     }
     setError(null)
     const asked = trimmedQuestion
+    // 사용자 질문을 즉시 화면에 반영하고 응답 대기 인디케이터를 띄운다.
+    setPending(true)
+    setPendingQuestion(asked)
+    setQuestion("")
     try {
       const response = await client.query({
         branch,
@@ -50,10 +56,14 @@ export function QueryPage() {
         question: asked,
       })
       setTurns((current) => [...current, { question: asked, answer: response }])
-      setQuestion("")
       setTyping(false)
     } catch (caught: unknown) {
       setError(caught instanceof Error ? caught.message : "Query failed")
+      // 전송 실패 시 질문을 입력창으로 되돌려 재시도할 수 있게 한다.
+      setQuestion(asked)
+    } finally {
+      setPending(false)
+      setPendingQuestion(null)
     }
   }
 
@@ -72,7 +82,7 @@ export function QueryPage() {
           <div className="flex min-h-0 flex-1 flex-col items-center px-7 pb-7">
             <div className="flex h-full w-full max-w-[760px] flex-col gap-5">
               <div className="flex flex-1 flex-col justify-end gap-5 overflow-y-auto">
-                {turns.length === 0 && error === null && (
+                {turns.length === 0 && error === null && !pending && (
                   <div className="flex flex-1 items-center justify-center">
                     <span className="pen-text text-[13px] tracking-[-0.2px] text-ink-tertiary">
                       이 프로젝트의 spec에 대해 무엇이든 물어보세요
@@ -82,13 +92,16 @@ export function QueryPage() {
                 {turns.map((turn) => (
                   <DesktopTurn key={turn.answer.query_id} turn={turn} branch={branch} />
                 ))}
+                {pending && pendingQuestion !== null && (
+                  <DesktopPendingTurn question={pendingQuestion} />
+                )}
                 {error && <span className="pen-text text-[13px] text-danger">{error}</span>}
               </div>
               <AskBar
                 question={question}
                 onChange={setQuestion}
                 onSubmit={submit}
-                disabled={trimmedQuestion.length === 0}
+                disabled={trimmedQuestion.length === 0 || pending}
               />
               <div className="flex w-full justify-center">
                 <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">
@@ -119,10 +132,13 @@ export function QueryPage() {
               {turns.map((turn) => (
                 <MobileTurn key={turn.answer.query_id} turn={turn} compact />
               ))}
+              {pending && pendingQuestion !== null && (
+                <MobilePendingTurn question={pendingQuestion} compact />
+              )}
               {error && <span className="pen-text text-[12px] text-danger">{error}</span>}
             </div>
             <div className="w-full px-4 pt-1 pb-2">
-              <div className="flex w-full items-center gap-0.5 rounded-pill border-[1.5px] border-accent bg-surface py-[7px] pr-[7px] pl-4 shadow-[0_3px_14px_#0000001A]">
+              <div className="flex w-full items-center gap-0.5 rounded-pill border-[1.5px] border-accent bg-surface py-[7px] pr-[7px] pl-4 shadow-[0_3px_14px_#0000001A] focus-within:ring-2 focus-within:ring-accent">
                 <label className="sr-only" htmlFor="specraft-question-mobile">
                   질문
                 </label>
@@ -132,16 +148,18 @@ export function QueryPage() {
                   onChange={(event) => setQuestion(event.currentTarget.value)}
                   onBlur={() => setTyping(false)}
                   placeholder="이 프로젝트의 spec에 대해 무엇이든 물어보세요…"
-                  className="pen-text min-w-0 flex-1 border-none bg-transparent text-[13.5px] tracking-[-0.2px] text-ink outline-none placeholder:text-ink-tertiary"
+                  className="pen-text min-w-0 flex-1 border-none bg-transparent text-[13.5px] tracking-[-0.2px] text-ink outline-none max-md:text-[16px] placeholder:text-ink-tertiary"
                 />
                 <button
                   type="button"
-                  disabled={trimmedQuestion.length === 0}
+                  disabled={trimmedQuestion.length === 0 || pending}
                   onClick={submit}
-                  className="flex size-[30px] shrink-0 items-center justify-center rounded-[15px] bg-accent disabled:bg-separator"
+                  className="group -m-[7px] flex size-11 shrink-0 items-center justify-center"
                   aria-label="질문 전송"
                 >
-                  <ArrowUp className="size-3.5 text-white" />
+                  <span className="flex size-[30px] items-center justify-center rounded-[15px] bg-accent group-disabled:bg-separator">
+                    <ArrowUp className="size-3.5 text-white" />
+                  </span>
                 </button>
               </div>
             </div>
@@ -151,7 +169,7 @@ export function QueryPage() {
           /* ─ M06: 기본 상태 ─ */
           <>
             <div className="flex min-h-0 w-full flex-1 flex-col gap-3.5 overflow-y-auto px-4 pt-2 pb-3">
-              {turns.length === 0 && error === null && (
+              {turns.length === 0 && error === null && !pending && (
                 <div className="flex flex-1 items-center justify-center">
                   <span className="pen-text text-[13px] tracking-[-0.2px] text-ink-tertiary">
                     spec에 대해 무엇이든 물어보세요
@@ -161,6 +179,9 @@ export function QueryPage() {
               {turns.map((turn) => (
                 <MobileTurn key={turn.answer.query_id} turn={turn} />
               ))}
+              {pending && pendingQuestion !== null && (
+                <MobilePendingTurn question={pendingQuestion} />
+              )}
               {error && <span className="pen-text text-[12px] text-danger">{error}</span>}
             </div>
             <div className="w-full px-4 pt-1.5 pb-2.5">
@@ -250,6 +271,35 @@ function DesktopTurn({ turn, branch }: { turn: QueryTurn; branch: string }) {
   )
 }
 
+/* ───── 데스크톱 응답 대기 턴 ───── */
+
+function DesktopPendingTurn({ question }: { question: string }) {
+  return (
+    <div className="flex w-full flex-col gap-5">
+      <div className="flex w-full flex-col items-end gap-[5px]">
+        <div className="rounded-[16px] rounded-br-[4px] bg-input px-4 py-2.5">
+          <span className="pen-text text-[14.5px] tracking-[-0.22px] text-ink">{question}</span>
+        </div>
+        <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">· 방금</span>
+      </div>
+      <article
+        aria-live="polite"
+        aria-busy="true"
+        className="flex items-center gap-[7px] rounded-[16px] bg-surface px-[26px] py-[22px] shadow-[0_2px_12px_#0000000F]"
+      >
+        <Sparkles className="size-3.5 animate-pulse text-accent" />
+        <span className="pen-text animate-pulse text-[12.5px] font-semibold tracking-[-0.12px] text-ink">
+          specraft
+        </span>
+        <span className="pen-text animate-pulse text-[12px] tracking-[-0.12px] text-ink-tertiary">
+          · wiki 탐색 중…
+        </span>
+        <span className="size-1.5 animate-pulse rounded-full bg-accent" />
+      </article>
+    </div>
+  )
+}
+
 /* ───── 모바일 대화 턴 ───── */
 
 function MobileTurn({ turn, compact = false }: { turn: QueryTurn; compact?: boolean }) {
@@ -316,6 +366,40 @@ function MobileTurn({ turn, compact = false }: { turn: QueryTurn; compact?: bool
   )
 }
 
+/* ───── 모바일 응답 대기 턴 ───── */
+
+function MobilePendingTurn({ question, compact = false }: { question: string; compact?: boolean }) {
+  return (
+    <div className="flex w-full flex-col gap-3.5">
+      <div className="flex w-full flex-col items-end gap-1">
+        <div className="rounded-[16px] rounded-br-[4px] bg-input px-3.5 py-[9px]">
+          <span className="pen-text block max-w-[250px] text-[13.5px] leading-[1.5] tracking-[-0.2px] text-ink">
+            {question}
+          </span>
+        </div>
+        <span className="pen-text text-[10px] tracking-[-0.1px] text-ink-tertiary">· 방금</span>
+      </div>
+      <div
+        aria-live="polite"
+        aria-busy="true"
+        className={cn(
+          "flex w-full items-center gap-1.5 rounded-[16px] bg-surface shadow-[0_2px_10px_#0000000D]",
+          compact ? "px-4 py-3.5" : "p-4",
+        )}
+      >
+        <Sparkles className="size-[13px] animate-pulse text-accent" />
+        <span className="pen-text animate-pulse text-[11.5px] font-semibold tracking-[-0.1px] text-ink">
+          specraft
+        </span>
+        <span className="pen-text animate-pulse text-[11px] tracking-[-0.1px] text-ink-tertiary">
+          · wiki 탐색 중…
+        </span>
+        <span className="size-1.5 animate-pulse rounded-full bg-accent" />
+      </div>
+    </div>
+  )
+}
+
 /* ───── Ask Bar (데스크톱) ───── */
 
 function AskBar({
@@ -330,7 +414,7 @@ function AskBar({
   disabled: boolean
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-pill bg-surface py-2 pr-2 pl-5 shadow-[3px_5px_30px_#00000038]">
+    <div className="flex items-center gap-3 rounded-pill bg-surface py-2 pr-2 pl-5 shadow-[3px_5px_30px_#00000038] focus-within:ring-2 focus-within:ring-accent">
       <label className="sr-only" htmlFor="specraft-question">
         질문
       </label>
@@ -401,10 +485,10 @@ function Key({
       onClick={onClick}
       style={wide ? { width: wide } : undefined}
       className={cn(
-        "flex h-[42px] items-center justify-center rounded-[5.5px] shadow-[0_1px_0_#898A8D]",
-        tone === "white" && "bg-white",
-        tone === "gray" && "bg-[#ADB3BC]",
-        tone === "accent" && "bg-accent",
+        "flex h-[42px] items-center justify-center rounded-[5.5px] shadow-[0_1px_0_#898A8D] transition-colors duration-150 ease-[var(--ease-standard)]",
+        tone === "white" && "bg-white active:bg-input",
+        tone === "gray" && "bg-[#ADB3BC] active:brightness-95",
+        tone === "accent" && "bg-accent active:brightness-95",
         grow && "min-w-0 flex-1",
         !wide && !grow && "min-w-0 flex-1",
       )}

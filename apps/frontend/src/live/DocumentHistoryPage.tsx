@@ -1,10 +1,11 @@
 import type { WikiVersion } from "@specraft/shared"
 import { Check, ChevronDown, ChevronLeft, GitMerge, History } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
 import { SelectCard } from "../components/SelectCard.js"
 import { cn } from "../lib/cn.js"
+import { useDismissable } from "../lib/useDismissable.js"
 import { useSpecraft } from "./api.js"
 import { useBranch } from "./branch.js"
 import { actorInitials, relativeTime } from "./DocumentPage.js"
@@ -65,6 +66,23 @@ export function DocumentHistoryPage() {
   const [selectedHash, setSelectedHash] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [versionMenuOpen, setVersionMenuOpen] = useState(false)
+  // ease-enter 페이드·슬라이드: mount 직후 다음 프레임에 entered=true로 전환한다.
+  const [versionMenuEntered, setVersionMenuEntered] = useState(false)
+  // 컨테이너는 트리거+메뉴를 함께 감싸 트리거 재클릭이 외부 닫기와 충돌하지 않게 한다.
+  const mobileViewRef = useRef<HTMLDivElement>(null)
+  const versionTriggerRef = useRef<HTMLButtonElement>(null)
+  const closeVersionMenu = useCallback(() => setVersionMenuOpen(false), [])
+  useDismissable(versionMenuOpen, closeVersionMenu, mobileViewRef, versionTriggerRef)
+
+  // ease-enter 전환 구동: 닫힐 때 즉시 초기 상태로, 열리면 다음 프레임에 entered.
+  useEffect(() => {
+    if (!versionMenuOpen) {
+      setVersionMenuEntered(false)
+      return
+    }
+    const frame = requestAnimationFrame(() => setVersionMenuEntered(true))
+    return () => cancelAnimationFrame(frame)
+  }, [versionMenuOpen])
 
   useEffect(() => {
     let active = true
@@ -194,9 +212,9 @@ export function DocumentHistoryPage() {
                 </p>
               )}
               {selected && selected.added.length > 0 && (
-                <div className="w-full overflow-hidden rounded-sm border border-[#34C759] bg-[#E9F6EE]">
+                <div className="w-full overflow-hidden rounded-sm bg-success/10">
                   <div className="flex w-full flex-col gap-1.5 px-3.5 py-2.5">
-                    <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-[#1E8E3E]">
+                    <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-success">
                       + ADDED
                     </span>
                     {addedLines.map((entry) => (
@@ -211,9 +229,9 @@ export function DocumentHistoryPage() {
                 </div>
               )}
               {selected && selected.removed.length > 0 && (
-                <div className="w-full overflow-hidden rounded-sm border border-[#FF3B30] bg-[#FBEEEC]">
+                <div className="w-full overflow-hidden rounded-sm bg-danger/10">
                   <div className="flex w-full flex-col gap-1.5 px-3.5 py-2.5">
-                    <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-[#C5221F]">
+                    <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-danger">
                       − REMOVED
                     </span>
                     {removedLines.map((entry) => (
@@ -235,7 +253,7 @@ export function DocumentHistoryPage() {
             </article>
             {/* History Panel */}
             <aside className="flex w-[360px] shrink-0 flex-col gap-2.5 overflow-y-auto">
-              <div className="flex w-full flex-col gap-0.5 border border-hairline px-1">
+              <div className="flex w-full flex-col gap-0.5 px-1">
                 <span className="pen-text text-[15px] font-semibold tracking-[-0.24px] text-ink">
                   History
                 </span>
@@ -293,10 +311,10 @@ export function DocumentHistoryPage() {
                         </span>
                       </span>
                       {/* 디자인(AGh5N Ver Meta)은 ±0 도 항상 표기한다 */}
-                      <span className="pen-text font-mono text-[10px] text-[#1E8E3E]">
+                      <span className="pen-text font-mono text-[10px] text-success">
                         +{version.added_lines}
                       </span>
-                      <span className="pen-text font-mono text-[10px] text-[#C5221F]">
+                      <span className="pen-text font-mono text-[10px] text-danger">
                         −{version.removed_lines}
                       </span>
                     </div>
@@ -309,7 +327,10 @@ export function DocumentHistoryPage() {
       </div>
 
       {/* ───── 모바일 M05b/M05c ───── */}
-      <div className="relative flex h-full flex-col overflow-hidden bg-bg md:hidden">
+      <div
+        ref={mobileViewRef}
+        className="relative flex h-full flex-col overflow-hidden bg-bg md:hidden"
+      >
         <MobileStatusBar />
         <div className="flex w-full items-center gap-2.5 px-4 pt-1.5 pb-2.5">
           <button
@@ -340,8 +361,11 @@ export function DocumentHistoryPage() {
         <div className="flex min-h-0 w-full flex-1 flex-col gap-2.5 px-4 pb-4">
           {/* Version Banner — 드롭다운 트리거 */}
           <button
+            ref={versionTriggerRef}
             type="button"
             onClick={() => setVersionMenuOpen((open) => !open)}
+            aria-haspopup="true"
+            aria-expanded={versionMenuOpen}
             className="flex w-full items-center gap-[7px] rounded-[10px] bg-surface px-3 py-[9px] text-left"
           >
             <History className="size-3 shrink-0 text-ink-tertiary" />
@@ -376,8 +400,8 @@ export function DocumentHistoryPage() {
               </span>
             )}
             {selected && selected.added.length > 0 && (
-              <div className="flex w-full flex-col gap-[5px] rounded-sm bg-[#E9F6EE] px-3 py-[9px]">
-                <span className="pen-text text-[8.5px] font-semibold tracking-[0.8px] text-[#1E8E3E]">
+              <div className="flex w-full flex-col gap-[5px] rounded-sm bg-success/10 px-3 py-[9px]">
+                <span className="pen-text text-[8.5px] font-semibold tracking-[0.8px] text-success">
                   + ADDED
                 </span>
                 {addedLines.map((entry) => (
@@ -391,8 +415,8 @@ export function DocumentHistoryPage() {
               </div>
             )}
             {selected && selected.removed.length > 0 && (
-              <div className="flex w-full flex-col gap-[5px] rounded-sm bg-[#FBEEEC] px-3 py-[9px]">
-                <span className="pen-text text-[8.5px] font-semibold tracking-[0.8px] text-[#C5221F]">
+              <div className="flex w-full flex-col gap-[5px] rounded-sm bg-danger/10 px-3 py-[9px]">
+                <span className="pen-text text-[8.5px] font-semibold tracking-[0.8px] text-danger">
                   − REMOVED
                 </span>
                 {removedLines.map((entry) => (
@@ -409,7 +433,12 @@ export function DocumentHistoryPage() {
         </div>
         {/* M05c — Version Menu 드롭다운 */}
         {versionMenuOpen && versions.length > 0 && (
-          <div className="absolute top-[132px] left-4 z-40 flex w-[358px] flex-col gap-px rounded-md bg-surface p-1.5 shadow-[0_6px_24px_#00000030]">
+          <div
+            className={cn(
+              "absolute top-[132px] left-4 z-40 flex w-[358px] flex-col gap-px rounded-md bg-surface p-1.5 shadow-[0_6px_24px_#00000030] origin-top transition duration-150 ease-[var(--ease-enter)] motion-reduce:transition-none",
+              versionMenuEntered ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0",
+            )}
+          >
             <div className="flex w-full items-center px-2.5 pt-[7px] pb-[5px]">
               <span className="pen-text text-[10px] font-semibold tracking-[0.8px] text-ink-tertiary">
                 VERSIONS

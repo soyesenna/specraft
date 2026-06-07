@@ -22,7 +22,7 @@ export function ZoomControls({ onZoomIn, onZoomOut, onFit, className }: ZoomCont
       <button
         type="button"
         onClick={onZoomIn}
-        className="flex h-8 w-[34px] items-center justify-center"
+        className="flex h-8 w-[34px] cursor-pointer items-center justify-center rounded-t-sm transition-colors hover:bg-bg"
         aria-label="확대"
       >
         <Plus className="size-3.5 text-ink-secondary" />
@@ -30,7 +30,7 @@ export function ZoomControls({ onZoomIn, onZoomOut, onFit, className }: ZoomCont
       <button
         type="button"
         onClick={onZoomOut}
-        className="flex h-8 w-[34px] items-center justify-center"
+        className="flex h-8 w-[34px] cursor-pointer items-center justify-center border-y border-hairline transition-colors hover:bg-bg"
         aria-label="축소"
       >
         <Minus className="size-3.5 text-ink-secondary" />
@@ -38,7 +38,7 @@ export function ZoomControls({ onZoomIn, onZoomOut, onFit, className }: ZoomCont
       <button
         type="button"
         onClick={onFit}
-        className="flex h-8 w-[34px] items-center justify-center"
+        className="flex h-8 w-[34px] cursor-pointer items-center justify-center rounded-b-sm transition-colors hover:bg-bg"
         aria-label="화면 맞춤"
       >
         <Scan className="size-3.5 text-ink-secondary" />
@@ -62,13 +62,13 @@ export function DetailPanel({ node, edges, onOpenDoc }: DetailPanelProps) {
   return (
     <aside
       data-testid="specs-detail-panel"
-      className="absolute top-5 right-5 z-20 flex w-[344px] flex-col gap-3.5 rounded-lg bg-surface p-[22px] shadow-[3px_5px_30px_#00000038]"
+      className="absolute top-7 right-7 z-20 flex w-[344px] flex-col gap-3.5 rounded-lg bg-surface p-[22px] shadow-[3px_5px_30px_#00000038]"
     >
       <div className="flex w-full flex-col gap-[5px]">
         <span className="pen-text text-[10px] font-semibold tracking-[0.8px] text-ink-tertiary">
           {node.dir}
         </span>
-        <span className="pen-text font-display text-[21px] font-semibold tracking-[-0.3px] text-ink">
+        <span className="pen-text w-full truncate font-display text-[21px] font-semibold tracking-[-0.3px] text-ink">
           {fileNameOf(node.path)}
         </span>
         <p className="pen-text m-0 w-full text-[13px] leading-[1.5] tracking-[-0.2px] text-ink-secondary">
@@ -95,10 +95,9 @@ export function DetailPanel({ node, edges, onOpenDoc }: DetailPanelProps) {
         {uniqueConnected.map((doc) => (
           <div key={doc} className="flex w-full items-center gap-2 text-left">
             <FileText className="size-[13px] shrink-0 text-ink-tertiary" />
-            <span className="pen-text truncate text-[13px] tracking-[-0.2px] text-ink-secondary">
+            <span className="pen-text min-w-0 flex-1 truncate text-[13px] tracking-[-0.2px] text-ink-secondary">
               {fileNameOf(doc)}
             </span>
-            <span className="h-px flex-1" />
           </div>
         ))}
       </div>

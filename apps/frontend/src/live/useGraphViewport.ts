@@ -1,4 +1,4 @@
-import { type PointerEvent, useRef, type WheelEvent } from "react"
+import { type CSSProperties, type PointerEvent, useRef, useState, type WheelEvent } from "react"
 import {
   formatGraphViewport,
   type GraphViewport,
@@ -21,6 +21,7 @@ function isInteractiveTarget(target: EventTarget | null): boolean {
 
 export function useGraphViewport(viewport: GraphViewport, onViewportChange: ViewportUpdater) {
   const drag = useRef<DragState | null>(null)
+  const [dragging, setDragging] = useState(false)
 
   function zoomBy(factor: number, originX = 0, originY = 0): void {
     onViewportChange((current) =>
@@ -47,6 +48,7 @@ export function useGraphViewport(viewport: GraphViewport, onViewportChange: View
       originX: viewport.x,
       originY: viewport.y,
     }
+    setDragging(true)
   }
 
   function onPointerMove(event: PointerEvent<HTMLDivElement>): void {
@@ -71,15 +73,22 @@ export function useGraphViewport(viewport: GraphViewport, onViewportChange: View
       event.currentTarget.releasePointerCapture(event.pointerId)
     }
     drag.current = null
+    setDragging(false)
+  }
+
+  const gridStyle: CSSProperties = {
+    ...graphGridStyle(viewport),
+    cursor: dragging ? "grabbing" : "grab",
+  }
+  const contentStyle: CSSProperties = {
+    transform: `translate3d(${viewport.x}px, ${viewport.y}px, 0) scale(${viewport.scale})`,
   }
 
   return {
     gridSize: graphGridSize(viewport.scale),
-    gridStyle: graphGridStyle(viewport),
+    gridStyle,
     transform: formatGraphViewport(viewport),
-    contentStyle: {
-      transform: `translate3d(${viewport.x}px, ${viewport.y}px, 0) scale(${viewport.scale})`,
-    },
+    contentStyle,
     onWheel,
     onPointerDown,
     onPointerMove,

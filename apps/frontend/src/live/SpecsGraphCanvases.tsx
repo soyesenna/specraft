@@ -69,6 +69,10 @@ export function DesktopGraphCanvas({
                 y2={edge.to.cy}
                 stroke={active ? "#0071E3" : "#D2D2D7"}
                 strokeWidth={active ? 2 : 1.5}
+                style={{
+                  transition:
+                    "stroke 150ms var(--ease-standard), stroke-width 150ms var(--ease-standard)",
+                }}
               />
             )
           })}

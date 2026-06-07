@@ -1,13 +1,16 @@
 import type { IngestLog, QueryLog } from "@specraft/shared"
 import {
+  AlertTriangle,
   ArrowUp,
   Calendar,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   MessageCircle,
+  RefreshCw,
 } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { ButtonSecondary } from "../components/buttons.js"
 import { GitBranchIcon } from "../components/GitBranchIcon.js"
 import { GlassNav } from "../components/GlassNav.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
@@ -87,39 +90,55 @@ function relativeTime(iso: string): string {
 
 export function ActivityPage() {
   const { client } = useSpecraft()
-  const [rows, setRows] = useState<readonly ActivityRow[]>([])
+  const [rows, setRows] = useState<readonly ActivityRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<TypeTab>("All")
   const [page, setPage] = useState(0)
 
+  // 액티비티 로드를 재호출 가능한 함수로 분리 — Retry 버튼이 같은 경로를 다시 태운다.
+  // active 가드는 호출자(useEffect cleanup / 버튼 핸들러)가 넘긴 ref로 stale 응답을 차단.
+  const loadActivity = useCallback(
+    (isActive: () => boolean) => {
+      setRows(null)
+      setError(null)
+      void Promise.all([client.listIngestLogs(), client.listQueryLogs()])
+        .then(([ingests, queries]) => {
+          if (!isActive()) {
+            return
+          }
+          const nextRows: readonly ActivityRow[] = [
+            ...ingests.logs.map((log) => ({ kind: "Ingest", log }) as const),
+            ...queries.logs.map((log) => ({ kind: "Query", log }) as const),
+          ]
+            .slice()
+            .sort((a, b) => rowMillis(b) - rowMillis(a))
+          setRows(nextRows)
+          setError(null)
+        })
+        .catch((caught: unknown) => {
+          if (isActive()) {
+            setError(caught instanceof Error ? caught.message : "Failed to load activity")
+          }
+        })
+    },
+    [client],
+  )
+
   useEffect(() => {
     let active = true
-    void Promise.all([client.listIngestLogs(), client.listQueryLogs()])
-      .then(([ingests, queries]) => {
-        if (!active) {
-          return
-        }
-        const nextRows: readonly ActivityRow[] = [
-          ...ingests.logs.map((log) => ({ kind: "Ingest", log }) as const),
-          ...queries.logs.map((log) => ({ kind: "Query", log }) as const),
-        ]
-          .slice()
-          .sort((a, b) => rowMillis(b) - rowMillis(a))
-        setRows(nextRows)
-      })
-      .catch((caught: unknown) => {
-        if (active) {
-          setError(caught instanceof Error ? caught.message : "Failed to load activity")
-        }
-      })
+    loadActivity(() => active)
     return () => {
       active = false
     }
-  }, [client])
+  }, [loadActivity])
+
+  const retryActivity = () => {
+    loadActivity(() => true)
+  }
 
   const filteredRows = useMemo(
     () =>
-      rows.filter((row) => {
+      (rows ?? []).filter((row) => {
         if (filter === "Ingests") return row.kind === "Ingest"
         if (filter === "Queries") return row.kind === "Query"
         return true
@@ -127,6 +146,8 @@ export function ActivityPage() {
     [rows, filter],
   )
 
+  // 로딩: rows 미도착 && 에러 없음. 데이터 0건과 로딩 중을 명확히 구분한다.
+  const loading = rows === null && error === null
   const totalCount = filteredRows.length
   const pageStart = page * PAGE_SIZE
   const pageRows = filteredRows.slice(pageStart, pageStart + PAGE_SIZE)
@@ -159,140 +180,151 @@ export function ActivityPage() {
             </div>
           }
         >
-          <div className="flex min-h-0 flex-1 flex-col gap-3 px-7 pt-1 pb-7">
-            {error && <span className="pen-text text-[13px] text-danger">{error}</span>}
-            <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
-              <div className="flex h-[38px] w-full shrink-0 items-center gap-3.5 border-b border-hairline px-5">
-                <HeadCell w={96}>TYPE</HeadCell>
-                <HeadCell w={130}>MEMBER</HeadCell>
-                <HeadCell w={170}>BRANCH</HeadCell>
-                <span className="min-w-0 flex-1">
-                  <span className="pen-text text-[10.5px] font-semibold tracking-[0.6px] text-ink-tertiary">
-                    SUMMARY
+          {error ? (
+            <DesktopErrorState message={error} onRetry={retryActivity} />
+          ) : (
+            <div className="flex min-h-0 flex-1 flex-col gap-3 px-7 pt-1 pb-7">
+              <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
+                <div className="flex h-[38px] w-full shrink-0 items-center gap-3.5 border-b border-hairline px-5">
+                  <HeadCell w={96}>TYPE</HeadCell>
+                  <HeadCell w={130}>MEMBER</HeadCell>
+                  <HeadCell w={170}>BRANCH</HeadCell>
+                  <span className="min-w-0 flex-1">
+                    <span className="pen-text text-[10.5px] font-semibold tracking-[0.6px] text-ink-tertiary">
+                      SUMMARY
+                    </span>
                   </span>
+                  <HeadCell w={84}>COMMIT</HeadCell>
+                  <HeadCell w={104}>STATUS</HeadCell>
+                  <HeadCell w={84}>TIME</HeadCell>
+                </div>
+                {loading && <DesktopRowSkeleton />}
+                {!loading &&
+                  pageRows.map((row, i) => {
+                    const status = rowStatus(row)
+                    const commit = rowCommit(row)
+                    return (
+                      <div
+                        key={rowKey(row)}
+                        className={cn(
+                          "flex h-[46px] w-full shrink-0 items-center gap-3.5 px-5",
+                          i < pageRows.length - 1 && "border-b border-hairline",
+                        )}
+                      >
+                        <span className="flex w-24 shrink-0 items-center gap-[7px]">
+                          <span
+                            className={cn(
+                              "flex size-[22px] items-center justify-center rounded-[6px]",
+                              row.kind === "Ingest" ? "bg-dark-card" : "bg-input",
+                            )}
+                          >
+                            {row.kind === "Ingest" ? (
+                              <ArrowUp className="size-3 text-white" />
+                            ) : (
+                              <MessageCircle className="size-3 text-ink-secondary" />
+                            )}
+                          </span>
+                          <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink-secondary">
+                            {row.kind}
+                          </span>
+                        </span>
+                        <span className="flex w-[130px] shrink-0 items-center gap-[7px]">
+                          <span className="flex size-5 items-center justify-center rounded-[10px] bg-input">
+                            <span className="pen-text text-[8px] font-semibold text-ink-secondary">
+                              {memberInitials(row.log.member.name)}
+                            </span>
+                          </span>
+                          <span className="pen-text truncate text-[13px] tracking-[-0.2px] text-ink">
+                            {row.log.member.name}
+                          </span>
+                        </span>
+                        <span className="flex w-[170px] shrink-0 items-center overflow-hidden">
+                          <span className="flex min-w-0 max-w-full items-center gap-[5px] rounded-[5px] bg-input px-2 py-[3px]">
+                            <GitBranchIcon className="size-2.5 text-ink-tertiary" />
+                            <span className="pen-text truncate font-mono text-[11px] text-ink-secondary">
+                              {row.log.branch}
+                            </span>
+                          </span>
+                        </span>
+                        <span className="min-w-0 flex-1 overflow-hidden">
+                          <span className="pen-text truncate text-[13px] tracking-[-0.2px] text-ink-secondary">
+                            {rowSummary(row)}
+                          </span>
+                        </span>
+                        <span className="flex w-[84px] shrink-0 items-center">
+                          <span
+                            className={cn(
+                              "pen-text font-mono text-[11px]",
+                              commit === "—" ? "text-ink-tertiary" : "text-ink-secondary",
+                            )}
+                          >
+                            {commit}
+                          </span>
+                        </span>
+                        <span className="flex w-[104px] shrink-0 items-center gap-1.5">
+                          <span className={cn("size-[7px] rounded-full", STATUS_DOT[status])} />
+                          <span
+                            className={cn(
+                              "pen-text text-[12px] font-medium tracking-[-0.12px]",
+                              status === "rejected" ? "text-danger" : "text-ink-secondary",
+                            )}
+                          >
+                            {status}
+                          </span>
+                        </span>
+                        <span className="flex w-[84px] shrink-0 items-center">
+                          <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
+                            {relativeTime(row.log.created_at)}
+                          </span>
+                        </span>
+                      </div>
+                    )
+                  })}
+              </div>
+              <div className="flex w-full items-center px-1">
+                <span className="pen-text text-[12px] tracking-[-0.12px] text-ink-tertiary">
+                  Showing {shownCount} of {totalCount}
                 </span>
-                <HeadCell w={84}>COMMIT</HeadCell>
-                <HeadCell w={104}>STATUS</HeadCell>
-                <HeadCell w={84}>TIME</HeadCell>
-              </div>
-              {pageRows.map((row, i) => {
-                const status = rowStatus(row)
-                const commit = rowCommit(row)
-                return (
-                  <div
-                    key={rowKey(row)}
+                <span className="h-px flex-1" />
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    disabled={!hasPrev}
+                    onClick={() => setPage((current) => Math.max(0, current - 1))}
                     className={cn(
-                      "flex h-[46px] w-full shrink-0 items-center gap-3.5 px-5",
-                      i < pageRows.length - 1 && "border-b border-hairline",
+                      "flex size-[26px] items-center justify-center rounded-[7px] transition-[background-color,filter] duration-150 ease-[var(--ease-standard)]",
+                      hasPrev && "bg-surface hover:brightness-95",
                     )}
+                    aria-label="이전 페이지"
                   >
-                    <span className="flex w-24 shrink-0 items-center gap-[7px]">
-                      <span
-                        className={cn(
-                          "flex size-[22px] items-center justify-center rounded-[6px]",
-                          row.kind === "Ingest" ? "bg-dark-card" : "bg-input",
-                        )}
-                      >
-                        {row.kind === "Ingest" ? (
-                          <ArrowUp className="size-3 text-white" />
-                        ) : (
-                          <MessageCircle className="size-3 text-ink-secondary" />
-                        )}
-                      </span>
-                      <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink-secondary">
-                        {row.kind}
-                      </span>
-                    </span>
-                    <span className="flex w-[130px] shrink-0 items-center gap-[7px]">
-                      <span className="flex size-5 items-center justify-center rounded-[10px] bg-input">
-                        <span className="pen-text text-[8px] font-semibold text-ink-secondary">
-                          {memberInitials(row.log.member.name)}
-                        </span>
-                      </span>
-                      <span className="pen-text truncate text-[13px] tracking-[-0.2px] text-ink">
-                        {row.log.member.name}
-                      </span>
-                    </span>
-                    <span className="flex w-[170px] shrink-0 items-center">
-                      <span className="flex items-center gap-[5px] rounded-[5px] bg-input px-2 py-[3px]">
-                        <GitBranchIcon className="size-2.5 text-ink-tertiary" />
-                        <span className="pen-text truncate font-mono text-[11px] text-ink-secondary">
-                          {row.log.branch}
-                        </span>
-                      </span>
-                    </span>
-                    <span className="min-w-0 flex-1 overflow-hidden">
-                      <span className="pen-text text-[13px] tracking-[-0.2px] whitespace-nowrap text-ink-secondary">
-                        {rowSummary(row)}
-                      </span>
-                    </span>
-                    <span className="flex w-[84px] shrink-0 items-center">
-                      <span
-                        className={cn(
-                          "pen-text font-mono text-[11px]",
-                          commit === "—" ? "text-ink-tertiary" : "text-ink-secondary",
-                        )}
-                      >
-                        {commit}
-                      </span>
-                    </span>
-                    <span className="flex w-[104px] shrink-0 items-center gap-1.5">
-                      <span className={cn("size-[7px] rounded-full", STATUS_DOT[status])} />
-                      <span
-                        className={cn(
-                          "pen-text text-[12px] font-medium tracking-[-0.12px]",
-                          status === "rejected" ? "text-danger" : "text-ink-secondary",
-                        )}
-                      >
-                        {status}
-                      </span>
-                    </span>
-                    <span className="flex w-[84px] shrink-0 items-center">
-                      <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
-                        {relativeTime(row.log.created_at)}
-                      </span>
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-            <div className="flex w-full items-center px-1">
-              <span className="pen-text text-[12px] tracking-[-0.12px] text-ink-tertiary">
-                Showing {shownCount} of {totalCount}
-              </span>
-              <span className="h-px flex-1" />
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  disabled={!hasPrev}
-                  onClick={() => setPage((current) => Math.max(0, current - 1))}
-                  className={cn(
-                    "flex size-[26px] items-center justify-center rounded-[7px]",
-                    hasPrev && "bg-surface",
-                  )}
-                  aria-label="이전 페이지"
-                >
-                  <ChevronLeft
-                    className={cn("size-[13px]", hasPrev ? "text-ink-secondary" : "text-separator")}
-                  />
-                </button>
-                <button
-                  type="button"
-                  disabled={!hasNext}
-                  onClick={() => setPage((current) => current + 1)}
-                  className={cn(
-                    "flex size-[26px] items-center justify-center rounded-[7px]",
-                    hasNext && "bg-surface",
-                  )}
-                  aria-label="다음 페이지"
-                >
-                  <ChevronRight
-                    className={cn("size-[13px]", hasNext ? "text-ink-secondary" : "text-separator")}
-                  />
-                </button>
+                    <ChevronLeft
+                      className={cn(
+                        "size-[13px]",
+                        hasPrev ? "text-ink-secondary" : "text-separator",
+                      )}
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!hasNext}
+                    onClick={() => setPage((current) => current + 1)}
+                    className={cn(
+                      "flex size-[26px] items-center justify-center rounded-[7px] transition-[background-color,filter] duration-150 ease-[var(--ease-standard)]",
+                      hasNext && "bg-surface hover:brightness-95",
+                    )}
+                    aria-label="다음 페이지"
+                  >
+                    <ChevronRight
+                      className={cn(
+                        "size-[13px]",
+                        hasNext ? "text-ink-secondary" : "text-separator",
+                      )}
+                    />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </LiveShell>
       </div>
 
@@ -318,9 +350,11 @@ export function ActivityPage() {
                 key={tab}
                 type="button"
                 onClick={() => setFilterReset(tab)}
+                aria-pressed={filter === tab}
                 className={cn(
                   "flex h-[30px] min-w-0 flex-1 items-center justify-center rounded-[7px]",
-                  filter === tab && "bg-surface shadow-[0_1px_3px_#0000001F]",
+                  "transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
+                  filter === tab ? "bg-surface shadow-[0_1px_3px_#0000001F]" : "hover:bg-hairline",
                 )}
               >
                 <span
@@ -335,64 +369,187 @@ export function ActivityPage() {
             ))}
           </div>
         </div>
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-4 pt-0.5 pb-3">
-          {error && <span className="pen-text px-1 pb-2 text-[12px] text-danger">{error}</span>}
-          <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
-            {pageRows.map((row, i) => {
-              const status = rowStatus(row)
-              return (
-                <div
-                  key={rowKey(row)}
-                  className={cn(
-                    "flex h-14 w-full shrink-0 items-center gap-[11px] px-3.5",
-                    i < pageRows.length - 1 && "border-b border-hairline",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "flex size-[26px] shrink-0 items-center justify-center rounded-sm",
-                      row.kind === "Ingest" ? "bg-dark-card" : "bg-input",
-                    )}
-                  >
-                    {row.kind === "Ingest" ? (
-                      <ArrowUp className="size-3 text-white" />
-                    ) : (
-                      <MessageCircle className="size-3 text-ink-secondary" />
-                    )}
-                  </span>
-                  <span className="flex min-w-0 flex-1 flex-col gap-0.5 overflow-hidden">
-                    <span className="pen-text truncate text-[12.5px] font-semibold tracking-[-0.12px] text-ink">
-                      {row.log.member.name} · {row.kind}
-                    </span>
-                    <span className="pen-text truncate text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
-                      {rowSummary(row)}
-                    </span>
-                  </span>
-                  <span className="flex shrink-0 flex-col items-end gap-[3px]">
-                    <span className="pen-text text-[10px] tracking-[-0.1px] text-ink-tertiary">
-                      {relativeTime(row.log.created_at)}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className={cn("size-1.5 rounded-full", STATUS_DOT[status])} />
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-4 pt-0.5 pb-[150px]">
+          {error ? (
+            <MobileErrorState message={error} onRetry={retryActivity} />
+          ) : (
+            <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
+              {loading && <MobileRowSkeleton />}
+              {!loading &&
+                pageRows.map((row, i) => {
+                  const status = rowStatus(row)
+                  return (
+                    <div
+                      key={rowKey(row)}
+                      className={cn(
+                        "flex h-14 w-full shrink-0 items-center gap-[11px] px-3.5",
+                        i < pageRows.length - 1 && "border-b border-hairline",
+                      )}
+                    >
                       <span
                         className={cn(
-                          "pen-text text-[10px] font-medium tracking-[-0.1px]",
-                          status === "rejected" ? "text-danger" : "text-ink-secondary",
+                          "flex size-[26px] shrink-0 items-center justify-center rounded-sm",
+                          row.kind === "Ingest" ? "bg-dark-card" : "bg-input",
                         )}
                       >
-                        {status}
+                        {row.kind === "Ingest" ? (
+                          <ArrowUp className="size-3 text-white" />
+                        ) : (
+                          <MessageCircle className="size-3 text-ink-secondary" />
+                        )}
                       </span>
-                    </span>
-                  </span>
-                </div>
-              )
-            })}
-          </div>
+                      <span className="flex min-w-0 flex-1 flex-col gap-0.5 overflow-hidden">
+                        <span className="pen-text truncate text-[12.5px] font-semibold tracking-[-0.12px] text-ink">
+                          {row.log.member.name} · {row.kind}
+                        </span>
+                        <span className="pen-text truncate text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
+                          {rowSummary(row)}
+                        </span>
+                      </span>
+                      <span className="flex shrink-0 flex-col items-end gap-[3px]">
+                        <span className="pen-text text-[10px] tracking-[-0.1px] text-ink-tertiary">
+                          {relativeTime(row.log.created_at)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className={cn("size-1.5 rounded-full", STATUS_DOT[status])} />
+                          <span
+                            className={cn(
+                              "pen-text text-[10px] font-medium tracking-[-0.1px]",
+                              status === "rejected" ? "text-danger" : "text-ink-secondary",
+                            )}
+                          >
+                            {status}
+                          </span>
+                        </span>
+                      </span>
+                    </div>
+                  )
+                })}
+            </div>
+          )}
         </div>
         <MobileTabBar active="spec" />
         <GlassNav active="activity" className="absolute bottom-[88px] left-4 z-20" />
       </div>
     </>
+  )
+}
+
+/**
+ * DESIGN.md §14 Error(network/system): SF 헤드라인 + 원인 1문장 + 복구 CTA 1개.
+ * SpecsPage.DesktopErrorState와 동일 톤(아이콘 카드+제목+원인+Retry), Retry는 fetch 재호출.
+ */
+function DesktopErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3.5 px-7 pb-7">
+      <span className="flex size-14 items-center justify-center rounded-[28px] bg-input">
+        <AlertTriangle className="size-6 text-danger" />
+      </span>
+      <div className="flex flex-col items-center gap-[5px]">
+        <span className="pen-text text-[15px] font-semibold tracking-[-0.24px] text-ink">
+          액티비티를 불러오지 못했습니다
+        </span>
+        <span className="pen-text max-w-[420px] text-center text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
+          {message}
+        </span>
+      </div>
+      <ButtonSecondary onClick={onRetry}>
+        <RefreshCw className="size-[18px] text-ink" />
+        Retry
+      </ButtonSecondary>
+    </div>
+  )
+}
+
+/**
+ * DESIGN.md §14 Skeleton: 최종 콘텐츠와 동일한 radius·치수의 bg(#f5f5f7) 블록.
+ * shimmer는 더 밝은 회색(animate-pulse), blue-tint 금지. 테이블 행(h-[46px]) 치수를 보존.
+ */
+function DesktopRowSkeleton() {
+  return (
+    <div aria-hidden>
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div
+          key={`activity-skeleton-row-${i.toString()}`}
+          className="flex h-[46px] w-full shrink-0 items-center gap-3.5 px-5 last:border-b-0 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-hairline"
+        >
+          <span className="flex w-24 shrink-0 items-center gap-[7px]">
+            <span className="size-[22px] animate-pulse rounded-[6px] bg-bg" />
+            <span className="h-[11px] w-12 animate-pulse rounded-sm bg-bg" />
+          </span>
+          <span className="flex w-[130px] shrink-0 items-center gap-[7px]">
+            <span className="size-5 animate-pulse rounded-[10px] bg-bg" />
+            <span className="h-[11px] w-[72px] animate-pulse rounded-sm bg-bg" />
+          </span>
+          <span className="flex w-[170px] shrink-0">
+            <span className="h-[19px] w-[120px] animate-pulse rounded-[5px] bg-bg" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block h-[11px] w-[70%] animate-pulse rounded-sm bg-bg" />
+          </span>
+          <span className="flex w-[84px] shrink-0">
+            <span className="h-[11px] w-12 animate-pulse rounded-sm bg-bg" />
+          </span>
+          <span className="flex w-[104px] shrink-0">
+            <span className="h-[11px] w-16 animate-pulse rounded-sm bg-bg" />
+          </span>
+          <span className="flex w-[84px] shrink-0">
+            <span className="h-[11px] w-12 animate-pulse rounded-sm bg-bg" />
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/**
+ * DESIGN.md §14 Error(network/system) 모바일 변형 — 데스크톱과 동일한 아이콘 카드+제목+원인+Retry.
+ */
+function MobileErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-12">
+      <span className="flex size-12 items-center justify-center rounded-3xl bg-input">
+        <AlertTriangle className="size-5 text-danger" />
+      </span>
+      <div className="flex flex-col items-center gap-1">
+        <span className="pen-text text-[14px] font-semibold tracking-[-0.2px] text-ink">
+          액티비티를 불러오지 못했습니다
+        </span>
+        <span className="pen-text max-w-[280px] text-center text-[12px] tracking-[-0.1px] text-ink-tertiary">
+          {message}
+        </span>
+      </div>
+      <ButtonSecondary onClick={onRetry}>
+        <RefreshCw className="size-[18px] text-ink" />
+        Retry
+      </ButtonSecondary>
+    </div>
+  )
+}
+
+/**
+ * DESIGN.md §14 Skeleton 모바일 변형 — 리스트 행(h-14) 치수를 보존한 animate-pulse 블록.
+ */
+function MobileRowSkeleton() {
+  return (
+    <div aria-hidden>
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={`activity-skeleton-mobile-${i.toString()}`}
+          className="flex h-14 w-full shrink-0 items-center gap-[11px] px-3.5 last:border-b-0 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-hairline"
+        >
+          <span className="size-[26px] shrink-0 animate-pulse rounded-sm bg-bg" />
+          <span className="flex min-w-0 flex-1 flex-col gap-1">
+            <span className="h-[11px] w-[44%] animate-pulse rounded-sm bg-bg" />
+            <span className="h-[10px] w-[70%] animate-pulse rounded-sm bg-bg" />
+          </span>
+          <span className="flex shrink-0 flex-col items-end gap-[5px]">
+            <span className="h-[9px] w-10 animate-pulse rounded-sm bg-bg" />
+            <span className="h-[9px] w-12 animate-pulse rounded-sm bg-bg" />
+          </span>
+        </div>
+      ))}
+    </div>
   )
 }
 
@@ -414,9 +571,11 @@ function TypeFilter({ filter, onChange }: { filter: TypeTab; onChange: (tab: Typ
           key={tab}
           type="button"
           onClick={() => onChange(tab)}
+          aria-pressed={filter === tab}
           className={cn(
             "flex items-center justify-center rounded-[7px] px-3 py-[5px]",
-            filter === tab && "bg-surface shadow-[0_1px_3px_#0000001F]",
+            "transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
+            filter === tab ? "bg-surface shadow-[0_1px_3px_#0000001F]" : "hover:bg-hairline",
           )}
         >
           <span

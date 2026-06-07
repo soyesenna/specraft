@@ -10,7 +10,7 @@ type MobileListProps = {
 
 export function MobileList({ nodes, onOpenDoc }: MobileListProps) {
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-4 pt-0.5 pb-3">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-4 pt-0.5 pb-[150px]">
       <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         {nodes.map((node, i) => {
           const dark = isSkeleton(node)

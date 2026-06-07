@@ -98,7 +98,7 @@ export function PrimaryButton({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className="flex shrink-0 items-center justify-center rounded-sm bg-accent px-4 py-2 disabled:opacity-50"
+      className="flex shrink-0 items-center justify-center rounded-sm bg-accent px-4 py-2 transition-[filter,transform] duration-150 ease-[var(--ease-standard)] hover:brightness-95 active:scale-[0.97] disabled:opacity-50"
     >
       <span className="pen-text text-[14px] tracking-[-0.22px] text-white">{children}</span>
     </button>
@@ -119,7 +119,7 @@ export function SecondaryButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="flex items-center justify-center rounded-sm bg-input px-4 py-2 disabled:opacity-50"
+      className="flex items-center justify-center rounded-sm bg-input px-4 py-2 transition-[filter,transform] duration-150 ease-[var(--ease-standard)] hover:brightness-95 active:scale-[0.97] disabled:opacity-50"
     >
       <span className="pen-text text-[14px] tracking-[-0.22px] text-ink">{children}</span>
     </button>
@@ -164,9 +164,14 @@ export function RevealBanner({
   subValue?: string
 }) {
   const [copied, setCopied] = useState(false)
-  function copy(): void {
-    void navigator.clipboard?.writeText(value)
+  async function copy(): Promise<void> {
+    try {
+      await navigator.clipboard?.writeText(value)
+    } catch {
+      // clipboard 미지원/거부 — 값은 화면에 노출돼 있으므로 무시한다.
+    }
     setCopied(true)
+    setTimeout(() => setCopied(false), 1500)
   }
   return (
     <div
@@ -186,8 +191,13 @@ export function RevealBanner({
           {title}
         </span>
         <span className="h-px flex-1" />
-        <button type="button" onClick={onClose} aria-label="배너 닫기">
-          <X className={cn("text-ink-tertiary", compact ? "size-[13px]" : "size-3.5")} />
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="배너 닫기"
+          className="cursor-pointer text-ink-tertiary transition-colors hover:text-ink-secondary"
+        >
+          <X className={cn(compact ? "size-[13px]" : "size-3.5")} />
         </button>
       </div>
       <p
@@ -209,17 +219,27 @@ export function RevealBanner({
       >
         <span
           className={cn(
-            "pen-text overflow-hidden font-mono whitespace-nowrap text-white",
+            "pen-text min-w-0 truncate font-mono text-white",
             compact ? "text-[10px]" : "text-[12px]",
           )}
         >
           {value}
         </span>
         <span className="h-px flex-1" />
-        <button type="button" onClick={copy} aria-label={copied ? "복사됨" : "복사"}>
-          <Copy
-            className={cn("shrink-0 text-white-secondary", compact ? "size-[13px]" : "size-3.5")}
-          />
+        <button
+          type="button"
+          onClick={copy}
+          aria-label={copied ? "복사됨" : "복사"}
+          className={cn(
+            "shrink-0 cursor-pointer transition-colors",
+            copied ? "text-success" : "text-white-secondary hover:text-white",
+          )}
+        >
+          {copied ? (
+            <CircleCheck className={cn("shrink-0", compact ? "size-[13px]" : "size-3.5")} />
+          ) : (
+            <Copy className={cn("shrink-0", compact ? "size-[13px]" : "size-3.5")} />
+          )}
         </button>
       </div>
     </div>
@@ -268,7 +288,7 @@ export function KeyRow({
         type="button"
         onClick={onRevoke}
         disabled={revoked}
-        className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-danger disabled:text-ink-tertiary"
+        className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-danger transition-colors duration-150 ease-[var(--ease-standard)] hover:underline disabled:text-ink-tertiary disabled:no-underline"
       >
         {revoked ? "Revoked" : "Revoke"}
       </button>
@@ -301,7 +321,7 @@ export function MemberRow({
         status === "Disabled" && "opacity-60",
       )}
     >
-      <span className="flex w-[170px] shrink-0 items-center gap-2">
+      <span className="flex w-[170px] shrink-0 items-center gap-2 overflow-hidden">
         <span
           className={cn(
             "flex size-6 items-center justify-center rounded-xl",
@@ -317,17 +337,17 @@ export function MemberRow({
             {memberInitials(member)}
           </span>
         </span>
-        <span className="pen-text text-[13px] font-medium tracking-[-0.2px] text-ink">
+        <span className="pen-text min-w-0 truncate text-[13px] font-medium tracking-[-0.2px] text-ink">
           {member.name}
         </span>
         {isYou && (
-          <span className="flex items-center rounded-[4px] bg-input px-1.5 py-0.5">
+          <span className="flex shrink-0 items-center rounded-[4px] bg-input px-1.5 py-0.5">
             <span className="pen-text text-[9.5px] font-semibold text-ink-tertiary">You</span>
           </span>
         )}
       </span>
       <span className="min-w-0 flex-1 overflow-hidden">
-        <span className="pen-text text-[12.5px] tracking-[-0.12px] whitespace-nowrap text-ink-secondary">
+        <span className="pen-text block truncate text-[12.5px] tracking-[-0.12px] text-ink-secondary">
           {member.email}
         </span>
       </span>
@@ -364,7 +384,7 @@ export function MemberRow({
             type="button"
             onClick={onToggle}
             className={cn(
-              "pen-text text-[12.5px] font-medium tracking-[-0.12px]",
+              "pen-text text-[12.5px] font-medium tracking-[-0.12px] transition-colors duration-150 ease-[var(--ease-standard)] hover:underline",
               action === "Disable" ? "text-danger" : "text-link",
             )}
           >
@@ -401,15 +421,15 @@ export function InviteRow({
           {inviteToken(invite)}
         </span>
       </span>
-      <span className="flex w-[120px] shrink-0 items-center gap-[7px]">
+      <span className="flex w-[120px] shrink-0 items-center gap-[7px] overflow-hidden">
         {createdBy ? (
           <>
-            <span className="flex size-5 items-center justify-center rounded-[10px] bg-dark-card">
+            <span className="flex size-5 shrink-0 items-center justify-center rounded-[10px] bg-dark-card">
               <span className="pen-text text-[8px] font-semibold text-white">
                 {memberInitials(createdBy)}
               </span>
             </span>
-            <span className="pen-text text-[13px] tracking-[-0.2px] text-ink">
+            <span className="pen-text min-w-0 truncate text-[13px] tracking-[-0.2px] text-ink">
               {createdBy.name}
             </span>
           </>
@@ -596,7 +616,7 @@ export function MobileKeyRow({
         type="button"
         onClick={onRevoke}
         disabled={revoked}
-        className="pen-text shrink-0 text-[12px] font-medium tracking-[-0.12px] text-danger disabled:text-ink-tertiary"
+        className="pen-text shrink-0 text-[12px] font-medium tracking-[-0.12px] text-danger transition-colors duration-150 ease-[var(--ease-standard)] hover:underline disabled:text-ink-tertiary disabled:no-underline"
       >
         {revoked ? "Revoked" : "Revoke"}
       </button>

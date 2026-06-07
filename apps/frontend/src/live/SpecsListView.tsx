@@ -108,16 +108,16 @@ function ListRow({
       </span>
       <span className="flex w-[380px] shrink-0 items-center gap-0.5 overflow-hidden">
         {prefixOf(node.path) && (
-          <span className="pen-text text-[13px] tracking-[-0.2px] whitespace-nowrap text-ink-tertiary">
+          <span className="pen-text shrink-0 truncate text-[13px] tracking-[-0.2px] text-ink-tertiary">
             {prefixOf(node.path)}
           </span>
         )}
-        <span className="pen-text text-[13px] font-semibold tracking-[-0.2px] whitespace-nowrap text-ink">
+        <span className="pen-text min-w-0 truncate text-[13px] font-semibold tracking-[-0.2px] text-ink">
           {fileNameOf(node.path)}
         </span>
       </span>
       <span className="min-w-0 flex-1 overflow-hidden">
-        <span className="pen-text text-[13px] tracking-[-0.2px] whitespace-nowrap text-ink-tertiary">
+        <span className="pen-text block truncate text-[13px] tracking-[-0.2px] text-ink-tertiary">
           {node.summary || node.title}
         </span>
       </span>

@@ -15,6 +15,7 @@ import {
   type SVGProps,
   useCallback,
   useEffect,
+  useId,
   useState,
 } from "react"
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
@@ -193,22 +194,52 @@ function GitModelsContent({ data }: { data: SettingsData }) {
     setQueryModel,
   } = data
   const [credentialMode, setCredentialMode] = useState<"ssh" | "https">("ssh")
+  const ingestModelId = useId()
+  const queryModelId = useId()
   const [gitSaved, setGitSaved] = useState(false)
+  const [gitSaving, setGitSaving] = useState(false)
+  const [gitError, setGitError] = useState<string | null>(null)
   const [modelsSaved, setModelsSaved] = useState(false)
+  const [modelsSaving, setModelsSaving] = useState(false)
+  const [modelsError, setModelsError] = useState<string | null>(null)
   const [testResult, setTestResult] = useState<"idle" | "ok" | "failed">("idle")
   const [testing, setTesting] = useState(false)
 
   async function saveGit(): Promise<void> {
-    await client.updateAdminSettings({ git_remote_url: nonEmpty(gitRemoteUrl) })
-    setGitSaved(true)
+    if (gitSaving) {
+      return
+    }
+    setGitSaving(true)
+    setGitError(null)
+    try {
+      await client.updateAdminSettings({ git_remote_url: nonEmpty(gitRemoteUrl) })
+      setGitSaved(true)
+      setTimeout(() => setGitSaved(false), 3000)
+    } catch (error) {
+      setGitError(error instanceof Error ? error.message : "저장에 실패했습니다")
+    } finally {
+      setGitSaving(false)
+    }
   }
 
   async function saveModels(): Promise<void> {
-    await client.updateAdminSettings({
-      model_ingest: nonEmpty(ingestModel),
-      model_query: nonEmpty(queryModel),
-    })
-    setModelsSaved(true)
+    if (modelsSaving) {
+      return
+    }
+    setModelsSaving(true)
+    setModelsError(null)
+    try {
+      await client.updateAdminSettings({
+        model_ingest: nonEmpty(ingestModel),
+        model_query: nonEmpty(queryModel),
+      })
+      setModelsSaved(true)
+      setTimeout(() => setModelsSaved(false), 3000)
+    } catch (error) {
+      setModelsError(error instanceof Error ? error.message : "저장에 실패했습니다")
+    } finally {
+      setModelsSaving(false)
+    }
   }
 
   async function testConnection(): Promise<void> {
@@ -240,11 +271,23 @@ function GitModelsContent({ data }: { data: SettingsData }) {
             <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
               Remote URL
             </span>
-            <input
-              value={gitRemoteUrl}
-              onChange={(event) => setGitRemoteUrl(event.currentTarget.value)}
-              className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12.5px] text-ink outline-none"
-            />
+            <div className="w-full rounded-sm focus-within:ring-2 focus-within:ring-accent">
+              <input
+                value={gitRemoteUrl}
+                onChange={(event) => {
+                  setGitRemoteUrl(event.currentTarget.value)
+                  setGitSaved(false)
+                  setGitError(null)
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault()
+                    void saveGit()
+                  }
+                }}
+                className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12.5px] text-ink outline-none"
+              />
+            </div>
           </label>
           <span className="flex items-center gap-1.5">
             <span
@@ -267,8 +310,9 @@ function GitModelsContent({ data }: { data: SettingsData }) {
               <button
                 type="button"
                 onClick={() => setCredentialMode("ssh")}
+                aria-pressed={credentialMode === "ssh"}
                 className={cn(
-                  "flex items-center rounded-[6px] px-2.5 py-[3px]",
+                  "flex items-center rounded-[6px] px-2.5 py-[3px] transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
                   credentialMode === "ssh" && "bg-surface shadow-[0_1px_3px_#0000001F]",
                 )}
               >
@@ -284,8 +328,9 @@ function GitModelsContent({ data }: { data: SettingsData }) {
               <button
                 type="button"
                 onClick={() => setCredentialMode("https")}
+                aria-pressed={credentialMode === "https"}
                 className={cn(
-                  "flex items-center rounded-[6px] px-2.5 py-[3px]",
+                  "flex items-center rounded-[6px] px-2.5 py-[3px] transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
                   credentialMode === "https" && "bg-surface shadow-[0_1px_3px_#0000001F]",
                 )}
               >
@@ -330,13 +375,17 @@ function GitModelsContent({ data }: { data: SettingsData }) {
             </span>
           )}
           <span className="h-px flex-1" />
-          <PrimaryButton onClick={saveGit}>Save</PrimaryButton>
+          <PrimaryButton onClick={saveGit} disabled={gitSaving}>
+            Save
+          </PrimaryButton>
         </div>
-        {gitSaved && (
+        {gitError ? (
+          <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{gitError}</span>
+        ) : gitSaved ? (
           <span className="pen-text text-[12px] tracking-[-0.12px] text-success">
             Settings saved from API
           </span>
-        )}
+        ) : null}
       </section>
       <section className="flex w-full flex-col gap-4 rounded-md bg-surface px-6 py-[22px]">
         <div className="flex w-full flex-col gap-1">
@@ -348,38 +397,76 @@ function GitModelsContent({ data }: { data: SettingsData }) {
           </span>
         </div>
         <div className="flex w-full gap-3.5">
-          <label className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <label
+              htmlFor={ingestModelId}
+              className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink"
+            >
               Ingest model
-            </span>
-            <input
-              value={ingestModel}
-              onChange={(event) => setIngestModel(event.currentTarget.value)}
-              className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12px] text-ink outline-none"
-            />
-          </label>
-          <label className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <span className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink">
+            </label>
+            <div className="w-full rounded-sm focus-within:ring-2 focus-within:ring-accent">
+              <input
+                id={ingestModelId}
+                value={ingestModel}
+                onChange={(event) => {
+                  setIngestModel(event.currentTarget.value)
+                  setModelsSaved(false)
+                  setModelsError(null)
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault()
+                    void saveModels()
+                  }
+                }}
+                className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12px] text-ink outline-none"
+              />
+            </div>
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <label
+              htmlFor={queryModelId}
+              className="pen-text text-[12.5px] font-medium tracking-[-0.12px] text-ink"
+            >
               Query model
-            </span>
-            <input
-              value={queryModel}
-              onChange={(event) => setQueryModel(event.currentTarget.value)}
-              className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12px] text-ink outline-none"
-            />
-          </label>
+            </label>
+            <div className="w-full rounded-sm focus-within:ring-2 focus-within:ring-accent">
+              <input
+                id={queryModelId}
+                value={queryModel}
+                onChange={(event) => {
+                  setQueryModel(event.currentTarget.value)
+                  setModelsSaved(false)
+                  setModelsError(null)
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault()
+                    void saveModels()
+                  }
+                }}
+                className="pen-text h-9 w-full rounded-sm border-none bg-bg px-3 font-mono text-[12px] text-ink outline-none"
+              />
+            </div>
+          </div>
         </div>
         <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
           OPENROUTER_API_KEY는 서버 env에서 관리됩니다 — 대시보드에는 노출되지 않습니다
         </span>
         <div className="flex w-full items-center gap-2.5">
-          {modelsSaved && (
+          {modelsError ? (
+            <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">
+              {modelsError}
+            </span>
+          ) : modelsSaved ? (
             <span className="pen-text text-[12px] tracking-[-0.12px] text-success">
               Models saved from API
             </span>
-          )}
+          ) : null}
           <span className="h-px flex-1" />
-          <PrimaryButton onClick={saveModels}>Save</PrimaryButton>
+          <PrimaryButton onClick={saveModels} disabled={modelsSaving}>
+            Save
+          </PrimaryButton>
         </div>
       </section>
     </>
@@ -389,16 +476,41 @@ function GitModelsContent({ data }: { data: SettingsData }) {
 function KeysContent({ data }: { data: SettingsData }) {
   const { client, keys, refreshKeys } = data
   const [createdKey, setCreatedKey] = useState<{ id: string; api_key: string } | null>(null)
+  const [generating, setGenerating] = useState(false)
+  const [revokingId, setRevokingId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   async function generate(): Promise<void> {
-    const response = await client.createApiKey({ name: "Dashboard key" })
-    setCreatedKey({ id: response.id, api_key: response.api_key })
-    await refreshKeys()
+    if (generating) {
+      return
+    }
+    setGenerating(true)
+    setError(null)
+    try {
+      const response = await client.createApiKey({ name: "Dashboard key" })
+      setCreatedKey({ id: response.id, api_key: response.api_key })
+      await refreshKeys()
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "키 발급에 실패했습니다")
+    } finally {
+      setGenerating(false)
+    }
   }
 
   async function revoke(id: string): Promise<void> {
-    await client.deleteApiKey({ id })
-    await refreshKeys()
+    if (revokingId !== null) {
+      return
+    }
+    setRevokingId(id)
+    setError(null)
+    try {
+      await client.deleteApiKey({ id })
+      await refreshKeys()
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "키 폐기에 실패했습니다")
+    } finally {
+      setRevokingId(null)
+    }
   }
 
   return (
@@ -406,8 +518,15 @@ function KeysContent({ data }: { data: SettingsData }) {
       <CardHeader
         title="API keys"
         desc="플러그인 인증용 개인 키 — 본인 키만 발급 · 재발급 · 폐기할 수 있습니다."
-        action={<PrimaryButton onClick={generate}>Generate new key</PrimaryButton>}
+        action={
+          <PrimaryButton onClick={generate} disabled={generating}>
+            Generate new key
+          </PrimaryButton>
+        }
       />
+      {error && (
+        <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{error}</span>
+      )}
       {createdKey && (
         <RevealBanner
           title="New key created"
@@ -456,22 +575,50 @@ function MembersContent({ data }: { data: SettingsData }) {
   const { member: currentMember } = useSpecraft()
   const navigate = useNavigate()
   const [disabledIds, setDisabledIds] = useState<ReadonlySet<string>>(new Set())
+  const [pendingId, setPendingId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   function statusOf(member: Member): MemberStatus {
     return disabledIds.has(member.id) ? "Disabled" : "Active"
   }
 
   async function toggle(member: Member): Promise<void> {
-    if (disabledIds.has(member.id)) {
-      await client.enableAdminMember({ id: member.id })
+    if (pendingId !== null) {
+      return
+    }
+    const wasDisabled = disabledIds.has(member.id)
+    // 낙관적 업데이트: 즉시 토글 후 실패 시 원복.
+    setDisabledIds((current) => {
+      const next = new Set(current)
+      if (wasDisabled) {
+        next.delete(member.id)
+      } else {
+        next.add(member.id)
+      }
+      return next
+    })
+    setPendingId(member.id)
+    setError(null)
+    try {
+      if (wasDisabled) {
+        await client.enableAdminMember({ id: member.id })
+      } else {
+        await client.disableAdminMember({ id: member.id })
+      }
+    } catch (caught) {
+      // 롤백
       setDisabledIds((current) => {
         const next = new Set(current)
-        next.delete(member.id)
+        if (wasDisabled) {
+          next.add(member.id)
+        } else {
+          next.delete(member.id)
+        }
         return next
       })
-    } else {
-      await client.disableAdminMember({ id: member.id })
-      setDisabledIds((current) => new Set(current).add(member.id))
+      setError(caught instanceof Error ? caught.message : "멤버 상태 변경에 실패했습니다")
+    } finally {
+      setPendingId(null)
     }
   }
 
@@ -484,6 +631,9 @@ function MembersContent({ data }: { data: SettingsData }) {
           <PrimaryButton onClick={() => navigate("/settings/invites")}>Create invite</PrimaryButton>
         }
       />
+      {error && (
+        <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{error}</span>
+      )}
       <div className="flex w-full flex-col overflow-hidden rounded-md bg-surface">
         <div className="flex h-9 w-full items-center gap-3.5 border-b border-hairline px-[18px]">
           <ColumnHead w={170}>MEMBER</ColumnHead>
@@ -516,11 +666,24 @@ function MembersContent({ data }: { data: SettingsData }) {
 function InvitesContent({ data }: { data: SettingsData }) {
   const { client, invites, refreshInvites } = data
   const [createdUrl, setCreatedUrl] = useState<string | null>(null)
+  const [creating, setCreating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function createInvite(): Promise<void> {
-    const response = await client.createAdminInvite()
-    setCreatedUrl(response.invite_url)
-    await refreshInvites()
+    if (creating) {
+      return
+    }
+    setCreating(true)
+    setError(null)
+    try {
+      const response = await client.createAdminInvite()
+      setCreatedUrl(response.invite_url)
+      await refreshInvites()
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "초대 링크 생성에 실패했습니다")
+    } finally {
+      setCreating(false)
+    }
   }
 
   return (
@@ -528,8 +691,15 @@ function InvitesContent({ data }: { data: SettingsData }) {
       <CardHeader
         title="Invites"
         desc="가입은 초대 링크로만 가능합니다 — 링크는 72시간 후 만료됩니다."
-        action={<PrimaryButton onClick={createInvite}>Create invite link</PrimaryButton>}
+        action={
+          <PrimaryButton onClick={createInvite} disabled={creating}>
+            Create invite link
+          </PrimaryButton>
+        }
       />
+      {error && (
+        <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{error}</span>
+      )}
       {createdUrl && (
         <RevealBanner
           title="Invite link created"
@@ -710,7 +880,7 @@ function MobileHub() {
           </button>
         </div>
         <div className="flex w-full justify-center py-1.5">
-          <span className="pen-text text-[10.5px] tracking-[-0.1px] text-[#00000052]">
+          <span className="pen-text text-[10.5px] tracking-[-0.1px] text-ink-tertiary">
             specraft v1 · self-hosted
           </span>
         </div>
@@ -744,9 +914,22 @@ function MobileSection({
 function MobileGit({ data }: { data: SettingsData }) {
   const { client, gitRemoteUrl, setGitRemoteUrl, credentialConfigured } = data
   const [credentialMode, setCredentialMode] = useState<"ssh" | "https">("ssh")
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function save(): Promise<void> {
-    await client.updateAdminSettings({ git_remote_url: nonEmpty(gitRemoteUrl) })
+    if (saving) {
+      return
+    }
+    setSaving(true)
+    setError(null)
+    try {
+      await client.updateAdminSettings({ git_remote_url: nonEmpty(gitRemoteUrl) })
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "저장에 실패했습니다")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -755,11 +938,22 @@ function MobileGit({ data }: { data: SettingsData }) {
         <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink">
           Remote URL
         </span>
-        <input
-          value={gitRemoteUrl}
-          onChange={(event) => setGitRemoteUrl(event.currentTarget.value)}
-          className="pen-text h-[42px] w-full rounded-[10px] border-none bg-bg px-3 font-mono text-[11px] text-ink outline-none"
-        />
+        <div className="w-full rounded-[10px] focus-within:ring-2 focus-within:ring-accent">
+          <input
+            value={gitRemoteUrl}
+            onChange={(event) => {
+              setGitRemoteUrl(event.currentTarget.value)
+              setError(null)
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault()
+                void save()
+              }
+            }}
+            className="pen-text h-[42px] w-full rounded-[10px] border-none bg-bg px-3 font-mono text-[16px] text-ink outline-none"
+          />
+        </div>
         <span className="flex items-center gap-1.5">
           <span
             className={cn(
@@ -780,8 +974,9 @@ function MobileGit({ data }: { data: SettingsData }) {
           <button
             type="button"
             onClick={() => setCredentialMode("ssh")}
+            aria-pressed={credentialMode === "ssh"}
             className={cn(
-              "flex h-7 min-w-0 flex-1 items-center justify-center rounded-[7px]",
+              "flex h-7 min-w-0 flex-1 items-center justify-center rounded-[7px] transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
               credentialMode === "ssh" && "bg-surface shadow-[0_1px_3px_#0000001F]",
             )}
           >
@@ -797,8 +992,9 @@ function MobileGit({ data }: { data: SettingsData }) {
           <button
             type="button"
             onClick={() => setCredentialMode("https")}
+            aria-pressed={credentialMode === "https"}
             className={cn(
-              "flex h-7 min-w-0 flex-1 items-center justify-center rounded-[7px]",
+              "flex h-7 min-w-0 flex-1 items-center justify-center rounded-[7px] transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
               credentialMode === "https" && "bg-surface shadow-[0_1px_3px_#0000001F]",
             )}
           >
@@ -840,13 +1036,17 @@ function MobileGit({ data }: { data: SettingsData }) {
           onClick={() => {
             void save()
           }}
-          className="flex h-11 min-w-0 flex-1 items-center justify-center rounded-[10px] bg-accent"
+          disabled={saving}
+          className="flex h-11 min-w-0 flex-1 items-center justify-center rounded-[10px] bg-accent disabled:opacity-50"
         >
           <span className="pen-text text-[13.5px] font-medium tracking-[-0.2px] text-white">
             Save
           </span>
         </button>
       </div>
+      {error && (
+        <span className="pen-text text-[10.5px] tracking-[-0.1px] text-danger">{error}</span>
+      )}
       <span className="pen-text text-[10.5px] tracking-[-0.1px] text-ink-tertiary">
         서버는 코드 repo에 read-only로만 접근합니다
       </span>
@@ -856,12 +1056,25 @@ function MobileGit({ data }: { data: SettingsData }) {
 
 function MobileModels({ data }: { data: SettingsData }) {
   const { client, ingestModel, setIngestModel, queryModel, setQueryModel } = data
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function save(): Promise<void> {
-    await client.updateAdminSettings({
-      model_ingest: nonEmpty(ingestModel),
-      model_query: nonEmpty(queryModel),
-    })
+    if (saving) {
+      return
+    }
+    setSaving(true)
+    setError(null)
+    try {
+      await client.updateAdminSettings({
+        model_ingest: nonEmpty(ingestModel),
+        model_query: nonEmpty(queryModel),
+      })
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "저장에 실패했습니다")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -871,33 +1084,59 @@ function MobileModels({ data }: { data: SettingsData }) {
           <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink">
             Ingest model
           </span>
-          <input
-            value={ingestModel}
-            onChange={(event) => setIngestModel(event.currentTarget.value)}
-            className="pen-text h-[42px] w-full rounded-[10px] border-none bg-bg px-3 font-mono text-[11px] text-ink outline-none"
-          />
+          <div className="w-full rounded-[10px] focus-within:ring-2 focus-within:ring-accent">
+            <input
+              value={ingestModel}
+              onChange={(event) => {
+                setIngestModel(event.currentTarget.value)
+                setError(null)
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault()
+                  void save()
+                }
+              }}
+              className="pen-text h-[42px] w-full rounded-[10px] border-none bg-bg px-3 font-mono text-[16px] text-ink outline-none"
+            />
+          </div>
         </label>
         <label className="flex w-full flex-col gap-1.5">
           <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink">
             Query model
           </span>
-          <input
-            value={queryModel}
-            onChange={(event) => setQueryModel(event.currentTarget.value)}
-            className="pen-text h-[42px] w-full rounded-[10px] border-none bg-bg px-3 font-mono text-[11px] text-ink outline-none"
-          />
+          <div className="w-full rounded-[10px] focus-within:ring-2 focus-within:ring-accent">
+            <input
+              value={queryModel}
+              onChange={(event) => {
+                setQueryModel(event.currentTarget.value)
+                setError(null)
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault()
+                  void save()
+                }
+              }}
+              className="pen-text h-[42px] w-full rounded-[10px] border-none bg-bg px-3 font-mono text-[16px] text-ink outline-none"
+            />
+          </div>
         </label>
         <span className="pen-text w-full text-[10.5px] leading-[1.45] tracking-[-0.1px] text-ink-tertiary">
           OpenRouter 슬러그 — ingest / query 분리 설정. OPENROUTER_API_KEY는 서버 env에서
           관리됩니다.
         </span>
       </div>
+      {error && (
+        <span className="pen-text text-[10.5px] tracking-[-0.1px] text-danger">{error}</span>
+      )}
       <button
         type="button"
         onClick={() => {
           void save()
         }}
-        className="flex h-11 w-full items-center justify-center rounded-[10px] bg-accent"
+        disabled={saving}
+        className="flex h-11 w-full items-center justify-center rounded-[10px] bg-accent disabled:opacity-50"
       >
         <span className="pen-text text-[13.5px] font-medium tracking-[-0.2px] text-white">
           Save
@@ -953,11 +1192,24 @@ function MobileMembers({ data }: { data: SettingsData }) {
 function MobileInvites({ data }: { data: SettingsData }) {
   const { client, invites, refreshInvites } = data
   const [createdUrl, setCreatedUrl] = useState<string | null>(null)
+  const [creating, setCreating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function createInvite(): Promise<void> {
-    const response = await client.createAdminInvite()
-    setCreatedUrl(response.invite_url)
-    await refreshInvites()
+    if (creating) {
+      return
+    }
+    setCreating(true)
+    setError(null)
+    try {
+      const response = await client.createAdminInvite()
+      setCreatedUrl(response.invite_url)
+      await refreshInvites()
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "초대 링크 생성에 실패했습니다")
+    } finally {
+      setCreating(false)
+    }
   }
 
   return (
@@ -984,12 +1236,16 @@ function MobileInvites({ data }: { data: SettingsData }) {
           ))
         )}
       </div>
+      {error && (
+        <span className="pen-text text-[10.5px] tracking-[-0.1px] text-danger">{error}</span>
+      )}
       <button
         type="button"
         onClick={() => {
           void createInvite()
         }}
-        className="flex h-[46px] w-full items-center justify-center rounded-[10px] bg-accent"
+        disabled={creating}
+        className="flex h-[46px] w-full items-center justify-center rounded-[10px] bg-accent disabled:opacity-50"
       >
         <span className="pen-text text-[14.5px] font-medium tracking-[-0.22px] text-white">
           Create invite link
@@ -1005,16 +1261,41 @@ function MobileInvites({ data }: { data: SettingsData }) {
 function MobileKeys({ data }: { data: SettingsData }) {
   const { client, keys, refreshKeys } = data
   const [createdKey, setCreatedKey] = useState<string | null>(null)
+  const [generating, setGenerating] = useState(false)
+  const [revokingId, setRevokingId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   async function generate(): Promise<void> {
-    const response = await client.createApiKey({ name: "Dashboard key" })
-    setCreatedKey(response.api_key)
-    await refreshKeys()
+    if (generating) {
+      return
+    }
+    setGenerating(true)
+    setError(null)
+    try {
+      const response = await client.createApiKey({ name: "Dashboard key" })
+      setCreatedKey(response.api_key)
+      await refreshKeys()
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "키 발급에 실패했습니다")
+    } finally {
+      setGenerating(false)
+    }
   }
 
   async function revoke(id: string): Promise<void> {
-    await client.deleteApiKey({ id })
-    await refreshKeys()
+    if (revokingId !== null) {
+      return
+    }
+    setRevokingId(id)
+    setError(null)
+    try {
+      await client.deleteApiKey({ id })
+      await refreshKeys()
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "키 폐기에 실패했습니다")
+    } finally {
+      setRevokingId(null)
+    }
   }
 
   return (
@@ -1048,12 +1329,16 @@ function MobileKeys({ data }: { data: SettingsData }) {
           ))
         )}
       </div>
+      {error && (
+        <span className="pen-text text-[10.5px] tracking-[-0.1px] text-danger">{error}</span>
+      )}
       <button
         type="button"
         onClick={() => {
           void generate()
         }}
-        className="flex h-[46px] w-full items-center justify-center rounded-[10px] bg-accent"
+        disabled={generating}
+        className="flex h-[46px] w-full items-center justify-center rounded-[10px] bg-accent disabled:opacity-50"
       >
         <span className="pen-text text-[14.5px] font-medium tracking-[-0.22px] text-white">
           Generate new key
@@ -1164,7 +1449,7 @@ export function SettingsPage() {
         >
           <div className="flex min-h-0 flex-1 gap-[26px] px-7 pt-1 pb-7">
             <SettingsNav active={desktopSection} />
-            <div className="flex min-h-0 w-[660px] flex-col gap-[18px] overflow-y-auto">
+            <div className="flex min-h-0 max-w-[660px] min-w-0 flex-1 flex-col gap-[18px] overflow-y-auto">
               {desktopSection === "general" && <GeneralContent />}
               {(desktopSection === "git" || desktopSection === "models") && (
                 <GitModelsContent data={data} />

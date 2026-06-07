@@ -1,7 +1,16 @@
 import type { IngestLog, WikiGraphResponse, WikiPageResponse } from "@specraft/shared"
-import { ChevronLeft, CornerDownRight, FileText, History, Lock } from "lucide-react"
+import {
+  AlertTriangle,
+  ChevronLeft,
+  CornerDownRight,
+  FileText,
+  History,
+  Lock,
+  RefreshCw,
+} from "lucide-react"
 import { type ReactNode, useEffect, useMemo, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import { ButtonSecondary } from "../components/buttons.js"
 import { IconButton } from "../components/IconButton.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
 import { cn } from "../lib/cn.js"
@@ -102,6 +111,8 @@ export function DocumentPage() {
   const [page, setPage] = useState<WikiPageResponse | null>(null)
   const [ingests, setIngests] = useState<readonly IngestLog[]>([])
   const [error, setError] = useState<string | null>(null)
+  /** Retry CTA가 페이지 본문 fetch effect를 다시 트리거하기 위한 nonce */
+  const [reloadKey, setReloadKey] = useState(0)
 
   useEffect(() => {
     let active = true
@@ -120,8 +131,12 @@ export function DocumentPage() {
     }
   }, [client, selectedBranch])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reloadKey는 Retry 버튼이 동일 입력으로 재요청을 강제하는 의도적 트리거 의존성.
   useEffect(() => {
     let active = true
+    // 경로/브랜치 변경·Retry 시 로딩 스켈레톤이 다시 보이도록 page를 비운다.
+    setPage(null)
+    setError(null)
     void client
       .wikiPage({ branch: selectedBranch, path })
       .then((response) => {
@@ -138,7 +153,11 @@ export function DocumentPage() {
     return () => {
       active = false
     }
-  }, [client, selectedBranch, path])
+  }, [client, selectedBranch, path, reloadKey])
+
+  const retryPage = () => {
+    setReloadKey((key) => key + 1)
+  }
 
   useEffect(() => {
     let active = true
@@ -182,6 +201,9 @@ export function DocumentPage() {
   }, [graph, path])
 
   const historyHref = `/specs/doc/${encodeURIComponent(path)}/history`
+  // 로딩: page 미도착 && 에러 없음. fetch 실패 후 body가 비어있으면 에러 상태로 본다.
+  const pageLoading = page === null && error === null
+  const pageError = error !== null && page === null
 
   return (
     <>
@@ -219,8 +241,8 @@ export function DocumentPage() {
           }
         >
           <div className="flex min-h-0 w-full flex-1 gap-[26px] px-7 pb-7">
-            {/* Wiki Tree */}
-            <nav className="flex w-[230px] shrink-0 flex-col gap-px overflow-y-auto">
+            {/* Wiki Tree — 768~1023px에서는 clamp로 압착 완화, lg(1024px+)부터 정본 230px 고정 */}
+            <nav className="flex w-[clamp(184px,24vw,230px)] shrink-0 flex-col gap-px overflow-y-auto lg:w-[230px]">
               {tree.map((group) => (
                 <div key={group.section} className="flex flex-col gap-px">
                   <div className="flex h-[30px] items-end px-2.5 pb-2">
@@ -236,8 +258,8 @@ export function DocumentPage() {
                         type="button"
                         onClick={() => navigate(`/specs/doc/${encodeURIComponent(doc.path)}`)}
                         className={cn(
-                          "flex h-[30px] w-full items-center gap-[7px] rounded-[6px] px-2.5 text-left",
-                          docActive && "bg-surface",
+                          "flex h-[30px] w-full items-center gap-[7px] rounded-[6px] px-2.5 text-left transition-colors duration-150 ease-[var(--ease-standard)]",
+                          docActive ? "bg-surface" : "hover:bg-hairline",
                         )}
                       >
                         <FileText
@@ -262,20 +284,27 @@ export function DocumentPage() {
             </nav>
             {/* Doc Sheet */}
             <article className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto rounded-lg bg-surface px-11 py-9">
-              <h1 className="pen-text m-0 w-full font-display text-[28px] leading-[1.15] font-semibold tracking-[-0.4px] text-ink">
-                {title}
-              </h1>
-              <span className="pen-text w-full text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
-                {path} · {selectedBranch}
-              </span>
-              <div className="h-px w-full shrink-0 bg-hairline" />
-              {error && <span className="pen-text text-[13px] text-danger">{error}</span>}
-              {body.map((entry) => (
-                <DocBlock key={entry.key} block={entry.block} />
-              ))}
+              {pageError ? (
+                <DocErrorState message={error ?? ""} onRetry={retryPage} />
+              ) : pageLoading ? (
+                <DocSkeleton />
+              ) : (
+                <>
+                  <h1 className="pen-text m-0 w-full font-display text-[28px] leading-[1.15] font-semibold tracking-[-0.4px] text-ink">
+                    {title}
+                  </h1>
+                  <span className="pen-text w-full text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
+                    {path} · {selectedBranch}
+                  </span>
+                  <div className="h-px w-full shrink-0 bg-hairline" />
+                  {body.map((entry) => (
+                    <DocBlock key={entry.key} block={entry.block} />
+                  ))}
+                </>
+              )}
             </article>
-            {/* Doc Rail */}
-            <aside className="flex w-[248px] shrink-0 flex-col gap-3.5 overflow-y-auto pt-2 pl-1">
+            {/* Doc Rail — 768~1023px에서는 본문 압착 방지를 위해 숨기고, lg(1024px+)부터 정본 248px 노출 */}
+            <aside className="hidden w-[248px] shrink-0 flex-col gap-3.5 overflow-y-auto pt-2 pl-1 lg:flex">
               <span className="pen-text text-[10px] font-semibold tracking-[0.8px] text-ink-tertiary">
                 ON THIS PAGE
               </span>
@@ -386,43 +415,126 @@ export function DocumentPage() {
         </div>
         <div className="flex min-h-0 w-full flex-1 flex-col px-3 pb-4">
           <article className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto rounded-md bg-surface px-[18px] py-5">
-            <h1 className="pen-text m-0 w-full font-display text-[21px] leading-[1.2] font-semibold tracking-[-0.32px] text-ink">
-              {title}
-            </h1>
-            <span className="pen-text w-full text-[10.5px] tracking-[-0.1px] text-ink-tertiary">
-              {path}
-            </span>
-            <div className="h-px w-full shrink-0 bg-hairline" />
-            {error && <span className="pen-text text-[12px] text-danger">{error}</span>}
-            {body.map((entry) => (
-              <DocBlock key={`m-${entry.key}`} block={entry.block} mobile />
-            ))}
-            {backlinks.length > 0 && (
+            {pageError ? (
+              <DocErrorState message={error ?? ""} onRetry={retryPage} mobile />
+            ) : pageLoading ? (
+              <DocSkeleton mobile />
+            ) : (
               <>
-                <span className="pen-text text-[9.5px] font-semibold tracking-[0.8px] text-ink-tertiary">
-                  BACKLINKS · {backlinks.length}
+                <h1 className="pen-text m-0 w-full font-display text-[21px] leading-[1.2] font-semibold tracking-[-0.32px] text-ink">
+                  {title}
+                </h1>
+                <span className="pen-text w-full text-[10.5px] tracking-[-0.1px] text-ink-tertiary">
+                  {path}
                 </span>
-                <div className="flex w-full flex-col gap-2">
-                  {backlinks.map((doc) => (
-                    <button
-                      key={doc}
-                      type="button"
-                      onClick={() => navigate(`/specs/doc/${encodeURIComponent(doc)}`)}
-                      className="flex items-center gap-[7px] text-left"
-                    >
-                      <CornerDownRight className="size-3 shrink-0 text-ink-tertiary" />
-                      <span className="pen-text truncate text-[12.5px] tracking-[-0.12px] text-link">
-                        {fileLabel(doc)}
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                <div className="h-px w-full shrink-0 bg-hairline" />
+                {body.map((entry) => (
+                  <DocBlock key={`m-${entry.key}`} block={entry.block} mobile />
+                ))}
+                {backlinks.length > 0 && (
+                  <>
+                    <span className="pen-text text-[9.5px] font-semibold tracking-[0.8px] text-ink-tertiary">
+                      BACKLINKS · {backlinks.length}
+                    </span>
+                    <div className="flex w-full flex-col gap-2">
+                      {backlinks.map((doc) => (
+                        <button
+                          key={doc}
+                          type="button"
+                          onClick={() => navigate(`/specs/doc/${encodeURIComponent(doc)}`)}
+                          className="flex items-center gap-[7px] text-left"
+                        >
+                          <CornerDownRight className="size-3 shrink-0 text-ink-tertiary" />
+                          <span className="pen-text truncate text-[12.5px] tracking-[-0.12px] text-link">
+                            {fileLabel(doc)}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
               </>
             )}
           </article>
         </div>
       </div>
     </>
+  )
+}
+
+/**
+ * DESIGN.md §14 Loading(Skeleton): 최종 콘텐츠와 동일한 치수·radius의 bg(input) 블록.
+ * 제목/메타/구분선/본문 단락 구조를 보존하고 animate-pulse로 shimmer(blue-tint 금지).
+ */
+function DocSkeleton({ mobile = false }: { mobile?: boolean }): ReactNode {
+  return (
+    <div className="flex w-full flex-col gap-4" aria-hidden>
+      {/* 제목(h1) 자리 */}
+      <div
+        className={cn("animate-pulse rounded-sm bg-input", mobile ? "h-7 w-3/5" : "h-9 w-1/2")}
+      />
+      {/* 메타(path · branch) 자리 */}
+      <div
+        className={cn("animate-pulse rounded-[6px] bg-input", mobile ? "h-3 w-2/5" : "h-3.5 w-1/3")}
+      />
+      <div className="h-px w-full shrink-0 bg-hairline" />
+      {/* 본문 단락 자리 */}
+      <div className="flex w-full flex-col gap-2.5">
+        {["w-full", "w-full", "w-4/5"].map((width, i) => (
+          <div
+            key={`doc-skeleton-line-a-${i.toString()}`}
+            className={cn("h-4 animate-pulse rounded-[6px] bg-input", width)}
+          />
+        ))}
+      </div>
+      <div className="flex w-full flex-col gap-2.5">
+        {["w-full", "w-11/12", "w-3/4"].map((width, i) => (
+          <div
+            key={`doc-skeleton-line-b-${i.toString()}`}
+            className={cn("h-4 animate-pulse rounded-[6px] bg-input", width)}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/**
+ * DESIGN.md §14 Error(network/system): SF 헤드라인 + 원인 1문장 + 복구 CTA 1개.
+ * SpecsPage DesktopErrorState 패턴을 Doc Sheet 안에 맞춰 중앙 정렬로 렌더한다.
+ */
+function DocErrorState({
+  message,
+  onRetry,
+  mobile = false,
+}: {
+  message: string
+  onRetry: () => void
+  mobile?: boolean
+}): ReactNode {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3.5 py-10">
+      <span className="flex size-14 items-center justify-center rounded-[28px] bg-input">
+        <AlertTriangle className="size-6 text-danger" />
+      </span>
+      <div className="flex flex-col items-center gap-[5px]">
+        <span
+          className={cn(
+            "pen-text font-semibold tracking-[-0.24px] text-ink",
+            mobile ? "text-[14px]" : "text-[15px]",
+          )}
+        >
+          문서를 불러오지 못했습니다
+        </span>
+        <span className="pen-text max-w-[420px] text-center text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
+          {message}
+        </span>
+      </div>
+      <ButtonSecondary onClick={onRetry}>
+        <RefreshCw className="size-[18px] text-ink" />
+        Retry
+      </ButtonSecondary>
+    </div>
   )
 }
 
