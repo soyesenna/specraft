@@ -66,7 +66,8 @@ describe("frontend navigation shell integration", () => {
     const profileMenu = await screen.findByRole("navigation", { name: "프로필 메뉴" })
     fireEvent.click(within(profileMenu).getByRole("button", { name: "Sign out" }))
 
-    expect(await screen.findByRole("button", { name: "Sign in" })).toBeTruthy()
+    // 디자인 정합 SignInScreen 은 데스크톱/모바일 분기를 모두 렌더링하므로 Sign in 버튼이 둘 이상이다.
+    expect((await screen.findAllByRole("button", { name: "Sign in" })).length).toBeGreaterThan(0)
     expect(loggedOut).toBe(true)
   })
 

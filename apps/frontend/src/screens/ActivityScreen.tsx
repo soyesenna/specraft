@@ -4,7 +4,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Key,
   LogOut,
   MessageCircle,
   SlidersHorizontal,
@@ -178,13 +177,6 @@ export function ActivityScreen() {
                 >
                   <SlidersHorizontal className="size-3.5 text-ink-secondary" />
                   <span className="pen-text text-[13px] tracking-[-0.2px] text-ink">Settings</span>
-                </Link>
-                <Link
-                  to="/settings/keys"
-                  className="flex h-8 w-full items-center gap-[9px] rounded-[7px] px-2.5"
-                >
-                  <Key className="size-3.5 text-ink-secondary" />
-                  <span className="pen-text text-[13px] tracking-[-0.2px] text-ink">API keys</span>
                 </Link>
                 <div className="h-px w-full bg-hairline" />
                 <Link
