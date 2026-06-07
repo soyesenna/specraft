@@ -1136,7 +1136,7 @@
                                   "type": "text",
                                   "id": "P57Ta",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "overview.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -1187,7 +1187,7 @@
                                   "type": "text",
                                   "id": "NHc9h",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "mcp-proxy.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -1238,7 +1238,7 @@
                                   "type": "text",
                                   "id": "ymOcU",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "ingest-pipeline.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -1289,7 +1289,7 @@
                                   "type": "text",
                                   "id": "DPI7p",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "adr-002-hard-gate.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -9685,7 +9685,7 @@
       "id": "QDEUK",
       "x": 1520,
       "y": 1320,
-      "name": "09 · Settings — Git & Models",
+      "name": "09 · Settings — Git integration",
       "clip": true,
       "width": 1440,
       "height": 900,
@@ -10104,198 +10104,6 @@
                           "type": "ref",
                           "ref": "XufQA",
                           "name": "Save Btn",
-                          "descendants": {
-                            "VGKQ2": {
-                              "content": "Save"
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "NU6iz",
-                  "name": "Models Card",
-                  "width": "fill_container",
-                  "fill": "$surface",
-                  "cornerRadius": "$radius-m",
-                  "layout": "vertical",
-                  "gap": 16,
-                  "padding": [
-                    22,
-                    24
-                  ],
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "D7sUhN",
-                      "name": "Models Head",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 4,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "z6DeAO",
-                          "name": "Models Title",
-                          "fill": "$ink",
-                          "content": "Models",
-                          "fontFamily": "$font-text",
-                          "fontSize": 16,
-                          "fontWeight": "600",
-                          "letterSpacing": -0.26
-                        },
-                        {
-                          "type": "text",
-                          "id": "jnzrr",
-                          "name": "Models Desc",
-                          "fill": "$ink-tertiary",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "OpenRouter 모델 슬러그 — ingest용과 query용을 분리 설정할 수 있습니다.",
-                          "lineHeight": 1.5,
-                          "fontFamily": "$font-text",
-                          "fontSize": 12.5,
-                          "fontWeight": "normal",
-                          "letterSpacing": -0.12
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "jmvuD",
-                      "name": "Model Fields",
-                      "width": "fill_container",
-                      "gap": 14,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "Ko6Kj",
-                          "name": "Field Ingest model",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "TiLaC",
-                              "name": "MF Label",
-                              "fill": "$ink",
-                              "content": "Ingest model",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            },
-                            {
-                              "type": "frame",
-                              "id": "NnUoT",
-                              "name": "MF Input",
-                              "width": "fill_container",
-                              "height": 36,
-                              "fill": "#F5F5F7",
-                              "cornerRadius": "$radius-s",
-                              "padding": [
-                                0,
-                                12
-                              ],
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "text",
-                                  "id": "D6seY",
-                                  "name": "MF Value",
-                                  "fill": "$ink",
-                                  "content": "anthropic/claude-sonnet-4.6",
-                                  "fontFamily": "$font-mono",
-                                  "fontSize": 12,
-                                  "fontWeight": "normal"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "rfUJW",
-                          "name": "Field Query model",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "Q1lsRU",
-                              "name": "MF Label",
-                              "fill": "$ink",
-                              "content": "Query model",
-                              "fontFamily": "$font-text",
-                              "fontSize": 12.5,
-                              "fontWeight": "500",
-                              "letterSpacing": -0.12
-                            },
-                            {
-                              "type": "frame",
-                              "id": "n8zeG",
-                              "name": "MF Input",
-                              "width": "fill_container",
-                              "height": 36,
-                              "fill": "#F5F5F7",
-                              "cornerRadius": "$radius-s",
-                              "padding": [
-                                0,
-                                12
-                              ],
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "text",
-                                  "id": "t5aVSe",
-                                  "name": "MF Value",
-                                  "fill": "$ink",
-                                  "content": "anthropic/claude-haiku-4.5",
-                                  "fontFamily": "$font-mono",
-                                  "fontSize": 12,
-                                  "fontWeight": "normal"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "G5SgI",
-                      "name": "Models Note",
-                      "fill": "$ink-tertiary",
-                      "content": "OPENROUTER_API_KEY는 서버 env에서 관리됩니다 — 대시보드에는 노출되지 않습니다",
-                      "fontFamily": "$font-text",
-                      "fontSize": 11.5,
-                      "fontWeight": "normal",
-                      "letterSpacing": -0.1
-                    },
-                    {
-                      "type": "frame",
-                      "id": "d2eZF7",
-                      "name": "Models Actions",
-                      "width": "fill_container",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "m9ve0",
-                          "name": "MA Spacer",
-                          "width": "fill_container",
-                          "height": 1
-                        },
-                        {
-                          "id": "l2ZgP",
-                          "type": "ref",
-                          "ref": "XufQA",
-                          "name": "Save Models Btn",
                           "descendants": {
                             "VGKQ2": {
                               "content": "Save"
@@ -14823,7 +14631,7 @@
                                   "type": "text",
                                   "id": "HOW3t",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "overview.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -14874,7 +14682,7 @@
                                   "type": "text",
                                   "id": "ttu7W",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "mcp-proxy.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -14925,7 +14733,7 @@
                                   "type": "text",
                                   "id": "au1qS",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "ingest-pipeline.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -14976,7 +14784,7 @@
                                   "type": "text",
                                   "id": "e8v4X",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "adr-002-hard-gate.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -19767,7 +19575,7 @@
                                   "type": "text",
                                   "id": "z5CJQ",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "overview.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -19818,7 +19626,7 @@
                                   "type": "text",
                                   "id": "h8ktv",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "mcp-proxy.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -19869,7 +19677,7 @@
                                   "type": "text",
                                   "id": "zgjZf",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "ingest-pipeline.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -19920,7 +19728,7 @@
                                   "type": "text",
                                   "id": "bMmSO",
                                   "name": "Link Text",
-                                  "fill": "#000000CC",
+                                  "fill": "$link",
                                   "content": "adr-002-hard-gate.md",
                                   "fontFamily": "$font-text",
                                   "fontSize": 13,
@@ -38458,6 +38266,319 @@
           "fontSize": 11,
           "fontWeight": "normal",
           "letterSpacing": -0.1
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "njQXE",
+      "x": 13680,
+      "y": 1320,
+      "name": "09b · Settings — Models",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "YMbOa",
+          "type": "ref",
+          "ref": "nwOLJ",
+          "name": "TopNav",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "ufb2W",
+          "name": "Toolbar",
+          "width": "fill_container",
+          "gap": 14,
+          "padding": [
+            18,
+            28
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "id": "upFc7",
+              "type": "ref",
+              "ref": "fMa8O",
+              "name": "Back Button"
+            },
+            {
+              "type": "text",
+              "id": "Gzldo",
+              "name": "Page Title",
+              "fill": "$ink",
+              "content": "Settings",
+              "fontFamily": "$font-display",
+              "fontSize": 28,
+              "fontWeight": "600",
+              "letterSpacing": -0.4
+            },
+            {
+              "type": "frame",
+              "id": "ekvkr",
+              "name": "Admin Badge",
+              "fill": "$input-bg",
+              "cornerRadius": "$radius-pill",
+              "padding": [
+                3,
+                9
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rKvUS",
+                  "name": "Admin Label",
+                  "fill": "$ink-secondary",
+                  "content": "ADMIN",
+                  "fontFamily": "$font-text",
+                  "fontSize": 10.5,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yy44j",
+          "name": "Settings Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 26,
+          "padding": [
+            4,
+            28,
+            28,
+            28
+          ],
+          "children": [
+            {
+              "id": "OewKd",
+              "type": "ref",
+              "ref": "ttcaX",
+              "name": "Settings Nav",
+              "descendants": {
+                "bxOMS": {
+                  "fill": "$surface"
+                },
+                "p02Kex": {
+                  "fill": "$ink"
+                },
+                "R1efZ": {
+                  "fill": "$ink",
+                  "fontWeight": "600"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "fIyYt",
+              "name": "Settings Content",
+              "width": 660,
+              "layout": "vertical",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "bVj4e",
+                  "name": "Models Card",
+                  "width": "fill_container",
+                  "fill": "$surface",
+                  "cornerRadius": "$radius-m",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": [
+                    22,
+                    24
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Mpfcy",
+                      "name": "Models Head",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "M9XX1F",
+                          "name": "Models Title",
+                          "fill": "$ink",
+                          "content": "Models",
+                          "fontFamily": "$font-text",
+                          "fontSize": 16,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.26
+                        },
+                        {
+                          "type": "text",
+                          "id": "earQK",
+                          "name": "Models Desc",
+                          "fill": "$ink-tertiary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "OpenRouter 모델 슬러그 — ingest용과 query용을 분리 설정할 수 있습니다.",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$font-text",
+                          "fontSize": 12.5,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.12
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "dOhfw",
+                      "name": "Model Fields",
+                      "width": "fill_container",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "MhKbJ",
+                          "name": "Field Ingest model",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "A1kCqC",
+                              "name": "MF Label",
+                              "fill": "$ink",
+                              "content": "Ingest model",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "O2iCsm",
+                              "name": "MF Input",
+                              "width": "fill_container",
+                              "height": 36,
+                              "fill": "#F5F5F7",
+                              "cornerRadius": "$radius-s",
+                              "padding": [
+                                0,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "gvN1f",
+                                  "name": "MF Value",
+                                  "fill": "$ink",
+                                  "content": "anthropic/claude-sonnet-4.6",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "k848Fs",
+                          "name": "Field Query model",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Q3XHY",
+                              "name": "MF Label",
+                              "fill": "$ink",
+                              "content": "Query model",
+                              "fontFamily": "$font-text",
+                              "fontSize": 12.5,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.12
+                            },
+                            {
+                              "type": "frame",
+                              "id": "kHtqk",
+                              "name": "MF Input",
+                              "width": "fill_container",
+                              "height": 36,
+                              "fill": "#F5F5F7",
+                              "cornerRadius": "$radius-s",
+                              "padding": [
+                                0,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "ytT7X",
+                                  "name": "MF Value",
+                                  "fill": "$ink",
+                                  "content": "anthropic/claude-haiku-4.5",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "asCql",
+                      "name": "Models Note",
+                      "fill": "$ink-tertiary",
+                      "content": "OPENROUTER_API_KEY는 서버 env에서 관리됩니다 — 대시보드에는 노출되지 않습니다",
+                      "fontFamily": "$font-text",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal",
+                      "letterSpacing": -0.1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xVPRE",
+                      "name": "Models Actions",
+                      "width": "fill_container",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "aL6tG",
+                          "name": "MA Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "id": "yZXye",
+                          "type": "ref",
+                          "ref": "XufQA",
+                          "name": "Save Models Btn",
+                          "descendants": {
+                            "VGKQ2": {
+                              "content": "Save"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     }
