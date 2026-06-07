@@ -1,10 +1,13 @@
 import { type ClientConfig, createRequester } from "./client-core.js"
 import type { SpecraftClient } from "./client-types.js"
 import {
+  AdminGitTestConnectionResponseSchema,
   AdminInviteCreateResponseSchema,
   AdminInviteListResponseSchema,
   AdminMemberDisableRequestSchema,
   AdminMemberDisableResponseSchema,
+  AdminMemberEnableRequestSchema,
+  AdminMemberEnableResponseSchema,
   AdminMemberListResponseSchema,
   AdminSettingsRequestSchema,
   AdminSettingsResponseSchema,
@@ -32,6 +35,10 @@ import {
   QueryRequestSchema,
   QueryResponseSchema,
   StatusResponseSchema,
+  WikiGraphRequestSchema,
+  WikiGraphResponseSchema,
+  WikiHistoryRequestSchema,
+  WikiHistoryResponseSchema,
   WikiPageRequestSchema,
   WikiPageResponseSchema,
   WikiTreeRequestSchema,
@@ -228,6 +235,38 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         method: "GET",
         responseSchema: WikiPageResponseSchema,
         query: [["path", parsed.path]],
+      })
+    },
+    wikiGraph: (body) => {
+      const parsed = WikiGraphRequestSchema.parse(body)
+      return request({
+        path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/graph`,
+        method: "GET",
+        responseSchema: WikiGraphResponseSchema,
+      })
+    },
+    wikiHistory: (body) => {
+      const parsed = WikiHistoryRequestSchema.parse(body)
+      return request({
+        path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/history`,
+        method: "GET",
+        responseSchema: WikiHistoryResponseSchema,
+        query: [["path", parsed.path]],
+      })
+    },
+    testGitConnection: () =>
+      request({
+        path: "/api/v1/admin/git/test-connection",
+        method: "POST",
+        responseSchema: AdminGitTestConnectionResponseSchema,
+      }),
+    enableAdminMember: (body) => {
+      const parsed = AdminMemberEnableRequestSchema.parse(body)
+      return request({
+        path: "/api/v1/admin/members/enable",
+        method: "POST",
+        responseSchema: AdminMemberEnableResponseSchema,
+        body: { id: parsed.id },
       })
     },
   }

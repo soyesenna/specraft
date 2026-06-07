@@ -1,8 +1,11 @@
 import type {
+  AdminGitTestConnectionResponse,
   AdminInviteCreateResponse,
   AdminInviteListResponse,
   AdminMemberDisableRequest,
   AdminMemberDisableResponse,
+  AdminMemberEnableRequest,
+  AdminMemberEnableResponse,
   AdminMemberListResponse,
   AdminSettingsRequest,
   AdminSettingsResponse,
@@ -30,6 +33,10 @@ import type {
   QueryRequest,
   QueryResponse,
   StatusResponse,
+  WikiGraphRequest,
+  WikiGraphResponse,
+  WikiHistoryRequest,
+  WikiHistoryResponse,
   WikiPageRequest,
   WikiPageResponse,
   WikiTreeRequest,
@@ -57,10 +64,16 @@ export type SpecraftClient = {
   readonly disableAdminMember: (
     request: AdminMemberDisableRequest,
   ) => Promise<AdminMemberDisableResponse>
+  readonly enableAdminMember: (
+    request: AdminMemberEnableRequest,
+  ) => Promise<AdminMemberEnableResponse>
+  readonly testGitConnection: () => Promise<AdminGitTestConnectionResponse>
   readonly listConflicts: () => Promise<ConflictListResponse>
   readonly resolveConflict: (request: ConflictResolveRequest) => Promise<ConflictResolveResponse>
   readonly listIngestLogs: (request?: PaginationRequest) => Promise<IngestLogListResponse>
   readonly listQueryLogs: (request?: PaginationRequest) => Promise<QueryLogListResponse>
   readonly wikiTree: (request: WikiTreeRequest) => Promise<WikiTreeResponse>
   readonly wikiPage: (request: WikiPageRequest) => Promise<WikiPageResponse>
+  readonly wikiGraph: (request: WikiGraphRequest) => Promise<WikiGraphResponse>
+  readonly wikiHistory: (request: WikiHistoryRequest) => Promise<WikiHistoryResponse>
 }

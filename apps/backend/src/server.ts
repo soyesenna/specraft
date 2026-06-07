@@ -4,6 +4,7 @@ import fastify from "fastify"
 
 import { registerAuthRoutes } from "./auth/routes.js"
 import { loadServerConfig } from "./config/secrets.js"
+import type { GitConnectionTester } from "./git/connection.js"
 import type { LLMProvider } from "./llm/provider.js"
 import { registerSpecRoutes } from "./spec/routes.js"
 import { createDatabase, type SpecraftDatabase } from "./storage/database.js"
@@ -15,6 +16,7 @@ export type BuildServerOptions = {
   readonly dataDir?: string
   readonly codeRemoteUrl?: string
   readonly llmProvider?: LLMProvider
+  readonly gitConnectionTester?: GitConnectionTester
 }
 
 export function buildServer(options: BuildServerOptions = {}): FastifyInstance {
@@ -25,7 +27,11 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance {
   const database = options.database ?? createDatabase({ path: ":memory:" })
 
   void server.register(cookie, { secret })
-  registerAuthRoutes(server, { credentialKey, database })
+  registerAuthRoutes(server, {
+    credentialKey,
+    database,
+    ...(options.gitConnectionTester ? { gitConnectionTester: options.gitConnectionTester } : {}),
+  })
   registerSpecRoutes(server, {
     database,
     ...(options.dataDir ? { dataDir: options.dataDir } : {}),

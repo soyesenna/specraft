@@ -81,6 +81,10 @@ describe("Specraft client", () => {
       ["GET /api/v1/logs/queries", { logs: [], next_cursor: null }],
       ["GET /api/v1/wiki/main/tree", { branch: "main", entries: [] }],
       ["GET /api/v1/wiki/main/page", { branch: "main", path: "index.md", content: "# Index" }],
+      ["GET /api/v1/wiki/main/graph", { branch: "main", nodes: [], edges: [] }],
+      ["GET /api/v1/wiki/main/history", { branch: "main", path: "index.md", versions: [] }],
+      ["POST /api/v1/admin/git/test-connection", { status: "ok" }],
+      ["POST /api/v1/admin/members/enable", { status: "ok" }],
     ])
     const client = createSpecraftClient({
       baseUrl: "https://specraft.test",
@@ -157,8 +161,12 @@ describe("Specraft client", () => {
     await client.listQueryLogs()
     await client.wikiTree(wikiTree)
     await client.wikiPage(wikiPage)
+    await client.wikiGraph({ branch: "main" })
+    await client.wikiHistory({ branch: "main", path: "index.md" })
+    await client.testGitConnection()
+    await client.enableAdminMember({ id: "mem-1" })
 
-    expect(calls).toHaveLength(24)
+    expect(calls).toHaveLength(28)
     expect(calls).toContainEqual({
       url: "https://specraft.test/api/v1/admin/members/mem-1/disable",
       method: "PUT",
@@ -177,6 +185,15 @@ describe("Specraft client", () => {
       body: "",
       contentType: null,
     })
+    expect(calls).toContainEqual({
+      url: "https://specraft.test/api/v1/wiki/main/history?path=index.md",
+      method: "GET",
+      body: "",
+      contentType: null,
+    })
+    expect(calls.find((call) => call.url.endsWith("/api/v1/admin/members/enable"))?.body).toBe(
+      JSON.stringify({ id: "mem-1" }),
+    )
     expect(calls.find((call) => call.url.endsWith("/api/v1/auth/logout"))?.contentType).toBeNull()
     expect(calls.find((call) => call.url.endsWith("/api/v1/admin/invites"))?.contentType).toBeNull()
     expect(calls.find((call) => call.url.endsWith("/api/v1/conflicts/conf-1/resolve"))?.body).toBe(

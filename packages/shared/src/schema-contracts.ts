@@ -238,6 +238,61 @@ export const WikiPageResponseSchema = z.object({
   content: z.string(),
 })
 
+export const WikiGraphRequestSchema = z.object({
+  branch: NonEmptyStringSchema,
+})
+
+export const WikiGraphNodeSchema = z.object({
+  path: NonEmptyStringSchema,
+  title: z.string(),
+  dir: NonEmptyStringSchema,
+  summary: z.string(),
+})
+
+export const WikiGraphEdgeSchema = z.object({
+  from: NonEmptyStringSchema,
+  to: NonEmptyStringSchema,
+})
+
+export const WikiGraphResponseSchema = z.object({
+  branch: NonEmptyStringSchema,
+  nodes: z.array(WikiGraphNodeSchema),
+  edges: z.array(WikiGraphEdgeSchema),
+})
+
+export const WikiHistoryRequestSchema = z.object({
+  branch: NonEmptyStringSchema,
+  path: NonEmptyStringSchema,
+})
+
+export const WikiVersionSchema = z.object({
+  commit_hash: NonEmptyStringSchema,
+  summary: z.string(),
+  author: z.string(),
+  timestamp: NonEmptyStringSchema,
+  added_lines: z.number().int().min(0),
+  removed_lines: z.number().int().min(0),
+  added: z.array(z.string()),
+  removed: z.array(z.string()),
+})
+
+export const WikiHistoryResponseSchema = z.object({
+  branch: NonEmptyStringSchema,
+  path: NonEmptyStringSchema,
+  versions: z.array(WikiVersionSchema),
+})
+
+export const AdminGitTestConnectionResponseSchema = z.object({
+  status: z.enum(["ok", "failed"]),
+  message: z.string().optional(),
+})
+
+export const AdminMemberEnableRequestSchema = z.object({
+  id: NonEmptyStringSchema,
+})
+
+export const AdminMemberEnableResponseSchema = OkResponseSchema
+
 export const BranchLockedErrorSchema = z.object({
   error: z.literal("branch_locked"),
   conflict_id: NonEmptyStringSchema,
@@ -294,6 +349,16 @@ export type WikiTreeRequest = z.infer<typeof WikiTreeRequestSchema>
 export type WikiTreeResponse = z.infer<typeof WikiTreeResponseSchema>
 export type WikiPageRequest = z.infer<typeof WikiPageRequestSchema>
 export type WikiPageResponse = z.infer<typeof WikiPageResponseSchema>
+export type WikiGraphRequest = z.infer<typeof WikiGraphRequestSchema>
+export type WikiGraphNode = z.infer<typeof WikiGraphNodeSchema>
+export type WikiGraphEdge = z.infer<typeof WikiGraphEdgeSchema>
+export type WikiGraphResponse = z.infer<typeof WikiGraphResponseSchema>
+export type WikiHistoryRequest = z.infer<typeof WikiHistoryRequestSchema>
+export type WikiVersion = z.infer<typeof WikiVersionSchema>
+export type WikiHistoryResponse = z.infer<typeof WikiHistoryResponseSchema>
+export type AdminGitTestConnectionResponse = z.infer<typeof AdminGitTestConnectionResponseSchema>
+export type AdminMemberEnableRequest = z.infer<typeof AdminMemberEnableRequestSchema>
+export type AdminMemberEnableResponse = z.infer<typeof AdminMemberEnableResponseSchema>
 export type BranchLockedError = z.infer<typeof BranchLockedErrorSchema>
 export type UnauthorizedError = z.infer<typeof UnauthorizedErrorSchema>
 export type ErrorBody = z.infer<typeof ErrorBodySchema>

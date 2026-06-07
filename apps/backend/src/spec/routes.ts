@@ -8,6 +8,8 @@ import {
   QueryRequestSchema,
   QueryResponseSchema,
   StatusResponseSchema,
+  WikiGraphResponseSchema,
+  WikiHistoryResponseSchema,
   WikiPageResponseSchema,
   WikiTreeResponseSchema,
 } from "@specraft/shared"
@@ -34,6 +36,8 @@ import { requireMember } from "./auth.js"
 import { registerConflictRoutes } from "./conflict-routes.js"
 import { listIngestLogs, listQueryLogs, recordIngestLog, recordQueryLog } from "./logs.js"
 import { answerWikiQuestionWithAgent, ingestWikiWithAgent } from "./wiki-agent.js"
+import { buildWikiGraph } from "./wiki-graph.js"
+import { buildWikiHistory } from "./wiki-history.js"
 
 export type SpecRouteContext = {
   readonly database: SpecraftDatabase
@@ -222,6 +226,41 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       content: wiki ? readWikiFile(wiki, query.data.path) : "",
       path: query.data.path,
     })
+  })
+
+  server.get("/api/v1/wiki/:branch/graph", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const parsed = BranchParamsSchema.safeParse(request.params)
+    if (!parsed.success) {
+      return sendValidationFailed(reply)
+    }
+    const wiki = wikiFor(context, parsed.data.branch)
+    return WikiGraphResponseSchema.parse(
+      wiki
+        ? buildWikiGraph(wiki, parsed.data.branch)
+        : { branch: parsed.data.branch, nodes: [], edges: [] },
+    )
+  })
+
+  server.get("/api/v1/wiki/:branch/history", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const params = BranchParamsSchema.safeParse(request.params)
+    const query = WikiPageQuerySchema.safeParse(request.query)
+    if (!params.success || !query.success) {
+      return sendValidationFailed(reply)
+    }
+    const wiki = wikiFor(context, params.data.branch)
+    return WikiHistoryResponseSchema.parse(
+      wiki
+        ? buildWikiHistory(wiki, params.data.branch, query.data.path)
+        : { branch: params.data.branch, path: query.data.path, versions: [] },
+    )
   })
 
   registerConflictRoutes(server, context)
