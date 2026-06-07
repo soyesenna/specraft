@@ -13,15 +13,20 @@ export function SignInScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [pending, setPending] = useState(false)
 
   async function submit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault()
+    if (pending) return
     setError(null)
+    setPending(true)
     try {
       await login({ email, password })
       navigate("/specs")
     } catch (caught: unknown) {
       setError(caught instanceof Error ? caught.message : "Authentication failed")
+    } finally {
+      setPending(false)
     }
   }
 
@@ -30,20 +35,42 @@ export function SignInScreen() {
       onSubmit={submit}
       className="flex w-full flex-col gap-3.5 rounded-lg bg-surface p-5 md:w-[360px] md:p-[26px]"
     >
-      <Field label="Email" type="email" value={email} onChange={setEmail} />
-      <Field label="Password" type="password" value={password} onChange={setPassword} />
+      <Field
+        label="Email"
+        type="email"
+        value={email}
+        onChange={setEmail}
+        autoComplete="email"
+        name="email"
+        autoFocus
+      />
+      <Field
+        label="Password"
+        type="password"
+        value={password}
+        onChange={setPassword}
+        autoComplete="current-password"
+        name="password"
+      />
       {error && (
         <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{error}</span>
       )}
       <ButtonPill
         type="submit"
+        pending={pending}
         className="h-[46px] w-full md:h-10"
         labelClassName="font-medium tracking-[-0.24px]"
       >
         Sign in
       </ButtonPill>
       <div className="flex w-full justify-center">
-        <button type="button" className="pen-text text-[12.5px] tracking-[-0.12px] text-link">
+        <button
+          type="button"
+          disabled
+          aria-disabled="true"
+          title="Password reset is not available yet"
+          className="pen-text text-[12.5px] tracking-[-0.12px] text-link opacity-50"
+        >
           Forgot password?
         </button>
       </div>
@@ -66,7 +93,7 @@ export function SignInScreen() {
           </span>
         </div>
         {card}
-        <span className="pen-text text-[11px] tracking-[-0.1px] text-[#00000052]">
+        <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">
           specraft v1 · self-hosted · spec integrity over availability
         </span>
       </div>
@@ -89,7 +116,7 @@ export function SignInScreen() {
           {card}
         </div>
         <div className="flex h-14 w-full shrink-0 items-center justify-center">
-          <span className="pen-text text-[10.5px] tracking-[-0.1px] text-[#00000052]">
+          <span className="pen-text text-[10.5px] tracking-[-0.1px] text-ink-tertiary">
             specraft v1 · self-hosted
           </span>
         </div>

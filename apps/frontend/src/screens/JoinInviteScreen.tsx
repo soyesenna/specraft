@@ -17,15 +17,27 @@ export function JoinInviteScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [pending, setPending] = useState(false)
+
+  // 서버 최소 길이 규칙(12자)을 제출 전 클라이언트에서 선검증해
+  // 원시 서버 에러 대신 actionable 한 문구를 Field 하단에 노출한다.
+  const PASSWORD_MIN = 12
 
   async function submit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault()
     setError(null)
+    if (password.length < PASSWORD_MIN) {
+      setError(`Password must be at least ${PASSWORD_MIN} characters.`)
+      return
+    }
+    setPending(true)
     try {
       await signup({ invite_token: inviteToken, email, password, name })
       navigate("/specs")
     } catch (caught: unknown) {
       setError(caught instanceof Error ? caught.message : "Signup failed")
+    } finally {
+      setPending(false)
     }
   }
 
@@ -42,20 +54,32 @@ export function JoinInviteScreen() {
           수연님이 초대했습니다 · 초대 링크는 72시간 내 만료됩니다
         </p>
       </div>
-      <Field label="Name" value={name} onChange={setName} />
-      <Field label="Email" type="email" value={email} onChange={setEmail} />
+      <Field label="Name" value={name} onChange={setName} autoFocus />
+      <Field
+        label="Email"
+        type="email"
+        value={email}
+        onChange={setEmail}
+        autoComplete="email"
+        name="email"
+      />
       <Field
         label="Password"
         type="password"
         value={password}
         onChange={setPassword}
-        placeholder="최소 12자"
+        placeholder="At least 12 characters"
+        autoComplete="new-password"
+        name="password"
       />
       {error && (
-        <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{error}</span>
+        <span role="alert" className="pen-text text-[12px] tracking-[-0.12px] text-danger">
+          {error}
+        </span>
       )}
       <ButtonPill
         type="submit"
+        pending={pending}
         className="h-[46px] w-full md:h-10"
         labelClassName="font-medium tracking-[-0.24px]"
       >
