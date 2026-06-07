@@ -1,4 +1,5 @@
 import { FileText, X } from "lucide-react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { cn } from "../lib/cn.js"
 import { Avatar } from "./Avatar.js"
@@ -17,9 +18,16 @@ type DocSheetProps = {
   className?: string
 }
 
+/** 바텀시트 슬라이드 모션 길이 — DESIGN.md §15 motion-standard(300ms). */
+const SHEET_MOTION_MS = 300
+
 /**
  * component/Doc Sheet — 모바일 디태치드 플로팅 바텀시트 (370px, r22, 0 10px 30px 섀도).
  * 그래버 / 헤드(닫기) / 요약 / 메타 / CONNECTED 칩 / Open document 버튼.
+ *
+ * 등장/퇴장 모션: 부모가 조건부 마운트하므로 시트 내부에서 자체 진입(미묘한 상승+페이드)을
+ * 재생하고, 닫을 때는 하강 퇴장을 끝낸 뒤 지연 언마운트(onClose 콜백)로 넘긴다.
+ * 디태치드 플로팅 시트라 스크림 없이 떠 있고, motion-reduce 환경은 즉시 전환·즉시 언마운트한다.
  */
 export function DocSheet({
   dir = "SPECS",
@@ -33,10 +41,106 @@ export function DocSheet({
   onClose,
   className,
 }: DocSheetProps) {
+  const sheetRef = useRef<HTMLDivElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // entered: 진입 트랜지션 트리거(마운트 다음 프레임에 on). closing: 퇴장 트랜지션 트리거.
+  const [entered, setEntered] = useState(false)
+  const [closing, setClosing] = useState(false)
+
+  // 마운트 다음 프레임에 진입 상태로 전환 — translate-y-3/opacity-0 → translate-y-0/opacity-100.
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setEntered(true))
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
+  // 진행 중 타이머 정리(언마운트 누수 방지).
+  useEffect(
+    () => () => {
+      if (closeTimerRef.current !== null) {
+        clearTimeout(closeTimerRef.current)
+      }
+    },
+    [],
+  )
+
+  // 퇴장 모션 재생 후 지연 언마운트. motion-reduce면 즉시 onClose.
+  const requestClose = useCallback(() => {
+    if (closing) {
+      return
+    }
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true
+    if (reduceMotion) {
+      onClose?.()
+      return
+    }
+    setClosing(true)
+    closeTimerRef.current = setTimeout(() => {
+      onClose?.()
+    }, SHEET_MOTION_MS)
+  }, [closing, onClose])
+
+  // 모달성 바텀시트 접근성: Escape 닫기, 초기 포커스 이동, 포커스 트랩, 트리거 복귀.
+  useEffect(() => {
+    const trigger = document.activeElement as HTMLElement | null
+
+    // 마운트 시 닫기 버튼으로 초기 포커스 이동 — 시트 내부로 키보드 진입점 확보.
+    closeRef.current?.focus()
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.stopPropagation()
+        requestClose()
+        return
+      }
+      if (event.key !== "Tab") return
+
+      // 포커스 트랩 — 시트 내부 포커스 가능 요소 사이로만 Tab 순환.
+      const root = sheetRef.current
+      if (!root) return
+      const focusable = root.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (!first || !last) return
+      const active = document.activeElement
+
+      if (event.shiftKey) {
+        if (active === first || !root.contains(active)) {
+          event.preventDefault()
+          last.focus()
+        }
+      } else if (active === last || !root.contains(active)) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+      // 언마운트 시 시트를 연 트리거(MobileNode 버튼)로 포커스 복귀.
+      trigger?.focus?.()
+    }
+  }, [requestClose])
+
+  // 진입 완료 + 퇴장 시작 전 = 화면에 떠 있는 상태. 진입 전/퇴장 중에는 아래로 슬라이드·페이드 아웃.
+  const visible = entered && !closing
+
   return (
     <div
+      ref={sheetRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${dir} ${name}`}
       className={cn(
-        "flex w-[370px] flex-col gap-[11px] rounded-[22px] bg-surface px-[18px] pt-2 pb-4 shadow-[0_10px_30px_#00000030]",
+        "flex w-[370px] flex-col gap-[11px] rounded-[22px] bg-surface px-[18px] pt-2 pb-4 shadow-[0_10px_30px_#00000030] transition-[transform,opacity] duration-300 motion-reduce:transition-none",
+        closing ? "ease-[var(--ease-exit)]" : "ease-[var(--ease-enter)]",
+        visible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
         className,
       )}
     >
@@ -48,13 +152,14 @@ export function DocSheet({
           <span className="pen-text text-[9.5px] font-semibold tracking-[0.8px] text-ink-tertiary">
             {dir}
           </span>
-          <span className="pen-text font-display text-[18px] font-semibold tracking-[-0.28px] text-ink">
+          <span className="pen-text font-text text-[18px] font-semibold tracking-[-0.28px] text-ink">
             {name}
           </span>
         </div>
         <button
+          ref={closeRef}
           type="button"
-          onClick={onClose}
+          onClick={requestClose}
           className="flex size-7 shrink-0 items-center justify-center rounded-[14px] bg-bg"
           aria-label="닫기"
         >

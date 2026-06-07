@@ -31,9 +31,10 @@ export function SettingsNav({ active }: SettingsNavProps) {
           <Link
             key={key}
             to={to}
+            aria-current={selected ? "page" : undefined}
             className={cn(
-              "flex h-8 w-full items-center gap-[9px] rounded-[7px] px-[11px]",
-              selected && "bg-surface",
+              "flex h-8 w-full items-center gap-[9px] rounded-[7px] px-[11px] transition-[background-color,color] duration-150 ease-[var(--ease-standard)]",
+              selected ? "bg-surface" : "hover:bg-hairline",
             )}
           >
             <Icon className={cn("size-3.5", selected ? "text-ink" : "text-ink-tertiary")} />

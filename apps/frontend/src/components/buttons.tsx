@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react"
 import type { ButtonHTMLAttributes, ReactNode } from "react"
 import { cn } from "../lib/cn.js"
 
@@ -12,7 +13,7 @@ export function ButtonPrimary({ children, className, ...rest }: ButtonProps) {
     <button
       type="button"
       className={cn(
-        "flex items-center justify-center gap-1.5 rounded-sm bg-accent px-4 py-2",
+        "flex cursor-pointer items-center justify-center gap-1.5 rounded-sm bg-accent px-4 py-2 transition active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50 disabled:active:scale-100",
         className,
       )}
       {...rest}
@@ -28,7 +29,7 @@ export function ButtonSecondary({ children, className, ...rest }: ButtonProps) {
     <button
       type="button"
       className={cn(
-        "flex items-center justify-center gap-1.5 rounded-sm bg-input px-4 py-2",
+        "flex cursor-pointer items-center justify-center gap-1.5 rounded-sm bg-input px-4 py-2 transition active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50 disabled:active:scale-100",
         className,
       )}
       {...rest}
@@ -39,16 +40,25 @@ export function ButtonSecondary({ children, className, ...rest }: ButtonProps) {
 }
 
 /** component/Button Pill — accent 필, pill radius, 11×22 패딩, 15px 라벨 */
-export function ButtonPill({ children, className, labelClassName, ...rest }: ButtonProps) {
+export function ButtonPill({
+  children,
+  className,
+  labelClassName,
+  pending,
+  disabled,
+  ...rest
+}: ButtonProps & { pending?: boolean }) {
   return (
     <button
       type="button"
+      disabled={disabled || pending}
       className={cn(
-        "flex items-center justify-center rounded-pill bg-accent px-[22px] py-[11px]",
+        "flex cursor-pointer items-center justify-center gap-1.5 rounded-pill bg-accent px-[22px] py-[11px] transition active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50 disabled:active:scale-100",
         className,
       )}
       {...rest}
     >
+      {pending ? <Loader2 className="size-4 animate-spin text-white" /> : null}
       <span className={cn("pen-text text-[15px] tracking-[-0.25px] text-white", labelClassName)}>
         {children}
       </span>

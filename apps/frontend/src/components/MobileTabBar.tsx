@@ -14,31 +14,44 @@ export function MobileTabBar({ active }: MobileTabBarProps) {
   return (
     <div className="flex w-full shrink-0 flex-col border-t border-hairline bg-nav-glass backdrop-blur-[20px]">
       <div className="flex h-[52px] w-full px-2 pt-[5px]">
-        <Link to="/specs" className="flex flex-1 flex-col items-center gap-[3px] pt-0.5">
+        <Link
+          to="/specs"
+          aria-current={active === "spec" ? "page" : undefined}
+          className="flex flex-1 flex-col items-center gap-[3px] pt-0.5"
+        >
           <Waypoints
-            className={cn("size-[22px]", active === "spec" ? "text-accent" : "text-ink-tertiary")}
+            className={cn(
+              "size-[22px] transition-colors duration-150 ease-[var(--ease-standard)]",
+              active === "spec" ? "text-accent" : "text-ink-tertiary",
+            )}
           />
           <span
             className={cn(
-              "pen-text text-[10px] font-medium",
+              "pen-text text-[10px] font-medium transition-colors duration-150 ease-[var(--ease-standard)]",
               active === "spec" ? "text-accent" : "text-ink-tertiary",
             )}
           >
             Spec
           </span>
         </Link>
-        <Link to="/settings" className="flex flex-1 flex-col items-center gap-[3px]">
+        <Link
+          to="/settings"
+          aria-current={active === "profile" ? "page" : undefined}
+          className="flex flex-1 flex-col items-center gap-[3px]"
+        >
           <span
             className={cn(
-              "flex size-6 items-center justify-center rounded-xl bg-dark-card",
-              active === "profile" && "border-[1.5px] border-accent",
+              "flex size-6 items-center justify-center rounded-xl bg-dark-card transition-colors duration-150 ease-[var(--ease-standard)]",
+              active === "profile"
+                ? "border-[1.5px] border-accent"
+                : "border-[1.5px] border-transparent",
             )}
           >
             <span className="pen-text text-[9px] font-semibold text-white">SY</span>
           </span>
           <span
             className={cn(
-              "pen-text text-[10px] font-medium",
+              "pen-text text-[10px] font-medium transition-colors duration-150 ease-[var(--ease-standard)]",
               active === "profile" ? "text-accent" : "text-ink-tertiary",
             )}
           >

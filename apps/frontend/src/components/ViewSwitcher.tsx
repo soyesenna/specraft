@@ -19,10 +19,12 @@ export function ViewSwitcher({ view, onChange, mobile = false, className }: View
       <button
         type="button"
         onClick={() => onChange(target)}
+        aria-pressed={active}
         className={cn(
           "flex items-center justify-center gap-1.5 rounded-[7px] px-3",
+          "transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
           mobile ? "h-[30px] flex-1" : "py-[5px]",
-          active && "bg-surface shadow-[0_1px_3px_#0000001F]",
+          active ? "bg-surface shadow-[0_1px_3px_#0000001F]" : "hover:bg-hairline",
         )}
       >
         <Icon className={cn("size-[13px]", active ? "text-ink" : "text-ink-tertiary")} />

@@ -19,7 +19,7 @@ export function SearchField({
   return (
     <div
       className={cn(
-        "flex h-8 w-[240px] items-center gap-[7px] rounded-sm bg-input px-2.5",
+        "flex h-8 w-[240px] items-center gap-[7px] rounded-sm bg-input px-2.5 focus-within:ring-2 focus-within:ring-accent",
         className,
       )}
     >
@@ -29,7 +29,7 @@ export function SearchField({
         placeholder={placeholder}
         value={value}
         onChange={onChange ? (event) => onChange(event.target.value) : undefined}
-        className="pen-text w-full min-w-0 border-none bg-transparent text-[13px] tracking-[-0.2px] text-ink outline-none placeholder:text-ink-tertiary"
+        className="pen-text w-full min-w-0 border-none bg-transparent text-[13px] tracking-[-0.2px] text-ink outline-none max-md:text-[16px] placeholder:text-ink-tertiary"
       />
     </div>
   )

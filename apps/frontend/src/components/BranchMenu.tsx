@@ -53,14 +53,18 @@ export function BranchMenu({
       </div>
       {rows.map((row) => {
         const selected = row.state === "selected"
+        const locked = row.state === "locked"
         return (
           <button
             key={row.name}
             type="button"
-            onClick={onSelect ? () => onSelect(row.name) : undefined}
+            disabled={locked}
+            aria-disabled={locked || undefined}
+            onClick={onSelect && !locked ? () => onSelect(row.name) : undefined}
             className={cn(
               "flex h-[34px] w-full items-center gap-2 rounded-[7px] px-2.5",
               selected && "bg-bg",
+              locked ? "cursor-not-allowed" : "cursor-pointer hover:bg-hairline",
             )}
           >
             <GitBranchIcon
@@ -68,21 +72,22 @@ export function BranchMenu({
             />
             <span
               className={cn(
-                "pen-text text-[13px] tracking-[-0.2px] text-ink",
+                "pen-text min-w-0 flex-1 truncate text-[13px] tracking-[-0.2px] text-ink",
                 selected && "font-semibold",
               )}
             >
               {row.name}
             </span>
-            <span className="h-px flex-1" />
             {row.time && (
-              <span className="pen-text text-[10.5px] tracking-[-0.1px] text-ink-tertiary">
+              <span className="pen-text shrink-0 text-[10.5px] tracking-[-0.1px] text-ink-tertiary">
                 {row.time}
               </span>
             )}
-            {selected && <Check className="size-3.5 text-accent" />}
-            {row.state === "resolving" && <span className="size-[7px] rounded-full bg-warning" />}
-            {row.state === "locked" && <Lock className="size-3 text-danger" />}
+            {selected && <Check className="size-3.5 shrink-0 text-accent" />}
+            {row.state === "resolving" && (
+              <span className="size-[7px] shrink-0 rounded-full bg-warning" />
+            )}
+            {locked && <Lock className="size-3 shrink-0 text-danger" />}
           </button>
         )
       })}
