@@ -11,6 +11,8 @@ type DocSheetProps = {
   commit?: string
   connected?: string[]
   moreCount?: number
+  /** Open document 링크 목적지(/specs/doc/:docId) — 미지정 시 name 에서 파생 */
+  docId?: string
   onClose?: () => void
   className?: string
 }
@@ -27,6 +29,7 @@ export function DocSheet({
   commit = "a1b2c3d",
   connected = ["overview.md", "mcp-proxy.md"],
   moreCount = 2,
+  docId,
   onClose,
   className,
 }: DocSheetProps) {
@@ -85,7 +88,7 @@ export function DocSheet({
         )}
       </div>
       <Link
-        to="/specs/doc/stop-gate"
+        to={`/specs/doc/${docId ?? name.replace(/\.md$/, "")}`}
         className="flex h-[46px] w-full items-center justify-center rounded-xl bg-accent"
       >
         <span className="pen-text text-[14.5px] font-medium tracking-[-0.22px] text-white">

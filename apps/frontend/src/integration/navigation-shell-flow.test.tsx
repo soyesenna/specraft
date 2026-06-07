@@ -131,18 +131,18 @@ describe("frontend navigation shell integration", () => {
       routes: new Map([
         ["GET /api/v1/auth/session", { member }],
         [
-          "GET /api/v1/wiki/dev/tree",
+          "GET /api/v1/wiki/dev/graph",
           {
             branch: "dev",
-            entries: [{ path: "overview.md", type: "file" }],
-          },
-        ],
-        [
-          "GET /api/v1/wiki/dev/page",
-          {
-            branch: "dev",
-            path: "overview.md",
-            content: "# Overview\n\nLive content.",
+            nodes: [
+              {
+                path: "overview.md",
+                title: "Overview",
+                dir: "CORE",
+                summary: "Live content.",
+              },
+            ],
+            edges: [],
           },
         ],
       ]),
@@ -154,7 +154,8 @@ describe("frontend navigation shell integration", () => {
       </MemoryRouter>,
     )
 
-    expect(await screen.findByText("Overview")).toBeTruthy()
+    // 디자인 정합 Specs 화면은 그래프/리스트 뷰로 노드(파일명)를 렌더한다.
+    expect((await screen.findAllByText("overview.md")).length).toBeGreaterThan(0)
     fireEvent.click(screen.getByRole("button", { name: "사이드바 접기" }))
     const collapsedSidebar = screen.getByRole("navigation", { name: "앱 사이드바" })
     expect(await screen.findByRole("button", { name: "사이드바 펼치기" })).toBeTruthy()

@@ -25,21 +25,24 @@ describe("frontend wiki and query integration", () => {
       routes: new Map([
         ["GET /api/v1/auth/session", { member }],
         [
-          "GET /api/v1/wiki/dev/tree",
+          "GET /api/v1/wiki/dev/graph",
           {
             branch: "dev",
-            entries: [
-              { path: "overview.md", type: "file" },
-              { path: "specs/stop-gate.md", type: "file" },
+            nodes: [
+              {
+                path: "overview.md",
+                title: "Live Overview",
+                dir: "CORE",
+                summary: "Live wiki content from API.",
+              },
+              {
+                path: "specs/stop-gate.md",
+                title: "Stop Gate",
+                dir: "SPECS",
+                summary: "Stop 게이트 판정 규칙",
+              },
             ],
-          },
-        ],
-        [
-          "GET /api/v1/wiki/dev/page",
-          {
-            branch: "dev",
-            path: "overview.md",
-            content: "# Live Overview\n\nLive wiki content from API.",
+            edges: [{ from: "specs/stop-gate.md", to: "overview.md" }],
           },
         ],
         [
@@ -81,8 +84,9 @@ describe("frontend wiki and query integration", () => {
       </MemoryRouter>,
     )
 
-    expect(await screen.findByText("Live Overview")).toBeTruthy()
-    expect(screen.getByText("Live wiki content from API.")).toBeTruthy()
+    // 디자인 정합 Specs 화면은 그래프/리스트 노드(파일명·요약)로 위키 데이터를 렌더한다.
+    expect((await screen.findAllByText("overview.md")).length).toBeGreaterThan(0)
+    expect(screen.getAllByText("Live wiki content from API.").length).toBeGreaterThan(0)
 
     fireEvent.click(firstElement(screen.getAllByRole("link", { name: "Query" }), "Query"))
     expect(
