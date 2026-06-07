@@ -50,7 +50,7 @@ export function createRequester(config: ClientConfig): Requester {
         }
       }
     }
-    const headers = new Headers({ "content-type": "application/json" })
+    const headers = new Headers()
     if (config.apiKey) {
       headers.set("authorization", `Bearer ${config.apiKey}`)
     }
@@ -61,7 +61,8 @@ export function createRequester(config: ClientConfig): Requester {
           ? spec.requestSchema.parse(spec.body)
           : spec.body
     const init: RequestInit = { method: spec.method, headers }
-    if (parsedBody) {
+    if (parsedBody !== undefined) {
+      headers.set("content-type", "application/json")
       init.body = JSON.stringify(parsedBody)
     }
     const response = await fetcher(url.toString(), init)

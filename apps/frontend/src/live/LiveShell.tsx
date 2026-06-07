@@ -1,38 +1,54 @@
-import type { LucideIcon } from "lucide-react"
-import { Activity, GitMerge, Key, MessageCircle, Settings, Waypoints } from "lucide-react"
-import { type ReactNode, useEffect } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { LogOut, SlidersHorizontal } from "lucide-react"
+import { type ReactNode, useEffect, useState } from "react"
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
+import { Sidebar, type SidebarSection } from "../components/Sidebar.js"
+import { TopNav } from "../components/TopNav.js"
 import { useSpecraft } from "./api.js"
 
-type NavItem = {
-  readonly label: string
-  readonly to: string
-  readonly icon: LucideIcon
+let sidebarCollapsed = false
+
+function activeSidebarSection(pathname: string): SidebarSection | null {
+  if (pathname.startsWith("/query")) {
+    return "query"
+  }
+  if (pathname.startsWith("/activity")) {
+    return "activity"
+  }
+  if (pathname.startsWith("/conflicts")) {
+    return "conflicts"
+  }
+  if (pathname.startsWith("/specs")) {
+    return "specs"
+  }
+  return null
 }
 
-const navItems: readonly NavItem[] = [
-  { label: "Specs", to: "/specs", icon: Waypoints },
-  { label: "Query", to: "/query", icon: MessageCircle },
-  { label: "Activity", to: "/activity", icon: Activity },
-  { label: "Conflicts", to: "/conflicts", icon: GitMerge },
-  { label: "Settings", to: "/settings/git", icon: Settings },
-  { label: "API keys", to: "/settings/keys", icon: Key },
-]
-
-function isActive(pathname: string, to: string): boolean {
-  return pathname === to || (to !== "/specs" && pathname.startsWith(to))
+function memberInitials(name: string | undefined, email: string | undefined): string {
+  const source = name ?? email ?? "SP"
+  return source.slice(0, 2).toUpperCase()
 }
 
 export function LiveShell({
   title,
+  showSidebar = true,
+  titleMeta,
+  titlePrefix,
   children,
 }: {
   readonly title: string
+  readonly showSidebar?: boolean
+  readonly titleMeta?: ReactNode
+  readonly titlePrefix?: ReactNode
   readonly children: ReactNode
 }) {
-  const { member, sessionChecked, sessionError } = useSpecraft()
+  const { logout, member, sessionChecked, sessionError } = useSpecraft()
   const location = useLocation()
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(
+    params.get("sidebar") === "collapsed" ? true : sidebarCollapsed,
+  )
 
   useEffect(() => {
     if (sessionChecked && !member) {
@@ -40,58 +56,90 @@ export function LiveShell({
     }
   }, [member, navigate, sessionChecked])
 
+  const toggleSidebar = () => {
+    setCollapsed((current) => {
+      const next = !current
+      sidebarCollapsed = next
+      return next
+    })
+  }
+  const statusText = sessionError ?? (sessionChecked ? "Live API connected" : "Connecting...")
+  const sidebarActive = activeSidebarSection(location.pathname)
+  const initials = memberInitials(member?.name, member?.email)
+  const headingMeta =
+    titleMeta === undefined ? (
+      <span className="rounded-pill bg-input px-[9px] py-[3px]">
+        <span className="pen-text text-[10.5px] font-semibold tracking-[0.4px] text-ink-secondary">
+          dev
+        </span>
+      </span>
+    ) : (
+      titleMeta
+    )
+
+  async function signOut(): Promise<void> {
+    await logout()
+    setProfileMenuOpen(false)
+    navigate("/signin")
+  }
+
   return (
     <div className="flex h-full min-h-[640px] flex-col overflow-hidden bg-bg text-ink">
-      <header className="flex h-12 shrink-0 items-center gap-7 border-b border-hairline bg-nav-glass px-7 backdrop-blur-[20px]">
-        <Link to="/specs" className="flex items-center gap-2">
-          <Waypoints className="size-[17px]" />
-          <span className="pen-text font-display text-[16px] font-semibold tracking-[-0.3px]">
-            specraft
-          </span>
-        </Link>
-        <span className="h-px flex-1" />
-        <span className="pen-text text-[12px] tracking-[-0.12px] text-ink-tertiary">
-          {sessionError ?? (sessionChecked ? "Live API connected" : "Connecting...")}
-        </span>
-        <span className="flex size-[26px] items-center justify-center rounded-[13px] bg-ink">
-          <span className="pen-text text-[10px] font-semibold tracking-[0.2px] text-white">
-            {(member?.name ?? "SP").slice(0, 2).toUpperCase()}
-          </span>
-        </span>
-        {member && (
-          <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-secondary">
-            {member.name}
-          </span>
+      <TopNav
+        avatarExpanded={profileMenuOpen}
+        brandHref="/specs"
+        initials={initials}
+        onAvatarClick={() => setProfileMenuOpen((open) => !open)}
+        profileName={member?.name}
+        status={statusText}
+      >
+        {profileMenuOpen && (
+          <nav
+            aria-label="프로필 메뉴"
+            className="absolute top-[54px] right-[28px] z-50 flex w-[236px] flex-col gap-0.5 rounded-md bg-surface p-1.5 shadow-[3px_5px_30px_#00000038]"
+          >
+            <div className="flex w-full flex-col gap-0.5 px-2.5 py-2">
+              <span className="pen-text text-[13px] font-semibold tracking-[-0.2px] text-ink">
+                {member?.name ?? "Specraft user"}
+              </span>
+              <span className="pen-text text-[11.5px] tracking-[-0.1px] text-ink-tertiary">
+                {member?.email ?? "session pending"}
+              </span>
+            </div>
+            <div className="h-px w-full bg-hairline" />
+            <Link
+              to="/settings/git"
+              onClick={() => setProfileMenuOpen(false)}
+              className="flex h-8 w-full items-center gap-[9px] rounded-[7px] bg-bg px-2.5"
+            >
+              <SlidersHorizontal className="size-3.5 text-ink-secondary" />
+              <span className="pen-text text-[13px] tracking-[-0.2px] text-ink">Settings</span>
+            </Link>
+            <div className="h-px w-full bg-hairline" />
+            <button
+              type="button"
+              onClick={() => {
+                void signOut()
+              }}
+              className="flex h-8 w-full items-center gap-[9px] rounded-[7px] px-2.5"
+            >
+              <LogOut className="size-3.5 text-ink-secondary" />
+              <span className="pen-text text-[13px] tracking-[-0.2px] text-ink">Sign out</span>
+            </button>
+          </nav>
         )}
-      </header>
+      </TopNav>
       <div className="flex min-h-0 flex-1">
-        <nav className="flex w-[216px] shrink-0 flex-col gap-0.5 border-r border-hairline px-3 py-3.5">
-          {navItems.map(({ label, to, icon: Icon }) => {
-            const active = isActive(location.pathname, to)
-            return (
-              <Link
-                key={to}
-                to={to}
-                className={`flex h-9 items-center gap-2.5 rounded-[7px] px-[11px] ${
-                  active ? "bg-surface font-semibold text-ink" : "text-ink-secondary"
-                }`}
-              >
-                <Icon className="size-[15px]" />
-                <span className="pen-text text-[13px] tracking-[-0.2px]">{label}</span>
-              </Link>
-            )
-          })}
-        </nav>
+        {showSidebar && (
+          <Sidebar active={sidebarActive} collapsed={collapsed} onToggle={toggleSidebar} />
+        )}
         <main className="flex min-h-0 min-w-0 flex-1 flex-col">
           <div className="flex h-[64px] shrink-0 items-center gap-3.5 px-7">
+            {titlePrefix}
             <h1 className="pen-text m-0 font-display text-[28px] font-semibold tracking-[-0.4px]">
               {title}
             </h1>
-            <span className="rounded-pill bg-input px-[9px] py-[3px]">
-              <span className="pen-text text-[10.5px] font-semibold tracking-[0.4px] text-ink-secondary">
-                dev
-              </span>
-            </span>
+            {headingMeta}
           </div>
           {children}
         </main>

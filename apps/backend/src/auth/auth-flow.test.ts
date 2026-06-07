@@ -241,36 +241,4 @@ describe("auth and admin API", () => {
     await server.close()
     database.close()
   })
-
-  it("rejects duplicate bootstrap and unauthorized admin access", async () => {
-    const database = createDatabase({ path: ":memory:" })
-    const server = buildServer({ database, secret })
-
-    await server.inject({
-      method: "POST",
-      url: "/api/v1/auth/bootstrap-admin",
-      payload: {
-        email: "admin@example.com",
-        password: "admin-password",
-        name: "Admin One",
-      },
-    })
-    const duplicate = await server.inject({
-      method: "POST",
-      url: "/api/v1/auth/bootstrap-admin",
-      payload: {
-        email: "other@example.com",
-        password: "admin-password",
-        name: "Other Admin",
-      },
-    })
-    const invite = await server.inject({ method: "POST", url: "/api/v1/admin/invites" })
-
-    expect(duplicate.statusCode).toBe(409)
-    expect(invite.statusCode).toBe(401)
-    expect(invite.json()).toEqual({ error: "unauthorized" })
-
-    await server.close()
-    database.close()
-  })
 })

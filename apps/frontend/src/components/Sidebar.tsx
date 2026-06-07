@@ -20,7 +20,7 @@ const ITEMS: Array<{ key: SidebarSection; icon: LucideIcon; label: string; to: s
 ]
 
 type SidebarProps = {
-  active: SidebarSection
+  active: SidebarSection | null
   collapsed: boolean
   onToggle: () => void
   conflictCount?: number
@@ -36,7 +36,10 @@ export function Sidebar({ active, collapsed, onToggle, conflictCount = 1 }: Side
   const forcedTooltip = params.get("tooltip")
   if (collapsed) {
     return (
-      <nav className="flex h-full w-16 shrink-0 flex-col items-center gap-1 border-r border-hairline pt-3.5 pb-2.5">
+      <nav
+        aria-label="앱 사이드바"
+        className="flex h-full w-16 shrink-0 flex-col items-center gap-1 border-r border-hairline pt-3.5 pb-2.5"
+      >
         {ITEMS.map(({ key, icon: Icon, label, to }) => {
           const selected = key === active
           return (
@@ -81,7 +84,10 @@ export function Sidebar({ active, collapsed, onToggle, conflictCount = 1 }: Side
   }
 
   return (
-    <nav className="flex h-full w-[216px] shrink-0 flex-col gap-0.5 border-r border-hairline px-3 py-3.5">
+    <nav
+      aria-label="앱 사이드바"
+      className="flex h-full w-[216px] shrink-0 flex-col gap-0.5 border-r border-hairline px-3 py-3.5"
+    >
       {ITEMS.map(({ key, icon: Icon, label, to }) => {
         const selected = key === active
         return (

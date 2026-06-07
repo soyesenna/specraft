@@ -13,7 +13,7 @@ import { sendConflict, sendUnauthorized, sendValidationFailed } from "../http/er
 import type { SpecraftDatabase } from "../storage/database.js"
 import { requireAdmin, requireMember } from "./identity.js"
 import { createInvite } from "./invites.js"
-import { setSessionCookie } from "./session.js"
+import { clearSessionCookie, setSessionCookie } from "./session.js"
 import {
   authenticateMember,
   createApiKey,
@@ -108,6 +108,11 @@ export function registerAuthRoutes(server: FastifyInstance, context: AuthContext
     }
     setSessionCookie(reply, member.id)
     return { member }
+  })
+
+  server.post("/api/v1/auth/logout", async (_request, reply) => {
+    clearSessionCookie(reply)
+    return { status: "ok" }
   })
 
   server.post("/api/v1/keys", async (request, reply) => {

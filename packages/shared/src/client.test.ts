@@ -19,8 +19,12 @@ const member = {
 
 describe("Specraft client", () => {
   it("wraps every M1 REST route with request and response schemas", async () => {
-    const calls: Array<{ readonly url: string; readonly method: string; readonly body: string }> =
-      []
+    const calls: Array<{
+      readonly url: string
+      readonly method: string
+      readonly body: string
+      readonly contentType: string | null
+    }> = []
     const responseByRoute = new Map<string, unknown>([
       [
         "POST /api/v1/context",
@@ -38,6 +42,7 @@ describe("Specraft client", () => {
       ["POST /api/v1/auth/bootstrap-admin", { member }],
       ["POST /api/v1/auth/signup", { member }],
       ["POST /api/v1/auth/login", { member }],
+      ["POST /api/v1/auth/logout", { status: "ok" }],
       ["POST /api/v1/keys", { id: "key-1", api_key: "sk-spcrft-secret" }],
       ["GET /api/v1/keys", { keys: [] }],
       ["DELETE /api/v1/keys", { status: "ok" }],
@@ -83,7 +88,12 @@ describe("Specraft client", () => {
       fetch: async (input, init) => {
         const url = new URL(input)
         const method = init?.method ?? "GET"
-        calls.push({ url: input.toString(), method, body: init?.body?.toString() ?? "" })
+        calls.push({
+          url: input.toString(),
+          method,
+          body: init?.body?.toString() ?? "",
+          contentType: new Headers(init?.headers).get("content-type"),
+        })
         const responseBody = responseByRoute.get(`${method} ${url.pathname}`)
         return new Response(JSON.stringify(responseBody ?? { error: "unauthorized" }), {
           status: responseBody ? 200 : 401,
@@ -131,6 +141,7 @@ describe("Specraft client", () => {
       name: "Member One",
     })
     await client.authLogin({ email: "member@example.com", password: "password" })
+    await client.authLogout()
     await client.createApiKey({ name: "default" })
     await client.listApiKeys()
     await client.deleteApiKey(keyDelete)
@@ -147,24 +158,32 @@ describe("Specraft client", () => {
     await client.wikiTree(wikiTree)
     await client.wikiPage(wikiPage)
 
-    expect(calls).toHaveLength(23)
+    expect(calls).toHaveLength(24)
     expect(calls).toContainEqual({
       url: "https://specraft.test/api/v1/admin/members/mem-1/disable",
       method: "PUT",
       body: "",
+      contentType: null,
     })
     expect(calls).toContainEqual({
       url: "https://specraft.test/api/v1/logs/ingests?cursor=cur-1&limit=10",
       method: "GET",
       body: "",
+      contentType: null,
     })
     expect(calls).toContainEqual({
       url: "https://specraft.test/api/v1/wiki/main/page?path=index.md",
       method: "GET",
       body: "",
+      contentType: null,
     })
+    expect(calls.find((call) => call.url.endsWith("/api/v1/auth/logout"))?.contentType).toBeNull()
+    expect(calls.find((call) => call.url.endsWith("/api/v1/admin/invites"))?.contentType).toBeNull()
     expect(calls.find((call) => call.url.endsWith("/api/v1/conflicts/conf-1/resolve"))?.body).toBe(
       JSON.stringify({ directive: "merge main" }),
     )
+    expect(
+      calls.find((call) => call.url.endsWith("/api/v1/conflicts/conf-1/resolve"))?.contentType,
+    ).toBe("application/json")
   })
 })
