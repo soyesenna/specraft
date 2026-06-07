@@ -251,6 +251,8 @@ export const WikiGraphNodeSchema = z.object({
   updated: z.string().optional(),
   /** 마지막 수정 커밋 author — 행 아바타 이니셜용 */
   author: z.string().optional(),
+  /** 마지막 수정 커밋 short hash — 03 디테일 패널 메타 칩용 */
+  commit: z.string().optional(),
 })
 
 export const WikiGraphEdgeSchema = z.object({

@@ -330,7 +330,7 @@ function GitModelsContent({ data }: { data: SettingsData }) {
             </span>
           )}
           <span className="h-px flex-1" />
-          <PrimaryButton onClick={saveGit}>Save settings</PrimaryButton>
+          <PrimaryButton onClick={saveGit}>Save</PrimaryButton>
         </div>
         {gitSaved && (
           <span className="pen-text text-[12px] tracking-[-0.12px] text-success">
@@ -406,7 +406,7 @@ function KeysContent({ data }: { data: SettingsData }) {
       <CardHeader
         title="API keys"
         desc="플러그인 인증용 개인 키 — 본인 키만 발급 · 재발급 · 폐기할 수 있습니다."
-        action={<PrimaryButton onClick={generate}>Create API key</PrimaryButton>}
+        action={<PrimaryButton onClick={generate}>Generate new key</PrimaryButton>}
       />
       {createdKey && (
         <RevealBanner

@@ -65,7 +65,7 @@ export function QueryPage() {
           title="Query"
           titleRight={
             <Link to="/activity" className="pen-text text-[13px] tracking-[-0.2px] text-link">
-              View full log
+              View query log
             </Link>
           }
         >

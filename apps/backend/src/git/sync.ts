@@ -248,15 +248,16 @@ const historyFieldSeparator = "\x1f"
 export type WikiFileTouch = {
   readonly timestamp: string
   readonly author: string
+  readonly commitHash: string
 }
 
-/** 브랜치 로그 한 번 순회로 파일별 마지막 수정 시각/author 를 수집한다. */
+/** 브랜치 로그 한 번 순회로 파일별 마지막 수정 시각/author/커밋 해시를 수집한다. */
 export function listWikiLastModified(wiki: WikiRepository): ReadonlyMap<string, WikiFileTouch> {
   const output = git(wiki.root, [
     "log",
     wiki.branch,
     "--name-only",
-    `--pretty=format:${historyRecordSeparator}%aI${historyFieldSeparator}%an`,
+    `--pretty=format:${historyRecordSeparator}%aI${historyFieldSeparator}%an${historyFieldSeparator}%h`,
   ])
   const touched = new Map<string, WikiFileTouch>()
   if (output === "") {
@@ -268,14 +269,14 @@ export function listWikiLastModified(wiki: WikiRepository): ReadonlyMap<string, 
       continue
     }
     const [header, ...fileLines] = trimmed.split("\n")
-    const [timestamp, author] = (header ?? "").split(historyFieldSeparator)
+    const [timestamp, author, commitHash] = (header ?? "").split(historyFieldSeparator)
     if (!timestamp) {
       continue
     }
     for (const rawFile of fileLines) {
       const file = rawFile.trim()
       if (file !== "" && !touched.has(file)) {
-        touched.set(file, { timestamp, author: author ?? "" })
+        touched.set(file, { timestamp, author: author ?? "", commitHash: commitHash ?? "" })
       }
     }
   }

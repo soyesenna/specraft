@@ -292,16 +292,13 @@ export function DocumentHistoryPage() {
                           {shortHash(version.commit_hash)}
                         </span>
                       </span>
-                      {version.added_lines > 0 && (
-                        <span className="pen-text font-mono text-[10px] text-[#1E8E3E]">
-                          +{version.added_lines}
-                        </span>
-                      )}
-                      {version.removed_lines > 0 && (
-                        <span className="pen-text font-mono text-[10px] text-[#C5221F]">
-                          −{version.removed_lines}
-                        </span>
-                      )}
+                      {/* 디자인(AGh5N Ver Meta)은 ±0 도 항상 표기한다 */}
+                      <span className="pen-text font-mono text-[10px] text-[#1E8E3E]">
+                        +{version.added_lines}
+                      </span>
+                      <span className="pen-text font-mono text-[10px] text-[#C5221F]">
+                        −{version.removed_lines}
+                      </span>
                     </div>
                   </SelectCard>
                 )

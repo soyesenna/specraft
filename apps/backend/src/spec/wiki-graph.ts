@@ -95,7 +95,9 @@ export function buildWikiGraph(wiki: WikiRepository, branch: string): WikiGraphR
       title: titleOf(content, path),
       dir: dirOf(path),
       summary: summaryOf(content),
-      ...(touch ? { updated: touch.timestamp, author: touch.author } : {}),
+      ...(touch
+        ? { updated: touch.timestamp, author: touch.author, commit: touch.commitHash }
+        : {}),
     })
     for (const rawTarget of linkTargets(content)) {
       const target = normalizeLinkTarget(path, rawTarget)

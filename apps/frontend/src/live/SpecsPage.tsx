@@ -1,5 +1,6 @@
 import type { WikiGraphNode, WikiGraphResponse } from "@specraft/shared"
 import {
+  ArrowUpRight,
   ChevronDown,
   ChevronRight,
   FileText,
@@ -547,10 +548,16 @@ function DetailPanel({
         </p>
       </div>
       <div className="flex w-full items-center gap-2">
-        <Avatar initials="SY" size={20} />
+        <Avatar initials={authorInitials(node.author)} size={20} />
         <span className="pen-text text-[12px] tracking-[-0.12px] text-ink-tertiary">
-          {node.path}
+          {node.author ?? "—"} · {relativeUpdated(node.updated)}
         </span>
+        <span className="h-px flex-1" />
+        {node.commit && (
+          <span className="rounded-[4px] bg-input px-[7px] py-0.5">
+            <span className="pen-text font-mono text-[11px] text-ink-secondary">{node.commit}</span>
+          </span>
+        )}
       </div>
       <div className="h-px w-full bg-hairline" />
       <div className="flex w-full flex-col gap-2.5">
@@ -568,6 +575,8 @@ function DetailPanel({
             <span className="pen-text truncate text-[13px] tracking-[-0.2px] text-link">
               {fileNameOf(doc)}
             </span>
+            <span className="h-px flex-1" />
+            <ArrowUpRight className="size-[11px] shrink-0 text-ink-tertiary" />
           </button>
         ))}
       </div>

@@ -68,7 +68,12 @@ describe("frontend auth integration", () => {
     fireEvent.click(screen.getByRole("link", { name: "Settings" }))
     const settingsNav = await screen.findByRole("navigation", { name: "Settings sections" })
     fireEvent.click(within(settingsNav).getByRole("link", { name: "API keys" }))
-    fireEvent.click(await screen.findByRole("button", { name: "Create API key" }))
+    fireEvent.click(
+      firstElement(
+        await screen.findAllByRole("button", { name: "Generate new key" }),
+        "Generate new key",
+      ),
+    )
 
     expect(await screen.findByText("sk-spcrft-live-secret")).toBeTruthy()
     expect(screen.getByText("key-live")).toBeTruthy()

@@ -258,7 +258,7 @@ export function ActivityPage() {
             </div>
             <div className="flex w-full items-center px-1">
               <span className="pen-text text-[12px] tracking-[-0.12px] text-ink-tertiary">
-                Showing {shownCount} of {totalCount} entries
+                Showing {shownCount} of {totalCount}
               </span>
               <span className="h-px flex-1" />
               <div className="flex items-center gap-1.5">

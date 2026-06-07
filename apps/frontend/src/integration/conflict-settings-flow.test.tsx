@@ -104,7 +104,7 @@ describe("frontend conflict and settings integration", () => {
       target: { value: "ssh://git.example/specraft-next.git" },
     })
     fireEvent.click(
-      firstElement(screen.getAllByRole("button", { name: "Save settings" }), "Save settings"),
+      firstElement(screen.getAllByRole("button", { name: "Save", exact: true }), "Save settings"),
     )
 
     expect(await screen.findByText("Settings saved from API")).toBeTruthy()
