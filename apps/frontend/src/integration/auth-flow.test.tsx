@@ -53,8 +53,8 @@ describe("frontend auth integration", () => {
     })
     fireEvent.click(firstElement(screen.getAllByRole("button", { name: "Sign in" }), "Sign in"))
 
+    fireEvent.click(await screen.findByRole("button", { name: "프로필 메뉴 열기" }))
     expect(await screen.findByText("Admin API User")).toBeTruthy()
-    fireEvent.click(screen.getByRole("button", { name: "프로필 메뉴 열기" }))
     fireEvent.click(screen.getByRole("link", { name: "Settings" }))
     const settingsNav = await screen.findByRole("navigation", { name: "Settings sections" })
     fireEvent.click(within(settingsNav).getByRole("link", { name: "API keys" }))

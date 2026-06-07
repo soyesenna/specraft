@@ -8,21 +8,17 @@ type TopNavProps = {
   avatarLabel?: string | undefined
   brandHref?: string | undefined
   initials?: string | undefined
-  profileName?: string | undefined
-  status?: ReactNode
   /** Profile Menu 등 절대배치 오버레이 (07 화면) */
   children?: ReactNode
 }
 
-/** component/TopNav — 48px 글래스 바: 브랜드 / 스페이서 / 검색·아바타·셰브런 */
+/** component/TopNav — 48px 글래스 바: 브랜드 / 스페이서 / 검색·아바타·셰브런(Nav Right Dl0LD) */
 export function TopNav({
   onAvatarClick,
   avatarExpanded = false,
   avatarLabel = "프로필 메뉴 열기",
   brandHref,
   initials = "SY",
-  profileName,
-  status,
   children,
 }: TopNavProps) {
   const brand = (
@@ -45,11 +41,6 @@ export function TopNav({
       )}
       <div className="h-px flex-1" />
       <div className="flex items-center gap-4">
-        {status && (
-          <span className="pen-text text-[12px] tracking-[-0.12px] text-ink-tertiary">
-            {status}
-          </span>
-        )}
         <Search className="size-[15px] text-[#000000C4]" />
         <button
           type="button"
@@ -63,11 +54,6 @@ export function TopNav({
             {initials}
           </span>
         </button>
-        {profileName && (
-          <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-secondary">
-            {profileName}
-          </span>
-        )}
         <ChevronDown className="size-3 text-ink-tertiary" />
       </div>
       {children}

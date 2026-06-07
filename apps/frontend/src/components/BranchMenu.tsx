@@ -20,13 +20,20 @@ type BranchMenuProps = {
   rows?: BranchRow[]
   width?: number
   className?: string
+  /** 행 선택 콜백 — 미지정 시 행은 비활성(정적 디자인 화면 호환) */
+  onSelect?: (branch: string) => void
 }
 
 /**
  * component/Branch Menu — BRANCHES 헤더 + 브랜치 행 + 미러링 푸터 드롭다운.
  * 선택 행 = #F5F5F7 필 + 600 + accent 체크. resolving = warning 도트, locked = danger 자물쇠.
  */
-export function BranchMenu({ rows = BRANCH_ROWS, width = 264, className }: BranchMenuProps) {
+export function BranchMenu({
+  rows = BRANCH_ROWS,
+  width = 264,
+  className,
+  onSelect,
+}: BranchMenuProps) {
   return (
     <div
       style={{ width }}
@@ -50,6 +57,7 @@ export function BranchMenu({ rows = BRANCH_ROWS, width = 264, className }: Branc
           <button
             key={row.name}
             type="button"
+            onClick={onSelect ? () => onSelect(row.name) : undefined}
             className={cn(
               "flex h-[34px] w-full items-center gap-2 rounded-[7px] px-2.5",
               selected && "bg-bg",
