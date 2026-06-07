@@ -25,6 +25,16 @@ describe("frontend auth integration", () => {
       routes: new Map([
         ["GET /api/v1/auth/session", { body: { error: "unauthorized" }, status: 401 }],
         ["POST /api/v1/auth/login", { member }],
+        ["GET /api/v1/status", { wiki_head_by_branch: { dev: "abc123" }, branch_locks: [] }],
+        ["GET /api/v1/conflicts", { conflicts: [] }],
+        [
+          "GET /api/v1/wiki/dev/tree",
+          { branch: "dev", entries: [{ path: "overview.md", type: "file" }] },
+        ],
+        [
+          "GET /api/v1/wiki/dev/page",
+          { branch: "dev", path: "overview.md", content: "# Overview\n" },
+        ],
         [
           "GET /api/v1/admin/settings",
           {

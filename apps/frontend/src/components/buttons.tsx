@@ -3,6 +3,7 @@ import { cn } from "../lib/cn.js"
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode
+  labelClassName?: string
 }
 
 /** component/Button Primary — accent 필, radius-s, 8×16 패딩, 14px 라벨 */
@@ -38,7 +39,7 @@ export function ButtonSecondary({ children, className, ...rest }: ButtonProps) {
 }
 
 /** component/Button Pill — accent 필, pill radius, 11×22 패딩, 15px 라벨 */
-export function ButtonPill({ children, className, ...rest }: ButtonProps) {
+export function ButtonPill({ children, className, labelClassName, ...rest }: ButtonProps) {
   return (
     <button
       type="button"
@@ -48,7 +49,9 @@ export function ButtonPill({ children, className, ...rest }: ButtonProps) {
       )}
       {...rest}
     >
-      <span className="pen-text text-[15px] tracking-[-0.25px] text-white">{children}</span>
+      <span className={cn("pen-text text-[15px] tracking-[-0.25px] text-white", labelClassName)}>
+        {children}
+      </span>
     </button>
   )
 }

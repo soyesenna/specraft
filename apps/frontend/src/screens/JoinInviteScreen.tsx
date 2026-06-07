@@ -1,37 +1,39 @@
 import { Waypoints } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { type FormEvent, useState } from "react"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { ButtonPill } from "../components/buttons.js"
+import { Field } from "../components/Field.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
+import { useSpecraft } from "../live/api.js"
 
-function InviteField({
-  label,
-  value,
-  placeholder,
-  type = "text",
-}: {
-  label: string
-  value?: string | undefined
-  placeholder?: string | undefined
-  type?: "text" | "email" | "password"
-}) {
-  return (
-    <label className="flex w-full flex-col gap-1.5">
-      <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink">{label}</span>
-      <input
-        type={type}
-        defaultValue={value}
-        placeholder={placeholder}
-        className="pen-text h-11 w-full rounded-[10px] border-none bg-bg px-3.5 text-[14px] tracking-[-0.22px] text-ink outline-none placeholder:text-ink-tertiary md:h-[38px] md:rounded-sm md:px-3 md:text-[13.5px] md:tracking-[-0.2px]"
-      />
-    </label>
-  )
-}
-
-/** 02 · Join via Invite (1440) + M02 (390) */
+/** 02 · Join via Invite (1440 / sM0yJ) + M02 (390 / m27YwG) */
 export function JoinInviteScreen() {
   const navigate = useNavigate()
+  const { token } = useParams<{ token?: string }>()
+  const [params] = useSearchParams()
+  const inviteToken = token ?? params.get("token") ?? ""
+  const { signup } = useSpecraft()
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
+
+  async function submit(event: FormEvent<HTMLFormElement>): Promise<void> {
+    event.preventDefault()
+    setError(null)
+    try {
+      await signup({ invite_token: inviteToken, email, password, name })
+      navigate("/specs")
+    } catch (caught: unknown) {
+      setError(caught instanceof Error ? caught.message : "Signup failed")
+    }
+  }
 
   const card = (
-    <div className="flex w-full flex-col gap-[13px] rounded-lg bg-surface p-5 md:w-[380px] md:gap-3.5 md:p-[26px]">
+    <form
+      onSubmit={submit}
+      className="flex w-full flex-col gap-[13px] rounded-lg bg-surface p-5 md:w-[380px] md:gap-3.5 md:p-[26px]"
+    >
       <div className="flex w-full flex-col gap-1 md:gap-[5px]">
         <span className="pen-text font-display text-[19px] font-semibold tracking-[-0.3px] text-ink md:text-[20px]">
           Join specraft
@@ -40,19 +42,26 @@ export function JoinInviteScreen() {
           수연님이 초대했습니다 · 초대 링크는 72시간 내 만료됩니다
         </p>
       </div>
-      <InviteField label="Name" value="민지" />
-      <InviteField label="Email" type="email" value="minji@prompt.town" />
-      <InviteField label="Password" placeholder="최소 12자" />
-      <button
-        type="button"
-        onClick={() => navigate("/specs")}
-        className="flex h-[46px] w-full items-center justify-center rounded-pill bg-accent md:h-10"
+      <Field label="Name" value={name} onChange={setName} />
+      <Field label="Email" type="email" value={email} onChange={setEmail} />
+      <Field
+        label="Password"
+        type="password"
+        value={password}
+        onChange={setPassword}
+        placeholder="최소 12자"
+      />
+      {error && (
+        <span className="pen-text text-[12px] tracking-[-0.12px] text-danger">{error}</span>
+      )}
+      <ButtonPill
+        type="submit"
+        className="h-[46px] w-full md:h-10"
+        labelClassName="font-medium tracking-[-0.24px]"
       >
-        <span className="pen-text text-[15px] font-medium tracking-[-0.24px] text-white">
-          Create account
-        </span>
-      </button>
-    </div>
+        Create account
+      </ButtonPill>
+    </form>
   )
 
   return (
