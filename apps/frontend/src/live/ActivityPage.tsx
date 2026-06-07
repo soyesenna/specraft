@@ -429,7 +429,7 @@ export function ActivityPage() {
           )}
         </div>
         <MobileTabBar active="spec" />
-        <GlassNav active="activity" className="absolute bottom-[88px] left-4 z-20" />
+        <GlassNav active="activity" className="absolute inset-x-4 bottom-[88px] z-20" />
       </div>
     </>
   )

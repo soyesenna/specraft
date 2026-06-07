@@ -163,18 +163,21 @@ export function MobileSpecs({
         <MobileList nodes={nodes} onOpenDoc={onOpenDoc} />
       )}
       <MobileTabBar active="spec" />
-      <GlassNav active="specs" className="absolute bottom-[88px] left-4 z-20" />
+      <GlassNav active="specs" className="absolute inset-x-4 bottom-[88px] z-20" />
+      {/* 노드 상세 시트 — 탭바 바로 위에 하단 고정. 콘텐츠 길이와 무관하게
+          바닥 기준선이 일정하고, GlassNav(bottom-88~142px 영역)를 항상 덮는다. */}
       {docSheetVisible && selectedNode && (
-        <DocSheet
-          dir={selectedNode.dir}
-          name={fileNameOf(selectedNode.path)}
-          summary={selectedNode.summary || selectedNode.title}
-          docId={docIdOf(selectedNode.path)}
-          connected={connectedNames.slice(0, 2)}
-          moreCount={Math.max(connectedNames.length - 2, 0)}
-          onClose={onSheetClose}
-          className="absolute top-[520px] left-2.5 z-30"
-        />
+        <div className="absolute inset-x-2.5 bottom-[86px] z-30">
+          <DocSheet
+            dir={selectedNode.dir}
+            name={fileNameOf(selectedNode.path)}
+            summary={selectedNode.summary || selectedNode.title}
+            docId={docIdOf(selectedNode.path)}
+            connected={connectedNames.slice(0, 2)}
+            moreCount={Math.max(connectedNames.length - 2, 0)}
+            onClose={onSheetClose}
+          />
+        </div>
       )}
     </div>
   )

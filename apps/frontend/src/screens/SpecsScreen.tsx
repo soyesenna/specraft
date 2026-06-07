@@ -116,13 +116,12 @@ export function SpecsScreen() {
           <MobileListView />
         )}
         <MobileTabBar active="spec" />
-        <GlassNav active="specs" className="absolute bottom-[88px] left-4 z-20" />
+        <GlassNav active="specs" className="absolute inset-x-4 bottom-[88px] z-20" />
         {view === "graph" && sheetOpen && (
-          // 디자인 좌표: 시트 top 520 고정(fit 높이) — 하단이 탭바(766~) 위에서 끝난다
-          <DocSheet
-            onClose={() => setSheetOpen(false)}
-            className="absolute top-[520px] left-2.5 z-30"
-          />
+          // 디자인 좌표: 시트 폭 inset-x-2.5(390 기준 370px) — 하단 고정으로 GlassNav를 덮는다
+          <div className="absolute inset-x-2.5 bottom-[86px] z-30">
+            <DocSheet onClose={() => setSheetOpen(false)} />
+          </div>
         )}
         {branchOpen && (
           <div className="absolute top-[88px] left-[92px] z-40">

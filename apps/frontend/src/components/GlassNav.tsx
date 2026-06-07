@@ -17,15 +17,16 @@ type GlassNavProps = {
 }
 
 /**
- * component/Glass Nav — iOS 26 Liquid Glass 플로팅 캡슐 (358px, blur 28).
+ * component/Glass Nav — iOS 26 Liquid Glass 플로팅 캡슐 (blur 28).
  * 선택 = 화이트 필 버블(0 2px 8px 섀도) + accent 아이콘/600 라벨.
- * 모바일 화면에서 absolute(x16, y702)로 탭바 위에 띄운다.
+ * 폭은 사용처가 결정한다(absolute inset-x 또는 w-full) — 390px 기준 358px.
+ * 세그먼트 높이는 뷰포트 폭에 비례해 40~50px 사이에서 자연스럽게 스케일한다.
  */
 export function GlassNav({ active, conflictBadge = true, className }: GlassNavProps) {
   return (
     <nav
       className={cn(
-        "flex w-[358px] gap-0.5 rounded-pill border border-[#FFFFFFD9] bg-[#FFFFFFBF] p-1 shadow-[0_10px_28px_#00000021] backdrop-blur-[28px]",
+        "flex gap-0.5 rounded-pill border border-[#FFFFFFD9] bg-[#FFFFFFBF] p-1 shadow-[0_10px_28px_#00000021] backdrop-blur-[28px]",
         className,
       )}
     >
@@ -37,7 +38,7 @@ export function GlassNav({ active, conflictBadge = true, className }: GlassNavPr
             to={to}
             aria-current={selected ? "page" : undefined}
             className={cn(
-              "flex h-[46px] flex-1 flex-col items-center justify-center gap-0.5 rounded-pill transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
+              "flex h-[clamp(40px,11.8vw,50px)] flex-1 flex-col items-center justify-center gap-0.5 rounded-pill transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)]",
               selected ? "bg-white shadow-[0_2px_8px_#0000001F]" : "hover:bg-hairline",
             )}
           >

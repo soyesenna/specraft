@@ -22,7 +22,8 @@ type DocSheetProps = {
 const SHEET_MOTION_MS = 300
 
 /**
- * component/Doc Sheet — 모바일 디태치드 플로팅 바텀시트 (370px, r22, 0 10px 30px 섀도).
+ * component/Doc Sheet — 모바일 디태치드 플로팅 바텀시트 (r22, 0 10px 30px 섀도).
+ * 폭은 부모 래퍼가 결정한다(w-full) — 390px 디자인 기준 inset-x-2.5(370px).
  * 그래버 / 헤드(닫기) / 요약 / 메타 / CONNECTED 칩 / Open document 버튼.
  *
  * 등장/퇴장 모션: 부모가 조건부 마운트하므로 시트 내부에서 자체 진입(미묘한 상승+페이드)을
@@ -138,7 +139,7 @@ export function DocSheet({
       aria-modal="true"
       aria-label={`${dir} ${name}`}
       className={cn(
-        "flex w-[370px] flex-col gap-[11px] rounded-[22px] bg-surface px-[18px] pt-2 pb-4 shadow-[0_10px_30px_#00000030] transition-[transform,opacity] duration-300 motion-reduce:transition-none",
+        "flex w-full flex-col gap-[11px] rounded-[22px] bg-surface px-[18px] pt-2 pb-4 shadow-[0_10px_30px_#00000030] transition-[transform,opacity] duration-300 motion-reduce:transition-none",
         closing ? "ease-[var(--ease-exit)]" : "ease-[var(--ease-enter)]",
         visible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
         className,

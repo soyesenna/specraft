@@ -292,7 +292,7 @@ export function ConflictsPage() {
               )}
             </div>
             <MobileTabBar active="spec" />
-            <GlassNav active="conflicts" className="absolute bottom-[88px] left-4 z-20" />
+            <GlassNav active="conflicts" className="absolute inset-x-4 bottom-[88px] z-20" />
           </>
         )}
       </div>
