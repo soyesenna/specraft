@@ -144,11 +144,7 @@ export function ConflictsPage() {
               })}
             </div>
             {/* Detail / Empty */}
-            {selected ? (
-              <DesktopConflictDetail conflict={selected} error={error} />
-            ) : (
-              <EmptyPane />
-            )}
+            {selected ? <DesktopConflictDetail conflict={selected} error={error} /> : <EmptyPane />}
           </div>
         </LiveShell>
         {selected && (
@@ -234,13 +230,7 @@ export function ConflictsPage() {
   )
 }
 
-function DesktopConflictDetail({
-  conflict,
-  error,
-}: {
-  conflict: Conflict
-  error: string | null
-}) {
+function DesktopConflictDetail({ conflict, error }: { conflict: Conflict; error: string | null }) {
   const tone = STATE_TONE[conflict.state]
   return (
     <article className="flex min-w-0 flex-1 flex-col gap-4 self-start rounded-lg bg-surface px-[26px] py-[22px]">
