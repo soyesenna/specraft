@@ -239,10 +239,11 @@ function MobileGraph({
     <div className="min-h-0 w-full flex-1 overflow-hidden">
       <div
         className="relative mx-auto h-[520px] w-[358px] touch-none overflow-hidden"
-        onWheel={controls.onWheel}
+        ref={controls.canvasRef}
         onPointerDown={controls.onPointerDown}
         onPointerMove={controls.onPointerMove}
         onPointerUp={controls.onPointerUp}
+        onPointerCancel={controls.onPointerCancel}
         style={{ ...controls.gridStyle, touchAction: "none" }}
       >
         <div className="absolute top-0 left-0 origin-top-left" style={controls.contentStyle}>

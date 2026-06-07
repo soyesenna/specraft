@@ -46,10 +46,11 @@ export function DesktopDotCanvas({
       data-viewport-scale={viewport.scale}
       data-viewport-transform={controls.transform}
       className="relative min-h-0 w-full flex-1 touch-none overflow-hidden"
-      onWheel={controls.onWheel}
+      ref={controls.canvasRef}
       onPointerDown={controls.onPointerDown}
       onPointerMove={controls.onPointerMove}
       onPointerUp={controls.onPointerUp}
+      onPointerCancel={controls.onPointerCancel}
       style={{ ...controls.gridStyle, touchAction: "none" }}
     >
       <div className="absolute top-0 left-0 origin-top-left" style={controls.contentStyle}>

@@ -185,7 +185,7 @@ describe("frontend specs graph zoom controls", () => {
     clickZoom("축소", 5)
 
     const dotCanvas = await screen.findByTestId("specs-dot-canvas")
-    fireEvent.wheel(dotCanvas, { clientX: 480, clientY: 280, deltaY: -180 })
+    fireEvent.wheel(dotCanvas, { clientX: 480, clientY: 280, deltaY: -180, ctrlKey: true })
 
     const graphCanvas = await screen.findByTestId("specs-graph-canvas")
     expect(screen.queryByTestId("specs-dot-canvas")).toBeNull()
@@ -209,6 +209,39 @@ describe("frontend specs graph zoom controls", () => {
     })
     expect(screen.queryByTestId("specs-graph-canvas")).toBeNull()
     expect(graphGridSizeOf(dotCanvas)).toBeLessThan(compactGrid)
+  })
+
+  it("Given graph canvas When plain wheel scrolls Then viewport pans without zooming", async () => {
+    renderSpecs()
+
+    const canvas = await screen.findByTestId("specs-graph-canvas")
+    const initial = graphTransformOf(canvas)
+
+    fireEvent.wheel(canvas, { clientX: 480, clientY: 280, deltaX: 24, deltaY: 40 })
+
+    await waitFor(() => {
+      const panned = graphTransformOf(canvas)
+      expect(panned.x).toBeCloseTo(initial.x - 24)
+      expect(panned.y).toBeCloseTo(initial.y - 40)
+      expect(panned.scale).toBeCloseTo(initial.scale)
+    })
+  })
+
+  it("Given graph canvas When two pointers pinch apart Then viewport zooms in around the midpoint", async () => {
+    renderSpecs()
+
+    const canvas = await screen.findByTestId("specs-graph-canvas")
+    const initial = graphTransformOf(canvas)
+
+    fireEvent.pointerDown(canvas, { buttons: 1, clientX: 400, clientY: 300, pointerId: 1 })
+    fireEvent.pointerDown(canvas, { buttons: 1, clientX: 500, clientY: 300, pointerId: 2 })
+    fireEvent.pointerMove(canvas, { buttons: 1, clientX: 540, clientY: 300, pointerId: 2 })
+    fireEvent.pointerUp(canvas, { buttons: 0, clientX: 540, clientY: 300, pointerId: 2 })
+    fireEvent.pointerUp(canvas, { buttons: 0, clientX: 400, clientY: 300, pointerId: 1 })
+
+    await waitFor(() => {
+      expect(graphTransformOf(canvas).scale).toBeGreaterThan(initial.scale)
+    })
   })
 
   it("Given compact graph view When canvas is dragged Then viewport position changes", async () => {

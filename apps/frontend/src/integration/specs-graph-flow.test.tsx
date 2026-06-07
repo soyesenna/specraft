@@ -200,7 +200,8 @@ describe("frontend specs graph interaction", () => {
     const initialRaw = canvas.getAttribute("data-viewport-transform")
     const initial = parseGraphTransform(initialRaw)
 
-    fireEvent.wheel(canvas, { clientX: 480, clientY: 280, deltaY: -180 })
+    // Figma 시맨틱: 줌은 ctrl(핀치)/cmd+휠 — 수식키 없는 휠은 패닝이다.
+    fireEvent.wheel(canvas, { clientX: 480, clientY: 280, deltaY: -180, ctrlKey: true })
     await waitFor(() => {
       expect(canvas.getAttribute("data-viewport-transform")).not.toBe(initialRaw)
     })
