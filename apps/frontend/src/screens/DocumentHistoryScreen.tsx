@@ -139,7 +139,7 @@ export function DocumentHistoryScreen() {
               <h2 className="pen-text m-0 w-full font-display text-[17px] font-semibold tracking-[-0.26px] text-ink">
                 판정 매트릭스
               </h2>
-              <div className="w-full overflow-hidden rounded-sm bg-[#E9F6EE]">
+              <div className="w-full overflow-hidden rounded-sm border border-[#34C759] bg-[#E9F6EE]">
                 <div className="flex w-full flex-col gap-1.5 px-3.5 py-2.5">
                   <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-[#1E8E3E]">
                     + ADDED
@@ -152,7 +152,7 @@ export function DocumentHistoryScreen() {
                   </span>
                 </div>
               </div>
-              <div className="w-full overflow-hidden rounded-sm bg-[#FBEEEC]">
+              <div className="w-full overflow-hidden rounded-sm border border-[#FF3B30] bg-[#FBEEEC]">
                 <div className="flex w-full flex-col gap-1.5 px-3.5 py-2.5">
                   <span className="pen-text text-[9px] font-semibold tracking-[0.8px] text-[#C5221F]">
                     − REMOVED
@@ -173,7 +173,7 @@ export function DocumentHistoryScreen() {
             </article>
             {/* History Panel */}
             <aside className="flex w-[360px] shrink-0 flex-col gap-2.5 overflow-y-auto">
-              <div className="flex w-full flex-col gap-0.5 px-1">
+              <div className="flex w-full flex-col gap-0.5 border border-hairline px-1">
                 <span className="pen-text text-[15px] font-semibold tracking-[-0.24px] text-ink">
                   History
                 </span>
