@@ -15053,7 +15053,7 @@
                           "type": "frame",
                           "id": "jwOy0",
                           "name": "MH MEMBER",
-                          "width": 170,
+                          "width": 164,
                           "children": [
                             {
                               "type": "text",
@@ -15091,7 +15091,7 @@
                           "type": "frame",
                           "id": "Z52KG",
                           "name": "MH ROLE",
-                          "width": 90,
+                          "width": 56,
                           "children": [
                             {
                               "type": "text",
@@ -15110,7 +15110,7 @@
                           "type": "frame",
                           "id": "n3JfW",
                           "name": "MH STATUS",
-                          "width": 110,
+                          "width": 74,
                           "children": [
                             {
                               "type": "text",
@@ -15129,7 +15129,7 @@
                           "type": "frame",
                           "id": "E2Ug0",
                           "name": "MH JOINED",
-                          "width": 80,
+                          "width": 56,
                           "children": [
                             {
                               "type": "text",
@@ -15148,7 +15148,7 @@
                           "type": "frame",
                           "id": "e59SKW",
                           "name": "MH ",
-                          "width": 60,
+                          "width": 52,
                           "height": 1
                         }
                       ]
@@ -15174,7 +15174,7 @@
                           "type": "frame",
                           "id": "rdmE7",
                           "name": "MC Member",
-                          "width": 170,
+                          "width": 164,
                           "gap": 8,
                           "alignItems": "center",
                           "children": [
@@ -15261,7 +15261,7 @@
                           "type": "frame",
                           "id": "vA45f",
                           "name": "MC Role",
-                          "width": 90,
+                          "width": 56,
                           "alignItems": "center",
                           "children": [
                             {
@@ -15294,7 +15294,7 @@
                           "type": "frame",
                           "id": "LQytl",
                           "name": "MC Status",
-                          "width": 110,
+                          "width": 74,
                           "gap": 6,
                           "alignItems": "center",
                           "children": [
@@ -15323,7 +15323,7 @@
                           "type": "frame",
                           "id": "F91iwq",
                           "name": "MC Joined",
-                          "width": 80,
+                          "width": 56,
                           "children": [
                             {
                               "type": "text",
@@ -15342,7 +15342,7 @@
                           "type": "frame",
                           "id": "N2IC6",
                           "name": "MC Action",
-                          "width": 60,
+                          "width": 52,
                           "height": 1,
                           "justifyContent": "end"
                         }
@@ -15369,7 +15369,7 @@
                           "type": "frame",
                           "id": "nu2TX",
                           "name": "MC Member",
-                          "width": 170,
+                          "width": 164,
                           "gap": 8,
                           "alignItems": "center",
                           "children": [
@@ -15433,7 +15433,7 @@
                           "type": "frame",
                           "id": "glNxk",
                           "name": "MC Role",
-                          "width": 90,
+                          "width": 56,
                           "alignItems": "center",
                           "children": [
                             {
@@ -15453,7 +15453,7 @@
                           "type": "frame",
                           "id": "Q0Imy",
                           "name": "MC Status",
-                          "width": 110,
+                          "width": 74,
                           "gap": 6,
                           "alignItems": "center",
                           "children": [
@@ -15482,7 +15482,7 @@
                           "type": "frame",
                           "id": "wDI47",
                           "name": "MC Joined",
-                          "width": 80,
+                          "width": 56,
                           "children": [
                             {
                               "type": "text",
@@ -15501,7 +15501,7 @@
                           "type": "frame",
                           "id": "OWpQA",
                           "name": "MC Action",
-                          "width": 60,
+                          "width": 52,
                           "justifyContent": "end",
                           "children": [
                             {
@@ -15540,7 +15540,7 @@
                           "type": "frame",
                           "id": "y051L",
                           "name": "MC Member",
-                          "width": 170,
+                          "width": 164,
                           "gap": 8,
                           "alignItems": "center",
                           "children": [
@@ -15604,7 +15604,7 @@
                           "type": "frame",
                           "id": "e73duQ",
                           "name": "MC Role",
-                          "width": 90,
+                          "width": 56,
                           "alignItems": "center",
                           "children": [
                             {
@@ -15624,7 +15624,7 @@
                           "type": "frame",
                           "id": "P5twt",
                           "name": "MC Status",
-                          "width": 110,
+                          "width": 74,
                           "gap": 6,
                           "alignItems": "center",
                           "children": [
@@ -15653,7 +15653,7 @@
                           "type": "frame",
                           "id": "em1rH",
                           "name": "MC Joined",
-                          "width": 80,
+                          "width": 56,
                           "children": [
                             {
                               "type": "text",
@@ -15672,7 +15672,7 @@
                           "type": "frame",
                           "id": "Jnnyp",
                           "name": "MC Action",
-                          "width": 60,
+                          "width": 52,
                           "justifyContent": "end",
                           "children": [
                             {
@@ -15708,7 +15708,7 @@
                           "type": "frame",
                           "id": "K4cgK",
                           "name": "MC Member",
-                          "width": 170,
+                          "width": 164,
                           "gap": 8,
                           "alignItems": "center",
                           "children": [
@@ -15772,7 +15772,7 @@
                           "type": "frame",
                           "id": "TOo3G",
                           "name": "MC Role",
-                          "width": 90,
+                          "width": 56,
                           "alignItems": "center",
                           "children": [
                             {
@@ -15792,7 +15792,7 @@
                           "type": "frame",
                           "id": "V8IFEp",
                           "name": "MC Status",
-                          "width": 110,
+                          "width": 74,
                           "gap": 6,
                           "alignItems": "center",
                           "children": [
@@ -15821,7 +15821,7 @@
                           "type": "frame",
                           "id": "nrVLB",
                           "name": "MC Joined",
-                          "width": 80,
+                          "width": 56,
                           "children": [
                             {
                               "type": "text",
@@ -15840,7 +15840,7 @@
                           "type": "frame",
                           "id": "v5DKdc",
                           "name": "MC Action",
-                          "width": 60,
+                          "width": 52,
                           "justifyContent": "end",
                           "children": [
                             {
@@ -16199,7 +16199,7 @@
                           "type": "frame",
                           "id": "G6vCu",
                           "name": "IH LINK",
-                          "width": 200,
+                          "width": 140,
                           "children": [
                             {
                               "type": "text",
@@ -16237,7 +16237,7 @@
                           "type": "frame",
                           "id": "znpdH",
                           "name": "IH CREATED",
-                          "width": 80,
+                          "width": 70,
                           "children": [
                             {
                               "type": "text",
@@ -16256,7 +16256,7 @@
                           "type": "frame",
                           "id": "za1vl",
                           "name": "IH EXPIRES",
-                          "width": 110,
+                          "width": 70,
                           "children": [
                             {
                               "type": "text",
@@ -16313,7 +16313,7 @@
                           "type": "frame",
                           "id": "K3o4P",
                           "name": "IC Link",
-                          "width": 200,
+                          "width": 140,
                           "alignItems": "center",
                           "children": [
                             {
@@ -16376,7 +16376,7 @@
                           "type": "frame",
                           "id": "z0RyV",
                           "name": "IC Created",
-                          "width": 80,
+                          "width": 70,
                           "children": [
                             {
                               "type": "text",
@@ -16395,7 +16395,7 @@
                           "type": "frame",
                           "id": "ZokWV",
                           "name": "IC Expires",
-                          "width": 110,
+                          "width": 70,
                           "children": [
                             {
                               "type": "text",
@@ -16463,7 +16463,7 @@
                           "type": "frame",
                           "id": "Peo1L",
                           "name": "IC Link",
-                          "width": 200,
+                          "width": 140,
                           "alignItems": "center",
                           "children": [
                             {
@@ -16526,7 +16526,7 @@
                           "type": "frame",
                           "id": "I1hH3",
                           "name": "IC Created",
-                          "width": 80,
+                          "width": 70,
                           "children": [
                             {
                               "type": "text",
@@ -16545,7 +16545,7 @@
                           "type": "frame",
                           "id": "V2kVg",
                           "name": "IC Expires",
-                          "width": 110,
+                          "width": 70,
                           "children": [
                             {
                               "type": "text",
@@ -16609,7 +16609,7 @@
                           "type": "frame",
                           "id": "k5KUS",
                           "name": "IC Link",
-                          "width": 200,
+                          "width": 140,
                           "alignItems": "center",
                           "children": [
                             {
@@ -16672,7 +16672,7 @@
                           "type": "frame",
                           "id": "k1CFy",
                           "name": "IC Created",
-                          "width": 80,
+                          "width": 70,
                           "children": [
                             {
                               "type": "text",
@@ -16691,7 +16691,7 @@
                           "type": "frame",
                           "id": "ktvNk",
                           "name": "IC Expires",
-                          "width": 110,
+                          "width": 70,
                           "children": [
                             {
                               "type": "text",
