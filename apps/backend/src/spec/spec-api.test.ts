@@ -193,7 +193,7 @@ describe("spec REST API", () => {
 
     await server.close()
     database.close()
-  }, 15_000)
+  })
 
   it("rejects ingest when commit validation cannot be configured", async () => {
     const database = createDatabase({ path: ":memory:" })
