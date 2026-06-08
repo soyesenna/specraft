@@ -1,5 +1,6 @@
-import { type ClientConfig, createRequester } from "./client-core.js"
-import type { SpecraftClient } from "./client-types.js"
+import { type ClientConfig, createRequester, SpecraftHttpError } from "./client-core.js"
+import type { QueryStreamHandlers, SpecraftClient } from "./client-types.js"
+import type { QueryRequest, QueryResponse } from "./schemas.js"
 import {
   AdminGitTestConnectionResponseSchema,
   AdminInviteCreateResponseSchema,
@@ -69,6 +70,8 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         responseSchema: QueryResponseSchema,
         body,
       }),
+    queryStream: (body, handlers, signal) =>
+      streamQuery(config, QueryRequestSchema.parse(body), handlers, signal),
     ingest: (body) =>
       request({
         path: "/api/v1/ingest",
@@ -270,4 +273,125 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
       })
     },
   }
+}
+
+async function streamQuery(
+  config: ClientConfig,
+  body: QueryRequest,
+  handlers: QueryStreamHandlers,
+  signal: AbortSignal | undefined,
+): Promise<QueryResponse> {
+  const url = new URL("/api/v1/query/stream", config.baseUrl)
+  const headers: Record<string, string> = { "content-type": "application/json" }
+  if (config.apiKey) {
+    headers["authorization"] = `Bearer ${config.apiKey}`
+  }
+  const fetcher = config.fetch ?? globalThis.fetch
+  const response = await fetcher(url.toString(), {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+    ...(signal ? { signal } : {}),
+  })
+  if (!response.ok || !response.body) {
+    const text = await response.text().catch(() => "")
+    let parsed: unknown = text
+    try {
+      parsed = text.length > 0 ? JSON.parse(text) : {}
+    } catch {
+      parsed = text
+    }
+    throw new SpecraftHttpError(response.status, parsed)
+  }
+  return readSseStream(response.body, handlers)
+}
+
+async function readSseStream(
+  stream: ReadableStream<Uint8Array>,
+  handlers: QueryStreamHandlers,
+): Promise<QueryResponse> {
+  const reader = stream.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ""
+  let result: QueryResponse | null = null
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) {
+        break
+      }
+      buffer += decoder.decode(value, { stream: true })
+      let separator = buffer.indexOf("\n\n")
+      while (separator !== -1) {
+        const handled = handleSseEvent(buffer.slice(0, separator), handlers)
+        buffer = buffer.slice(separator + 2)
+        if (handled) {
+          result = handled
+        }
+        separator = buffer.indexOf("\n\n")
+      }
+    }
+  } finally {
+    reader.releaseLock()
+  }
+  if (!result) {
+    throw new Error("query stream ended without a result")
+  }
+  return result
+}
+
+function handleSseEvent(raw: string, handlers: QueryStreamHandlers): QueryResponse | null {
+  let event = "message"
+  const dataLines: string[] = []
+  for (const line of raw.split("\n")) {
+    if (line.startsWith("event:")) {
+      event = line.slice("event:".length).trim()
+    } else if (line.startsWith("data:")) {
+      dataLines.push(line.slice("data:".length).trim())
+    }
+  }
+  if (dataLines.length === 0) {
+    return null
+  }
+  let data: unknown
+  try {
+    data = JSON.parse(dataLines.join("\n"))
+  } catch {
+    return null
+  }
+  if (event === "delta") {
+    handlers.onDelta(stringField(data, "text"))
+    return null
+  }
+  if (event === "tool_call") {
+    handlers.onToolCall?.({
+      name: stringField(data, "name"),
+      arguments: stringField(data, "arguments"),
+    })
+    return null
+  }
+  if (event === "tool_result") {
+    handlers.onToolResult?.({
+      name: stringField(data, "name"),
+      result: stringField(data, "result"),
+    })
+    return null
+  }
+  if (event === "error") {
+    throw new Error(stringField(data, "message") || "query stream failed")
+  }
+  if (event === "done") {
+    return QueryResponseSchema.parse(data)
+  }
+  return null
+}
+
+function stringField(data: unknown, key: string): string {
+  if (data && typeof data === "object" && key in data) {
+    const value = (data as Record<string, unknown>)[key]
+    if (typeof value === "string") {
+      return value
+    }
+  }
+  return ""
 }
