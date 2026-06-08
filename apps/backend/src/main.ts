@@ -10,12 +10,13 @@ const port = Number.isNaN(parsedPort) ? 4311 : parsedPort
 const config = loadServerConfig(process.env)
 const database = createDatabase({ path: `${config.dataDir}/specraft.db` })
 verifyWikiIntegrity(config.dataDir)
-const llmProvider = config.openRouterApiKey
-  ? new OpenRouterProvider({ apiKey: config.openRouterApiKey, model: config.openRouterModel })
-  : undefined
+const llmProvider = new OpenRouterProvider({
+  apiKey: config.openRouterApiKey,
+  model: config.openRouterModel,
+})
 const server = buildServer({
   ...(config.codeRemoteUrl ? { codeRemoteUrl: config.codeRemoteUrl } : {}),
-  ...(llmProvider ? { llmProvider } : {}),
+  llmProvider,
   credentialKey: config.credentialKey,
   database,
   dataDir: config.dataDir,

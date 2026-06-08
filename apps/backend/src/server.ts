@@ -21,7 +21,10 @@ export type BuildServerOptions = {
 
 export function buildServer(options: BuildServerOptions = {}): FastifyInstance {
   const server = fastify({ logger: false })
-  const fallbackConfig = loadServerConfig({ SPECRAFT_SECRET: "test-secret-0123456789abcdef" })
+  const fallbackConfig = loadServerConfig({
+    OPENROUTER_API_KEY: "sk-or-v1-test",
+    SPECRAFT_SECRET: "test-secret-0123456789abcdef",
+  })
   const secret = options.secret ?? fallbackConfig.sessionSecret
   const credentialKey = options.credentialKey ?? fallbackConfig.credentialKey
   const database = options.database ?? createDatabase({ path: ":memory:" })

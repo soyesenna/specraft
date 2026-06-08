@@ -6,7 +6,7 @@ services:
       PORT: "4311"
       SPECRAFT_DATA_DIR: /data
       SPECRAFT_SECRET: ${SPECRAFT_SECRET:?set SPECRAFT_SECRET before docker compose up}
-      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY before docker compose up}
     ports:
       - "4311:4311"
     volumes:

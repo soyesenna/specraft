@@ -8,15 +8,17 @@ specraft is a single-project spec source server for AI-driven development teams.
 pnpm install
 pnpm --filter @specraft/shared build
 pnpm --filter @specraft/backend build
-SPECRAFT_SECRET="replace-with-32-plus-random-chars" pnpm --filter @specraft/backend dev
+OPENROUTER_API_KEY="sk-or-v1-..." SPECRAFT_SECRET="replace-with-32-plus-random-chars" pnpm --filter @specraft/backend dev
 ```
 
 `SPECRAFT_SECRET` is required. The server derives the session-cookie key and the credential-encryption key from it. Losing this secret means encrypted git credentials cannot be decrypted and must be re-entered by an admin.
+`OPENROUTER_API_KEY` is required because Specraft v1 runs the LLM engine through the OpenRouter provider.
 
 ## Docker
 
 ```sh
 export SPECRAFT_SECRET="$(openssl rand -base64 48)"
+export OPENROUTER_API_KEY="sk-or-v1-..."
 docker compose up --build
 ```
 

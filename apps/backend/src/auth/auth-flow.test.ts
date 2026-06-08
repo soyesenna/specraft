@@ -5,7 +5,10 @@ import { createDatabase } from "../storage/database.js"
 import { decryptCredential } from "./credentials.js"
 
 const secret = "0123456789abcdef0123456789abcdef"
-const credentialKey = loadServerConfig({ SPECRAFT_SECRET: secret }).credentialKey
+const credentialKey = loadServerConfig({
+  OPENROUTER_API_KEY: "sk-or-v1-test",
+  SPECRAFT_SECRET: secret,
+}).credentialKey
 
 describe("auth and admin API", () => {
   it("bootstraps admin, invites a member, logs in, and manages API keys/settings", async () => {
