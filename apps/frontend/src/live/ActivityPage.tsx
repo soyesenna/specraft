@@ -10,6 +10,7 @@ import {
   RefreshCw,
 } from "lucide-react"
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { ButtonSecondary } from "../components/buttons.js"
 import { GitBranchIcon } from "../components/GitBranchIcon.js"
 import { GlassNav } from "../components/GlassNav.js"
@@ -37,6 +38,11 @@ const STATUS_DOT: Record<ActivityStatus, string> = {
 
 function rowKey(row: ActivityRow): string {
   return `${row.kind}-${row.log.id}`
+}
+
+/** 행 → 상세 라우트 (/activity/ingest/:id | /activity/query/:id) */
+function rowHref(row: ActivityRow): string {
+  return `/activity/${row.kind === "Ingest" ? "ingest" : "query"}/${row.log.id}`
 }
 
 function rowSummary(row: ActivityRow): string {
@@ -90,6 +96,7 @@ function relativeTime(iso: string): string {
 
 export function ActivityPage() {
   const { client } = useSpecraft()
+  const navigate = useNavigate()
   const [rows, setRows] = useState<readonly ActivityRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<TypeTab>("All")
@@ -204,10 +211,12 @@ export function ActivityPage() {
                     const status = rowStatus(row)
                     const commit = rowCommit(row)
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={rowKey(row)}
+                        onClick={() => navigate(rowHref(row))}
                         className={cn(
-                          "flex h-[46px] w-full shrink-0 items-center gap-3.5 px-5",
+                          "group flex h-[46px] w-full shrink-0 cursor-pointer items-center gap-3.5 px-5 text-left transition-colors duration-150 ease-[var(--ease-standard)] hover:bg-bg",
                           i < pageRows.length - 1 && "border-b border-hairline",
                         )}
                       >
@@ -272,12 +281,13 @@ export function ActivityPage() {
                             {status}
                           </span>
                         </span>
-                        <span className="flex w-[84px] shrink-0 items-center">
+                        <span className="flex w-[84px] shrink-0 items-center justify-between gap-1.5">
                           <span className="pen-text text-[12.5px] tracking-[-0.12px] text-ink-tertiary">
                             {relativeTime(row.log.created_at)}
                           </span>
+                          <ChevronRight className="size-4 shrink-0 text-ink-tertiary opacity-0 transition-opacity duration-150 group-hover:opacity-100" />
                         </span>
-                      </div>
+                      </button>
                     )
                   })}
               </div>
@@ -379,10 +389,12 @@ export function ActivityPage() {
                 pageRows.map((row, i) => {
                   const status = rowStatus(row)
                   return (
-                    <div
+                    <button
+                      type="button"
                       key={rowKey(row)}
+                      onClick={() => navigate(rowHref(row))}
                       className={cn(
-                        "flex h-14 w-full shrink-0 items-center gap-[11px] px-3.5",
+                        "flex h-14 w-full shrink-0 items-center gap-[11px] px-3.5 text-left transition-colors duration-150 ease-[var(--ease-standard)] active:bg-bg",
                         i < pageRows.length - 1 && "border-b border-hairline",
                       )}
                     >
@@ -422,7 +434,8 @@ export function ActivityPage() {
                           </span>
                         </span>
                       </span>
-                    </div>
+                      <ChevronRight className="size-4 shrink-0 text-separator" />
+                    </button>
                   )
                 })}
             </div>

@@ -5,6 +5,8 @@ import { BranchProvider } from "./live/branch.js"
 import { ConflictsPage } from "./live/ConflictsPage.js"
 import { DocumentHistoryPage } from "./live/DocumentHistoryPage.js"
 import { DocumentPage } from "./live/DocumentPage.js"
+import { IngestDetailPage } from "./live/IngestDetailPage.js"
+import { QueryDetailPage } from "./live/QueryDetailPage.js"
 import { QueryPage } from "./live/QueryPage.js"
 import { SettingsPage } from "./live/SettingsPage.js"
 import { SpecsPage } from "./live/SpecsPage.js"
@@ -27,6 +29,8 @@ export function App() {
           <Route path="/specs/doc/:docId/history" element={<DocumentHistoryPage />} />
           <Route path="/query" element={<QueryPage />} />
           <Route path="/activity" element={<ActivityPage />} />
+          <Route path="/activity/ingest/:id" element={<IngestDetailPage />} />
+          <Route path="/activity/query/:id" element={<QueryDetailPage />} />
           <Route path="/conflicts" element={<ConflictsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/settings/:section" element={<SettingsPage />} />

@@ -25,16 +25,16 @@ import { LiveShell } from "./LiveShell.js"
 const commitHash = "frontend-live"
 
 /** 답변 한 턴을 구성하는 단계: 모델 텍스트(text) 또는 도구 호출/결과(tool). */
-type ToolStepData = {
+export type ToolStepData = {
   readonly kind: "tool"
   readonly name: string
   readonly args: string
   readonly result: string | null
 }
-type StreamStep = { readonly kind: "text"; readonly text: string } | ToolStepData
+export type StreamStep = { readonly kind: "text"; readonly text: string } | ToolStepData
 
 /** 텍스트 델타를 마지막 text 단계에 이어 붙이고, 없으면 새 text 단계를 만든다. */
-function appendTextStep(steps: readonly StreamStep[], text: string): StreamStep[] {
+export function appendTextStep(steps: readonly StreamStep[], text: string): StreamStep[] {
   const last = steps[steps.length - 1]
   if (last && last.kind === "text") {
     return [...steps.slice(0, -1), { kind: "text", text: last.text + text }]
@@ -43,7 +43,7 @@ function appendTextStep(steps: readonly StreamStep[], text: string): StreamStep[
 }
 
 /** 가장 최근의 미완료 tool 단계에 결과를 채운다. */
-function fillToolResult(steps: readonly StreamStep[], result: string): StreamStep[] {
+export function fillToolResult(steps: readonly StreamStep[], result: string): StreamStep[] {
   for (let index = steps.length - 1; index >= 0; index -= 1) {
     const step = steps[index]
     if (step && step.kind === "tool" && step.result === null) {
@@ -309,7 +309,7 @@ type QueryTurn = {
   readonly steps: readonly StreamStep[]
 }
 
-function citationLabel(citation: Citation): string {
+export function citationLabel(citation: Citation): string {
   return `${citation.path}#${citation.section}`
 }
 
@@ -338,7 +338,7 @@ function argSummary(args: string): string {
 
 /* ───── 단계 타임라인 (텍스트 + 도구 호출/결과) ───── */
 
-function StepTimeline({
+export function StepTimeline({
   steps,
   streaming = false,
   compact = false,
@@ -676,7 +676,7 @@ function AskBar({
 
 /* ───── Citation 칩 ───── */
 
-function Cit({ text }: { text: string }) {
+export function Cit({ text }: { text: string }) {
   return (
     <span className="flex items-center gap-1.5 rounded-[6px] bg-bg px-2.5 py-[5px]">
       <FileText className="size-[11px] text-ink-tertiary" />
@@ -685,7 +685,7 @@ function Cit({ text }: { text: string }) {
   )
 }
 
-function MobileCit({ text }: { text: string }) {
+export function MobileCit({ text }: { text: string }) {
   return (
     <span className="flex items-center gap-[5px] rounded-[6px] bg-bg px-[9px] py-1">
       <FileText className="size-2.5 text-ink-tertiary" />
