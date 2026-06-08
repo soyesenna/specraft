@@ -7,7 +7,13 @@ import {
   type WikiRepository,
   writeWikiFile,
 } from "../git/sync.js"
-import { type LLMProvider, runToolLoop } from "../llm/provider.js"
+import {
+  type LLMProvider,
+  runToolLoop,
+  runToolLoopStream,
+  type StreamToolCall,
+  type StreamToolResult,
+} from "../llm/provider.js"
 import { createWikiTools } from "../llm/wiki-tools.js"
 
 type RankedPage = {
@@ -122,7 +128,6 @@ export async function ingestWikiWithAgent(input: {
 }): Promise<string> {
   if (input.provider) {
     await runToolLoop({
-      maxTurns: 6,
       messages: [
         {
           role: "system",
@@ -220,7 +225,6 @@ export async function answerWikiQuestionWithAgent(input: {
   }
   const fallback = answerWikiQuestion(input.wiki, input.question, input.queryId)
   const response = await runToolLoop({
-    maxTurns: 6,
     messages: [
       {
         role: "system",
@@ -229,6 +233,46 @@ export async function answerWikiQuestionWithAgent(input: {
       },
       { role: "user", content: input.question },
     ],
+    provider: input.provider,
+    tools: createWikiTools(input.wiki.root),
+  })
+  const citations = citationsFromAnswer(response.content)
+  return {
+    answer: response.content,
+    citations: citations.length > 0 ? citations : fallback.citations,
+    query_id: input.queryId,
+  }
+}
+
+/** 스트리밍 질의 응답. 토큰(onDelta)과 도구 호출/결과(onToolCall/onToolResult)를 통지하고 최종 QueryResponse를 반환한다. */
+export async function answerWikiQuestionWithAgentStream(input: {
+  readonly provider: LLMProvider | undefined
+  readonly queryId: string
+  readonly question: string
+  readonly wiki: WikiRepository
+  readonly onDelta: (text: string) => void
+  readonly onToolCall: (call: StreamToolCall) => void
+  readonly onToolResult: (result: StreamToolResult) => void
+}): Promise<QueryResponse> {
+  const fallback = answerWikiQuestion(input.wiki, input.question, input.queryId)
+  if (!input.provider) {
+    if (fallback.answer.length > 0) {
+      input.onDelta(fallback.answer)
+    }
+    return fallback
+  }
+  const response = await runToolLoopStream({
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are the specraft Query Agent. Use wiki tools, answer with concrete citations in the form [path.md#Section].",
+      },
+      { role: "user", content: input.question },
+    ],
+    onDelta: input.onDelta,
+    onToolCall: input.onToolCall,
+    onToolResult: input.onToolResult,
     provider: input.provider,
     tools: createWikiTools(input.wiki.root),
   })
