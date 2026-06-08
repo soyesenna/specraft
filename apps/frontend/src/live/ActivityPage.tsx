@@ -32,12 +32,28 @@ type TypeTab = "All" | "Ingests" | "Queries"
 
 const PAGE_SIZE = 10
 
-/** 기간 필터 — created_at 기준 상대 범위. 기본 7d. */
-type Period = "today" | "7d" | "30d" | "90d" | "all"
+/** 기간 필터 — created_at 기준 상대 범위(분·시간·일). 기본 7d. */
+type Period = "5m" | "10m" | "1h" | "3h" | "5h" | "today" | "7d" | "30d" | "90d" | "all"
 
-const PERIODS: readonly Period[] = ["today", "7d", "30d", "90d", "all"]
+const PERIODS: readonly Period[] = [
+  "5m",
+  "10m",
+  "1h",
+  "3h",
+  "5h",
+  "today",
+  "7d",
+  "30d",
+  "90d",
+  "all",
+]
 
 const PERIOD_LABELS: Record<Period, string> = {
+  "5m": "Last 5 minutes",
+  "10m": "Last 10 minutes",
+  "1h": "Last hour",
+  "3h": "Last 3 hours",
+  "5h": "Last 5 hours",
   today: "Today",
   "7d": "Last 7 days",
   "30d": "Last 30 days",
@@ -46,6 +62,11 @@ const PERIOD_LABELS: Record<Period, string> = {
 }
 
 const PERIOD_SHORT: Record<Period, string> = {
+  "5m": "5 min",
+  "10m": "10 min",
+  "1h": "1 hour",
+  "3h": "3 hours",
+  "5h": "5 hours",
   today: "Today",
   "7d": "7 days",
   "30d": "30 days",
@@ -53,9 +74,23 @@ const PERIOD_SHORT: Record<Period, string> = {
   all: "All",
 }
 
+const MINUTE_MS = 60_000
+const HOUR_MS = 3_600_000
 const DAY_MS = 86_400_000
 
-/** 선택 기간의 시작 시각(ms). all=0(전체), today=로컬 자정 기준. */
+/** 기간별 현재 시각으로부터의 오프셋(ms). today/all은 periodCutoff에서 별도 처리. */
+const PERIOD_OFFSET: Partial<Record<Period, number>> = {
+  "5m": 5 * MINUTE_MS,
+  "10m": 10 * MINUTE_MS,
+  "1h": HOUR_MS,
+  "3h": 3 * HOUR_MS,
+  "5h": 5 * HOUR_MS,
+  "7d": 7 * DAY_MS,
+  "30d": 30 * DAY_MS,
+  "90d": 90 * DAY_MS,
+}
+
+/** 선택 기간의 시작 시각(ms). all=0(전체), today=로컬 자정 기준, 그 외=상대 오프셋. */
 function periodCutoff(period: Period): number {
   if (period === "all") {
     return 0
@@ -65,8 +100,7 @@ function periodCutoff(period: Period): number {
     start.setHours(0, 0, 0, 0)
     return start.getTime()
   }
-  const days = period === "7d" ? 7 : period === "30d" ? 30 : 90
-  return Date.now() - days * DAY_MS
+  return Date.now() - (PERIOD_OFFSET[period] ?? 0)
 }
 
 const STATUS_DOT: Record<ActivityStatus, string> = {
@@ -666,7 +700,7 @@ function PeriodFilter({
       {open && (
         <div
           className={cn(
-            "absolute right-0 z-40 mt-2 flex min-w-[148px] flex-col gap-0.5 rounded-md bg-surface p-1 shadow-[3px_5px_30px_#00000038]",
+            "absolute right-0 z-40 mt-2 flex max-h-[360px] min-w-[148px] flex-col gap-0.5 overflow-y-auto overscroll-contain rounded-md bg-surface p-1 shadow-[3px_5px_30px_#00000038]",
             "origin-top-right transition duration-150 ease-[cubic-bezier(0.2,0.6,0.25,1)] motion-reduce:transition-none",
             entered ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0",
           )}
