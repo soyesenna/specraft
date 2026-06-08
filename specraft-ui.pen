@@ -43834,6 +43834,409 @@
           }
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "Imgp7",
+      "x": 344,
+      "y": -2200,
+      "name": "component/Period Menu",
+      "reusable": true,
+      "width": 184,
+      "fill": "$surface",
+      "cornerRadius": "$radius-m",
+      "effect": {
+        "type": "shadow",
+        "shadowType": "outer",
+        "color": "#00000038",
+        "offset": {
+          "x": 3,
+          "y": 5
+        },
+        "blur": 30
+      },
+      "layout": "vertical",
+      "gap": 1,
+      "padding": 6,
+      "children": [
+        {
+          "type": "frame",
+          "id": "P9QhMh",
+          "name": "PM Head",
+          "width": "fill_container",
+          "padding": [
+            7,
+            10,
+            5,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "NCCP0",
+              "name": "PM Label",
+              "fill": "$ink-tertiary",
+              "content": "PERIOD",
+              "fontFamily": "$font-text",
+              "fontSize": 10,
+              "fontWeight": "600",
+              "letterSpacing": 0.8
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "BeCxb",
+          "name": "PM Last 5 minutes",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "hCg3J",
+              "name": "PM Name",
+              "fill": "$ink-secondary",
+              "content": "Last 5 minutes",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "gA7QJ",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vb2wB",
+          "name": "PM Last 10 minutes",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "t9F3L",
+              "name": "PM Name",
+              "fill": "$ink-secondary",
+              "content": "Last 10 minutes",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "Megm1",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TJAcF",
+          "name": "PM Last hour",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "kn6Vd",
+              "name": "PM Name",
+              "fill": "$ink-secondary",
+              "content": "Last hour",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "c4eku",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "l0meGR",
+          "name": "PM Last 3 hours",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "DoD2u",
+              "name": "PM Name",
+              "fill": "$ink-secondary",
+              "content": "Last 3 hours",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "kZ0aJ",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "raY3u",
+          "name": "PM Last 5 hours",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "M5kw8J",
+              "name": "PM Name",
+              "fill": "$ink-secondary",
+              "content": "Last 5 hours",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "FHVZO",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "xpFTE",
+          "name": "PM Last 24 hours",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Dadwg",
+              "name": "PM Name",
+              "fill": "$ink-secondary",
+              "content": "Last 24 hours",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "lJdmU",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "j3l4Na",
+          "name": "PM Last 7 days",
+          "width": "fill_container",
+          "height": 32,
+          "fill": "#F5F5F7",
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "iuExm",
+              "name": "PM Name",
+              "fill": "$ink",
+              "content": "Last 7 days",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "600",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "ItdLX",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "icon",
+              "id": "Wy848",
+              "name": "PM Check",
+              "width": 14,
+              "height": 14,
+              "icon": "check",
+              "library": "lucide",
+              "fill": "$accent"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "XTdJK",
+          "name": "PM Last 30 days",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "H6HHv",
+              "name": "PM Name",
+              "fill": "$ink-secondary",
+              "content": "Last 30 days",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "F7kbhL",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ike8L",
+          "name": "PM Last 90 days",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "A8i889",
+              "name": "PM Name",
+              "fill": "$ink-secondary",
+              "content": "Last 90 days",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "eqXw1",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "uEXF1",
+          "name": "PM All time",
+          "width": "fill_container",
+          "height": 32,
+          "cornerRadius": 7,
+          "gap": 8,
+          "padding": [
+            0,
+            10
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "EgPP1",
+              "name": "PM Name",
+              "fill": "$ink-secondary",
+              "content": "All time",
+              "fontFamily": "$font-text",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": -0.2
+            },
+            {
+              "type": "frame",
+              "id": "LIPGX",
+              "name": "PM Spacer",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        }
+      ]
     }
   ],
   "variables": {
