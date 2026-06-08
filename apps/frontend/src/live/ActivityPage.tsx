@@ -33,20 +33,9 @@ type TypeTab = "All" | "Ingests" | "Queries"
 const PAGE_SIZE = 10
 
 /** 기간 필터 — created_at 기준 상대 범위(분·시간·일). 기본 7d. */
-type Period = "5m" | "10m" | "1h" | "3h" | "5h" | "today" | "7d" | "30d" | "90d" | "all"
+type Period = "5m" | "10m" | "1h" | "3h" | "5h" | "24h" | "7d" | "30d" | "90d" | "all"
 
-const PERIODS: readonly Period[] = [
-  "5m",
-  "10m",
-  "1h",
-  "3h",
-  "5h",
-  "today",
-  "7d",
-  "30d",
-  "90d",
-  "all",
-]
+const PERIODS: readonly Period[] = ["5m", "10m", "1h", "3h", "5h", "24h", "7d", "30d", "90d", "all"]
 
 const PERIOD_LABELS: Record<Period, string> = {
   "5m": "Last 5 minutes",
@@ -54,7 +43,7 @@ const PERIOD_LABELS: Record<Period, string> = {
   "1h": "Last hour",
   "3h": "Last 3 hours",
   "5h": "Last 5 hours",
-  today: "Today",
+  "24h": "Last 24 hours",
   "7d": "Last 7 days",
   "30d": "Last 30 days",
   "90d": "Last 90 days",
@@ -67,7 +56,7 @@ const PERIOD_SHORT: Record<Period, string> = {
   "1h": "1 hour",
   "3h": "3 hours",
   "5h": "5 hours",
-  today: "Today",
+  "24h": "24 hours",
   "7d": "7 days",
   "30d": "30 days",
   "90d": "90 days",
@@ -78,27 +67,23 @@ const MINUTE_MS = 60_000
 const HOUR_MS = 3_600_000
 const DAY_MS = 86_400_000
 
-/** 기간별 현재 시각으로부터의 오프셋(ms). today/all은 periodCutoff에서 별도 처리. */
+/** 기간별 현재 시각으로부터의 오프셋(ms). all은 periodCutoff에서 별도 처리. */
 const PERIOD_OFFSET: Partial<Record<Period, number>> = {
   "5m": 5 * MINUTE_MS,
   "10m": 10 * MINUTE_MS,
   "1h": HOUR_MS,
   "3h": 3 * HOUR_MS,
   "5h": 5 * HOUR_MS,
+  "24h": DAY_MS,
   "7d": 7 * DAY_MS,
   "30d": 30 * DAY_MS,
   "90d": 90 * DAY_MS,
 }
 
-/** 선택 기간의 시작 시각(ms). all=0(전체), today=로컬 자정 기준, 그 외=상대 오프셋. */
+/** 선택 기간의 시작 시각(ms). all=0(전체), 그 외=현재 시각으로부터 상대 오프셋. */
 function periodCutoff(period: Period): number {
   if (period === "all") {
     return 0
-  }
-  if (period === "today") {
-    const start = new Date()
-    start.setHours(0, 0, 0, 0)
-    return start.getTime()
   }
   return Date.now() - (PERIOD_OFFSET[period] ?? 0)
 }
