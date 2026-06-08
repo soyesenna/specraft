@@ -12,6 +12,7 @@ import { type ReactNode, useEffect, useMemo, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { ButtonSecondary } from "../components/buttons.js"
 import { IconButton } from "../components/IconButton.js"
+import { renderInline } from "../components/Markdown.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
 import { cn } from "../lib/cn.js"
 import { useSpecraft } from "./api.js"
@@ -69,6 +70,18 @@ function blockKey(block: MarkdownBlock, keyer: (line: string) => string): string
   }
   if (block.kind === "bullets") {
     return keyer(`ul:${block.items.join("|")}`)
+  }
+  if (block.kind === "ordered") {
+    return keyer(`ol:${block.items.join("|")}`)
+  }
+  if (block.kind === "quote") {
+    return keyer(`quote:${block.lines.join("|")}`)
+  }
+  if (block.kind === "table") {
+    return keyer(`table:${block.headers.join("|")}:${block.rows.length}`)
+  }
+  if (block.kind === "hr") {
+    return keyer("hr")
   }
   return keyer(`pre:${block.lines.join("|")}`)
 }
@@ -554,7 +567,7 @@ function DocBlock({
           mobile ? "text-[15.5px] tracking-[-0.24px]" : "text-[19px] tracking-[-0.26px]",
         )}
       >
-        {block.text}
+        {renderInline(block.text)}
       </h2>
     )
   }
@@ -568,7 +581,7 @@ function DocBlock({
             : "text-[14.5px] leading-[1.65] tracking-[-0.22px]",
         )}
       >
-        {block.text}
+        {renderInline(block.text)}
       </p>
     )
   }
@@ -581,6 +594,109 @@ function DocBlock({
         ))}
       </div>
     )
+  }
+  if (block.kind === "ordered") {
+    const orderedKey = lineKeyer("ordered")
+    return (
+      <ol className="flex w-full list-none flex-col gap-2.5">
+        {block.items.map((item, index) => (
+          <li
+            key={orderedKey(item)}
+            className={cn("flex w-full", mobile ? "gap-[9px]" : "gap-2.5")}
+          >
+            <span
+              className={cn(
+                "pen-text shrink-0 font-medium text-ink-tertiary tabular-nums",
+                mobile ? "text-[13px] leading-[1.55]" : "text-[14.5px] leading-[1.6]",
+              )}
+            >
+              {index + 1}.
+            </span>
+            <span
+              className={cn(
+                "pen-text w-full text-ink-secondary",
+                mobile
+                  ? "text-[13px] leading-[1.55] tracking-[-0.2px]"
+                  : "text-[14.5px] leading-[1.6] tracking-[-0.22px]",
+              )}
+            >
+              {renderInline(item)}
+            </span>
+          </li>
+        ))}
+      </ol>
+    )
+  }
+  if (block.kind === "quote") {
+    const quoteKey = lineKeyer("quote")
+    return (
+      <blockquote
+        className={cn(
+          "flex w-full flex-col gap-1.5 border-accent/40 border-l-2",
+          mobile ? "pl-3" : "pl-4",
+        )}
+      >
+        {block.lines.map((line) => (
+          <span
+            key={quoteKey(line)}
+            className={cn(
+              "pen-text w-full text-ink-tertiary italic",
+              mobile ? "text-[13px] leading-[1.6]" : "text-[14px] leading-[1.65]",
+            )}
+          >
+            {renderInline(line)}
+          </span>
+        ))}
+      </blockquote>
+    )
+  }
+  if (block.kind === "table") {
+    const headerKey = lineKeyer("th")
+    const rowKey = lineKeyer("tr")
+    return (
+      <div className="w-full overflow-x-auto">
+        <table className="w-full border-collapse text-left">
+          <thead>
+            <tr>
+              {block.headers.map((header) => (
+                <th
+                  key={headerKey(header)}
+                  className={cn(
+                    "border border-separator bg-input pen-text font-semibold text-ink",
+                    mobile ? "px-2.5 py-1.5 text-[12.5px]" : "px-3.5 py-2 text-[13.5px]",
+                  )}
+                >
+                  {renderInline(header)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {block.rows.map((row) => {
+              const cellKey = lineKeyer("td")
+              return (
+                <tr key={rowKey(row.join("|"))}>
+                  {row.map((cell) => (
+                    <td
+                      key={cellKey(cell)}
+                      className={cn(
+                        "border border-separator pen-text align-top text-ink-secondary",
+                        mobile ? "px-2.5 py-1.5 text-[12.5px]" : "px-3.5 py-2 text-[13.5px]",
+                      )}
+                    >
+                      {renderInline(cell)}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+  if (block.kind === "hr") {
+    return <hr className="w-full border-0 border-separator border-t" />
   }
   // code
   const codeKey = lineKeyer("code")
@@ -625,7 +741,7 @@ function Bullet({ text, mobile }: { text: string; mobile: boolean }) {
             : "text-[14.5px] leading-[1.6] tracking-[-0.22px]",
         )}
       >
-        {text}
+        {renderInline(text)}
       </span>
     </div>
   )

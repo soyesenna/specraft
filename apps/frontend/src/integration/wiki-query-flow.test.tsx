@@ -46,11 +46,11 @@ describe("frontend wiki and query integration", () => {
           },
         ],
         [
-          "POST /api/v1/query",
+          "POST /api/v1/query/stream",
           {
-            answer: "Live answer from API about Stop gate.",
-            citations: [{ path: "overview.md", section: "Goal" }],
-            query_id: "qry-live",
+            sse:
+              'event: delta\ndata: {"text":"Live answer from API about Stop gate."}\n\n' +
+              'event: done\ndata: {"answer":"Live answer from API about Stop gate.","citations":[{"path":"overview.md","section":"Goal"}],"query_id":"qry-live"}\n\n',
           },
         ],
         [
@@ -118,7 +118,7 @@ describe("frontend wiki and query integration", () => {
       routes: new Map([
         ["GET /api/v1/auth/session", { member }],
         [
-          "POST /api/v1/query",
+          "POST /api/v1/query/stream",
           {
             status: 500,
             body: { error: "query_failed" },

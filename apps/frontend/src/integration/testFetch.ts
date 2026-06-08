@@ -4,8 +4,10 @@ type RouteMethod = "DELETE" | "GET" | "POST" | "PUT"
 type RouteKey = `${RouteMethod} ${string}`
 
 type FetchResponse = {
-  readonly body: unknown
+  readonly body?: unknown
   readonly status?: number
+  // 설정 시 text/event-stream 으로 응답 (SSE 라우트 mock 용)
+  readonly sse?: string
 }
 
 type FetchMockOptions = {
@@ -14,7 +16,7 @@ type FetchMockOptions = {
 }
 
 function isFetchResponse(value: FetchResponse | unknown): value is FetchResponse {
-  return typeof value === "object" && value !== null && "body" in value
+  return typeof value === "object" && value !== null && ("body" in value || "sse" in value)
 }
 
 function responseFor(value: FetchResponse | unknown): FetchResponse {
@@ -60,6 +62,12 @@ export function installFetchMock(options: FetchMockOptions): void {
         })
       }
       const response = responseFor(configured)
+      if (typeof response.sse === "string") {
+        return new Response(response.sse, {
+          status: response.status ?? 200,
+          headers: { "content-type": "text/event-stream" },
+        })
+      }
       return new Response(JSON.stringify(response.body), {
         status: response.status ?? 200,
         headers: { "content-type": "application/json" },

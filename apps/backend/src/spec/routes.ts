@@ -35,7 +35,11 @@ import type { SpecraftDatabase } from "../storage/database.js"
 import { requireMember } from "./auth.js"
 import { registerConflictRoutes } from "./conflict-routes.js"
 import { listIngestLogs, listQueryLogs, recordIngestLog, recordQueryLog } from "./logs.js"
-import { answerWikiQuestionWithAgent, ingestWikiWithAgent } from "./wiki-agent.js"
+import {
+  answerWikiQuestionWithAgent,
+  answerWikiQuestionWithAgentStream,
+  ingestWikiWithAgent,
+} from "./wiki-agent.js"
 import { buildWikiGraph } from "./wiki-graph.js"
 import { buildWikiHistory } from "./wiki-history.js"
 
@@ -126,6 +130,62 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
           })
         : { answer: "", citations: [], query_id: queryId },
     )
+  })
+
+  server.post("/api/v1/query/stream", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const parsed = QueryRequestSchema.safeParse(request.body)
+    if (!parsed.success || !isSafeBranchName(parsed.data.branch)) {
+      return sendValidationFailed(reply)
+    }
+    if (!ensureUnlocked(context, parsed.data.branch, reply)) {
+      return reply
+    }
+    const wiki = wikiFor(context, parsed.data.branch)
+    const queryId = recordQueryLog(context.database, {
+      branch: parsed.data.branch,
+      memberId: member.id,
+      question: parsed.data.question,
+    })
+    reply.hijack()
+    const raw = reply.raw
+    raw.writeHead(200, {
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+      "Content-Type": "text/event-stream",
+      "X-Accel-Buffering": "no",
+    })
+    const send = (event: string, data: unknown): void => {
+      raw.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+    }
+    try {
+      if (!wiki) {
+        send("done", { answer: "", citations: [], query_id: queryId })
+        return
+      }
+      const result = await answerWikiQuestionWithAgentStream({
+        onDelta: (text) => send("delta", { text }),
+        onToolCall: (call) => send("tool_call", call),
+        onToolResult: (toolResult) =>
+          send("tool_result", {
+            name: toolResult.name,
+            result: toolResult.result.slice(0, 2000),
+          }),
+        provider: context.llmProvider,
+        queryId,
+        question: parsed.data.question,
+        wiki,
+      })
+      send("done", QueryResponseSchema.parse(result))
+    } catch (error) {
+      send("error", { message: error instanceof Error ? error.message : "query failed" })
+    } finally {
+      raw.end()
+    }
+    return reply
   })
 
   server.post("/api/v1/ingest", async (request, reply) => {

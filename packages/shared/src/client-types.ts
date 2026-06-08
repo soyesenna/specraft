@@ -43,9 +43,31 @@ import type {
   WikiTreeResponse,
 } from "./schemas.js"
 
+export type QueryToolCall = {
+  readonly name: string
+  readonly arguments: string
+}
+
+export type QueryToolResult = {
+  readonly name: string
+  readonly result: string
+}
+
+/** queryStream 진행 콜백: 토큰(onDelta)과 도구 호출/결과(onToolCall/onToolResult)를 통지한다. */
+export type QueryStreamHandlers = {
+  readonly onDelta: (text: string) => void
+  readonly onToolCall?: (call: QueryToolCall) => void
+  readonly onToolResult?: (result: QueryToolResult) => void
+}
+
 export type SpecraftClient = {
   readonly context: (request: ContextRequest) => Promise<ContextResponse>
   readonly query: (request: QueryRequest) => Promise<QueryResponse>
+  readonly queryStream: (
+    request: QueryRequest,
+    handlers: QueryStreamHandlers,
+    signal?: AbortSignal,
+  ) => Promise<QueryResponse>
   readonly ingest: (request: IngestPayload) => Promise<IngestResponse>
   readonly status: () => Promise<StatusResponse>
   readonly authSession: () => Promise<AuthSessionResponse>
