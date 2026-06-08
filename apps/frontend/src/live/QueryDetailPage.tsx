@@ -1,11 +1,11 @@
-import type { QueryLog, QueryResponse } from "@specraft/shared"
+import type { Citation, QueryLogDetail, QueryResponse } from "@specraft/shared"
+import { SpecraftHttpError } from "@specraft/shared"
 import { AlertTriangle, ChevronLeft, MessageCircle, RefreshCw, Sparkles } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { ButtonSecondary } from "../components/buttons.js"
 import { GitBranchIcon } from "../components/GitBranchIcon.js"
 import { IconButton } from "../components/IconButton.js"
-import { ChatMarkdown } from "../components/Markdown.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
 import { MobileTabBar } from "../components/MobileTabBar.js"
 import { cn } from "../lib/cn.js"
@@ -33,23 +33,37 @@ function formatDateTime(iso: string): string {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`
 }
 
+/** 저장된 tool_calls → StepTimeline용 StreamStep[] (+ 답변 본문을 마지막 text 단계로) */
+function buildSavedSteps(log: QueryLogDetail): StreamStep[] {
+  const toolSteps: StreamStep[] = log.tool_calls.map((call) => ({
+    kind: "tool",
+    name: call.name,
+    args: call.arguments,
+    result: call.result,
+  }))
+  if (log.answer && log.answer.length > 0) {
+    return [...toolSteps, { kind: "text", text: log.answer }]
+  }
+  return toolSteps
+}
+
 /**
- * 07b · Query Detail (ZXEiK) + M07b (F4jkv) — 디자인 충실 + 실데이터.
- * QueryLog는 질문만 저장하므로(답변 미저장), 상세 진입 시 해당 질문을
- * 원 브랜치에서 queryStream으로 다시 실행해 답변·도구·인용을 라이브 렌더한다.
+ * 07b · Query Detail (ZXEiK) + M07b (F4jkv) — 디자인 충실 + 저장된 상세 데이터.
+ * getQueryLog(id)의 저장된 answer/citations/tool_calls를 우선 렌더하고,
+ * 답변이 기록되기 전 생성된 구(舊) 로그(answer=null)만 현재 브랜치 재질의로 폴백한다.
  */
 export function QueryDetailPage() {
   const { client } = useSpecraft()
   const navigate = useNavigate()
   const { id } = useParams()
-  const [log, setLog] = useState<QueryLog | null>(null)
+  const [log, setLog] = useState<QueryLogDetail | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [notFound, setNotFound] = useState(false)
   const [reloadKey, setReloadKey] = useState(0)
 
-  // 재질의 상태
+  // 폴백 재질의 상태 (log.answer === null 일 때만 사용)
   const [steps, setSteps] = useState<StreamStep[]>([])
-  const [answer, setAnswer] = useState<QueryResponse | null>(null)
+  const [liveAnswer, setLiveAnswer] = useState<QueryResponse | null>(null)
   const [pending, setPending] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
 
@@ -59,21 +73,27 @@ export function QueryDetailPage() {
     setLog(null)
     setError(null)
     setNotFound(false)
+    setSteps([])
+    setLiveAnswer(null)
+    setQueryError(null)
+    if (id === undefined) {
+      setNotFound(true)
+      return
+    }
     void client
-      .listQueryLogs()
-      .then((response) => {
-        if (!active) {
-          return
-        }
-        const found = response.logs.find((entry) => entry.id === id)
-        if (found) {
-          setLog(found)
-        } else {
-          setNotFound(true)
+      .getQueryLog(id)
+      .then((detail) => {
+        if (active) {
+          setLog(detail)
         }
       })
       .catch((caught: unknown) => {
-        if (active) {
+        if (!active) {
+          return
+        }
+        if (caught instanceof SpecraftHttpError && caught.status === 404) {
+          setNotFound(true)
+        } else {
           setError(caught instanceof Error ? caught.message : "Failed to load query")
         }
       })
@@ -82,15 +102,15 @@ export function QueryDetailPage() {
     }
   }, [client, id, reloadKey])
 
-  // 로그를 찾으면 원 질문을 다시 실행해 답변 타임라인을 채운다.
+  // 저장된 답변이 없는 구 로그만 원 브랜치에서 재질의해 타임라인을 채운다.
   useEffect(() => {
-    if (!log) {
+    if (!log || log.answer !== null) {
       return
     }
     let active = true
     let live: StreamStep[] = []
     setSteps([])
-    setAnswer(null)
+    setLiveAnswer(null)
     setQueryError(null)
     setPending(true)
     const apply = (next: StreamStep[]): void => {
@@ -111,7 +131,7 @@ export function QueryDetailPage() {
       )
       .then((response) => {
         if (active) {
-          setAnswer(response)
+          setLiveAnswer(response)
           setSteps(live)
         }
       })
@@ -139,6 +159,33 @@ export function QueryDetailPage() {
     navigate("/activity")
   }
 
+  // 표시 데이터: 저장본 우선, 없으면 재질의 결과
+  const saved = log !== null && log.answer !== null
+  const displaySteps: readonly StreamStep[] = log && saved ? buildSavedSteps(log) : steps
+  const displayCitations: readonly Citation[] = saved
+    ? (log?.citations ?? [])
+    : (liveAnswer?.citations ?? [])
+  const livePending = !saved && pending
+
+  const bodyFor = (mobile: boolean) =>
+    error ? (
+      <QueryDetailError message={error} onRetry={retry} mobile={mobile} />
+    ) : notFound ? (
+      <QueryDetailNotFound onBack={back} mobile={mobile} />
+    ) : loading || !log ? (
+      <QuerySkeleton mobile={mobile} />
+    ) : (
+      <QueryBody
+        log={log}
+        steps={displaySteps}
+        citations={displayCitations}
+        pending={livePending}
+        saved={saved}
+        queryError={queryError}
+        mobile={mobile}
+      />
+    )
+
   return (
     <>
       {/* ───── 데스크톱 07b ───── */}
@@ -165,21 +212,7 @@ export function QueryDetailPage() {
           }
         >
           <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-7 pt-1 pb-7">
-            {error ? (
-              <QueryDetailError message={error} onRetry={retry} />
-            ) : notFound ? (
-              <QueryDetailNotFound onBack={back} />
-            ) : loading || !log ? (
-              <QuerySkeleton />
-            ) : (
-              <QueryBody
-                log={log}
-                steps={steps}
-                answer={answer}
-                pending={pending}
-                queryError={queryError}
-              />
-            )}
+            {bodyFor(false)}
           </div>
         </LiveShell>
       </div>
@@ -200,22 +233,7 @@ export function QueryDetailPage() {
           <span className="h-px flex-1" />
         </div>
         <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-4 pt-3.5 pb-[110px]">
-          {error ? (
-            <QueryDetailError message={error} onRetry={retry} mobile />
-          ) : notFound ? (
-            <QueryDetailNotFound onBack={back} mobile />
-          ) : loading || !log ? (
-            <QuerySkeleton mobile />
-          ) : (
-            <QueryBody
-              log={log}
-              steps={steps}
-              answer={answer}
-              pending={pending}
-              queryError={queryError}
-              mobile
-            />
-          )}
+          {bodyFor(true)}
         </div>
         <MobileTabBar active="spec" />
       </div>
@@ -226,15 +244,17 @@ export function QueryDetailPage() {
 function QueryBody({
   log,
   steps,
-  answer,
+  citations,
   pending,
+  saved,
   queryError,
   mobile = false,
 }: {
-  log: QueryLog
+  log: QueryLogDetail
   steps: readonly StreamStep[]
-  answer: QueryResponse | null
+  citations: readonly Citation[]
   pending: boolean
+  saved: boolean
   queryError: string | null
   mobile?: boolean
 }) {
@@ -336,7 +356,7 @@ function QueryBody({
         </div>
       </div>
 
-      {/* 답변 카드 (재질의 결과) */}
+      {/* 답변 카드 */}
       <article
         aria-live="polite"
         aria-busy={pending}
@@ -353,7 +373,13 @@ function QueryBody({
             specraft
           </span>
           <span className="pen-text text-[12px] tracking-[-0.12px] text-ink-tertiary">
-            {pending ? (lastIsText ? "· 응답 중…" : "· 문서 탐색 중…") : "· wiki 탐색 후 재생성"}
+            {pending
+              ? lastIsText
+                ? "· 응답 중…"
+                : "· 문서 탐색 중…"
+              : saved
+                ? "· wiki 탐색 후 응답"
+                : "· wiki 탐색 후 재생성"}
           </span>
           {pending && !lastIsText && (
             <span className="size-1.5 animate-pulse rounded-full bg-accent" />
@@ -366,11 +392,13 @@ function QueryBody({
           <span className="pen-text text-[13px] tracking-[-0.2px] text-ink-tertiary">
             질문을 현재 브랜치({log.branch})에서 다시 실행하는 중입니다…
           </span>
-        ) : answer ? (
-          <ChatMarkdown source={answer.answer} compact={mobile} />
-        ) : null}
+        ) : (
+          <span className="pen-text text-[13px] tracking-[-0.2px] text-ink-tertiary">
+            기록된 답변이 없습니다.
+          </span>
+        )}
 
-        {answer && answer.citations.length > 0 && (
+        {citations.length > 0 && (
           <>
             <span
               className={cn(
@@ -378,10 +406,10 @@ function QueryBody({
                 mobile ? "text-[9.5px]" : "text-[10px]",
               )}
             >
-              CITATIONS · {answer.citations.length}
+              CITATIONS · {citations.length}
             </span>
             <div className="flex flex-wrap gap-2">
-              {answer.citations.map((citation) =>
+              {citations.map((citation) =>
                 mobile ? (
                   <MobileCit key={citationLabel(citation)} text={citationLabel(citation)} />
                 ) : (
@@ -394,12 +422,11 @@ function QueryBody({
 
         {queryError && <span className="pen-text text-[13px] text-danger">{queryError}</span>}
 
-        {answer && (
-          <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">
-            query_id {log.id.slice(0, 8)} · {log.branch} · 원 질문을 현재 wiki 기준으로 재생성한
-            결과입니다
-          </span>
-        )}
+        <span className="pen-text text-[11px] tracking-[-0.1px] text-ink-tertiary">
+          {saved
+            ? `query_id ${log.id.slice(0, 8)} · ${log.branch} · query 로그에 기록됨`
+            : `query_id ${log.id.slice(0, 8)} · ${log.branch} · 원 질문을 현재 wiki 기준으로 재생성한 결과입니다`}
+        </span>
       </article>
     </div>
   )

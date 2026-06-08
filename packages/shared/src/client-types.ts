@@ -24,11 +24,13 @@ import type {
   ConflictResolveResponse,
   ContextRequest,
   ContextResponse,
+  IngestLogDetail,
   IngestLogListResponse,
   IngestPayload,
   IngestResponse,
   OkResponse,
   PaginationRequest,
+  QueryLogDetail,
   QueryLogListResponse,
   QueryRequest,
   QueryResponse,
@@ -94,6 +96,8 @@ export type SpecraftClient = {
   readonly resolveConflict: (request: ConflictResolveRequest) => Promise<ConflictResolveResponse>
   readonly listIngestLogs: (request?: PaginationRequest) => Promise<IngestLogListResponse>
   readonly listQueryLogs: (request?: PaginationRequest) => Promise<QueryLogListResponse>
+  readonly getIngestLog: (id: string) => Promise<IngestLogDetail>
+  readonly getQueryLog: (id: string) => Promise<QueryLogDetail>
   readonly wikiTree: (request: WikiTreeRequest) => Promise<WikiTreeResponse>
   readonly wikiPage: (request: WikiPageRequest) => Promise<WikiPageResponse>
   readonly wikiGraph: (request: WikiGraphRequest) => Promise<WikiGraphResponse>

@@ -1,9 +1,11 @@
 import {
   ContextRequestSchema,
   ContextResponseSchema,
+  IngestLogDetailSchema,
   IngestLogListResponseSchema,
   IngestPayloadSchema,
   IngestResponseSchema,
+  QueryLogDetailSchema,
   QueryLogListResponseSchema,
   QueryRequestSchema,
   QueryResponseSchema,
@@ -34,7 +36,15 @@ import type { LLMProvider } from "../llm/provider.js"
 import type { SpecraftDatabase } from "../storage/database.js"
 import { requireMember } from "./auth.js"
 import { registerConflictRoutes } from "./conflict-routes.js"
-import { listIngestLogs, listQueryLogs, recordIngestLog, recordQueryLog } from "./logs.js"
+import {
+  getIngestLogDetail,
+  getQueryLogDetail,
+  listIngestLogs,
+  listQueryLogs,
+  recordIngestLog,
+  recordQueryLog,
+  updateQueryLogResult,
+} from "./logs.js"
 import {
   answerWikiQuestionWithAgent,
   answerWikiQuestionWithAgentStream,
@@ -54,6 +64,7 @@ export type SpecRouteContext = {
 const BranchNameSchema = z.string().min(1).refine(isSafeBranchName)
 const BranchParamsSchema = z.object({ branch: BranchNameSchema })
 const WikiPageQuerySchema = z.object({ path: z.string().min(1).refine(isSafeWikiPath) })
+const LogIdParamsSchema = z.object({ id: z.string().min(1) })
 
 function wikiFor(context: SpecRouteContext, branch: string): WikiRepository | null {
   return context.dataDir ? createSkeletonWiki({ dataDir: context.dataDir, branch }) : null
@@ -120,7 +131,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       memberId: member.id,
       question: parsed.data.question,
     })
-    return QueryResponseSchema.parse(
+    const result = QueryResponseSchema.parse(
       wiki
         ? await answerWikiQuestionWithAgent({
             provider: context.llmProvider,
@@ -130,6 +141,13 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
           })
         : { answer: "", citations: [], query_id: queryId },
     )
+    updateQueryLogResult(context.database, {
+      queryId,
+      answer: result.answer,
+      citations: result.citations,
+      toolCalls: [],
+    })
+    return result
   })
 
   server.post("/api/v1/query/stream", async (request, reply) => {
@@ -161,6 +179,8 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
     const send = (event: string, data: unknown): void => {
       raw.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
     }
+    // 도구 타임라인 누적: 호출 시 result=null로 push, 결과 도착 시 짝을 맞춰 채운다.
+    const toolCalls: { name: string; arguments: string; result: string | null }[] = []
     try {
       if (!wiki) {
         send("done", { answer: "", citations: [], query_id: queryId })
@@ -168,18 +188,37 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       }
       const result = await answerWikiQuestionWithAgentStream({
         onDelta: (text) => send("delta", { text }),
-        onToolCall: (call) => send("tool_call", call),
-        onToolResult: (toolResult) =>
+        onToolCall: (call) => {
+          send("tool_call", call)
+          toolCalls.push({ name: call.name, arguments: call.arguments, result: null })
+        },
+        onToolResult: (toolResult) => {
           send("tool_result", {
             name: toolResult.name,
             result: toolResult.result.slice(0, 2000),
-          }),
+          })
+          const pending = toolCalls.find(
+            (call) => call.result === null && call.name === toolResult.name,
+          )
+          if (pending) {
+            pending.result = toolResult.result
+          } else {
+            toolCalls.push({ name: toolResult.name, arguments: "", result: toolResult.result })
+          }
+        },
         provider: context.llmProvider,
         queryId,
         question: parsed.data.question,
         wiki,
       })
-      send("done", QueryResponseSchema.parse(result))
+      const response = QueryResponseSchema.parse(result)
+      send("done", response)
+      updateQueryLogResult(context.database, {
+        queryId,
+        answer: response.answer,
+        citations: response.citations,
+        toolCalls,
+      })
     } catch (error) {
       send("error", { message: error instanceof Error ? error.message : "query failed" })
     } finally {
@@ -211,6 +250,9 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
           memberId: member.id,
           status: "rejected",
           summary: parsed.data.summary,
+          specChanges: parsed.data.spec_changes,
+          progressUpdates: parsed.data.progress_updates,
+          openQuestions: parsed.data.open_questions,
         })
         return reply.status(422).send({ status: "rejected", reason: "commit_not_found" })
       }
@@ -229,6 +271,9 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
         memberId: member.id,
         status: "accepted",
         summary: parsed.data.summary,
+        specChanges: parsed.data.spec_changes,
+        progressUpdates: parsed.data.progress_updates,
+        openQuestions: parsed.data.open_questions,
       } as const
       recordIngestLog(context.database, wikiCommit ? { ...logInput, wikiCommit } : logInput)
       return IngestResponseSchema.parse(
@@ -251,6 +296,38 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       return member
     }
     return QueryLogListResponseSchema.parse(listQueryLogs(context.database))
+  })
+
+  server.get("/api/v1/logs/ingests/:id", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const parsed = LogIdParamsSchema.safeParse(request.params)
+    if (!parsed.success) {
+      return sendValidationFailed(reply)
+    }
+    const detail = getIngestLogDetail(context.database, parsed.data.id)
+    if (!detail) {
+      return reply.status(404).send({ error: "not_found" })
+    }
+    return IngestLogDetailSchema.parse(detail)
+  })
+
+  server.get("/api/v1/logs/queries/:id", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const parsed = LogIdParamsSchema.safeParse(request.params)
+    if (!parsed.success) {
+      return sendValidationFailed(reply)
+    }
+    const detail = getQueryLogDetail(context.database, parsed.data.id)
+    if (!detail) {
+      return reply.status(404).send({ error: "not_found" })
+    }
+    return QueryLogDetailSchema.parse(detail)
   })
 
   server.get("/api/v1/wiki/:branch/tree", async (request, reply) => {

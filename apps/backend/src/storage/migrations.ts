@@ -77,10 +77,26 @@ export function migrateDatabase(database: Database.Database): void {
   `)
 
   // invites.created_at — 출시 후 추가된 컬럼. 기존 DB에는 ALTER로 보강한다 (레거시 행은 NULL 유지).
-  const inviteColumns = database.prepare("PRAGMA table_info(invites)").all() as Array<{
-    name: string
-  }>
-  if (!inviteColumns.some((column) => column.name === "created_at")) {
-    database.exec("ALTER TABLE invites ADD COLUMN created_at TEXT")
+  addColumnIfMissing(database, "invites", "created_at", "TEXT")
+
+  // 상세 로그 컬럼 — Activity 상세 페이지(변경 문서·저장된 답변·도구 타임라인)용. 모두 nullable JSON 문자열.
+  addColumnIfMissing(database, "ingest_logs", "spec_changes", "TEXT")
+  addColumnIfMissing(database, "ingest_logs", "progress_updates", "TEXT")
+  addColumnIfMissing(database, "ingest_logs", "open_questions", "TEXT")
+  addColumnIfMissing(database, "query_logs", "answer", "TEXT")
+  addColumnIfMissing(database, "query_logs", "citations", "TEXT")
+  addColumnIfMissing(database, "query_logs", "tool_calls", "TEXT")
+}
+
+// PRAGMA table_info로 컬럼 존재를 확인하고 없을 때만 ALTER하는 멱등 보강 헬퍼.
+function addColumnIfMissing(
+  database: Database.Database,
+  table: string,
+  column: string,
+  type: string,
+): void {
+  const columns = database.prepare(`PRAGMA table_info(${table})`).all() as Array<{ name: string }>
+  if (!columns.some((existing) => existing.name === column)) {
+    database.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`)
   }
 }

@@ -27,11 +27,13 @@ import {
   ConflictResolveResponseSchema,
   ContextRequestSchema,
   ContextResponseSchema,
+  IngestLogDetailSchema,
   IngestLogListResponseSchema,
   IngestPayloadSchema,
   IngestResponseSchema,
   OkResponseSchema,
   PaginationRequestSchema,
+  QueryLogDetailSchema,
   QueryLogListResponseSchema,
   QueryRequestSchema,
   QueryResponseSchema,
@@ -223,6 +225,18 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         ],
       })
     },
+    getIngestLog: (id) =>
+      request({
+        path: `/api/v1/logs/ingests/${encodeURIComponent(id)}`,
+        method: "GET",
+        responseSchema: IngestLogDetailSchema,
+      }),
+    getQueryLog: (id) =>
+      request({
+        path: `/api/v1/logs/queries/${encodeURIComponent(id)}`,
+        method: "GET",
+        responseSchema: QueryLogDetailSchema,
+      }),
     wikiTree: (body) => {
       const parsed = WikiTreeRequestSchema.parse(body)
       return request({

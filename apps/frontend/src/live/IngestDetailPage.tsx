@@ -1,9 +1,11 @@
-import type { IngestLog } from "@specraft/shared"
+import type { IngestLogDetail } from "@specraft/shared"
+import { SpecraftHttpError } from "@specraft/shared"
 import {
   AlertTriangle,
   ArrowUp,
   ChevronLeft,
   CircleCheck,
+  Files,
   GitCommitHorizontal,
   RefreshCw,
   ShieldAlert,
@@ -31,16 +33,22 @@ function formatDateTime(iso: string): string {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`
 }
 
+/** spec_change.type → git diff 스타일 배지 (added=A / modified=M / removed=D) */
+const CHANGE_BADGE: Record<string, { label: string; bg: string; text: string }> = {
+  added: { label: "A", bg: "bg-[#34C75924]", text: "text-[#1A7F37]" },
+  modified: { label: "M", bg: "bg-[#FF950026]", text: "text-[#9A5B00]" },
+  removed: { label: "D", bg: "bg-[#FF3B3024]", text: "text-danger" },
+}
+
 /**
- * 07a · Ingest Detail (UBiTY) + M07a (yyIJg) — 디자인 충실 + 실데이터.
- * 상세 조회 API가 없어 listIngestLogs()에서 id로 매칭한다.
- * 디자인의 변경 문서 리스트/diff는 IngestLog에 저장되지 않아 표시하지 않는다.
+ * 07a · Ingest Detail (UBiTY) + M07a (yyIJg) — 디자인 충실 + 저장된 상세 데이터.
+ * getIngestLog(id)로 spec_changes/progress/open_questions까지 조회해 Changed documents를 복원한다.
  */
 export function IngestDetailPage() {
   const { client } = useSpecraft()
   const navigate = useNavigate()
   const { id } = useParams()
-  const [log, setLog] = useState<IngestLog | null>(null)
+  const [log, setLog] = useState<IngestLogDetail | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [notFound, setNotFound] = useState(false)
   const [reloadKey, setReloadKey] = useState(0)
@@ -51,21 +59,24 @@ export function IngestDetailPage() {
     setLog(null)
     setError(null)
     setNotFound(false)
+    if (id === undefined) {
+      setNotFound(true)
+      return
+    }
     void client
-      .listIngestLogs()
-      .then((response) => {
-        if (!active) {
-          return
-        }
-        const found = response.logs.find((entry) => entry.id === id)
-        if (found) {
-          setLog(found)
-        } else {
-          setNotFound(true)
+      .getIngestLog(id)
+      .then((detail) => {
+        if (active) {
+          setLog(detail)
         }
       })
       .catch((caught: unknown) => {
-        if (active) {
+        if (!active) {
+          return
+        }
+        if (caught instanceof SpecraftHttpError && caught.status === 404) {
+          setNotFound(true)
+        } else {
           setError(caught instanceof Error ? caught.message : "Failed to load ingest")
         }
       })
@@ -156,7 +167,7 @@ export function IngestDetailPage() {
 }
 
 /** 디자인 07a/M07a 본문 — 데스크톱/모바일 공유, mobile 플래그로 치수만 분기 */
-function IngestBody({ log, mobile = false }: { log: IngestLog; mobile?: boolean }) {
+function IngestBody({ log, mobile = false }: { log: IngestLogDetail; mobile?: boolean }) {
   const accepted = log.status === "accepted"
   return (
     <div className={cn("mx-auto flex w-full flex-col", mobile ? "gap-3" : "max-w-[880px] gap-5")}>
@@ -281,6 +292,61 @@ function IngestBody({ log, mobile = false }: { log: IngestLog; mobile?: boolean 
           <MetaRow label="Ingested" value={formatDateTime(log.created_at)} />
         </div>
       </section>
+
+      {/* Spec changes 카드 — ingest 입력의 변경 항목 (added/modified/removed) */}
+      {log.spec_changes.length > 0 && (
+        <section className="flex w-full flex-col overflow-hidden rounded-lg bg-surface shadow-[0_2px_12px_#0000000F]">
+          <div className="flex w-full items-center gap-[9px] border-b border-hairline px-[18px] py-3.5">
+            <Files className="size-4 shrink-0 text-ink-secondary" />
+            <span className="pen-text text-[13.5px] font-semibold tracking-[-0.2px] text-ink">
+              Spec changes
+            </span>
+            <span className="flex items-center justify-center rounded-pill bg-input px-2 py-0.5">
+              <span className="pen-text text-[11px] font-semibold text-ink-secondary">
+                {log.spec_changes.length}
+              </span>
+            </span>
+          </div>
+          <div className="flex w-full flex-col">
+            {log.spec_changes.map((change, index) => {
+              const badge = CHANGE_BADGE[change.type] ?? CHANGE_BADGE["modified"]
+              return (
+                <div
+                  key={`${change.area}-${index.toString()}`}
+                  className={cn(
+                    "flex w-full items-start gap-3 px-[18px] py-3",
+                    index < log.spec_changes.length - 1 && "border-b border-hairline",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "flex size-[19px] shrink-0 items-center justify-center rounded-[5px]",
+                      badge?.bg,
+                    )}
+                  >
+                    <span
+                      className={cn("pen-text font-mono text-[11px] font-semibold", badge?.text)}
+                    >
+                      {badge?.label}
+                    </span>
+                  </span>
+                  <div className="flex min-w-0 flex-1 flex-col gap-1">
+                    <span className="pen-text text-[13px] font-medium tracking-[-0.12px] text-ink">
+                      {change.area}
+                    </span>
+                    <span className="pen-text text-[12px] leading-[1.5] tracking-[-0.1px] text-ink-secondary">
+                      {change.description}
+                    </span>
+                    <span className="pen-text text-[11.5px] leading-[1.5] tracking-[-0.1px] text-ink-tertiary">
+                      {change.reasoning}
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+      )}
 
       {/* Stop gate 카드 — status 기반 (accepted=passed / rejected=blocked) */}
       <section className="flex w-full flex-col overflow-hidden rounded-lg bg-surface shadow-[0_2px_12px_#0000000F]">

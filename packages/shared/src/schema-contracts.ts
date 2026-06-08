@@ -211,6 +211,24 @@ export const QueryLogSchema = z.object({
   created_at: NonEmptyStringSchema,
 })
 
+export const ToolCallSchema = z.object({
+  name: NonEmptyStringSchema,
+  arguments: z.string(),
+  result: z.string().nullable(),
+})
+
+export const IngestLogDetailSchema = IngestLogSchema.extend({
+  spec_changes: z.array(SpecChangeSchema),
+  progress_updates: z.array(ProgressUpdateSchema),
+  open_questions: z.array(z.string()),
+})
+
+export const QueryLogDetailSchema = QueryLogSchema.extend({
+  answer: z.string().nullable(),
+  citations: z.array(CitationSchema),
+  tool_calls: z.array(ToolCallSchema),
+})
+
 export const IngestLogListResponseSchema = z.object({
   logs: z.array(IngestLogSchema),
   next_cursor: NonEmptyStringSchema.nullable(),
@@ -352,6 +370,9 @@ export type ConflictResolveRequest = z.infer<typeof ConflictResolveRequestSchema
 export type ConflictResolveResponse = z.infer<typeof ConflictResolveResponseSchema>
 export type IngestLog = z.infer<typeof IngestLogSchema>
 export type QueryLog = z.infer<typeof QueryLogSchema>
+export type ToolCall = z.infer<typeof ToolCallSchema>
+export type IngestLogDetail = z.infer<typeof IngestLogDetailSchema>
+export type QueryLogDetail = z.infer<typeof QueryLogDetailSchema>
 export type IngestLogListResponse = z.infer<typeof IngestLogListResponseSchema>
 export type QueryLogListResponse = z.infer<typeof QueryLogListResponseSchema>
 export type WikiTreeRequest = z.infer<typeof WikiTreeRequestSchema>
