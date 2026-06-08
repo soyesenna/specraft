@@ -94,15 +94,15 @@ export function useGraphViewport(viewport: GraphViewport, onViewportChange: View
   const updateRef = useRef(onViewportChange)
   updateRef.current = onViewportChange
 
-  function stopInertia(): void {
+  const stopInertia = useCallback((): void => {
     if (inertiaFrame.current !== null) {
       cancelAnimationFrame(inertiaFrame.current)
       inertiaFrame.current = null
     }
-  }
+  }, [])
 
   // 언마운트 시 관성 루프 정리.
-  useEffect(() => stopInertia, [])
+  useEffect(() => stopInertia, [stopInertia])
 
   function pushSample(x: number, y: number): void {
     const now = performance.now()
