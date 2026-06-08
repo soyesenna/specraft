@@ -5627,6 +5627,204 @@
                               ]
                             },
                             {
+                              "type": "frame",
+                              "id": "aXZwM",
+                              "name": "Tool Timeline",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 6,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "OAQdr",
+                                  "name": "Tool Step 문서 목록",
+                                  "width": "fill_container",
+                                  "fill": "$bg",
+                                  "cornerRadius": 10,
+                                  "stroke": "$separator",
+                                  "strokeWidth": 1,
+                                  "gap": 8,
+                                  "padding": [
+                                    7,
+                                    12
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "q2IMpX",
+                                      "name": "Tool Icon",
+                                      "width": 14,
+                                      "height": 14,
+                                      "icon": "search",
+                                      "library": "lucide",
+                                      "fill": "$accent"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "zzHSb",
+                                      "name": "Tool Label",
+                                      "fill": "$ink",
+                                      "content": "문서 목록",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.12
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "UdMug",
+                                      "name": "Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "icon",
+                                      "id": "A16Z07",
+                                      "name": "Chevron",
+                                      "width": 14,
+                                      "height": 14,
+                                      "icon": "chevron-down",
+                                      "library": "lucide",
+                                      "fill": "$ink-tertiary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "n5N7Ez",
+                                  "name": "Tool Step 문서 검색",
+                                  "width": "fill_container",
+                                  "fill": "$bg",
+                                  "cornerRadius": 10,
+                                  "stroke": "$separator",
+                                  "strokeWidth": 1,
+                                  "gap": 8,
+                                  "padding": [
+                                    7,
+                                    12
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "Qup6r",
+                                      "name": "Tool Icon",
+                                      "width": 14,
+                                      "height": 14,
+                                      "icon": "search",
+                                      "library": "lucide",
+                                      "fill": "$accent"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "KQuIr",
+                                      "name": "Tool Label",
+                                      "fill": "$ink",
+                                      "content": "문서 검색",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.12
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "Apd37",
+                                      "name": "Tool Arg",
+                                      "fill": "$ink-tertiary",
+                                      "content": "stop-gate",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "normal"
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "GEJ6a",
+                                      "name": "Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "icon",
+                                      "id": "d5X8Pp",
+                                      "name": "Chevron",
+                                      "width": 14,
+                                      "height": 14,
+                                      "icon": "chevron-down",
+                                      "library": "lucide",
+                                      "fill": "$ink-tertiary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "u18GD",
+                                  "name": "Tool Step 문서 읽기",
+                                  "width": "fill_container",
+                                  "fill": "$bg",
+                                  "cornerRadius": 10,
+                                  "stroke": "$separator",
+                                  "strokeWidth": 1,
+                                  "gap": 8,
+                                  "padding": [
+                                    7,
+                                    12
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "JJQe1",
+                                      "name": "Tool Icon",
+                                      "width": 14,
+                                      "height": 14,
+                                      "icon": "search",
+                                      "library": "lucide",
+                                      "fill": "$accent"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "moZDx",
+                                      "name": "Tool Label",
+                                      "fill": "$ink",
+                                      "content": "문서 읽기",
+                                      "fontFamily": "$font-text",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "600",
+                                      "letterSpacing": -0.12
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "KsIK7",
+                                      "name": "Tool Arg",
+                                      "fill": "$ink-tertiary",
+                                      "content": "stop-gate.md",
+                                      "fontFamily": "$font-mono",
+                                      "fontSize": 11.5,
+                                      "fontWeight": "normal"
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "NivdM",
+                                      "name": "Spacer",
+                                      "width": "fill_container",
+                                      "height": 1
+                                    },
+                                    {
+                                      "type": "icon",
+                                      "id": "kSAGo",
+                                      "name": "Chevron",
+                                      "width": 14,
+                                      "height": 14,
+                                      "icon": "chevron-down",
+                                      "library": "lucide",
+                                      "fill": "$ink-tertiary"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
                               "type": "text",
                               "id": "CiTRC",
                               "name": "Answer P1",
@@ -23094,6 +23292,204 @@
                       "fontSize": 11,
                       "fontWeight": "normal",
                       "letterSpacing": -0.1
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "cVXRo",
+                  "name": "Tool Timeline",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 5,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "U9KeEv",
+                      "name": "Tool Step 문서 목록",
+                      "width": "fill_container",
+                      "fill": "$bg",
+                      "cornerRadius": 9,
+                      "stroke": "$separator",
+                      "strokeWidth": 1,
+                      "gap": 7,
+                      "padding": [
+                        6,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "MEDdz",
+                          "name": "Tool Icon",
+                          "width": 13,
+                          "height": 13,
+                          "icon": "search",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "xybvB",
+                          "name": "Tool Label",
+                          "fill": "$ink",
+                          "content": "문서 목록",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11.5,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.1
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZeHO4",
+                          "name": "Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "icon",
+                          "id": "rOA5y",
+                          "name": "Chevron",
+                          "width": 13,
+                          "height": 13,
+                          "icon": "chevron-down",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "qliEK",
+                      "name": "Tool Step 문서 검색",
+                      "width": "fill_container",
+                      "fill": "$bg",
+                      "cornerRadius": 9,
+                      "stroke": "$separator",
+                      "strokeWidth": 1,
+                      "gap": 7,
+                      "padding": [
+                        6,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "X1BLwZ",
+                          "name": "Tool Icon",
+                          "width": 13,
+                          "height": 13,
+                          "icon": "search",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "A0iT7",
+                          "name": "Tool Label",
+                          "fill": "$ink",
+                          "content": "문서 검색",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11.5,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.1
+                        },
+                        {
+                          "type": "text",
+                          "id": "rCcTr",
+                          "name": "Tool Arg",
+                          "fill": "$ink-tertiary",
+                          "content": "stop-gate",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 10.5,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "x4xCba",
+                          "name": "Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "icon",
+                          "id": "fTIJr",
+                          "name": "Chevron",
+                          "width": 13,
+                          "height": 13,
+                          "icon": "chevron-down",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VW9a8",
+                      "name": "Tool Step 문서 읽기",
+                      "width": "fill_container",
+                      "fill": "$bg",
+                      "cornerRadius": 9,
+                      "stroke": "$separator",
+                      "strokeWidth": 1,
+                      "gap": 7,
+                      "padding": [
+                        6,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "R0qcT",
+                          "name": "Tool Icon",
+                          "width": 13,
+                          "height": 13,
+                          "icon": "search",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "TCKqb",
+                          "name": "Tool Label",
+                          "fill": "$ink",
+                          "content": "문서 읽기",
+                          "fontFamily": "$font-text",
+                          "fontSize": 11.5,
+                          "fontWeight": "600",
+                          "letterSpacing": -0.1
+                        },
+                        {
+                          "type": "text",
+                          "id": "Q5jEe",
+                          "name": "Tool Arg",
+                          "fill": "$ink-tertiary",
+                          "content": "stop-gate.md",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 10.5,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "KRDPS",
+                          "name": "Spacer",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "icon",
+                          "id": "CoVji",
+                          "name": "Chevron",
+                          "width": 13,
+                          "height": 13,
+                          "icon": "chevron-down",
+                          "library": "lucide",
+                          "fill": "$ink-tertiary"
+                        }
+                      ]
                     }
                   ]
                 },
