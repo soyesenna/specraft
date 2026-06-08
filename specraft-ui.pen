@@ -6743,11 +6743,11 @@
                                   "type": "icon",
                                   "id": "lCogK",
                                   "name": "Go",
-                                  "width": 15,
-                                  "height": 15,
+                                  "width": 16,
+                                  "height": 16,
                                   "icon": "chevron-right",
                                   "library": "lucide",
-                                  "fill": "$ink-tertiary"
+                                  "fill": "$ink-secondary"
                                 }
                               ]
                             }
