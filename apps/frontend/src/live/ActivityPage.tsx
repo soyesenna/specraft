@@ -3,13 +3,14 @@ import {
   AlertTriangle,
   ArrowUp,
   Calendar,
+  Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   MessageCircle,
   RefreshCw,
 } from "lucide-react"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { ButtonSecondary } from "../components/buttons.js"
 import { GitBranchIcon } from "../components/GitBranchIcon.js"
@@ -17,6 +18,7 @@ import { GlassNav } from "../components/GlassNav.js"
 import { MobileStatusBar } from "../components/MobileStatusBar.js"
 import { MobileTabBar } from "../components/MobileTabBar.js"
 import { cn } from "../lib/cn.js"
+import { useDismissable } from "../lib/useDismissable.js"
 import { useSpecraft } from "./api.js"
 import { LiveShell } from "./LiveShell.js"
 
@@ -29,6 +31,43 @@ type ActivityStatus = "accepted" | "logged" | "rejected"
 type TypeTab = "All" | "Ingests" | "Queries"
 
 const PAGE_SIZE = 10
+
+/** 기간 필터 — created_at 기준 상대 범위. 기본 7d. */
+type Period = "today" | "7d" | "30d" | "90d" | "all"
+
+const PERIODS: readonly Period[] = ["today", "7d", "30d", "90d", "all"]
+
+const PERIOD_LABELS: Record<Period, string> = {
+  today: "Today",
+  "7d": "Last 7 days",
+  "30d": "Last 30 days",
+  "90d": "Last 90 days",
+  all: "All time",
+}
+
+const PERIOD_SHORT: Record<Period, string> = {
+  today: "Today",
+  "7d": "7 days",
+  "30d": "30 days",
+  "90d": "90 days",
+  all: "All",
+}
+
+const DAY_MS = 86_400_000
+
+/** 선택 기간의 시작 시각(ms). all=0(전체), today=로컬 자정 기준. */
+function periodCutoff(period: Period): number {
+  if (period === "all") {
+    return 0
+  }
+  if (period === "today") {
+    const start = new Date()
+    start.setHours(0, 0, 0, 0)
+    return start.getTime()
+  }
+  const days = period === "7d" ? 7 : period === "30d" ? 30 : 90
+  return Date.now() - days * DAY_MS
+}
 
 const STATUS_DOT: Record<ActivityStatus, string> = {
   accepted: "bg-success",
@@ -100,6 +139,7 @@ export function ActivityPage() {
   const [rows, setRows] = useState<readonly ActivityRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<TypeTab>("All")
+  const [period, setPeriod] = useState<Period>("7d")
   const [page, setPage] = useState(0)
 
   // 액티비티 로드를 재호출 가능한 함수로 분리 — Retry 버튼이 같은 경로를 다시 태운다.
@@ -143,15 +183,14 @@ export function ActivityPage() {
     loadActivity(() => true)
   }
 
-  const filteredRows = useMemo(
-    () =>
-      (rows ?? []).filter((row) => {
-        if (filter === "Ingests") return row.kind === "Ingest"
-        if (filter === "Queries") return row.kind === "Query"
-        return true
-      }),
-    [rows, filter],
-  )
+  const filteredRows = useMemo(() => {
+    const cutoff = periodCutoff(period)
+    return (rows ?? []).filter((row) => {
+      if (filter === "Ingests" && row.kind !== "Ingest") return false
+      if (filter === "Queries" && row.kind !== "Query") return false
+      return rowMillis(row) >= cutoff
+    })
+  }, [rows, filter, period])
 
   // 로딩: rows 미도착 && 에러 없음. 데이터 0건과 로딩 중을 명확히 구분한다.
   const loading = rows === null && error === null
@@ -167,6 +206,11 @@ export function ActivityPage() {
     setPage(0)
   }
 
+  const setPeriodReset = (next: Period) => {
+    setPeriod(next)
+    setPage(0)
+  }
+
   return (
     <>
       {/* ───── 데스크톱 07 ───── */}
@@ -177,13 +221,7 @@ export function ActivityPage() {
           titleRight={
             <div className="flex items-center gap-3.5">
               <TypeFilter filter={filter} onChange={setFilterReset} />
-              <div className="flex items-center gap-[7px] rounded-pill bg-surface px-[13px] py-[7px]">
-                <Calendar className="size-[13px] text-ink" />
-                <span className="pen-text text-[13px] font-medium tracking-[-0.2px] text-ink">
-                  Last 7 days
-                </span>
-                <ChevronDown className="size-[13px] text-ink-tertiary" />
-              </div>
+              <PeriodFilter period={period} onChange={setPeriodReset} />
             </div>
           }
         >
@@ -346,12 +384,7 @@ export function ActivityPage() {
             Activity
           </h1>
           <span className="h-px flex-1" />
-          <div className="flex items-center gap-1.5 rounded-pill bg-surface px-[11px] py-1.5">
-            <Calendar className="size-3 text-ink" />
-            <span className="pen-text text-[12px] font-medium tracking-[-0.12px] text-ink">
-              7 days
-            </span>
-          </div>
+          <PeriodFilter period={period} onChange={setPeriodReset} mobile />
         </div>
         <div className="w-full px-4 pt-1 pb-2.5">
           <div className="flex w-full gap-0.5 rounded-[9px] bg-input p-0.5">
@@ -573,6 +606,101 @@ function HeadCell({ w, children }: { w: number; children: string }) {
         {children}
       </span>
     </span>
+  )
+}
+
+/** 기간 필터 드롭다운 — Date Chip 트리거 + 옵션 메뉴(useDismissable로 외부/Esc 닫기). */
+function PeriodFilter({
+  period,
+  onChange,
+  mobile = false,
+}: {
+  period: Period
+  onChange: (period: Period) => void
+  mobile?: boolean
+}) {
+  const [open, setOpen] = useState(false)
+  const [entered, setEntered] = useState(false)
+  const anchorRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  useDismissable(open, () => setOpen(false), anchorRef, buttonRef)
+  // 드롭다운 ease-enter 페이드·슬라이드: 열림 직후 다음 프레임에 entered=true.
+  useEffect(() => {
+    if (!open) {
+      setEntered(false)
+      return
+    }
+    const frame = requestAnimationFrame(() => setEntered(true))
+    return () => cancelAnimationFrame(frame)
+  }, [open])
+  return (
+    <div ref={anchorRef} className="relative">
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-haspopup="true"
+        className={cn(
+          "flex items-center rounded-pill bg-surface transition-[filter] duration-150 ease-[var(--ease-standard)] hover:brightness-95",
+          mobile ? "gap-1.5 px-[11px] py-1.5" : "gap-[7px] px-[13px] py-[7px]",
+        )}
+      >
+        <Calendar className={cn("text-ink", mobile ? "size-3" : "size-[13px]")} />
+        <span
+          className={cn(
+            "pen-text font-medium text-ink",
+            mobile ? "text-[12px] tracking-[-0.12px]" : "text-[13px] tracking-[-0.2px]",
+          )}
+        >
+          {mobile ? PERIOD_SHORT[period] : PERIOD_LABELS[period]}
+        </span>
+        <ChevronDown
+          className={cn(
+            "text-ink-tertiary transition-transform duration-150",
+            mobile ? "size-3" : "size-[13px]",
+            open && "rotate-180",
+          )}
+        />
+      </button>
+      {open && (
+        <div
+          className={cn(
+            "absolute right-0 z-40 mt-2 flex min-w-[148px] flex-col gap-0.5 rounded-md bg-surface p-1 shadow-[3px_5px_30px_#00000038]",
+            "origin-top-right transition duration-150 ease-[cubic-bezier(0.2,0.6,0.25,1)] motion-reduce:transition-none",
+            entered ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0",
+          )}
+        >
+          {PERIODS.map((option) => {
+            const active = option === period
+            return (
+              <button
+                key={option}
+                type="button"
+                onClick={() => {
+                  onChange(option)
+                  setOpen(false)
+                }}
+                className={cn(
+                  "flex items-center gap-2.5 rounded-[7px] px-2.5 py-1.5 text-left transition-colors duration-150 ease-[var(--ease-standard)]",
+                  active ? "bg-bg" : "hover:bg-hairline",
+                )}
+              >
+                <span
+                  className={cn(
+                    "pen-text whitespace-nowrap text-[13px] tracking-[-0.2px]",
+                    active ? "font-semibold text-ink" : "text-ink-secondary",
+                  )}
+                >
+                  {PERIOD_LABELS[option]}
+                </span>
+                {active && <Check className="ml-auto size-3.5 shrink-0 text-accent" />}
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </div>
   )
 }
 
