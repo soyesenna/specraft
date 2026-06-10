@@ -4,6 +4,7 @@ import {
   listWikiFiles,
   listWikiLastModified,
   readWikiFile,
+  type WikiFileTouch,
   type WikiRepository,
 } from "../git/sync.js"
 
@@ -81,10 +82,18 @@ function linkTargets(content: string): readonly string[] {
   return [...matches].map((match) => match[1] ?? "").filter((target) => target !== "")
 }
 
-export function buildWikiGraph(wiki: WikiRepository, branch: string): WikiGraphResponse {
+/**
+ * 그래프 응답 생성. lastModifiedOverride를 주면 전체 브랜치 `git log` 순회를 건너뛴다
+ * — 캐시된 이전 그래프 + `old..new` 델타로 합성한 touch 맵을 재사용하는 증분 경로.
+ */
+export function buildWikiGraph(
+  wiki: WikiRepository,
+  branch: string,
+  lastModifiedOverride?: ReadonlyMap<string, WikiFileTouch>,
+): WikiGraphResponse {
   const files = listWikiFiles(wiki).filter((path) => path.endsWith(".md"))
   const known = new Set(files)
-  const lastModified = listWikiLastModified(wiki)
+  const lastModified = lastModifiedOverride ?? listWikiLastModified(wiki)
   const nodes: WikiGraphNode[] = []
   const edges: WikiGraphEdge[] = []
   for (const path of files) {

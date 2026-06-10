@@ -163,16 +163,62 @@ export function sortCommitsTopologically(
   })
 }
 
+/*
+ * 레포 핸들 프로세스 캐시 — createSkeletonWiki는 요청마다 호출되는데,
+ * 브랜치/워크트리 보장에 git 서브프로세스(show-ref·checkout)를 띄운다.
+ * 한 번 준비된 (dataDir, branch) 워크트리는 그대로 유지되므로 핸들을 재사용해
+ * warm 요청에서 스폰 비용을 0으로 만든다. 워크트리가 외부에서 삭제된 경우만 재준비.
+ */
+const wikiRepoCache = new Map<string, WikiRepository>()
+
 export function createSkeletonWiki(input: {
   readonly dataDir: string
   readonly branch: string
 }): WikiRepository {
+  const cacheKey = `${input.dataDir}\u0000${input.branch}`
+  const cached = wikiRepoCache.get(cacheKey)
+  if (cached && existsSync(join(cached.root, ".git"))) {
+    return cached
+  }
   const gitDirectory = initializeBareWiki(input.dataDir)
   ensureWikiBranch(gitDirectory, input.branch)
-  return {
+  const repo: WikiRepository = {
     branch: input.branch,
     gitDir: gitDirectory,
     root: ensureWikiWorktree(input.dataDir, gitDirectory, input.branch),
+  }
+  wikiRepoCache.set(cacheKey, repo)
+  return repo
+}
+
+/**
+ * git 스폰 없이 bare 저장소의 브랜치 tip을 읽는다 — loose ref 파일 우선,
+ * gc로 packed-refs에 들어간 경우 폴백 파싱. 그래프 캐시 키 검증용 초저비용 경로.
+ */
+export function wikiBranchTip(wiki: WikiRepository): string | null {
+  try {
+    const looseRef = join(wiki.gitDir, "refs", "heads", ...wiki.branch.split("/"))
+    if (existsSync(looseRef)) {
+      const sha = readFileSync(looseRef, "utf8").trim()
+      return /^[0-9a-f]{40,64}$/.test(sha) ? sha : null
+    }
+    const packedPath = join(wiki.gitDir, "packed-refs")
+    if (!existsSync(packedPath)) {
+      return null
+    }
+    const wanted = `refs/heads/${wiki.branch}`
+    for (const line of readFileSync(packedPath, "utf8").split("\n")) {
+      if (line.startsWith("#") || line.startsWith("^")) {
+        continue
+      }
+      const [sha, ref] = line.trim().split(" ")
+      if (ref === wanted && sha && /^[0-9a-f]{40,64}$/.test(sha)) {
+        return sha
+      }
+    }
+    return null
+  } catch {
+    return null
   }
 }
 
@@ -251,11 +297,17 @@ export type WikiFileTouch = {
   readonly commitHash: string
 }
 
-/** 브랜치 로그 한 번 순회로 파일별 마지막 수정 시각/author/커밋 해시를 수집한다. */
-export function listWikiLastModified(wiki: WikiRepository): ReadonlyMap<string, WikiFileTouch> {
+/**
+ * 브랜치 로그 한 번 순회로 파일별 마지막 수정 시각/author/커밋 해시를 수집한다.
+ * sinceCommit을 주면 `since..branch` 범위만 읽는다 — 캐시된 그래프의 증분 갱신용.
+ */
+export function listWikiLastModified(
+  wiki: WikiRepository,
+  sinceCommit?: string,
+): ReadonlyMap<string, WikiFileTouch> {
   const output = git(wiki.root, [
     "log",
-    wiki.branch,
+    sinceCommit ? `${sinceCommit}..${wiki.branch}` : wiki.branch,
     "--name-only",
     `--pretty=format:${historyRecordSeparator}%aI${historyFieldSeparator}%an${historyFieldSeparator}%h`,
   ])

@@ -39,6 +39,7 @@ import type { LLMProvider } from "../llm/provider.js"
 import type { SpecraftDatabase } from "../storage/database.js"
 import { requireMember } from "./auth.js"
 import { registerConflictRoutes } from "./conflict-routes.js"
+import { cachedWikiGraph } from "./graph-cache.js"
 import { getGraphLayout, saveGraphLayout } from "./layouts.js"
 import {
   getIngestLogDetail,
@@ -54,7 +55,6 @@ import {
   answerWikiQuestionWithAgentStream,
   ingestWikiWithAgent,
 } from "./wiki-agent.js"
-import { buildWikiGraph } from "./wiki-graph.js"
 import { buildWikiHistory } from "./wiki-history.js"
 
 export type SpecRouteContext = {
@@ -381,7 +381,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
     const wiki = wikiFor(context, parsed.data.branch)
     return WikiGraphResponseSchema.parse(
       wiki
-        ? buildWikiGraph(wiki, parsed.data.branch)
+        ? cachedWikiGraph(context.database, wiki, parsed.data.branch)
         : { branch: parsed.data.branch, nodes: [], edges: [] },
     )
   })
