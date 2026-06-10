@@ -9,10 +9,27 @@ export type LaidOutNode = {
   readonly cy: number
 }
 
+export type GraphNodePosition = {
+  readonly x: number
+  readonly y: number
+}
+
+/** 사용자가 드래그로 옮긴 노드 배치 — path → 콘텐츠 좌표계 좌상단 오버라이드 */
+export type GraphNodePositions = Readonly<Record<string, GraphNodePosition>>
+
+/** 오버라이드로 기본 캔버스 밖에 놓인 노드까지 덮는 엣지 SVG 영역 */
+export type GraphExtent = {
+  readonly minX: number
+  readonly minY: number
+  readonly width: number
+  readonly height: number
+}
+
 export type GraphLayout = {
   readonly viewBox: string
   readonly width: number
   readonly height: number
+  readonly extent: GraphExtent
   readonly nodes: readonly LaidOutNode[]
   readonly clusters: readonly { readonly dir: string; readonly cx: number; readonly cy: number }[]
   readonly edges: readonly { readonly from: LaidOutNode; readonly to: LaidOutNode }[]
@@ -115,6 +132,7 @@ export function buildLayout(
   edges: WikiGraphResponse["edges"],
   collapsed: boolean,
   dims?: LayoutDims,
+  overrides?: GraphNodePositions,
 ): GraphLayout {
   const width = dims?.width ?? (collapsed ? 1376 : 1224)
   const height = dims?.height ?? 782
@@ -162,8 +180,14 @@ export function buildLayout(
       const memberCx = clusterCx + Math.cos(memberAngle) * radius
       const memberCy = clusterCy + Math.sin(memberAngle) * radius * 0.74
       const margin = Math.min(16, width * 0.02)
-      const x = Math.min(Math.max(memberCx - nodeWidth / 2, margin), width - nodeWidth - margin)
-      const y = Math.min(Math.max(memberCy - nodeHeight / 2, margin), height - nodeHeight - margin)
+      // 사용자 드래그 오버라이드가 있으면 기본 산포·경계 클램프 대신 그대로 쓴다.
+      const override = overrides?.[node.path]
+      const x =
+        override?.x ??
+        Math.min(Math.max(memberCx - nodeWidth / 2, margin), width - nodeWidth - margin)
+      const y =
+        override?.y ??
+        Math.min(Math.max(memberCy - nodeHeight / 2, margin), height - nodeHeight - margin)
       const entry = { node, x, y, width: nodeWidth, cx: x + nodeWidth / 2, cy: y + nodeHeight / 2 }
       laidOut.push(entry)
       byPath.set(node.path, entry)
@@ -178,10 +202,23 @@ export function buildLayout(
       edgeLines.push({ from, to })
     }
   }
+  // 드래그로 기본 캔버스 밖에 놓인 노드의 엣지가 잘리지 않도록 SVG 영역을 확장한다.
+  let minX = 0
+  let minY = 0
+  let maxX = width
+  let maxY = height
+  for (const entry of laidOut) {
+    minX = Math.min(minX, entry.x)
+    minY = Math.min(minY, entry.y)
+    maxX = Math.max(maxX, entry.x + nodeWidth)
+    maxY = Math.max(maxY, entry.y + nodeHeight)
+  }
+  const extent = { minX, minY, width: maxX - minX, height: maxY - minY }
   return {
-    viewBox: `0 0 ${width} ${height}`,
+    viewBox: `${minX} ${minY} ${extent.width} ${extent.height}`,
     width,
     height,
+    extent,
     nodes: laidOut,
     clusters,
     edges: edgeLines,

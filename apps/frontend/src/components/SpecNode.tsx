@@ -1,3 +1,4 @@
+import type { PointerEventHandler } from "react"
 import { cn } from "../lib/cn.js"
 
 type SpecNodeProps = {
@@ -12,6 +13,11 @@ type SpecNodeProps = {
   x: number
   y: number
   onClick?: () => void
+  /** 노드 드래그(useNodeDrag) 핸들러 패스스루 */
+  onPointerDown?: PointerEventHandler<HTMLButtonElement>
+  onPointerMove?: PointerEventHandler<HTMLButtonElement>
+  onPointerUp?: PointerEventHandler<HTMLButtonElement>
+  onPointerCancel?: PointerEventHandler<HTMLButtonElement>
 }
 
 /**
@@ -28,11 +34,19 @@ export function SpecNode({
   x,
   y,
   onClick,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerCancel,
 }: SpecNodeProps) {
   return (
     <button
       type="button"
       onClick={onClick}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerCancel}
       style={{ width, left: x, top: y }}
       className={cn(
         "absolute flex flex-col gap-[3px] rounded-md border-2 border-transparent px-[15px] py-3 text-left shadow-[0_4px_24px_#0000001F] transition-colors duration-150 ease-standard",

@@ -1,6 +1,6 @@
 import type { WikiGraphResponse } from "@specraft/shared"
 import { AlertTriangle, RefreshCw, Waypoints } from "lucide-react"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { ButtonSecondary } from "../components/buttons.js"
 import { SearchField } from "../components/SearchField.js"
@@ -13,7 +13,13 @@ import { MobileSpecs } from "./MobileSpecs.js"
 import { DesktopDotCanvas } from "./SpecsDotCanvas.js"
 import { DesktopGraphCanvas } from "./SpecsGraphCanvases.js"
 import { DesktopListView } from "./SpecsListView.js"
-import { docIdOf, matchesQuery, relativeSyncedLabel } from "./specsGraphModel.js"
+import {
+  docIdOf,
+  type GraphNodePosition,
+  type GraphNodePositions,
+  matchesQuery,
+  relativeSyncedLabel,
+} from "./specsGraphModel.js"
 import {
   DEFAULT_GRAPH_VIEWPORT,
   GRAPH_COMPACT_THRESHOLD,
@@ -21,6 +27,13 @@ import {
   stepGraphViewport,
   type ViewportUpdater,
 } from "./specsGraphViewport.js"
+import {
+  readCachedGraph,
+  readCachedLayout,
+  specsCacheStorage,
+  writeCachedGraph,
+  writeCachedLayout,
+} from "./specsLocalCache.js"
 
 type SyncStatus = {
   readonly label: string
@@ -30,7 +43,7 @@ type SyncStatus = {
 const SYNC_LOADING: SyncStatus = { label: "Syncing…", tone: "neutral" }
 
 export function SpecsPage() {
-  const { client } = useSpecraft()
+  const { client, member } = useSpecraft()
   const { selectedBranch } = useBranch()
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
@@ -44,30 +57,58 @@ export function SpecsPage() {
   const [detailOpen, setDetailOpen] = useState(true)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(SYNC_LOADING)
+  // 드래그로 옮긴 노드 배치 — 서버(멤버×브랜치)가 정본, 로컬 캐시는 첫 프레임용 사본.
+  const [nodePositions, setNodePositions] = useState<GraphNodePositions>({})
+  const memberId = member?.id
+
+  // SpecsPage는 세션 확인 전에 마운트될 수 있어 memberId가 undefined → id로 바뀌며
+  // 로드 effect가 재실행된다. 이때 표시 중인 데이터/드래그를 지우면 안 되므로
+  // "브랜치가 실제로 바뀌었는지"를 ref로 구분해 재실행을 비파괴적으로 처리한다.
+  const graphBranchRef = useRef<string | null>(null)
+  const graphRef = useRef(graph)
+  graphRef.current = graph
 
   // 그래프 로드를 재호출 가능한 함수로 분리 — Retry 버튼이 같은 경로를 다시 태운다.
   // active 가드는 호출자(useEffect cleanup / 버튼 핸들러)가 넘긴 ref로 stale 응답을 차단.
+  // 로컬 캐시가 있으면 스켈레톤 없이 즉시 렌더하고(SWR), fetch 결과로 교체한다.
   const loadGraph = useCallback(
     (isActive: () => boolean) => {
-      setGraph(null)
+      const branchChanged = graphBranchRef.current !== selectedBranch
+      graphBranchRef.current = selectedBranch
+      const cached = readCachedGraph(specsCacheStorage(), memberId, selectedBranch)
+      if (branchChanged) {
+        setGraph(cached)
+        setSelectedPath(cached?.nodes[0]?.path ?? null)
+      } else {
+        // 멤버 식별·Retry 재실행 — 이미 보이는 그래프는 유지하고 빈 화면만 캐시로 채운다.
+        setGraph((current) => current ?? cached)
+        setSelectedPath((current) => current ?? cached?.nodes[0]?.path ?? null)
+      }
       setError(null)
-      setSelectedPath(null)
       void client
         .wikiGraph({ branch: selectedBranch })
         .then((response) => {
           if (isActive()) {
             setGraph(response)
-            setSelectedPath(response.nodes[0]?.path ?? null)
+            // 캐시로 미리 선택된 노드가 새 응답에도 있으면 유지한다.
+            setSelectedPath(
+              (current) =>
+                (current !== null && response.nodes.some((node) => node.path === current)
+                  ? current
+                  : response.nodes[0]?.path) ?? null,
+            )
             setError(null)
+            writeCachedGraph(specsCacheStorage(), memberId, selectedBranch, response)
           }
         })
         .catch((caught: unknown) => {
-          if (isActive()) {
+          // 캐시/이전 응답을 보여주는 중이면 stale 데이터 유지가 에러 화면보다 낫다.
+          if (isActive() && graphRef.current === null) {
             setError(caught instanceof Error ? caught.message : "Failed to load spec graph")
           }
         })
     },
-    [client, selectedBranch],
+    [client, selectedBranch, memberId],
   )
 
   useEffect(() => {
@@ -81,6 +122,56 @@ export function SpecsPage() {
   const retryGraph = () => {
     loadGraph(() => true)
   }
+
+  // 이번 브랜치에서 사용자가 직접 드래그한 위치 — 늦게 도착한 서버 GET 응답이
+  // 방금 드래그한 노드를 되돌리지 않도록 항상 로컬 드래그가 이긴다.
+  const localDragsRef = useRef<Record<string, GraphNodePosition>>({})
+  const layoutBranchRef = useRef<string | null>(null)
+
+  // 노드 배치 로드 — 로컬 캐시를 즉시 적용한 뒤 서버 정본으로 갱신한다.
+  // 레이아웃은 보조 데이터라 실패해도 기본 배치로 동작한다 (에러 표면화 없음).
+  useEffect(() => {
+    let active = true
+    if (layoutBranchRef.current !== selectedBranch) {
+      layoutBranchRef.current = selectedBranch
+      localDragsRef.current = {}
+    }
+    setNodePositions({
+      ...(readCachedLayout(specsCacheStorage(), memberId, selectedBranch) ?? {}),
+      ...localDragsRef.current,
+    })
+    void client
+      .getGraphLayout({ branch: selectedBranch })
+      .then((response) => {
+        if (active) {
+          const merged = { ...response.positions, ...localDragsRef.current }
+          setNodePositions(merged)
+          writeCachedLayout(specsCacheStorage(), memberId, selectedBranch, merged)
+        }
+      })
+      .catch(() => {})
+    return () => {
+      active = false
+    }
+  }, [client, selectedBranch, memberId])
+
+  // 드래그 종료 시점의 최신 배치를 저장하기 위한 ref — move는 프레임마다 오므로
+  // 상태만 갱신하고, 저장(서버 PUT + 로컬 캐시)은 moveEnd에서 한 번 수행한다.
+  const positionsRef = useRef(nodePositions)
+  positionsRef.current = nodePositions
+
+  const moveNode = useCallback((path: string, position: GraphNodePosition) => {
+    localDragsRef.current[path] = position
+    setNodePositions((current) => ({ ...current, [path]: position }))
+  }, [])
+
+  const persistNodePositions = useCallback(() => {
+    const positions = positionsRef.current
+    writeCachedLayout(specsCacheStorage(), memberId, selectedBranch, positions)
+    void client.saveGraphLayout({ branch: selectedBranch, positions }).catch(() => {
+      // 저장 실패는 다음 드래그/방문에서 재시도된다 — 화면 동작은 그대로 유지.
+    })
+  }, [client, selectedBranch, memberId])
 
   useEffect(() => {
     let active = true
@@ -206,6 +297,9 @@ export function SpecsPage() {
                 onFit={() => setViewport(DEFAULT_GRAPH_VIEWPORT)}
                 detailOpen={detailOpen}
                 onCloseDetail={() => setDetailOpen(false)}
+                nodePositions={nodePositions}
+                onNodeMove={moveNode}
+                onNodeMoveEnd={persistNodePositions}
               />
             ) : (
               <DesktopGraphCanvas
@@ -221,6 +315,9 @@ export function SpecsPage() {
                 onFit={() => setViewport(DEFAULT_GRAPH_VIEWPORT)}
                 detailOpen={detailOpen}
                 onCloseDetail={() => setDetailOpen(false)}
+                nodePositions={nodePositions}
+                onNodeMove={moveNode}
+                onNodeMoveEnd={persistNodePositions}
               />
             )
           ) : (

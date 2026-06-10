@@ -3,9 +3,16 @@ import { useMemo } from "react"
 import { SpecNode } from "../components/SpecNode.js"
 import { useSidebarCollapsed } from "../components/sidebarCollapsed.js"
 import { DetailPanel, ZoomControls } from "./SpecsGraphDetailPanel.js"
-import { buildLayout, fileNameOf, isSkeleton } from "./specsGraphModel.js"
+import {
+  buildLayout,
+  fileNameOf,
+  type GraphNodePosition,
+  type GraphNodePositions,
+  isSkeleton,
+} from "./specsGraphModel.js"
 import type { GraphViewport, ViewportUpdater } from "./specsGraphViewport.js"
 import { useGraphViewport } from "./useGraphViewport.js"
+import { useNodeDrag } from "./useNodeDrag.js"
 
 type DesktopGraphCanvasProps = {
   readonly nodes: readonly WikiGraphNode[]
@@ -21,6 +28,10 @@ type DesktopGraphCanvasProps = {
   /** 상세 패널 표시 여부 — X 닫기 후 노드 재클릭 전까지 false */
   readonly detailOpen: boolean
   readonly onCloseDetail: () => void
+  /** 사용자별 노드 배치 오버라이드 + 드래그 이동/저장 콜백 */
+  readonly nodePositions: GraphNodePositions
+  readonly onNodeMove: (path: string, position: GraphNodePosition) => void
+  readonly onNodeMoveEnd: () => void
 }
 
 export function DesktopGraphCanvas({
@@ -36,10 +47,21 @@ export function DesktopGraphCanvas({
   onFit,
   detailOpen,
   onCloseDetail,
+  nodePositions,
+  onNodeMove,
+  onNodeMoveEnd,
 }: DesktopGraphCanvasProps) {
   const collapsed = useSidebarCollapsed()
   const controls = useGraphViewport(viewport, onViewportChange)
-  const layout = useMemo(() => buildLayout(nodes, edges, collapsed), [nodes, edges, collapsed])
+  const layout = useMemo(
+    () => buildLayout(nodes, edges, collapsed, undefined, nodePositions),
+    [nodes, edges, collapsed, nodePositions],
+  )
+  const nodeDrag = useNodeDrag({
+    scale: viewport.scale,
+    onMove: onNodeMove,
+    onMoveEnd: onNodeMoveEnd,
+  })
 
   return (
     <div
@@ -57,8 +79,13 @@ export function DesktopGraphCanvas({
       <div className="absolute top-0 left-0 origin-top-left" style={controls.contentStyle}>
         <svg
           viewBox={layout.viewBox}
-          className="pointer-events-none absolute top-0 left-0"
-          style={{ width: layout.width, height: layout.height }}
+          className="pointer-events-none absolute"
+          style={{
+            left: layout.extent.minX,
+            top: layout.extent.minY,
+            width: layout.extent.width,
+            height: layout.extent.height,
+          }}
           aria-hidden
           role="presentation"
         >
@@ -94,7 +121,18 @@ export function DesktopGraphCanvas({
             width={entry.width}
             x={entry.x}
             y={entry.y}
-            onClick={() => onSelectNode(entry.node.path)}
+            onClick={() => {
+              // 드래그를 놓는 순간 발생하는 click은 선택으로 취급하지 않는다.
+              if (!nodeDrag.wasDragged()) {
+                onSelectNode(entry.node.path)
+              }
+            }}
+            onPointerDown={(event) =>
+              nodeDrag.start(entry.node.path, { x: entry.x, y: entry.y }, event)
+            }
+            onPointerMove={nodeDrag.onPointerMove}
+            onPointerUp={nodeDrag.onPointerUp}
+            onPointerCancel={nodeDrag.onPointerUp}
           />
         ))}
       </div>
