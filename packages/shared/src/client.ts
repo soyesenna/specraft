@@ -27,6 +27,10 @@ import {
   ConflictResolveResponseSchema,
   ContextRequestSchema,
   ContextResponseSchema,
+  GraphLayoutRequestSchema,
+  GraphLayoutResponseSchema,
+  GraphLayoutSaveRequestSchema,
+  GraphLayoutSaveResponseSchema,
   IngestLogDetailSchema,
   IngestLogListResponseSchema,
   IngestPayloadSchema,
@@ -269,6 +273,24 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         method: "GET",
         responseSchema: WikiHistoryResponseSchema,
         query: [["path", parsed.path]],
+      })
+    },
+    getGraphLayout: (body) => {
+      const parsed = GraphLayoutRequestSchema.parse(body)
+      return request({
+        path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/layout`,
+        method: "GET",
+        responseSchema: GraphLayoutResponseSchema,
+      })
+    },
+    saveGraphLayout: (body) => {
+      const parsed = GraphLayoutSaveRequestSchema.parse(body)
+      return request({
+        path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/layout`,
+        method: "PUT",
+        requestSchema: GraphLayoutSaveRequestSchema,
+        responseSchema: GraphLayoutSaveResponseSchema,
+        body: parsed,
       })
     },
     testGitConnection: () =>

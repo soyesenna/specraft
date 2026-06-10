@@ -74,6 +74,21 @@ export function migrateDatabase(database: Database.Database): void {
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS graph_layouts (
+      member_id TEXT NOT NULL REFERENCES members(id),
+      branch TEXT NOT NULL,
+      positions TEXT NOT NULL,
+      updated_at TEXT NOT NULL,
+      PRIMARY KEY (member_id, branch)
+    );
+
+    CREATE TABLE IF NOT EXISTS wiki_graph_cache (
+      branch TEXT PRIMARY KEY,
+      head TEXT NOT NULL,
+      payload TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
   `)
 
   // invites.created_at — 출시 후 추가된 컬럼. 기존 DB에는 ALTER로 보강한다 (레거시 행은 NULL 유지).

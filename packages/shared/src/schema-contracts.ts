@@ -287,6 +287,29 @@ export const WikiGraphResponseSchema = z.object({
   edges: z.array(WikiGraphEdgeSchema),
 })
 
+/** 그래프 노드 위치 — 레이아웃 콘텐츠 좌표계의 노드 좌상단(x,y) */
+export const GraphLayoutPositionSchema = z.object({
+  x: z.number(),
+  y: z.number(),
+})
+
+export const GraphLayoutRequestSchema = z.object({
+  branch: NonEmptyStringSchema,
+})
+
+/** 사용자별 그래프 노드 배치 — path → 위치 오버라이드 (없는 노드는 기본 레이아웃) */
+export const GraphLayoutResponseSchema = z.object({
+  branch: NonEmptyStringSchema,
+  positions: z.record(z.string(), GraphLayoutPositionSchema),
+})
+
+export const GraphLayoutSaveRequestSchema = z.object({
+  branch: NonEmptyStringSchema,
+  positions: z.record(z.string(), GraphLayoutPositionSchema),
+})
+
+export const GraphLayoutSaveResponseSchema = OkResponseSchema
+
 export const WikiHistoryRequestSchema = z.object({
   branch: NonEmptyStringSchema,
   path: NonEmptyStringSchema,
@@ -383,6 +406,11 @@ export type WikiGraphRequest = z.infer<typeof WikiGraphRequestSchema>
 export type WikiGraphNode = z.infer<typeof WikiGraphNodeSchema>
 export type WikiGraphEdge = z.infer<typeof WikiGraphEdgeSchema>
 export type WikiGraphResponse = z.infer<typeof WikiGraphResponseSchema>
+export type GraphLayoutPosition = z.infer<typeof GraphLayoutPositionSchema>
+export type GraphLayoutRequest = z.infer<typeof GraphLayoutRequestSchema>
+export type GraphLayoutResponse = z.infer<typeof GraphLayoutResponseSchema>
+export type GraphLayoutSaveRequest = z.infer<typeof GraphLayoutSaveRequestSchema>
+export type GraphLayoutSaveResponse = z.infer<typeof GraphLayoutSaveResponseSchema>
 export type WikiHistoryRequest = z.infer<typeof WikiHistoryRequestSchema>
 export type WikiVersion = z.infer<typeof WikiVersionSchema>
 export type WikiHistoryResponse = z.infer<typeof WikiHistoryResponseSchema>

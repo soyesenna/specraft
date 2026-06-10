@@ -12,11 +12,13 @@ describe("operational database schema", () => {
       "api_keys",
       "branch_locks",
       "conflicts",
+      "graph_layouts",
       "ingest_logs",
       "invites",
       "members",
       "query_logs",
       "settings",
+      "wiki_graph_cache",
     ])
     database.close()
   })

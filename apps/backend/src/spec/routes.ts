@@ -1,6 +1,9 @@
 import {
   ContextRequestSchema,
   ContextResponseSchema,
+  GraphLayoutResponseSchema,
+  GraphLayoutSaveRequestSchema,
+  GraphLayoutSaveResponseSchema,
   IngestLogDetailSchema,
   IngestLogListResponseSchema,
   IngestPayloadSchema,
@@ -36,6 +39,7 @@ import type { LLMProvider } from "../llm/provider.js"
 import type { SpecraftDatabase } from "../storage/database.js"
 import { requireMember } from "./auth.js"
 import { registerConflictRoutes } from "./conflict-routes.js"
+import { getGraphLayout, saveGraphLayout } from "./layouts.js"
 import {
   getIngestLogDetail,
   getQueryLogDetail,
@@ -380,6 +384,40 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
         ? buildWikiGraph(wiki, parsed.data.branch)
         : { branch: parsed.data.branch, nodes: [], edges: [] },
     )
+  })
+
+  // 사용자별 그래프 노드 배치 — 멤버×브랜치 단위로 저장/조회한다.
+  server.get("/api/v1/wiki/:branch/layout", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const parsed = BranchParamsSchema.safeParse(request.params)
+    if (!parsed.success) {
+      return sendValidationFailed(reply)
+    }
+    return GraphLayoutResponseSchema.parse({
+      branch: parsed.data.branch,
+      positions: getGraphLayout(context.database, member.id, parsed.data.branch),
+    })
+  })
+
+  server.put("/api/v1/wiki/:branch/layout", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const params = BranchParamsSchema.safeParse(request.params)
+    const body = GraphLayoutSaveRequestSchema.safeParse(request.body)
+    if (!params.success || !body.success || body.data.branch !== params.data.branch) {
+      return sendValidationFailed(reply)
+    }
+    saveGraphLayout(context.database, {
+      memberId: member.id,
+      branch: params.data.branch,
+      positions: body.data.positions,
+    })
+    return GraphLayoutSaveResponseSchema.parse({ status: "ok" })
   })
 
   server.get("/api/v1/wiki/:branch/history", async (request, reply) => {

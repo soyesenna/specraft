@@ -24,6 +24,10 @@ import type {
   ConflictResolveResponse,
   ContextRequest,
   ContextResponse,
+  GraphLayoutRequest,
+  GraphLayoutResponse,
+  GraphLayoutSaveRequest,
+  GraphLayoutSaveResponse,
   IngestLogDetail,
   IngestLogListResponse,
   IngestPayload,
@@ -102,4 +106,6 @@ export type SpecraftClient = {
   readonly wikiPage: (request: WikiPageRequest) => Promise<WikiPageResponse>
   readonly wikiGraph: (request: WikiGraphRequest) => Promise<WikiGraphResponse>
   readonly wikiHistory: (request: WikiHistoryRequest) => Promise<WikiHistoryResponse>
+  readonly getGraphLayout: (request: GraphLayoutRequest) => Promise<GraphLayoutResponse>
+  readonly saveGraphLayout: (request: GraphLayoutSaveRequest) => Promise<GraphLayoutSaveResponse>
 }

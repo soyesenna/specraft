@@ -289,6 +289,87 @@ describe("spec REST API", () => {
     database.close()
   })
 
+  it("stores graph node layouts per member and branch", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const server = buildServer({ database, secret })
+    const admin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: { email: "admin@example.com", password: "password", name: "Admin" },
+    })
+    const cookie = admin.cookies[0]?.value ?? ""
+
+    // 저장 전 — 빈 배치
+    const empty = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/main/layout",
+      cookies: { specraft_session: cookie },
+    })
+    expect(empty.statusCode).toBe(200)
+    expect(empty.json<{ positions: Record<string, unknown> }>().positions).toEqual({})
+
+    const positions = {
+      "overview.md": { x: 120.5, y: -36 },
+      "changes/feature.md": { x: 480, y: 320 },
+    }
+    const saved = await server.inject({
+      method: "PUT",
+      url: "/api/v1/wiki/main/layout",
+      cookies: { specraft_session: cookie },
+      payload: { branch: "main", positions },
+    })
+    expect(saved.statusCode).toBe(200)
+    expect(saved.json<{ status: string }>().status).toBe("ok")
+
+    const restored = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/main/layout",
+      cookies: { specraft_session: cookie },
+    })
+    expect(restored.json<{ positions: typeof positions }>().positions).toEqual(positions)
+
+    // 같은 멤버라도 다른 브랜치는 독립 저장
+    const otherBranch = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/dev/layout",
+      cookies: { specraft_session: cookie },
+    })
+    expect(otherBranch.json<{ positions: Record<string, unknown> }>().positions).toEqual({})
+
+    // URL 브랜치와 본문 브랜치 불일치 → 422
+    const mismatch = await server.inject({
+      method: "PUT",
+      url: "/api/v1/wiki/dev/layout",
+      cookies: { specraft_session: cookie },
+      payload: { branch: "main", positions },
+    })
+    expect(mismatch.statusCode).toBe(422)
+
+    // 미인증 → 401
+    const unauthorized = await server.inject({ method: "GET", url: "/api/v1/wiki/main/layout" })
+    expect(unauthorized.statusCode).toBe(401)
+
+    // 다른 멤버는 자신의 배치만 본다 (덮어쓰기 후 재조회로 멤버 격리 확인)
+    const overwrite = await server.inject({
+      method: "PUT",
+      url: "/api/v1/wiki/main/layout",
+      cookies: { specraft_session: cookie },
+      payload: { branch: "main", positions: { "overview.md": { x: 1, y: 2 } } },
+    })
+    expect(overwrite.statusCode).toBe(200)
+    const latest = await server.inject({
+      method: "GET",
+      url: "/api/v1/wiki/main/layout",
+      cookies: { specraft_session: cookie },
+    })
+    expect(latest.json<{ positions: Record<string, unknown> }>().positions).toEqual({
+      "overview.md": { x: 1, y: 2 },
+    })
+
+    await server.close()
+    database.close()
+  })
+
   it("rejects ingest when commit validation cannot be configured", async () => {
     const database = createDatabase({ path: ":memory:" })
     const dataDir = mkdtempSync(join(tmpdir(), "specraft-api-no-remote-"))
