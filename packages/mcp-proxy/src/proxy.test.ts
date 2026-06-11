@@ -1,20 +1,23 @@
 import { execFileSync } from "node:child_process"
-import { mkdtempSync, writeFileSync } from "node:fs"
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
+import { Client } from "@modelcontextprotocol/sdk/client/index.js"
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js"
+import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js"
 import { describe, expect, it } from "vitest"
 
 import { loadSpecraftConfig } from "./config.js"
 import { evaluateStopGate, readGitGateState } from "./gate.js"
-import { handleMcpRequest } from "./mcp.js"
+import { createSpecraftMcpServer, MCP_SERVER_NAME, mcpServerVersion } from "./mcp.js"
 import { markIngested, pendingReplaySessions, readSession, startSession } from "./session-state.js"
 import {
-  createMcpTools,
   type SpecraftToolClient,
   specraftIngest,
   specraftQuery,
   specraftStatus,
+  type ToolContext,
 } from "./tools.js"
 
 function git(cwd: string, args: readonly string[]): string {
@@ -197,61 +200,174 @@ describe("mcp proxy core", () => {
     expect(fixture.remote).toContain("specraft-gate-remote-")
   })
 
-  it("responds to JSON-RPC tool list and call requests", async () => {
-    const client: SpecraftToolClient = {
-      query: async () => ({ answer: "query answer", citations: [], query_id: "qry_1" }),
-      ingest: async () => ({ status: "accepted", wiki_commit: "wiki_1" }),
-      status: async () => ({ server: "ok", branch_locks: [], wiki_head_by_branch: {} }),
-    }
-    const home = mkdtempSync(join(tmpdir(), "specraft-mcp-home-"))
-    startSession({ home, sessionId: "s3", branch: "main", startedHead: "abc" })
-    const tools = createMcpTools({
-      client,
-      home,
-      sessionId: "s3",
-      gitSnapshot: async () => ({ branch: "main", head: "abc" }),
+})
+
+function stubToolClient(overrides?: Partial<SpecraftToolClient>): SpecraftToolClient {
+  return {
+    query: async () => ({ answer: "query answer", citations: [], query_id: "qry_1" }),
+    ingest: async () => ({ status: "accepted", wiki_commit: "wiki_1" }),
+    status: async () => ({ server: "ok", branch_locks: [], wiki_head_by_branch: {} }),
+    ...overrides,
+  }
+}
+
+async function connectMcpClient(context: ToolContext): Promise<Client> {
+  const server = createSpecraftMcpServer(context)
+  const client = new Client({ name: "proxy-test-client", version: "0.0.0" })
+  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair()
+  await Promise.all([server.connect(serverTransport), client.connect(clientTransport)])
+  return client
+}
+
+function testContext(overrides?: Partial<ToolContext>): ToolContext {
+  return {
+    client: stubToolClient(),
+    home: mkdtempSync(join(tmpdir(), "specraft-mcp-home-")),
+    sessionId: "s3",
+    gitSnapshot: async () => ({ branch: "main", head: "abc" }),
+    ...overrides,
+  }
+}
+
+describe("mcp sdk server", () => {
+  it("completes initialize with serverInfo and tools capability", async () => {
+    const client = await connectMcpClient(testContext())
+    const packageVersion = (
+      JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
+        version: string
+      }
+    ).version
+
+    expect(client.getServerVersion()).toMatchObject({
+      name: MCP_SERVER_NAME,
+      version: packageVersion,
+    })
+    expect(mcpServerVersion()).toBe(packageVersion)
+    expect(client.getServerCapabilities()?.tools).toBeDefined()
+    await client.close()
+  })
+
+  it("lists the three tools with zod-derived inputSchema", async () => {
+    const client = await connectMcpClient(testContext())
+    const { tools } = await client.listTools()
+
+    expect(tools.map((tool) => tool.name)).toEqual([
+      "specraft_query",
+      "specraft_ingest",
+      "specraft_status",
+    ])
+    const query = tools.find((tool) => tool.name === "specraft_query")
+    expect(query?.inputSchema).toMatchObject({ type: "object" })
+    expect(query?.inputSchema.properties).toMatchObject({ question: { type: "string" } })
+    expect(query?.inputSchema.required).toContain("question")
+
+    const ingest = tools.find((tool) => tool.name === "specraft_ingest")
+    const ingestProperties = Object.keys(ingest?.inputSchema.properties ?? {})
+    expect(ingestProperties).toEqual(
+      expect.arrayContaining([
+        "agent",
+        "summary",
+        "spec_changes",
+        "progress_updates",
+        "open_questions",
+      ]),
+    )
+    expect(ingestProperties).not.toContain("branch")
+    expect(ingestProperties).not.toContain("commit_hash")
+    expect(ingestProperties).not.toContain("session_id")
+
+    const status = tools.find((tool) => tool.name === "specraft_status")
+    expect(status?.description).toBe("Read specraft server status and branch locks.")
+    await client.close()
+  })
+
+  it("wraps tool call results in MCP content blocks and marks ingest sessions", async () => {
+    const context = testContext()
+    startSession({ home: context.home, sessionId: "s3", branch: "main", startedHead: "abc" })
+    const client = await connectMcpClient(context)
+
+    const queryResult = (await client.callTool({
+      name: "specraft_query",
+      arguments: { question: "what changed?" },
+    })) as CallToolResult
+    expect(queryResult.isError).toBeFalsy()
+    expect(queryResult.content).toEqual([
+      { type: "text", text: JSON.stringify({ answer: "query answer", citations: [], query_id: "qry_1" }) },
+    ])
+    expect(queryResult.structuredContent).toEqual({
+      answer: "query answer",
+      citations: [],
+      query_id: "qry_1",
     })
 
-    expect(await handleMcpRequest(tools, { jsonrpc: "2.0", id: 1, method: "tools/list" })).toEqual({
-      jsonrpc: "2.0",
-      id: 1,
-      result: {
-        tools: [
-          { name: "specraft_query", description: "Ask the specraft wiki a branch-aware question." },
-          { name: "specraft_ingest", description: "Ingest completed work into the specraft wiki." },
-          { name: "specraft_status", description: "Read specraft server status and branch locks." },
-        ],
+    const ingestResult = (await client.callTool({
+      name: "specraft_ingest",
+      arguments: {
+        agent: "codex",
+        summary: "implemented proxy",
+        spec_changes: [{ type: "added", area: "proxy", description: "mcp", reasoning: "M7" }],
+        progress_updates: [],
+        open_questions: [],
       },
+    })) as CallToolResult
+    expect(ingestResult.isError).toBeFalsy()
+    expect(ingestResult.structuredContent).toEqual({ status: "accepted", wiki_commit: "wiki_1" })
+    expect(readSession(context.home, "s3").ingested).toBe(true)
+
+    const statusResult = (await client.callTool({
+      name: "specraft_status",
+      arguments: {},
+    })) as CallToolResult
+    expect(statusResult.structuredContent).toEqual({
+      server: "ok",
+      branch_locks: [],
+      wiki_head_by_branch: {},
     })
-    expect(
-      await handleMcpRequest(tools, {
-        jsonrpc: "2.0",
-        id: 2,
-        method: "tools/call",
-        params: { name: "specraft_query", arguments: { question: "what changed?" } },
-      }),
-    ).toEqual({
-      jsonrpc: "2.0",
-      id: 2,
-      result: { answer: "query answer", citations: [], query_id: "qry_1" },
-    })
-    expect(
-      await handleMcpRequest(tools, {
-        jsonrpc: "2.0",
-        id: 3,
-        method: "tools/call",
-        params: {
-          name: "specraft_ingest",
-          arguments: {
-            agent: "codex",
-            summary: "implemented proxy",
-            spec_changes: [{ type: "added", area: "proxy", description: "mcp", reasoning: "M7" }],
-            progress_updates: [],
-            open_questions: [],
-          },
+    await client.close()
+  })
+
+  it("rejects tool calls that violate the declared inputSchema", async () => {
+    const client = await connectMcpClient(testContext())
+
+    const result = (await client.callTool({
+      name: "specraft_query",
+      arguments: {},
+    })) as CallToolResult
+    expect(result.isError).toBe(true)
+    expect(JSON.stringify(result.content)).toContain(
+      "Invalid arguments for tool specraft_query",
+    )
+    await client.close()
+  })
+
+  it("converts the ingest HEAD push pre-check throw into an MCP tool error", async () => {
+    let serverCalled = false
+    const context = testContext({
+      client: stubToolClient({
+        ingest: async () => {
+          serverCalled = true
+          return { status: "accepted", wiki_commit: "wiki_1" }
         },
       }),
-    ).toEqual({ jsonrpc: "2.0", id: 3, result: { status: "accepted", wiki_commit: "wiki_1" } })
-    expect(readSession(home, "s3").ingested).toBe(true)
+      headPushed: async () => false,
+    })
+    const client = await connectMcpClient(context)
+
+    const result = (await client.callTool({
+      name: "specraft_ingest",
+      arguments: {
+        agent: "codex",
+        summary: "should not call server",
+        spec_changes: [{ type: "added", area: "mcp", description: "blocked", reasoning: "P2" }],
+        progress_updates: [],
+        open_questions: [],
+      },
+    })) as CallToolResult
+    expect(result.isError).toBe(true)
+    expect(result.content).toEqual([
+      { type: "text", text: "HEAD is not pushed; push before specraft_ingest" },
+    ])
+    expect(serverCalled).toBe(false)
+    await client.close()
   })
 })

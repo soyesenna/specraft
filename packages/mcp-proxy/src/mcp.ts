@@ -1,49 +1,63 @@
+import { readFileSync } from "node:fs"
+
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js"
 import { z } from "zod"
 
-export type McpTool = {
-  readonly name: string
-  readonly description: string
-  readonly call: (input: unknown) => Promise<unknown>
+import {
+  IngestToolInputSchema,
+  QueryToolInputSchema,
+  specraftIngest,
+  specraftQuery,
+  specraftStatus,
+  type ToolContext,
+} from "./tools.js"
+
+export const MCP_SERVER_NAME = "specraft"
+
+const PackageManifestSchema = z.object({ version: z.string().min(1) })
+
+export function mcpServerVersion(): string {
+  try {
+    const manifest = PackageManifestSchema.parse(
+      JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")),
+    )
+    return manifest.version
+  } catch {
+    return "0.0.0"
+  }
 }
 
-const RequestSchema = z.object({
-  jsonrpc: z.literal("2.0"),
-  id: z.union([z.string(), z.number()]).optional(),
-  method: z.string(),
-  params: z.unknown().optional(),
-})
+function toToolResult(payload: unknown): CallToolResult {
+  return {
+    content: [{ type: "text", text: JSON.stringify(payload) }],
+    structuredContent: payload as Record<string, unknown>,
+  }
+}
 
-export async function handleMcpRequest(
-  tools: readonly McpTool[],
-  requestBody: unknown,
-): Promise<unknown> {
-  const request = RequestSchema.parse(requestBody)
-  if (request.method === "initialize") {
-    return { jsonrpc: "2.0", id: request.id, result: { protocolVersion: "2024-11-05" } }
-  }
-  if (request.method === "tools/list") {
-    return {
-      jsonrpc: "2.0",
-      id: request.id,
-      result: { tools: tools.map(({ name, description }) => ({ name, description })) },
-    }
-  }
-  if (request.method === "tools/call") {
-    const params = z
-      .object({ name: z.string(), arguments: z.unknown().optional() })
-      .parse(request.params)
-    const tool = tools.find((candidate) => candidate.name === params.name)
-    if (!tool) {
-      return { jsonrpc: "2.0", id: request.id, error: { code: -32601, message: "tool not found" } }
-    }
-    try {
-      return { jsonrpc: "2.0", id: request.id, result: await tool.call(params.arguments ?? {}) }
-    } catch (error) {
-      if (error instanceof Error) {
-        return { jsonrpc: "2.0", id: request.id, error: { code: -32000, message: error.message } }
-      }
-      throw error
-    }
-  }
-  return { jsonrpc: "2.0", id: request.id, error: { code: -32601, message: "method not found" } }
+export function createSpecraftMcpServer(context: ToolContext): McpServer {
+  const server = new McpServer({ name: MCP_SERVER_NAME, version: mcpServerVersion() })
+  server.registerTool(
+    "specraft_query",
+    {
+      description: "Ask the specraft wiki a branch-aware question.",
+      inputSchema: QueryToolInputSchema.shape,
+    },
+    async (input) => toToolResult(await specraftQuery(context, QueryToolInputSchema.parse(input))),
+  )
+  server.registerTool(
+    "specraft_ingest",
+    {
+      description: "Ingest completed work into the specraft wiki.",
+      inputSchema: IngestToolInputSchema.shape,
+    },
+    async (input) =>
+      toToolResult(await specraftIngest(context, IngestToolInputSchema.parse(input))),
+  )
+  server.registerTool(
+    "specraft_status",
+    { description: "Read specraft server status and branch locks." },
+    async () => toToolResult(await specraftStatus(context)),
+  )
+  return server
 }

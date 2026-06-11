@@ -7,7 +7,6 @@ import {
 } from "@specraft/shared"
 import { z } from "zod"
 
-import type { McpTool } from "./mcp.js"
 import { markIngested } from "./session-state.js"
 
 export type SpecraftToolClient = {
@@ -33,8 +32,8 @@ export type ToolContext = {
   readonly headPushed?: () => Promise<boolean> | boolean
 }
 
-const QueryToolInputSchema = z.object({ question: z.string().min(1) })
-const IngestToolInputSchema = IngestPayloadSchema.omit({
+export const QueryToolInputSchema = z.object({ question: z.string().min(1) })
+export const IngestToolInputSchema = IngestPayloadSchema.omit({
   branch: true,
   commit_hash: true,
   session_id: true,
@@ -74,24 +73,4 @@ export async function specraftIngest(
 
 export async function specraftStatus(context: ToolContext): Promise<StatusResponse> {
   return context.client.status()
-}
-
-export function createMcpTools(context: ToolContext): readonly McpTool[] {
-  return [
-    {
-      name: "specraft_query",
-      description: "Ask the specraft wiki a branch-aware question.",
-      call: (input) => specraftQuery(context, QueryToolInputSchema.parse(input)),
-    },
-    {
-      name: "specraft_ingest",
-      description: "Ingest completed work into the specraft wiki.",
-      call: (input) => specraftIngest(context, IngestToolInputSchema.parse(input)),
-    },
-    {
-      name: "specraft_status",
-      description: "Read specraft server status and branch locks.",
-      call: () => specraftStatus(context),
-    },
-  ]
 }

@@ -16,6 +16,7 @@ function readJson(path: string): Record<string, unknown> {
 describe("plugin packaging contracts", () => {
   it("ships Claude Code metadata, MCP registration, and commands", () => {
     const plugin = readJson("plugins/claude-code/.claude-plugin/plugin.json")
+    const hooks = readJson("plugins/claude-code/hooks/hooks.json")
     const mcp = readJson("plugins/claude-code/.mcp.json")
     const stopHook = readFileSync(repoPath("plugins/claude-code/hooks/stop.js"), "utf8")
     const promptHook = readFileSync(
@@ -23,8 +24,8 @@ describe("plugin packaging contracts", () => {
       "utf8",
     )
     expect(plugin["name"]).toBe("specraft")
-    expect(JSON.stringify(plugin)).toContain("SessionStart")
-    expect(JSON.stringify(plugin)).toContain("Stop")
+    expect(JSON.stringify(hooks)).toContain("SessionStart")
+    expect(JSON.stringify(hooks)).toContain("Stop")
     expect(JSON.stringify(mcp)).toContain("specraft-mcp-proxy")
     expect(stopHook).toContain("specraft-mcp-proxy")
     expect(stopHook).toContain("hook stop")

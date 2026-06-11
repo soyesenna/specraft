@@ -1,18 +1,16 @@
-import { createInterface } from "node:readline/promises"
-
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { createSpecraftClient } from "@specraft/shared"
 
 import { findSpecraftConfig } from "./config.js"
 import { evaluateStopGate, readGitGateState } from "./gate.js"
 import { isHeadPushed, readGitSnapshot } from "./git.js"
-import { handleMcpRequest } from "./mcp.js"
+import { createSpecraftMcpServer } from "./mcp.js"
 import {
   pendingReplaySessions,
   readSessionOrNull,
   resolveSession,
   startSession,
 } from "./session-state.js"
-import { createMcpTools } from "./tools.js"
 
 type HookOutput = {
   readonly decision: "approve" | "block"
@@ -147,21 +145,14 @@ async function runMcp(cwd: string): Promise<void> {
     throw new Error("SPECRAFT_API_KEY is required")
   }
   const client = createSpecraftClient({ apiKey, baseUrl: serverUrl(cwd) })
-  const tools = createMcpTools({
+  const server = createSpecraftMcpServer({
     client,
     gitSnapshot: async () => readGitSnapshot(cwd),
     headPushed: async () => isHeadPushed(cwd),
     home: homeDir(),
     sessionId: sessionId(),
   })
-  const input = createInterface({ input: process.stdin })
-  for await (const line of input) {
-    if (line.trim() === "") {
-      continue
-    }
-    const response = await handleMcpRequest(tools, JSON.parse(line))
-    process.stdout.write(`${JSON.stringify(response)}\n`)
-  }
+  await server.connect(new StdioServerTransport())
 }
 
 async function main(): Promise<void> {
