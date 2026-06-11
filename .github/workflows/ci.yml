@@ -47,6 +47,12 @@ jobs:
       - run: pnpm build
       - run: pnpm typecheck
       - run: pnpm test
+      # M2.3 도구 정의 토큰 게이트(≤5k). ANTHROPIC_API_KEY secret이 있으면 count_tokens
+      # API로 정밀 측정, 없으면 휴리스틱(chars/3.5) 모드로 무조건 실행한다.
+      - name: Tool definition token gate (≤5k)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/measure-tool-tokens.mjs
 
   e2e-cli:
     name: CLI E2E smoke (M1.9)

@@ -302,6 +302,99 @@ async function runProcessLevelGate(log, cleanups) {
     rmSync(join(repo, "scratch-codex.txt"), { force: true })
   }
 
+  // d14. M2 citation 역참조 + resources (모델 비의존 — MCP 직구동, 키워드 폴백 결정성)
+  //      ingest → specraft_query citations → specraft_read_page 전문 회수,
+  //      resources/list 노출 + resources/read 본문 회수.
+  {
+    const sessionId = "e2e-codex-session-m2"
+    const seededPath = `changes/${sessionId}.md`
+    const description =
+      "Payment gateway requests carry idempotency keys derived from the order ULID"
+    const client = new McpStdioClient({
+      args: [proxyBundle],
+      command: "node",
+      cwd: repo,
+      env: { ...env, SPECRAFT_SESSION_ID: sessionId },
+    })
+    try {
+      await client.initialize()
+      const ingest = await client.callTool("specraft_ingest", {
+        agent: "codex",
+        open_questions: [],
+        progress_updates: [],
+        spec_changes: [
+          {
+            area: "payments",
+            description,
+            reasoning: "duplicate charges must be impossible across webhook retries",
+            type: "added",
+          },
+        ],
+        summary: "Document payment gateway idempotency key contract",
+      })
+      if (ingest.isError || !JSON.stringify(ingest).includes('"accepted"')) {
+        log.fail("d14a M2 픽스처 ingest", JSON.stringify(ingest).slice(0, 200))
+      }
+
+      // citation 역참조: query → citations[].path → read_page 전문 회수
+      const query = await client.callTool("specraft_query", {
+        question: "What does the payment gateway spec say about idempotency keys?",
+      })
+      const citations = query.structuredContent?.citations ?? []
+      let citedPath = citations.find((citation) => citation.path === seededPath)?.path
+      if (citations.length === 0) {
+        // 키워드 폴백 provider가 citations를 비울 수 있는 경우의 분기(계획 명시):
+        // 알려진 시드 path로 read_page를 직접 검증하고 사유를 출력한다.
+        process.stdout.write(
+          `[9d codex] d14: citations 비어 있음(키워드 폴백) — 알려진 path(${seededPath})로 직접 검증\n`,
+        )
+        citedPath = seededPath
+      }
+      if (citedPath) {
+        const page = await client.callTool("specraft_read_page", { path: citedPath })
+        const content = page.structuredContent?.content ?? ""
+        if (!page.isError && content.includes(description)) {
+          log.pass(
+            "d14b citation 역참조 (query→citations→read_page)",
+            `${citedPath} 전문 회수, 시드 본문 일치`,
+          )
+        } else {
+          log.fail(
+            "d14b citation 역참조 (query→citations→read_page)",
+            JSON.stringify(page).slice(0, 200),
+          )
+        }
+      } else {
+        log.fail(
+          "d14b citation 역참조 (query→citations→read_page)",
+          `citations에 시드 path 없음: ${JSON.stringify(citations).slice(0, 200)}`,
+        )
+      }
+
+      // resources E2E: resources/list 노출 + resources/read 본문 회수
+      const resources = await client.listResources()
+      const expectedUri = `specraft://wiki/main/${seededPath}`
+      const listed = resources.find((resource) => resource.uri === expectedUri)
+      if (listed && listed.mimeType === "text/markdown") {
+        log.pass("d14c resources/list 노출", `${expectedUri} (총 ${resources.length}개)`)
+      } else {
+        log.fail(
+          "d14c resources/list 노출",
+          `${expectedUri} 미노출; uris=${JSON.stringify(resources.map((resource) => resource.uri)).slice(0, 300)}`,
+        )
+      }
+      const readResult = await client.readResource(expectedUri)
+      const resourceText = readResult?.contents?.[0]?.text ?? ""
+      if (resourceText.includes(description)) {
+        log.pass("d14d resources/read 본문 회수", "시드 본문 일치")
+      } else {
+        log.fail("d14d resources/read 본문 회수", JSON.stringify(readResult).slice(0, 200))
+      }
+    } finally {
+      await client.close()
+    }
+  }
+
   // d13. UserPromptSubmit: 타 세션 pending replay → block
   {
     const otherEnv = env

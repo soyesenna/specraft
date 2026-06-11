@@ -88,11 +88,10 @@ describe("mcp proxy core", () => {
     const home = mkdtempSync(join(tmpdir(), "specraft-session-"))
     startSession({ home, sessionId: "s1", branch: "main", startedHead: "base" })
     expect(pendingReplaySessions(home)).toHaveLength(1)
-    const client: SpecraftToolClient = {
+    const client = stubToolClient({
       query: async () => ({ answer: "ok", citations: [], query_id: "qry_1" }),
       ingest: async () => ({ status: "accepted", wiki_commit: "abc" }),
-      status: async () => ({ server: "ok", branch_locks: [], wiki_head_by_branch: {} }),
-    }
+    })
     const context = {
       client,
       home,
@@ -135,14 +134,12 @@ describe("mcp proxy core", () => {
 
   it("blocks specraft_ingest locally when HEAD is not pushed", async () => {
     let called = false
-    const client: SpecraftToolClient = {
-      query: async () => ({ answer: "ok", citations: [], query_id: "qry_1" }),
+    const client = stubToolClient({
       ingest: async () => {
         called = true
         return { status: "accepted", wiki_commit: "abc" }
       },
-      status: async () => ({ server: "ok", branch_locks: [], wiki_head_by_branch: {} }),
-    }
+    })
     const context = {
       client,
       home: mkdtempSync(join(tmpdir(), "specraft-unpushed-home-")),
@@ -208,6 +205,20 @@ function stubToolClient(overrides?: Partial<SpecraftToolClient>): SpecraftToolCl
     query: async () => ({ answer: "query answer", citations: [], query_id: "qry_1" }),
     ingest: async () => ({ status: "accepted", wiki_commit: "wiki_1" }),
     status: async () => ({ server: "ok", branch_locks: [], wiki_head_by_branch: {} }),
+    context: async () => ({
+      branch_status: { state: "ready" },
+      index: "index",
+      overview: "overview",
+      wiki_head: "wiki_head_1",
+    }),
+    wikiPage: async (request) => ({
+      branch: request.branch,
+      content: "# Page\n",
+      path: request.path,
+    }),
+    wikiTree: async (request) => ({ branch: request.branch, entries: [] }),
+    wikiHistory: async (request) => ({ branch: request.branch, path: request.path, versions: [] }),
+    listConflicts: async () => ({ conflicts: [] }),
     ...overrides,
   }
 }
@@ -248,7 +259,7 @@ describe("mcp sdk server", () => {
     await client.close()
   })
 
-  it("lists the three tools with zod-derived inputSchema", async () => {
+  it("lists the nine tools with zod-derived inputSchema", async () => {
     const client = await connectMcpClient(testContext())
     const { tools } = await client.listTools()
 
@@ -257,6 +268,11 @@ describe("mcp sdk server", () => {
       "specraft_ingest",
       "specraft_status",
       "specraft_defer",
+      "specraft_read_page",
+      "specraft_tree",
+      "specraft_history",
+      "specraft_conflicts",
+      "specraft_context",
     ])
     const query = tools.find((tool) => tool.name === "specraft_query")
     expect(query?.inputSchema).toMatchObject({ type: "object" })

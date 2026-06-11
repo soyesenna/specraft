@@ -122,6 +122,16 @@ export class McpStdioClient {
     return this.request("tools/call", { arguments: args, name })
   }
 
+  async listResources() {
+    const result = await this.request("resources/list", {})
+    return result.resources ?? []
+  }
+
+  /** @param {string} uri */
+  async readResource(uri) {
+    return this.request("resources/read", { uri })
+  }
+
   async close() {
     this.child.stdin.end()
     await new Promise((resolve) => {

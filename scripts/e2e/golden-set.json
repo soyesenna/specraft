@@ -1,0 +1,169 @@
+{
+  "description": "M2.5 golden-set — 시드 위키 컨텐츠(픽스처 ingest 8건)에 대한 질의 10개와 기대 citation path. 시드는 changes/<session_id>.md 페이지로 적재된다(키워드 폴백 ingest 경로).",
+  "seed": [
+    {
+      "session_id": "golden-auth",
+      "summary": "Authentication issues signed session cookies with sliding expiry",
+      "spec_changes": [
+        {
+          "type": "added",
+          "area": "auth",
+          "description": "Login issues a signed session cookie with a sliding expiry of fourteen days",
+          "reasoning": "bcrypt password hashing protects stored credentials and cookies must not outlive inactivity"
+        }
+      ],
+      "progress_updates": [],
+      "open_questions": []
+    },
+    {
+      "session_id": "golden-payments",
+      "summary": "Payment gateway enforces idempotency keys on every charge request",
+      "spec_changes": [
+        {
+          "type": "added",
+          "area": "payments",
+          "description": "Charges carry idempotency keys so webhook retries never duplicate a settlement",
+          "reasoning": "duplicate settlements would corrupt the ledger during gateway webhook replays"
+        }
+      ],
+      "progress_updates": [],
+      "open_questions": []
+    },
+    {
+      "session_id": "golden-search",
+      "summary": "Search relies on an inverted index with Porter stemming",
+      "spec_changes": [
+        {
+          "type": "added",
+          "area": "search",
+          "description": "Documents are tokenized into an inverted index with Porter stemming before relevance ranking",
+          "reasoning": "relevance ranking needs normalized tokens to stay stable across word forms"
+        }
+      ],
+      "progress_updates": [],
+      "open_questions": []
+    },
+    {
+      "session_id": "golden-notifications",
+      "summary": "Notifications batch into digest emails respecting quiet hours",
+      "spec_changes": [
+        {
+          "type": "added",
+          "area": "notifications",
+          "description": "Digest emails aggregate notifications and respect per-user quiet hours windows",
+          "reasoning": "midnight pushes hurt retention so delivery waits for the quiet hours window to end"
+        }
+      ],
+      "progress_updates": [],
+      "open_questions": []
+    },
+    {
+      "session_id": "golden-storage",
+      "summary": "Object storage uploads use presigned URLs with multipart chunks",
+      "spec_changes": [
+        {
+          "type": "added",
+          "area": "storage",
+          "description": "Clients upload via presigned URLs split into multipart chunks of eight megabytes",
+          "reasoning": "direct browser uploads keep the API stateless and avoid proxying large payloads"
+        }
+      ],
+      "progress_updates": [],
+      "open_questions": []
+    },
+    {
+      "session_id": "golden-i18n",
+      "summary": "Localization uses ICU message format with locale negotiation",
+      "spec_changes": [
+        {
+          "type": "added",
+          "area": "i18n",
+          "description": "Strings ship as ICU message format bundles and locale negotiation falls back to English",
+          "reasoning": "pluralization rules differ per locale and raw template strings cannot express them"
+        }
+      ],
+      "progress_updates": [],
+      "open_questions": []
+    },
+    {
+      "session_id": "golden-observability",
+      "summary": "Telemetry emits structured logs with trace sampling",
+      "spec_changes": [
+        {
+          "type": "added",
+          "area": "observability",
+          "description": "Services emit structured logs and apply trace sampling at one percent of requests",
+          "reasoning": "alert thresholds depend on consistent telemetry volume across services"
+        }
+      ],
+      "progress_updates": [],
+      "open_questions": []
+    },
+    {
+      "session_id": "golden-ratelimit",
+      "summary": "Rate limiting applies a token bucket with burst allowance",
+      "spec_changes": [
+        {
+          "type": "added",
+          "area": "ratelimit",
+          "description": "The API throttles with a token bucket of sixty requests and a burst allowance of ten",
+          "reasoning": "throttling headers must expose the remaining quota to well-behaved clients"
+        }
+      ],
+      "progress_updates": [],
+      "open_questions": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "q01",
+      "question": "How long is the sliding expiry of the signed session cookie?",
+      "expected_paths": ["changes/golden-auth.md"]
+    },
+    {
+      "id": "q02",
+      "question": "Why do charges carry idempotency keys in the payment gateway?",
+      "expected_paths": ["changes/golden-payments.md"]
+    },
+    {
+      "id": "q03",
+      "question": "Which stemming algorithm does the inverted index use for relevance ranking?",
+      "expected_paths": ["changes/golden-search.md"]
+    },
+    {
+      "id": "q04",
+      "question": "When do digest emails respect quiet hours for notifications?",
+      "expected_paths": ["changes/golden-notifications.md"]
+    },
+    {
+      "id": "q05",
+      "question": "How large are the multipart chunks used with presigned URLs?",
+      "expected_paths": ["changes/golden-storage.md"]
+    },
+    {
+      "id": "q06",
+      "question": "How does locale negotiation fall back when ICU message format bundles are missing?",
+      "expected_paths": ["changes/golden-i18n.md"]
+    },
+    {
+      "id": "q07",
+      "question": "What sampling rate applies to distributed traces in telemetry?",
+      "expected_paths": ["changes/golden-observability.md"]
+    },
+    {
+      "id": "q08",
+      "question": "What burst allowance does the token bucket rate limiting allow?",
+      "expected_paths": ["changes/golden-ratelimit.md"]
+    },
+    {
+      "id": "q09",
+      "question": "What does specraft keep as the one source of project truth?",
+      "expected_paths": ["overview.md"]
+    },
+    {
+      "id": "q10",
+      "question": "Where are webhook retries documented for duplicate settlement protection?",
+      "expected_paths": ["changes/golden-payments.md"]
+    }
+  ]
+}
