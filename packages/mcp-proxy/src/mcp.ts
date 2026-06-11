@@ -12,6 +12,7 @@ import {
   IngestToolInputSchema,
   QueryToolInputSchema,
   ReadPageToolInputSchema,
+  SearchToolInputSchema,
   specraftConflicts,
   specraftContext,
   specraftDefer,
@@ -19,6 +20,7 @@ import {
   specraftIngest,
   specraftQuery,
   specraftReadPage,
+  specraftSearch,
   specraftStatus,
   specraftTree,
   type ToolContext,
@@ -149,6 +151,16 @@ export function createSpecraftMcpServer(context: ToolContext): McpServer {
     },
     async (input) =>
       toToolResult(await specraftAnalyze(context, AnalyzeToolInputSchema.parse(input ?? {}))),
+  )
+  server.registerTool(
+    "specraft_search",
+    {
+      description:
+        "Search the spec wiki on the current git branch — semantic when the server has an embedding index, keyword fallback otherwise (mode field tells which). Unlike specraft_query (LLM-synthesized Q&A), this returns ranked page/section candidates with snippets; use it to find citation paths before specraft_read_page. Optional top_k (1-50, default 8).",
+      inputSchema: SearchToolInputSchema.shape,
+    },
+    async (input) =>
+      toToolResult(await specraftSearch(context, SearchToolInputSchema.parse(input))),
   )
   registerWikiResources(server, context)
   registerPrompts(server)

@@ -38,6 +38,7 @@ function stubToolClient(overrides?: Partial<SpecraftToolClient>): SpecraftToolCl
     wikiTree: async (request) => ({ branch: request.branch, entries: [] }),
     wikiHistory: async (request) => ({ branch: request.branch, path: request.path, versions: [] }),
     listConflicts: async () => ({ conflicts: [] }),
+    search: async (request) => ({ branch: request.branch, mode: "keyword" as const, results: [] }),
     ...overrides,
   }
 }

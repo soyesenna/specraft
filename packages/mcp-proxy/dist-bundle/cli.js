@@ -32356,6 +32356,10 @@ var HistoryToolInputSchema = external_exports.object({
 var ContextToolInputSchema = external_exports.object({
   budget_tokens: external_exports.number().int().positive().optional()
 });
+var SearchToolInputSchema = external_exports.object({
+  query: external_exports.string().min(1),
+  top_k: external_exports.number().int().min(1).max(50).optional()
+});
 async function specraftQuery(context, input) {
   const snapshot = await context.gitSnapshot();
   return context.client.query({
@@ -32419,6 +32423,14 @@ async function specraftHistory(context, input) {
 }
 async function specraftConflicts(context) {
   return context.client.listConflicts();
+}
+async function specraftSearch(context, input) {
+  const snapshot = await context.gitSnapshot();
+  return context.client.search({
+    branch: snapshot.branch,
+    query: input.query,
+    ...input.top_k !== void 0 ? { top_k: input.top_k } : {}
+  });
 }
 async function specraftContext(context, input = {}) {
   const snapshot = await context.gitSnapshot();
@@ -32523,6 +32535,14 @@ function createSpecraftMcpServer(context) {
       inputSchema: AnalyzeToolInputSchema.shape
     },
     async (input) => toToolResult(await specraftAnalyze(context, AnalyzeToolInputSchema.parse(input ?? {})))
+  );
+  server.registerTool(
+    "specraft_search",
+    {
+      description: "Search the spec wiki on the current git branch \u2014 semantic when the server has an embedding index, keyword fallback otherwise (mode field tells which). Unlike specraft_query (LLM-synthesized Q&A), this returns ranked page/section candidates with snippets; use it to find citation paths before specraft_read_page. Optional top_k (1-50, default 8).",
+      inputSchema: SearchToolInputSchema.shape
+    },
+    async (input) => toToolResult(await specraftSearch(context, SearchToolInputSchema.parse(input)))
   );
   registerWikiResources(server, context);
   registerPrompts(server);

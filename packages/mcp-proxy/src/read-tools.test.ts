@@ -32,6 +32,7 @@ function stubToolClient(overrides?: Partial<SpecraftToolClient>): SpecraftToolCl
     wikiTree: async (request) => ({ branch: request.branch, entries: [] }),
     wikiHistory: async (request) => ({ branch: request.branch, path: request.path, versions: [] }),
     listConflicts: async () => ({ conflicts: [] }),
+    search: async (request) => ({ branch: request.branch, mode: "keyword", results: [] }),
     ...overrides,
   }
 }
@@ -336,6 +337,46 @@ describe("prompts (M2.2)", () => {
     expect(text).toContain("specraft_query")
     expect(text).toContain("specraft_read_page")
     expect(text).toContain("focus: auth")
+    await client.close()
+  })
+})
+
+describe("search tool (M4+)", () => {
+  it("specraft_search binds the git branch and forwards query/top_k", async () => {
+    const requests: Array<{ branch: string; query: string; top_k?: number | undefined }> = []
+    const context = testContext({
+      client: stubToolClient({
+        search: async (request) => {
+          requests.push(request)
+          return {
+            branch: request.branch,
+            mode: "keyword",
+            results: [{ path: "changes/auth.md", score: 1, snippet: "auth spec" }],
+          }
+        },
+      }),
+    })
+    const client = await connectMcpClient(context)
+    const result = (await client.callTool({
+      name: "specraft_search",
+      arguments: { query: "auth tokens", top_k: 3 },
+    })) as CallToolResult
+    expect(result.isError).toBeFalsy()
+    expect(requests).toEqual([{ branch: "feature/login", query: "auth tokens", top_k: 3 }])
+    expect(result.structuredContent).toMatchObject({
+      mode: "keyword",
+      results: [{ path: "changes/auth.md" }],
+    })
+    await client.close()
+  })
+
+  it("specraft_search rejects an empty query", async () => {
+    const client = await connectMcpClient(testContext())
+    const result = (await client.callTool({
+      name: "specraft_search",
+      arguments: { query: "" },
+    })) as CallToolResult
+    expect(result.isError).toBe(true)
     await client.close()
   })
 })

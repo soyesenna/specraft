@@ -211,6 +211,35 @@ describe("specraft_defer MCP tool", () => {
         serverCalled = true
         return { server: "ok", branch_locks: [], wiki_head_by_branch: {} }
       },
+      context: async () => {
+        serverCalled = true
+        return {
+          branch_status: { state: "ready" as const },
+          index: "",
+          overview: "",
+          wiki_head: "w",
+        }
+      },
+      wikiPage: async (request) => {
+        serverCalled = true
+        return { branch: request.branch, content: "", path: request.path }
+      },
+      wikiTree: async (request) => {
+        serverCalled = true
+        return { branch: request.branch, entries: [] }
+      },
+      wikiHistory: async (request) => {
+        serverCalled = true
+        return { branch: request.branch, path: request.path, versions: [] }
+      },
+      listConflicts: async () => {
+        serverCalled = true
+        return { conflicts: [] }
+      },
+      search: async (request) => {
+        serverCalled = true
+        return { branch: request.branch, mode: "keyword" as const, results: [] }
+      },
     }
     const context: ToolContext = {
       client,

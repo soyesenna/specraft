@@ -225,6 +225,7 @@ function stubToolClient(overrides?: Partial<SpecraftToolClient>): SpecraftToolCl
     wikiTree: async (request) => ({ branch: request.branch, entries: [] }),
     wikiHistory: async (request) => ({ branch: request.branch, path: request.path, versions: [] }),
     listConflicts: async () => ({ conflicts: [] }),
+    search: async (request) => ({ branch: request.branch, mode: "keyword" as const, results: [] }),
     ...overrides,
   }
 }
@@ -280,6 +281,7 @@ describe("mcp sdk server", () => {
       "specraft_conflicts",
       "specraft_context",
       "specraft_analyze",
+      "specraft_search",
     ])
     const query = tools.find((tool) => tool.name === "specraft_query")
     expect(query?.inputSchema).toMatchObject({ type: "object" })

@@ -5,6 +5,7 @@ import {
   IngestPayloadSchema,
   type IngestResponse,
   type QueryResponse,
+  type SearchResponse,
   type StatusResponse,
   type WikiHistoryResponse,
   type WikiPageResponse,
@@ -38,6 +39,11 @@ export type SpecraftToolClient = {
     readonly path: string
   }) => Promise<WikiHistoryResponse>
   readonly listConflicts: () => Promise<ConflictListResponse>
+  readonly search: (request: {
+    readonly branch: string
+    readonly query: string
+    readonly top_k?: number | undefined
+  }) => Promise<SearchResponse>
 }
 
 export type GitSnapshot = {
@@ -72,6 +78,11 @@ export const HistoryToolInputSchema = z.object({
 // M3.6 — optional 토큰 예산. 서버 ContextRequestSchema(budget_tokens)와 동일 제약(양의 정수).
 export const ContextToolInputSchema = z.object({
   budget_tokens: z.number().int().positive().optional(),
+})
+// M4+ — 서버 SearchRequestSchema(top_k 1-50, 기본 8)와 동일 제약.
+export const SearchToolInputSchema = z.object({
+  query: z.string().min(1),
+  top_k: z.number().int().min(1).max(50).optional(),
 })
 
 export async function specraftQuery(
@@ -173,6 +184,22 @@ export async function specraftHistory(
 /** 열린 spec 충돌(branch lock) 목록을 조회한다. */
 export async function specraftConflicts(context: ToolContext): Promise<ConflictListResponse> {
   return context.client.listConflicts()
+}
+
+/**
+ * 위키를 시맨틱(서버에 embedding 인덱스 가용 시) 또는 키워드로 검색한다 — branch는
+ * git 스냅샷에 자동 바인딩. query 도구(Q&A 합성)와 달리 citation path 후보 탐색용.
+ */
+export async function specraftSearch(
+  context: ToolContext,
+  input: { readonly query: string; readonly top_k?: number | undefined },
+): Promise<SearchResponse> {
+  const snapshot = await context.gitSnapshot()
+  return context.client.search({
+    branch: snapshot.branch,
+    query: input.query,
+    ...(input.top_k !== undefined ? { top_k: input.top_k } : {}),
+  })
 }
 
 /**
