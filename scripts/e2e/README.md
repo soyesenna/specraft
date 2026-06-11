@@ -29,7 +29,8 @@ node scripts/e2e/backend-fixture.mjs [--code-remote <bare-remote-path>]
 |---|---|---|
 | 9c 세션 단계 (c1~c9) | Claude Code 인증 | `CLAUDE_CODE_OAUTH_TOKEN` → `ANTHROPIC_API_KEY` → macOS 키체인 `Claude Code-credentials` 추출 |
 | 9d 호스트 단계 (d2~d3) | Codex 인증 | `~/.codex/auth.json` 존재 시 격리 `CODEX_HOME`으로 복사 |
-| 9d 프로세스 레벨 (d4~d13) | 없음 | 항상 실행 (node + git만 필요) |
+| 9d 프로세스 레벨 (d4~d19) | 없음 | 항상 실행 (node + git만 필요) |
+| 9e golden-set 게이트 | 없음 | 항상 실행 (키워드 폴백 — 무키 결정적) |
 
 specraft 백엔드 API 키는 픽스처가 자동 발급한다(외부 키 불필요).
 LLM provider는 미설정으로 고정 → 백엔드는 키워드 폴백 모드(결정적, 무키)로 동작한다.
@@ -41,9 +42,10 @@ LLM provider는 미설정으로 고정 → 백엔드는 키워드 폴백 모드(
 | `backend-fixture.mjs` | 9a. 임시 dataDir 백엔드 기동 + admin bootstrap + API 키 발급. **주의**: 시나리오는 자식 프로세스를 동기(spawnSync)로 돌리므로 반드시 `startBackendFixtureProcess`(별도 프로세스)를 사용 — in-process 모드는 이벤트 루프 블로킹으로 교착한다. |
 | `git-fixture.mjs` | 9b. bare remote(origin) + push -u 완료된 임시 작업 레포 (proxy.test.ts 빌더 이식). |
 | `claude-scenario.mjs` | 9c. 격리 HOME+CLAUDE_CONFIG_DIR에서 `--plugin-dir`/marketplace 설치, SessionStart 주입, specraft_query, gate(블록→ingest→allow), defer, replay 게이트. |
-| `codex-scenario.mjs` | 9d. 격리 CODEX_HOME 설치+MCP 핸드셰이크+status 도구, global hooks 설치 스크립트, 훅 래퍼 stdin 직접 실행 프로세스 레벨 게이트 매트릭스. |
+| `codex-scenario.mjs` | 9d. 격리 CODEX_HOME 설치+MCP 핸드셰이크+status 도구, global hooks 설치 스크립트, 훅 래퍼 stdin 직접 실행 프로세스 레벨 게이트 매트릭스(+M4+ d16 search / d17 PostToolUse / d18 PreToolUse / d19 changes·merge·progress 스모크). |
 | `lib/mcp-client.mjs` | 번들 proxy를 stdio JSON-RPC로 구동하는 최소 MCP 클라이언트 (호스트 비의존 ingest/defer 기록). |
-| `run-all.mjs` | 오케스트레이터: 빌드 → 9c → 9d → 요약/종료 코드. |
+| `golden-set-runner.mjs` | 9e. golden-set 10질의 채점. 기본은 기록 모드, `--gate`면 점수 <8/10 또는 `golden-set-baseline.json` 대비 열등 시 exit 1(베이스라인 부재 시 현재 점수로 생성·커밋 대상). |
+| `run-all.mjs` | 오케스트레이터: 빌드 → 9c → 9d → 9e(golden-set --gate) → 요약/종료 코드. |
 
 ## 시나리오 설계 노트 (실측 기반)
 
@@ -59,7 +61,8 @@ LLM provider는 미설정으로 고정 → 백엔드는 키워드 폴백 모드(
 
 ## CI 정책 (.github/workflows/ci.yml)
 
-- `validate`(claude plugin validate)·`test`(contract/unit/typecheck/build): 무조건 실행.
+- `validate`(claude plugin validate)·`test`(contract/unit/typecheck/build + 토큰 게이트 +
+  golden-set `--gate`): 무조건 실행. golden-set은 키워드 폴백 고정이라 secrets 없이 결정적이다.
 - `e2e-cli`: 잡은 무조건 실행, 인증 secrets(`CLAUDE_CODE_OAUTH_TOKEN` 또는 `ANTHROPIC_API_KEY`,
   `CODEX_AUTH_JSON`) 존재 시 세션 단계까지 전부 실행(부재 시 해당 단계만 사유와 함께 SKIP).
   **마일스톤 완료 주장은 secrets가 설정된 상태의 e2e-cli green을 전제로 한다** (plan Principle 5).

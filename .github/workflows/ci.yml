@@ -53,6 +53,10 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node scripts/measure-tool-tokens.mjs
+      # M4+ golden-set 게이트 — LLM provider 미설정이라 키워드 폴백으로 고정(무키 결정적).
+      # 점수 <8/10 또는 베이스라인(scripts/e2e/golden-set-baseline.json) 대비 열등이면 실패.
+      - name: Golden-set retrieval gate (>=8/10 + baseline)
+        run: node scripts/e2e/golden-set-runner.mjs --gate
 
   e2e-cli:
     name: CLI E2E smoke (M1.9)

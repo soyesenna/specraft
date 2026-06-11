@@ -1,0 +1,18 @@
+{
+  "provider": "keyword-fallback",
+  "queries": {
+    "q01": true,
+    "q02": true,
+    "q03": true,
+    "q04": true,
+    "q05": true,
+    "q06": true,
+    "q07": true,
+    "q08": true,
+    "q09": true,
+    "q10": true
+  },
+  "recorded_at": "2026-06-11T17:14:28.142Z",
+  "score": 10,
+  "total": 10
+}

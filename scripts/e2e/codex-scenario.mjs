@@ -11,6 +11,10 @@
 //        stdio JSON-RPC로 직접 구동해 수행한다(호스트 비의존).
 //   d15. M3.6 주입 예산: 소형 위키 session-start 비절단 + specraft_context
 //        budget_tokens 소형값 절단(truncated=true) — 프로세스 레벨.
+//   d16. M4+ specraft_search: keyword 폴백 mode + 시드 path 포함.
+//   d17. M4+ PostToolUse 훅: 연관 페이지 포인터 주입 + 동일 파일 10분 스로틀(격리 HOME).
+//   d18. M4+ PreToolUse 훅: 잠금 없음 무출력 + 실서버 merge 충돌 잠금 경고(해제 포함).
+//   d19. M4+ changes/merge/progress 엔드포인트 스모크(키 인증).
 //
 // d1~d3은 codex CLI + auth.json이 없으면 SKIP. d4~d5는 무조건 실행(호스트 비의존).
 import { spawnSync } from "node:child_process"
@@ -28,7 +32,7 @@ import { homedir } from "node:os"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
 
-import { startBackendFixtureProcess } from "./backend-fixture.mjs"
+import { backendFetch, startBackendFixtureProcess } from "./backend-fixture.mjs"
 import { createGitFixture, git, writeSpecraftConfig } from "./git-fixture.mjs"
 import { McpStdioClient } from "./lib/mcp-client.mjs"
 import { commandExists, StepLog, tempDir, tryRun } from "./lib/util.mjs"
@@ -482,6 +486,375 @@ async function runProcessLevelGate(log, cleanups) {
       log.pass("d13 pending replay → 프롬프트 block", "타 세션 미해소 마커로 인한 차단")
     } else {
       log.fail("d13 pending replay → 프롬프트 block", `stdout=${result.stdout.slice(0, 160)}`)
+    }
+  }
+
+  // d16. M4+ specraft_search: 시드 ingest → 검색 — provider 미설정이라 mode는 "keyword"로
+  //      고정(결정적)이며 결과에 시드 페이지 path가 포함되어야 한다.
+  {
+    const searchSessionId = "e2e-codex-session-search"
+    const seededPath = `changes/${searchSessionId}.md`
+    const client = new McpStdioClient({
+      args: [proxyBundle],
+      command: "node",
+      cwd: repo,
+      env: { ...env, SPECRAFT_SESSION_ID: searchSessionId },
+    })
+    try {
+      await client.initialize()
+      const ingest = await client.callTool("specraft_ingest", {
+        agent: "codex",
+        open_questions: [],
+        progress_updates: [],
+        spec_changes: [
+          {
+            area: "telemetry",
+            description: "Telemetry exporter batches spans into zstd compressed envelopes",
+            reasoning: "uncompressed span floods saturate the collector ingress",
+            type: "added",
+          },
+        ],
+        summary: "Document telemetry span export compression contract",
+      })
+      if (ingest.isError || !JSON.stringify(ingest).includes('"accepted"')) {
+        log.fail(
+          "d16 specraft_search (keyword 폴백)",
+          `시드 ingest 실패: ${JSON.stringify(ingest).slice(0, 200)}`,
+        )
+      } else {
+        const search = await client.callTool("specraft_search", {
+          query: "zstd compressed telemetry spans",
+        })
+        const body = search.structuredContent ?? {}
+        const paths = Array.isArray(body.results) ? body.results.map((result) => result.path) : []
+        if (!search.isError && body.mode === "keyword" && paths.includes(seededPath)) {
+          log.pass(
+            "d16 specraft_search (keyword 폴백)",
+            `mode=keyword, ${seededPath} 포함 (결과 ${paths.length}건)`,
+          )
+        } else {
+          log.fail(
+            "d16 specraft_search (keyword 폴백)",
+            `mode=${body.mode} paths=${JSON.stringify(paths).slice(0, 200)}`,
+          )
+        }
+      }
+    } finally {
+      await client.close()
+    }
+  }
+
+  // d17. M4+ PostToolUse 훅: 래퍼를 호스트 stdin 계약({tool_input:{file_path}, cwd, session_id})
+  //      으로 직접 실행 — 1회차는 additionalContext에 연관 페이지 포인터, 같은 파일 2회차는
+  //      무출력(10분 스로틀). ptu-cache는 격리 HOME의 .specraft 아래에 쓰여 실제
+  //      ~/.specraft를 오염하지 않는다. 파일명 토큰(ptu·session)이 시드 페이지 path 토큰과
+  //      교차하도록 골라 포인터 매칭(rankRelatedPages)을 결정적으로 만든다.
+  {
+    const ptuSessionId = "e2e-codex-session-ptu"
+    const seededPath = `changes/${ptuSessionId}.md`
+    const client = new McpStdioClient({
+      args: [proxyBundle],
+      command: "node",
+      cwd: repo,
+      env: { ...env, SPECRAFT_SESSION_ID: ptuSessionId },
+    })
+    let seeded = false
+    try {
+      await client.initialize()
+      const ingest = await client.callTool("specraft_ingest", {
+        agent: "codex",
+        open_questions: [],
+        progress_updates: [],
+        spec_changes: [
+          {
+            area: "hooks",
+            description: "PostToolUse pointer fixture page for the session probe file",
+            reasoning: "drift pointers must reference related spec pages by path only",
+            type: "added",
+          },
+        ],
+        summary: "Seed wiki page for PostToolUse pointer matching",
+      })
+      seeded = !ingest.isError && JSON.stringify(ingest).includes('"accepted"')
+      if (!seeded) {
+        log.fail(
+          "d17a PostToolUse 연관 페이지 포인터",
+          `시드 ingest 실패: ${JSON.stringify(ingest).slice(0, 200)}`,
+        )
+      }
+    } finally {
+      await client.close()
+    }
+    if (seeded) {
+      const payload = {
+        cwd: repo,
+        hook_event_name: "PostToolUse",
+        session_id: ptuSessionId,
+        tool_input: { file_path: "ptu-session-probe.ts" },
+        tool_name: "Write",
+      }
+      const first = runHook("post-tool-use.js", payload, env)
+      let parsed = null
+      try {
+        parsed = JSON.parse(first.stdout)
+      } catch {
+        // fail로 흐름
+      }
+      const hookOutput = parsed?.hookSpecificOutput
+      if (
+        first.status === 0 &&
+        hookOutput?.hookEventName === "PostToolUse" &&
+        String(hookOutput.additionalContext).includes(seededPath)
+      ) {
+        log.pass("d17a PostToolUse 연관 페이지 포인터", `additionalContext에 ${seededPath} 포함`)
+      } else {
+        log.fail(
+          "d17a PostToolUse 연관 페이지 포인터",
+          `exit=${first.status} stdout=${first.stdout.slice(0, 200)}`,
+        )
+      }
+      const second = runHook("post-tool-use.js", payload, env)
+      if (second.status === 0 && second.stdout === "") {
+        log.pass("d17b PostToolUse 동일 파일 스로틀", "2회차 무출력(10분 ptu-cache, 격리 HOME)")
+      } else {
+        log.fail(
+          "d17b PostToolUse 동일 파일 스로틀",
+          `exit=${second.status} stdout=${second.stdout.slice(0, 160)}`,
+        )
+      }
+    }
+  }
+
+  // d19. M4+ changes/merge/progress 스모크 — proxy와 동일한 키 인증(Bearer)으로 엔드포인트별
+  //      fetch 1-call 계약을 확인한다. d18(잠금 생성)보다 먼저 실행해 main 잠금 영향을 피한다.
+  {
+    const head = git(repo, ["rev-parse", "HEAD"])
+    const auth = { apiKey: backend.apiKey }
+    const ingestBody = (branch, sessionId, progressUpdates = []) => ({
+      agent: "codex",
+      branch,
+      commit_hash: head,
+      open_questions: [],
+      progress_updates: progressUpdates,
+      session_id: sessionId,
+      spec_changes: [
+        {
+          area: "e2e",
+          description: `M4 smoke change recorded by ${sessionId}`,
+          reasoning: "contract smoke for the M4+ surfaces",
+          type: "added",
+        },
+      ],
+      summary: `M4 smoke ingest (${sessionId})`,
+    })
+    // 기준 wiki_head 확보(context 응답) 후 ingest 1건 → changes_since에 잡혀야 한다.
+    const contextResponse = await backendFetch(backend.url, "/api/v1/context", {
+      ...auth,
+      body: { branch: "main", commit_hash: head },
+    })
+    const wikiHead = contextResponse.json?.wiki_head
+    const smokeIngest = await backendFetch(backend.url, "/api/v1/ingest", {
+      ...auth,
+      body: ingestBody("main", "e2e-codex-session-m4", [
+        { feature: "m4-smoke", note: "E2E progress board smoke", status: "in_progress" },
+      ]),
+    })
+    if (typeof wikiHead !== "string" || smokeIngest.status !== 200) {
+      log.fail(
+        "d19 M4 스모크 사전 준비",
+        `context=${contextResponse.status} ingest=${smokeIngest.status} ${smokeIngest.text.slice(0, 160)}`,
+      )
+    } else {
+      // d19a. GET /wiki/:branch/changes?since= — 기준 커밋 이후 변경 목록 계약.
+      const changes = await backendFetch(
+        backend.url,
+        `/api/v1/wiki/main/changes?since=${wikiHead}`,
+        auth,
+      )
+      const changeEntries = Array.isArray(changes.json?.changes) ? changes.json.changes : []
+      const changed = changeEntries.find(
+        (entry) => entry.path === "changes/e2e-codex-session-m4.md",
+      )
+      if (
+        changes.status === 200 &&
+        changes.json?.branch === "main" &&
+        changes.json?.since === wikiHead &&
+        changed &&
+        typeof changed.timestamp === "string" &&
+        typeof changed.author === "string" &&
+        typeof changed.commit === "string"
+      ) {
+        log.pass(
+          "d19a GET /wiki/:branch/changes 계약",
+          `since=${wikiHead.slice(0, 8)} → changes/e2e-codex-session-m4.md 포함(${changeEntries.length}건)`,
+        )
+      } else {
+        log.fail(
+          "d19a GET /wiki/:branch/changes 계약",
+          `status=${changes.status} body=${changes.text.slice(0, 200)}`,
+        )
+      }
+      // d19b. POST /wiki/:branch/merge — 클린 병합 {status:"merged"} 계약.
+      const touch = await backendFetch(backend.url, "/api/v1/context", {
+        ...auth,
+        body: { branch: "e2e-merge-src", commit_hash: head },
+      })
+      const sourceIngest = await backendFetch(backend.url, "/api/v1/ingest", {
+        ...auth,
+        body: ingestBody("e2e-merge-src", "e2e-merge-feat"),
+      })
+      const merge = await backendFetch(backend.url, "/api/v1/wiki/e2e-merge-src/merge", {
+        ...auth,
+        body: { into: "main" },
+      })
+      if (
+        touch.status === 200 &&
+        sourceIngest.status === 200 &&
+        merge.status === 200 &&
+        merge.json?.status === "merged"
+      ) {
+        log.pass("d19b POST /wiki/:branch/merge 계약", 'e2e-merge-src → main {status:"merged"}')
+      } else {
+        log.fail(
+          "d19b POST /wiki/:branch/merge 계약",
+          `touch=${touch.status} ingest=${sourceIngest.status} merge=${merge.status} ${merge.text.slice(0, 160)}`,
+        )
+      }
+      // d19c. GET /progress — ingest progress_updates가 보드에 집계되는 계약(+무인증 401).
+      const progress = await backendFetch(backend.url, "/api/v1/progress", auth)
+      const items = Array.isArray(progress.json?.items) ? progress.json.items : []
+      const item = items.find((entry) => entry.feature === "m4-smoke")
+      const unauthorized = await backendFetch(backend.url, "/api/v1/progress")
+      if (
+        progress.status === 200 &&
+        item &&
+        item.status === "in_progress" &&
+        item.branch === "main" &&
+        typeof item.updated_at === "string" &&
+        typeof item.source_ingest_id === "string" &&
+        unauthorized.status === 401
+      ) {
+        log.pass(
+          "d19c GET /progress 계약(+무인증 401)",
+          `feature=m4-smoke status=in_progress (items ${items.length}건)`,
+        )
+      } else {
+        log.fail(
+          "d19c GET /progress 계약(+무인증 401)",
+          `status=${progress.status} unauth=${unauthorized.status} body=${progress.text.slice(0, 200)}`,
+        )
+      }
+    }
+  }
+
+  // d18. M4+ PreToolUse 훅: 잠금 없음 → 무출력, 실서버 merge 충돌로 main을 잠근 뒤 경고 1줄.
+  //      status-cache(5분)는 격리 HOME에 쓰이므로 잠금 생성 후 캐시 파일을 제거해 재조회를
+  //      강제한다. 마지막에 conflict resolve로 잠금을 해제해 이후 단계(호스트 레벨)의
+  //      ingest 거부를 막는다 — 그래서 잠금을 만드는 d18을 d19 뒤(프로세스 레벨 마지막)에 둔다.
+  {
+    const payload = {
+      cwd: repo,
+      hook_event_name: "PreToolUse",
+      session_id: sessionId,
+      tool_input: { file_path: "README.md" },
+      tool_name: "Write",
+    }
+    const unlocked = runHook("pre-tool-use.js", payload, env)
+    if (unlocked.status === 0 && unlocked.stdout === "") {
+      log.pass("d18a PreToolUse 잠금 없음 → 무출력", "exit 0 + 무출력(advisory fail-open 계약)")
+    } else {
+      log.fail(
+        "d18a PreToolUse 잠금 없음 → 무출력",
+        `exit=${unlocked.status} stdout=${unlocked.stdout.slice(0, 160)}`,
+      )
+    }
+    // 실서버 잠금 생성: main/e2e-lock-dev 양쪽 ingest(log.md·index.md 말미 동시 수정) →
+    // e2e-lock-dev→main 병합 충돌(409 merge_conflict) → main branch_lock.
+    const head = git(repo, ["rev-parse", "HEAD"])
+    const auth = { apiKey: backend.apiKey }
+    const lockIngestBody = (branch, suffix) => ({
+      agent: "codex",
+      branch,
+      commit_hash: head,
+      open_questions: [],
+      progress_updates: [],
+      session_id: `e2e-lock-${suffix}`,
+      spec_changes: [
+        {
+          area: "lock",
+          description: `${branch} side change to force a merge conflict`,
+          reasoning: "both branches must touch the same wiki tail lines",
+          type: "added",
+        },
+      ],
+      summary: `Lock fixture ingest on ${branch}`,
+    })
+    await backendFetch(backend.url, "/api/v1/context", {
+      ...auth,
+      body: { branch: "e2e-lock-dev", commit_hash: head },
+    })
+    const mainIngest = await backendFetch(backend.url, "/api/v1/ingest", {
+      ...auth,
+      body: lockIngestBody("main", "main"),
+    })
+    const devIngest = await backendFetch(backend.url, "/api/v1/ingest", {
+      ...auth,
+      body: lockIngestBody("e2e-lock-dev", "dev"),
+    })
+    const conflicted = await backendFetch(backend.url, "/api/v1/wiki/e2e-lock-dev/merge", {
+      ...auth,
+      body: { into: "main" },
+    })
+    const conflictId = conflicted.json?.conflict_id
+    if (
+      mainIngest.status !== 200 ||
+      devIngest.status !== 200 ||
+      conflicted.status !== 409 ||
+      typeof conflictId !== "string"
+    ) {
+      log.fail(
+        "d18b PreToolUse 잠금 경고",
+        `잠금 생성 실패: ingest=${mainIngest.status}/${devIngest.status} merge=${conflicted.status} ${conflicted.text.slice(0, 160)}`,
+      )
+    } else {
+      rmSync(join(home, ".specraft", "status-cache"), { force: true })
+      const locked = runHook("pre-tool-use.js", payload, env)
+      let parsed = null
+      try {
+        parsed = JSON.parse(locked.stdout)
+      } catch {
+        // fail로 흐름
+      }
+      const message = String(parsed?.systemMessage ?? "")
+      if (
+        locked.status === 0 &&
+        message.includes("branch 'main' is locked") &&
+        message.includes(conflictId)
+      ) {
+        log.pass(
+          "d18b PreToolUse 잠금 경고",
+          `systemMessage에 main 잠금 + conflict ${conflictId} 표기`,
+        )
+      } else {
+        log.fail(
+          "d18b PreToolUse 잠금 경고",
+          `exit=${locked.status} stdout=${locked.stdout.slice(0, 200)}`,
+        )
+      }
+      // 잠금 해제(원상 복구) — 기존 conflict resolve 플로로 branch_lock을 푼다.
+      const resolved = await backendFetch(backend.url, `/api/v1/conflicts/${conflictId}/resolve`, {
+        ...auth,
+        body: { directive: "prefer source branch content" },
+      })
+      rmSync(join(home, ".specraft", "status-cache"), { force: true })
+      if (resolved.status === 200 && resolved.json?.status === "resolved") {
+        log.pass("d18c 잠금 해제(conflict resolve)", "branch_lock 원상 복구")
+      } else {
+        log.fail(
+          "d18c 잠금 해제(conflict resolve)",
+          `status=${resolved.status} ${resolved.text.slice(0, 160)}`,
+        )
+      }
     }
   }
 
