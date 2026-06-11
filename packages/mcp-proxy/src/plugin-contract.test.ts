@@ -35,14 +35,17 @@ describe("plugin packaging contracts", () => {
     expect(existsSync(repoPath("plugins/claude-code/commands/specraft-init.md"))).toBe(true)
   })
 
-  it("ships Codex manifest, matcher-free hooks, and setup/init skills", () => {
+  it("ships Codex manifest, standard hooks, and setup/init skills", () => {
     const plugin = readJson("plugins/codex/.codex-plugin/plugin.json")
-    const hooks = readJson("plugins/codex/hooks.json")
+    const hooks = readJson("plugins/codex/hooks/hooks.json")
+    const mcp = readJson("plugins/codex/.mcp.json")
     const stopHook = readFileSync(repoPath("plugins/codex/hooks/stop.js"), "utf8")
     const promptHook = readFileSync(repoPath("plugins/codex/hooks/user-prompt-submit.js"), "utf8")
     expect(plugin["name"]).toBe("specraft")
+    expect(plugin["hooks"]).toBe("./hooks/hooks.json")
     expect(JSON.stringify(hooks)).toContain("UserPromptSubmit")
-    expect(JSON.stringify(hooks)).not.toContain("matcher")
+    expect(JSON.stringify(hooks)).toContain("SessionStart")
+    expect(JSON.stringify(mcp)).toContain("proxy/cli.js")
     expect(stopHook).toContain("specraft-mcp-proxy")
     expect(stopHook).toContain("hook stop")
     expect(promptHook).toContain("hook user-prompt-submit")

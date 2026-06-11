@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "specraft": {
+      "command": "node",
+      "args": ["./proxy/cli.js"],
+      "cwd": "."
+    }
+  }
+}

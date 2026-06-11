@@ -1,8 +1,0 @@
-{
-  "hooks": {
-    "SessionStart": [{ "command": "node hooks/session-start.js" }],
-    "PostCompact": [{ "command": "node hooks/post-compact.js" }],
-    "UserPromptSubmit": [{ "command": "node hooks/user-prompt-submit.js" }],
-    "Stop": [{ "command": "node hooks/stop.js" }]
-  }
-}

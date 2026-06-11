@@ -2,13 +2,20 @@
   "name": "specraft",
   "version": "0.1.0",
   "description": "Specraft context injection, MCP tools, setup/init skills, and stop gate hooks for Codex.",
-  "mcpServers": {
-    "specraft": {
-      "command": "specraft-mcp-proxy",
-      "env": {
-        "SPECRAFT_SERVER_URL": "${SPECRAFT_SERVER_URL}",
-        "SPECRAFT_API_KEY": "${SPECRAFT_API_KEY}"
-      }
-    }
+  "author": {
+    "name": "specraft"
+  },
+  "license": "UNLICENSED",
+  "keywords": ["specraft", "codex-plugin", "hooks", "mcp", "skills"],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Specraft",
+    "shortDescription": "Spec-first context injection and stop gates",
+    "longDescription": "Specraft injects project spec context at session start, exposes specraft_query/specraft_ingest/specraft_status MCP tools, ships setup/init skills, and enforces commit/push/ingest stop gates.",
+    "developerName": "specraft",
+    "category": "Developer Tools",
+    "capabilities": ["Hooks", "MCP Tools", "Context Injection", "Workflow"]
   }
 }
