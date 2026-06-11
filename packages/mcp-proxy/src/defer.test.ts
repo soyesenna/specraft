@@ -117,7 +117,11 @@ describe("specraft_defer stop-gate escape", () => {
     const fixture = createGitRepo()
     const home = makeHome()
     writeFileSync(join(fixture.repo, "WIP.md"), "draft\n")
-    recordDefer(home, { branch: "main", head: fixture.first, repoPath: "/other/repo" }, "other repo")
+    recordDefer(
+      home,
+      { branch: "main", head: fixture.first, repoPath: "/other/repo" },
+      "other repo",
+    )
 
     expect(
       decideStop({ cwd: fixture.repo, home, sessionId: "s-other", strictMode: true }).decision,

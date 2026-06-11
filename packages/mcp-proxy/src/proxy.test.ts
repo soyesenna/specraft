@@ -201,7 +201,6 @@ describe("mcp proxy core", () => {
     })
     expect(fixture.remote).toContain("specraft-gate-remote-")
   })
-
 })
 
 function stubToolClient(overrides?: Partial<SpecraftToolClient>): SpecraftToolClient {
@@ -295,7 +294,10 @@ describe("mcp sdk server", () => {
     })) as CallToolResult
     expect(queryResult.isError).toBeFalsy()
     expect(queryResult.content).toEqual([
-      { type: "text", text: JSON.stringify({ answer: "query answer", citations: [], query_id: "qry_1" }) },
+      {
+        type: "text",
+        text: JSON.stringify({ answer: "query answer", citations: [], query_id: "qry_1" }),
+      },
     ])
     expect(queryResult.structuredContent).toEqual({
       answer: "query answer",
@@ -337,9 +339,7 @@ describe("mcp sdk server", () => {
       arguments: {},
     })) as CallToolResult
     expect(result.isError).toBe(true)
-    expect(JSON.stringify(result.content)).toContain(
-      "Invalid arguments for tool specraft_query",
-    )
+    expect(JSON.stringify(result.content)).toContain("Invalid arguments for tool specraft_query")
     await client.close()
   })
 

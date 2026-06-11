@@ -1,4 +1,4 @@
-import { spawnSync, type SpawnSyncReturns } from "node:child_process"
+import { type SpawnSyncReturns, spawnSync } from "node:child_process"
 import { mkdtempSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
@@ -33,48 +33,48 @@ function hookStdin(): string {
 }
 
 describe("hook wrappers survive a missing specraft-mcp-proxy (ENOENT guard)", () => {
-  it.each(["claude-code", "codex"] as const)(
-    "%s stop.js emits a block decision with install guidance instead of crashing",
-    (plugin) => {
-      const result = runHook(plugin, "stop.js", hookStdin())
-      expect(result.status).toBe(0)
-      expect(result.stderr).not.toContain("TypeError")
-      const output = JSON.parse(result.stdout) as { decision: string; reason: string }
-      expect(output.decision).toBe("block")
-      expect(output.reason).toContain("specraft-mcp-proxy가 설치되지 않았습니다")
-      expect(output.reason).toContain("specraft_defer")
-      expect(output.reason).toContain("strict_mode=false")
-    },
-  )
+  it.each([
+    "claude-code",
+    "codex",
+  ] as const)("%s stop.js emits a block decision with install guidance instead of crashing", (plugin) => {
+    const result = runHook(plugin, "stop.js", hookStdin())
+    expect(result.status).toBe(0)
+    expect(result.stderr).not.toContain("TypeError")
+    const output = JSON.parse(result.stdout) as { decision: string; reason: string }
+    expect(output.decision).toBe("block")
+    expect(output.reason).toContain("specraft-mcp-proxy가 설치되지 않았습니다")
+    expect(output.reason).toContain("specraft_defer")
+    expect(output.reason).toContain("strict_mode=false")
+  })
 
-  it.each(["claude-code", "codex"] as const)(
-    "%s user-prompt-submit.js emits a block decision with install guidance",
-    (plugin) => {
-      const result = runHook(plugin, "user-prompt-submit.js", hookStdin())
-      expect(result.status).toBe(0)
-      const output = JSON.parse(result.stdout) as { decision: string; reason: string }
-      expect(output.decision).toBe("block")
-      expect(output.reason).toContain("specraft-mcp-proxy가 설치되지 않았습니다")
-    },
-  )
+  it.each([
+    "claude-code",
+    "codex",
+  ] as const)("%s user-prompt-submit.js emits a block decision with install guidance", (plugin) => {
+    const result = runHook(plugin, "user-prompt-submit.js", hookStdin())
+    expect(result.status).toBe(0)
+    const output = JSON.parse(result.stdout) as { decision: string; reason: string }
+    expect(output.decision).toBe("block")
+    expect(output.reason).toContain("specraft-mcp-proxy가 설치되지 않았습니다")
+  })
 
-  it.each(["claude-code", "codex"] as const)(
-    "%s session-start.js fails open with install guidance text",
-    (plugin) => {
-      const result = runHook(plugin, "session-start.js", hookStdin())
-      expect(result.status).toBe(0)
-      expect(result.stdout).toContain("specraft-mcp-proxy가 설치되지 않았습니다")
-    },
-  )
+  it.each([
+    "claude-code",
+    "codex",
+  ] as const)("%s session-start.js fails open with install guidance text", (plugin) => {
+    const result = runHook(plugin, "session-start.js", hookStdin())
+    expect(result.status).toBe(0)
+    expect(result.stdout).toContain("specraft-mcp-proxy가 설치되지 않았습니다")
+  })
 
-  it.each(["claude-code", "codex"] as const)(
-    "%s post-compact.js fails open with install guidance text",
-    (plugin) => {
-      const result = runHook(plugin, "post-compact.js", hookStdin())
-      expect(result.status).toBe(0)
-      expect(result.stdout).toContain("specraft-mcp-proxy가 설치되지 않았습니다")
-    },
-  )
+  it.each([
+    "claude-code",
+    "codex",
+  ] as const)("%s post-compact.js fails open with install guidance text", (plugin) => {
+    const result = runHook(plugin, "post-compact.js", hookStdin())
+    expect(result.status).toBe(0)
+    expect(result.stdout).toContain("specraft-mcp-proxy가 설치되지 않았습니다")
+  })
 
   it("tolerates empty and malformed stdin without crashing", () => {
     for (const stdin of ["", "not json", "[1,2,3]"]) {

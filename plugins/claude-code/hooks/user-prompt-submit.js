@@ -43,7 +43,11 @@ function writeBlock(reason) {
 
 if (result.error) {
   writeBlock(installGuidance)
-} else if (result.status === 0 && typeof result.stdout === "string" && result.stdout.trim() !== "") {
+} else if (
+  result.status === 0 &&
+  typeof result.stdout === "string" &&
+  result.stdout.trim() !== ""
+) {
   process.stdout.write(result.stdout)
 } else {
   const stderrText = typeof result.stderr === "string" ? result.stderr.trim() : ""

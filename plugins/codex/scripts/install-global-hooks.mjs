@@ -79,7 +79,7 @@ function withoutSpecraft(events) {
           group === null ||
           typeof group !== "object" ||
           !Array.isArray(group.hooks) ||
-          group.hooks.length > 0
+          group.hooks.length > 0,
       )
     if (kept.length > 0) {
       result[eventName] = kept
@@ -97,7 +97,7 @@ function readExisting() {
     parsed = JSON.parse(readFileSync(hooksPath, "utf8"))
   } catch {
     console.error(
-      `error: ${hooksPath} 가 유효한 JSON이 아닙니다. 손상된 파일을 덮어쓰지 않습니다. 직접 복구하거나 삭제한 뒤 다시 실행하세요.`
+      `error: ${hooksPath} 가 유효한 JSON이 아닙니다. 손상된 파일을 덮어쓰지 않습니다. 직접 복구하거나 삭제한 뒤 다시 실행하세요.`,
     )
     process.exit(1)
   }
@@ -119,7 +119,7 @@ function versionGuard() {
   const result = spawnSync("codex", ["--version"], { encoding: "utf8" })
   if (result.error || result.status !== 0) {
     console.warn(
-      "warn: codex CLI를 찾을 수 없습니다. Codex 설치 후 훅이 동작합니다 (https://developers.openai.com/codex)."
+      "warn: codex CLI를 찾을 수 없습니다. Codex 설치 후 훅이 동작합니다 (https://developers.openai.com/codex).",
     )
     return
   }
@@ -129,7 +129,7 @@ function versionGuard() {
     const config = readFileSync(configPath, "utf8")
     if (/^\s*plugin_hooks\s*=\s*true\s*$/m.test(config)) {
       console.warn(
-        "warn: config.toml에 features.plugin_hooks = true가 설정되어 있습니다. specraft 플러그인이 설치되어 있으면 플러그인 레벨 훅이 직접 로드되므로, 이 글로벌 설치와 중복 실행될 수 있습니다. 한쪽만 사용하세요 (글로벌 제거: --remove)."
+        "warn: config.toml에 features.plugin_hooks = true가 설정되어 있습니다. specraft 플러그인이 설치되어 있으면 플러그인 레벨 훅이 직접 로드되므로, 이 글로벌 설치와 중복 실행될 수 있습니다. 한쪽만 사용하세요 (글로벌 제거: --remove).",
       )
     }
   }
@@ -155,6 +155,6 @@ const next = { ...existing, hooks: merged }
 writeFileSync(hooksPath, `${JSON.stringify(next, null, 2)}\n`)
 console.log(`specraft 훅을 설치했습니다: ${hooksPath}`)
 console.log(
-  "참고: 새 훅은 다음 대화형 Codex 세션 시작 시 신뢰 검토(trust review)를 통과해야 실행됩니다."
+  "참고: 새 훅은 다음 대화형 Codex 세션 시작 시 신뢰 검토(trust review)를 통과해야 실행됩니다.",
 )
 versionGuard()

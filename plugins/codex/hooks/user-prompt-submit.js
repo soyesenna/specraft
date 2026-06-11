@@ -51,7 +51,7 @@ function relayDecision(stdoutText) {
       writeBlock(
         typeof parsed.reason === "string" && parsed.reason !== ""
           ? parsed.reason
-          : "pending specraft ingest replay exists; resolve or ingest before continuing"
+          : "pending specraft ingest replay exists; resolve or ingest before continuing",
       )
       return
     }
@@ -63,7 +63,11 @@ function relayDecision(stdoutText) {
 
 if (result.error) {
   writeBlock(installGuidance)
-} else if (result.status === 0 && typeof result.stdout === "string" && result.stdout.trim() !== "") {
+} else if (
+  result.status === 0 &&
+  typeof result.stdout === "string" &&
+  result.stdout.trim() !== ""
+) {
   relayDecision(result.stdout.trim())
 } else {
   const stderrText = typeof result.stderr === "string" ? result.stderr.trim() : ""

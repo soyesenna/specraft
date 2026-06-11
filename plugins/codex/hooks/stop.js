@@ -52,7 +52,11 @@ function relayDecision(stdoutText) {
   try {
     const parsed = JSON.parse(stdoutText)
     if (parsed !== null && typeof parsed === "object" && parsed.decision === "block") {
-      writeBlock(typeof parsed.reason === "string" && parsed.reason !== "" ? parsed.reason : resolutionGuidance)
+      writeBlock(
+        typeof parsed.reason === "string" && parsed.reason !== ""
+          ? parsed.reason
+          : resolutionGuidance,
+      )
       return
     }
     // allow/approve: 출력 없음 = 성공으로 처리되어 종료가 허용된다.
@@ -63,7 +67,11 @@ function relayDecision(stdoutText) {
 
 if (result.error) {
   writeBlock(`${installGuidance} ${resolutionGuidance}`)
-} else if (result.status === 0 && typeof result.stdout === "string" && result.stdout.trim() !== "") {
+} else if (
+  result.status === 0 &&
+  typeof result.stdout === "string" &&
+  result.stdout.trim() !== ""
+) {
   relayDecision(result.stdout.trim())
 } else {
   const stderrText = typeof result.stderr === "string" ? result.stderr.trim() : ""

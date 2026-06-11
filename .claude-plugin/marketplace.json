@@ -16,13 +16,7 @@
       "source": "./plugins/claude-code",
       "category": "development",
       "homepage": "https://github.com/soyesenna/specraft",
-      "tags": [
-        "spec",
-        "wiki",
-        "mcp",
-        "stop-gate",
-        "context-injection"
-      ]
+      "tags": ["spec", "wiki", "mcp", "stop-gate", "context-injection"]
     }
   ],
   "version": "0.1.0"
