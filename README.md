@@ -64,9 +64,17 @@ Configuration: the agent-side `.specraft.json` (`server_url`, `strict_mode`) plu
 
 ### Install (Codex)
 
-The Codex plugin lives in `plugins/codex`, and this repo ships a Codex marketplace manifest at `.agents/plugins/marketplace.json` pointing to it. Codex does not load plugin hooks yet (openai/codex#16430), so a global-hooks install script is planned for a later milestone; its location will be documented in `plugins/codex/README.md` once it lands.
+The Codex plugin lives in `plugins/codex`, and this repo ships a Codex marketplace manifest at `.agents/plugins/marketplace.json` pointing to it. Codex does not load plugin hooks yet (openai/codex#16430), so this repo ships a global-hooks install script at `plugins/codex/scripts/install-global-hooks.mjs` — see `plugins/codex/README.md` for usage.
 
 Stop gates are hard by default: dirty worktree, unpushed HEAD, or missing ingest marker blocks ending a write session. Read-only sessions are exempt.
+
+## E2E Smoke Harness
+
+```sh
+node scripts/e2e/run-all.mjs   # full M1.9 smoke: backend fixture + Claude Code + Codex scenarios
+```
+
+See `scripts/e2e/README.md` for per-scenario commands, auth requirements, and the CI policy.
 
 ## Backup And Recovery
 

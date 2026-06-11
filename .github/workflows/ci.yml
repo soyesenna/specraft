@@ -1,0 +1,82 @@
+# M1.9e CI 배선 (plan: .omc/plans/ralplan-specraft-plugin-enhancement.md §Phase M1.9)
+#
+# 잡 정책:
+# - validate / test(contract·unit·typecheck·build): 무조건 실행.
+# - e2e-cli: 잡 자체는 무조건 실행한다. 하니스(scripts/e2e/run-all.mjs)가 인증 secrets
+#   유무를 감지해 — secrets 존재 시 CLI 세션 단계까지 전부 실행하고, 부재 시 해당 단계만
+#   사유와 함께 SKIP 처리한다(프로세스 레벨 게이트 검증은 항상 실행). 즉 "secrets 존재 시
+#   무조건 실행"이며, 마일스톤 완료 주장은 secrets가 설정된 상태의 이 잡 green을 전제로 한다.
+#
+# 필요 secrets (e2e-cli 전체 실행용):
+# - CLAUDE_CODE_OAUTH_TOKEN 또는 ANTHROPIC_API_KEY : Claude Code 헤드리스 세션 인증
+# - CODEX_AUTH_JSON : ~/.codex/auth.json 내용 (Codex 호스트 세션 인증)
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    name: plugin validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Validate plugin manifest
+        run: claude plugin validate plugins/claude-code
+      - name: Validate marketplace manifest
+        run: claude plugin validate .
+
+  test:
+    name: contract / unit / build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  e2e-cli:
+    name: CLI E2E smoke (M1.9)
+    runs-on: ubuntu-latest
+    env:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install host CLIs (claude / codex)
+        run: npm install -g @anthropic-ai/claude-code @openai/codex
+      # job-level if에서는 secrets 컨텍스트를 쓸 수 없으므로(GitHub 제약) 스텝 셸과
+      # 하니스의 SKIP 로직에서 secrets 유무를 분기한다.
+      - name: Configure codex auth (secret 존재 시)
+        env:
+          CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
+        run: |
+          if [ -n "$CODEX_AUTH_JSON" ]; then
+            mkdir -p ~/.codex
+            printf '%s' "$CODEX_AUTH_JSON" > ~/.codex/auth.json
+            chmod 600 ~/.codex/auth.json
+            echo "codex auth configured"
+          else
+            echo "CODEX_AUTH_JSON secret 없음 — codex 호스트 세션 단계는 하니스가 SKIP 처리"
+          fi
+      - name: Run E2E smoke harness
+        run: node scripts/e2e/run-all.mjs
