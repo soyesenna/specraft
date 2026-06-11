@@ -46,6 +46,25 @@ export function readDirtyHash(cwd: string): string {
   return readDirtyState(cwd).hash
 }
 
+/**
+ * 변경 파일 수집(M4+ specraft_analyze): HEAD 대비 작업트리 diff와 staged diff의
+ * 합집합을 레포 루트 상대 경로로 반환한다(중복 제거, 정렬).
+ */
+export function readChangedFiles(cwd: string): readonly string[] {
+  const files = new Set<string>()
+  for (const args of [
+    ["diff", "--name-only", "HEAD"],
+    ["diff", "--name-only", "--cached"],
+  ] as const) {
+    for (const line of git(cwd, args).split("\n")) {
+      if (line !== "") {
+        files.add(line)
+      }
+    }
+  }
+  return [...files].sort()
+}
+
 export type HeadPushState = "pushed" | "not-pushed" | "no-upstream"
 
 /**

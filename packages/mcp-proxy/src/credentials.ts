@@ -93,19 +93,48 @@ export type ResolveServerUrlOptions = {
   readonly env?: CredentialsEnv
 }
 
+const LOOPBACK_HOSTNAMES = new Set(["127.0.0.1", "localhost", "::1", "[::1]"])
+
+/**
+ * TLS 강제(M4+): 비-localhost http URL은 기본 거부한다. 평문 HTTP로 API 키가
+ * 네트워크에 노출되기 때문이다. 명시 우회는 `SPECRAFT_ALLOW_INSECURE_HTTP=1` env뿐.
+ * loopback(127.0.0.1/localhost/[::1])과 https는 항상 허용. 해석 불가 URL은
+ * 기존 동작(zod/클라이언트 검증)에 맡기고 여기서는 통과시킨다.
+ */
+export function assertServerUrlSecure(url: string, env: CredentialsEnv): string {
+  let parsed: URL
+  try {
+    parsed = new URL(url)
+  } catch {
+    return url
+  }
+  if (parsed.protocol !== "http:" || LOOPBACK_HOSTNAMES.has(parsed.hostname)) {
+    return url
+  }
+  if (envOrNull(env, "SPECRAFT_ALLOW_INSECURE_HTTP") === "1") {
+    return url
+  }
+  throw new Error(
+    `specraft: refusing plaintext http server_url "${url}" for a non-localhost host — the API key would travel unencrypted. Use https://, or set SPECRAFT_ALLOW_INSECURE_HTTP=1 to bypass explicitly.`,
+  )
+}
+
 /**
  * Server URL resolution chain:
  * 1. `SPECRAFT_SERVER_URL` env
  * 2. `.specraft.json` `server_url` (project config)
  * 3. `~/.specraft/credentials` `SPECRAFT_SERVER_URL`
  * 4. `DEFAULT_SERVER_URL` (http://127.0.0.1:4311)
+ *
+ * Every source passes through the TLS guard (`assertServerUrlSecure`).
  */
 export function resolveServerUrl(options: ResolveServerUrlOptions): string {
   const env = options.env ?? process.env
-  return (
+  return assertServerUrlSecure(
     envOrNull(env, "SPECRAFT_SERVER_URL") ??
-    findSpecraftConfig(options.cwd)?.server_url ??
-    readCredentialsFile(options.home)["SPECRAFT_SERVER_URL"] ??
-    DEFAULT_SERVER_URL
+      findSpecraftConfig(options.cwd)?.server_url ??
+      readCredentialsFile(options.home)["SPECRAFT_SERVER_URL"] ??
+      DEFAULT_SERVER_URL,
+    env,
   )
 }

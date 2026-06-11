@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { createRequire } from 'node:module';
+import { isAbsolute, relative, join } from 'path';
 import process3 from 'process';
-import { existsSync, rmSync, writeFileSync, readFileSync, renameSync, mkdirSync, readdirSync, statSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync, mkdirSync, readdirSync, rmSync, writeFileSync, renameSync, statSync } from 'fs';
 import { createHash, randomBytes } from 'crypto';
 import { execFileSync, spawnSync } from 'child_process';
 
@@ -3627,49 +3627,49 @@ var require_fast_uri = __commonJS({
       schemelessOptions.skipEscape = true;
       return serialize(resolved, schemelessOptions);
     }
-    function resolveComponent(base, relative, options, skipNormalization) {
+    function resolveComponent(base, relative2, options, skipNormalization) {
       const target = {};
       if (!skipNormalization) {
         base = parse3(serialize(base, options), options);
-        relative = parse3(serialize(relative, options), options);
+        relative2 = parse3(serialize(relative2, options), options);
       }
       options = options || {};
-      if (!options.tolerant && relative.scheme) {
-        target.scheme = relative.scheme;
-        target.userinfo = relative.userinfo;
-        target.host = relative.host;
-        target.port = relative.port;
-        target.path = removeDotSegments(relative.path || "");
-        target.query = relative.query;
+      if (!options.tolerant && relative2.scheme) {
+        target.scheme = relative2.scheme;
+        target.userinfo = relative2.userinfo;
+        target.host = relative2.host;
+        target.port = relative2.port;
+        target.path = removeDotSegments(relative2.path || "");
+        target.query = relative2.query;
       } else {
-        if (relative.userinfo !== void 0 || relative.host !== void 0 || relative.port !== void 0) {
-          target.userinfo = relative.userinfo;
-          target.host = relative.host;
-          target.port = relative.port;
-          target.path = removeDotSegments(relative.path || "");
-          target.query = relative.query;
+        if (relative2.userinfo !== void 0 || relative2.host !== void 0 || relative2.port !== void 0) {
+          target.userinfo = relative2.userinfo;
+          target.host = relative2.host;
+          target.port = relative2.port;
+          target.path = removeDotSegments(relative2.path || "");
+          target.query = relative2.query;
         } else {
-          if (!relative.path) {
+          if (!relative2.path) {
             target.path = base.path;
-            if (relative.query !== void 0) {
-              target.query = relative.query;
+            if (relative2.query !== void 0) {
+              target.query = relative2.query;
             } else {
               target.query = base.query;
             }
           } else {
-            if (relative.path[0] === "/") {
-              target.path = removeDotSegments(relative.path);
+            if (relative2.path[0] === "/") {
+              target.path = removeDotSegments(relative2.path);
             } else {
               if ((base.userinfo !== void 0 || base.host !== void 0 || base.port !== void 0) && !base.path) {
-                target.path = "/" + relative.path;
+                target.path = "/" + relative2.path;
               } else if (!base.path) {
-                target.path = relative.path;
+                target.path = relative2.path;
               } else {
-                target.path = base.path.slice(0, base.path.lastIndexOf("/") + 1) + relative.path;
+                target.path = base.path.slice(0, base.path.lastIndexOf("/") + 1) + relative2.path;
               }
               target.path = removeDotSegments(target.path);
             }
-            target.query = relative.query;
+            target.query = relative2.query;
           }
           target.userinfo = base.userinfo;
           target.host = base.host;
@@ -3677,7 +3677,7 @@ var require_fast_uri = __commonJS({
         }
         target.scheme = base.scheme;
       }
-      target.fragment = relative.fragment;
+      target.fragment = relative2.fragment;
       return target;
     }
     function equal(uriA, uriB, options) {
@@ -23279,6 +23279,68 @@ var WikiHistoryResponseSchema = external_exports.object({
   path: NonEmptyStringSchema,
   versions: external_exports.array(WikiVersionSchema)
 });
+var WikiChangesRequestSchema = external_exports.object({
+  branch: GitBranchNameSchema,
+  /** 기준 커밋(위키 저장소 커밋 해시) — 이 커밋 이후의 변경만 반환한다 */
+  since: external_exports.string().regex(/^[0-9a-f]{4,64}$/)
+});
+var WikiChangedFileSchema = external_exports.object({
+  path: NonEmptyStringSchema,
+  /** 마지막 수정 커밋 시각(ISO) */
+  timestamp: NonEmptyStringSchema,
+  author: external_exports.string(),
+  /** 마지막 수정 커밋 short hash */
+  commit: external_exports.string()
+});
+var WikiChangesResponseSchema = external_exports.object({
+  branch: NonEmptyStringSchema,
+  since: NonEmptyStringSchema,
+  changes: external_exports.array(WikiChangedFileSchema)
+});
+var WikiMergeRequestSchema = external_exports.object({
+  branch: GitBranchNameSchema,
+  into: GitBranchNameSchema
+});
+var WikiMergeResponseSchema = external_exports.discriminatedUnion("status", [
+  external_exports.object({ status: external_exports.literal("merged") }),
+  external_exports.object({ status: external_exports.literal("conflict"), conflict_id: NonEmptyStringSchema })
+]);
+var MergeConflictErrorSchema = external_exports.object({
+  error: external_exports.literal("merge_conflict"),
+  conflict_id: NonEmptyStringSchema
+});
+var FeatureProgressSchema = external_exports.object({
+  feature: NonEmptyStringSchema,
+  status: ProgressStatusSchema,
+  note: external_exports.string(),
+  branch: NonEmptyStringSchema,
+  updated_at: NonEmptyStringSchema,
+  source_ingest_id: NonEmptyStringSchema
+});
+var ProgressBoardRequestSchema = external_exports.object({
+  /** 미지정 시 전 브랜치의 집계를 반환한다 */
+  branch: GitBranchNameSchema.optional()
+});
+var ProgressBoardResponseSchema = external_exports.object({
+  items: external_exports.array(FeatureProgressSchema)
+});
+var SearchRequestSchema = external_exports.object({
+  branch: GitBranchNameSchema,
+  query: NonEmptyStringSchema,
+  top_k: external_exports.number().int().min(1).max(50).optional()
+});
+var SearchResultSchema = external_exports.object({
+  path: NonEmptyStringSchema,
+  section: NonEmptyStringSchema.optional(),
+  score: external_exports.number(),
+  snippet: external_exports.string()
+});
+var SearchResponseSchema = external_exports.object({
+  branch: NonEmptyStringSchema,
+  /** semantic = 임베딩 코사인 / keyword = 결정적 키워드 폴백 — CI 무키 환경 검증용 표식 */
+  mode: external_exports.enum(["semantic", "keyword"]),
+  results: external_exports.array(SearchResultSchema)
+});
 var AdminGitTestConnectionResponseSchema = external_exports.object({
   status: external_exports.enum(["ok", "failed"]),
   message: external_exports.string().optional()
@@ -23297,7 +23359,8 @@ var UnauthorizedErrorSchema = external_exports.object({
 var ErrorBodySchema = external_exports.union([
   BranchLockedErrorSchema,
   UnauthorizedErrorSchema,
-  IngestRejectedResponseSchema
+  IngestRejectedResponseSchema,
+  MergeConflictErrorSchema
 ]);
 
 // ../shared/dist/client-core.js
@@ -23573,7 +23636,51 @@ function createSpecraftClient(config2) {
         responseSchema: AdminMemberEnableResponseSchema,
         body: { id: parsed.id }
       });
-    }
+    },
+    wikiChanges: (body) => {
+      const parsed = WikiChangesRequestSchema.parse(body);
+      return request({
+        path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/changes`,
+        method: "GET",
+        responseSchema: WikiChangesResponseSchema,
+        query: [["since", parsed.since]]
+      });
+    },
+    wikiMerge: async (body) => {
+      const parsed = WikiMergeRequestSchema.parse(body);
+      try {
+        return await request({
+          path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/merge`,
+          method: "POST",
+          responseSchema: WikiMergeResponseSchema,
+          body: { into: parsed.into }
+        });
+      } catch (error51) {
+        if (error51 instanceof SpecraftHttpError && error51.status === 409) {
+          const conflict = MergeConflictErrorSchema.safeParse(error51.body);
+          if (conflict.success) {
+            return { status: "conflict", conflict_id: conflict.data.conflict_id };
+          }
+        }
+        throw error51;
+      }
+    },
+    progressBoard: (body = {}) => {
+      const parsed = ProgressBoardRequestSchema.parse(body);
+      return request({
+        path: "/api/v1/progress",
+        method: "GET",
+        responseSchema: ProgressBoardResponseSchema,
+        query: [["branch", parsed.branch]]
+      });
+    },
+    search: (body) => request({
+      path: "/api/v1/search",
+      method: "POST",
+      requestSchema: SearchRequestSchema,
+      responseSchema: SearchResponseSchema,
+      body
+    })
   };
 }
 async function streamQuery(config2, body, handlers, signal) {
@@ -23751,9 +23858,240 @@ function resolveApiKey(options) {
   const env = options.env ?? process.env;
   return envOrNull(env, "SPECRAFT_API_KEY") ?? envOrNull(env, "CLAUDE_PLUGIN_OPTION_API_KEY") ?? readCredentialsFile(options.home)["SPECRAFT_API_KEY"] ?? null;
 }
+var LOOPBACK_HOSTNAMES = /* @__PURE__ */ new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
+function assertServerUrlSecure(url2, env) {
+  let parsed;
+  try {
+    parsed = new URL(url2);
+  } catch {
+    return url2;
+  }
+  if (parsed.protocol !== "http:" || LOOPBACK_HOSTNAMES.has(parsed.hostname)) {
+    return url2;
+  }
+  if (envOrNull(env, "SPECRAFT_ALLOW_INSECURE_HTTP") === "1") {
+    return url2;
+  }
+  throw new Error(
+    `specraft: refusing plaintext http server_url "${url2}" for a non-localhost host \u2014 the API key would travel unencrypted. Use https://, or set SPECRAFT_ALLOW_INSECURE_HTTP=1 to bypass explicitly.`
+  );
+}
 function resolveServerUrl(options) {
   const env = options.env ?? process.env;
-  return envOrNull(env, "SPECRAFT_SERVER_URL") ?? findSpecraftConfig(options.cwd)?.server_url ?? readCredentialsFile(options.home)["SPECRAFT_SERVER_URL"] ?? DEFAULT_SERVER_URL;
+  return assertServerUrlSecure(
+    envOrNull(env, "SPECRAFT_SERVER_URL") ?? findSpecraftConfig(options.cwd)?.server_url ?? readCredentialsFile(options.home)["SPECRAFT_SERVER_URL"] ?? DEFAULT_SERVER_URL,
+    env
+  );
+}
+
+// src/analyze.ts
+var AnalyzeToolInputSchema = external_exports.object({
+  paths: external_exports.array(external_exports.string().min(1)).optional()
+});
+var MAX_RELATED_PAGES = 5;
+var EXCERPT_MAX_CHARS = 700;
+var TOKEN_STOPWORDS = /* @__PURE__ */ new Set([
+  "apps",
+  "build",
+  "dist",
+  "docs",
+  "index",
+  "lib",
+  "main",
+  "node",
+  "packages",
+  "src",
+  "test",
+  "tests"
+]);
+function pathTokens(path) {
+  const withoutExtension = path.replace(/\.[a-z0-9]+$/i, "");
+  return [
+    ...new Set(
+      withoutExtension.toLowerCase().split(/[^a-z0-9]+/).filter((token) => token.length >= 3 && !TOKEN_STOPWORDS.has(token))
+    )
+  ];
+}
+function rankRelatedPages(pagePaths, changedFiles) {
+  const changedTokens = new Set(changedFiles.flatMap((file2) => pathTokens(file2)));
+  return pagePaths.map((path) => ({
+    path,
+    score: pathTokens(path).filter((token) => changedTokens.has(token)).length
+  })).filter((entry) => entry.score > 0).sort((left, right) => right.score - left.score || left.path.localeCompare(right.path)).map((entry) => entry.path);
+}
+function extractOpenQuestions(content) {
+  const questions = [];
+  let inSection = false;
+  for (const line of content.split("\n")) {
+    if (/^#{1,6}\s/.test(line)) {
+      inSection = /^#{1,6}\s+open questions\s*$/i.test(line);
+      continue;
+    }
+    if (!inSection) {
+      continue;
+    }
+    const bullet = /^[-*]\s+(.+)$/.exec(line.trim())?.[1]?.trim();
+    if (bullet !== void 0 && bullet !== "" && bullet.toLowerCase() !== "none") {
+      questions.push(bullet);
+    }
+  }
+  return questions;
+}
+function excerptContent(content) {
+  if (content.length <= EXCERPT_MAX_CHARS) {
+    return content;
+  }
+  return `${content.slice(0, EXCERPT_MAX_CHARS)}
+\u2026[truncated]`;
+}
+async function resolveChangedFiles(context, input) {
+  if (input.paths !== void 0 && input.paths.length > 0) {
+    return [...new Set(input.paths)].sort();
+  }
+  if (!context.changedFiles) {
+    throw new Error("git diff collection is unavailable; pass paths explicitly");
+  }
+  return context.changedFiles();
+}
+async function specraftAnalyze(context, input = {}) {
+  const snapshot = await context.gitSnapshot();
+  const changedFiles = await resolveChangedFiles(context, input);
+  if (changedFiles.length === 0) {
+    return { branch: snapshot.branch, changed_files: [], open_questions: [], related_pages: [] };
+  }
+  const tree = await context.client.wikiTree({ branch: snapshot.branch });
+  const pagePaths = tree.entries.filter((entry) => entry.type === "file").map((entry) => entry.path);
+  const relatedPaths = rankRelatedPages(pagePaths, changedFiles).slice(0, MAX_RELATED_PAGES);
+  const relatedPages = [];
+  const openQuestions = /* @__PURE__ */ new Set();
+  for (const path of relatedPaths) {
+    const page = await context.client.wikiPage({ branch: snapshot.branch, path });
+    relatedPages.push({ content_excerpt: excerptContent(page.content), path });
+    for (const question of extractOpenQuestions(page.content)) {
+      openQuestions.add(question);
+    }
+  }
+  return {
+    branch: snapshot.branch,
+    changed_files: changedFiles,
+    open_questions: [...openQuestions],
+    related_pages: relatedPages
+  };
+}
+
+// src/drift-hooks.ts
+var PTU_THROTTLE_MS = 10 * 60 * 1e3;
+var PTU_MAX_POINTER_PAGES = 3;
+var PtuMarkerSchema = external_exports.object({
+  repo_path: external_exports.string(),
+  file: external_exports.string(),
+  notified_at: external_exports.string()
+});
+function ptuCacheDir(home) {
+  return join(home, ".specraft", "ptu-cache");
+}
+function ptuMarkerPath(home, repoPath, file2) {
+  const digest = createHash("sha256").update(`${repoPath}
+${file2}`).digest("hex");
+  return join(ptuCacheDir(home), `${digest.slice(0, 24)}.json`);
+}
+function isPtuThrottled(home, repoPath, file2, now) {
+  const path = ptuMarkerPath(home, repoPath, file2);
+  if (!existsSync(path)) {
+    return false;
+  }
+  try {
+    const marker = PtuMarkerSchema.parse(JSON.parse(readFileSync(path, "utf8")));
+    const notifiedAt = Date.parse(marker.notified_at);
+    return !Number.isNaN(notifiedAt) && now - notifiedAt < PTU_THROTTLE_MS;
+  } catch {
+    return false;
+  }
+}
+function markPtuNotified(home, repoPath, file2, now) {
+  const dir = ptuCacheDir(home);
+  mkdirSync(dir, { recursive: true });
+  for (const name of readdirSync(dir).filter((entry) => entry.endsWith(".json"))) {
+    const path = join(dir, name);
+    try {
+      const marker2 = PtuMarkerSchema.parse(JSON.parse(readFileSync(path, "utf8")));
+      const notifiedAt = Date.parse(marker2.notified_at);
+      if (Number.isNaN(notifiedAt) || now - notifiedAt >= PTU_THROTTLE_MS) {
+        rmSync(path, { force: true });
+      }
+    } catch {
+      rmSync(path, { force: true });
+    }
+  }
+  const marker = {
+    file: file2,
+    notified_at: new Date(now).toISOString(),
+    repo_path: repoPath
+  };
+  writeFileSync(ptuMarkerPath(home, repoPath, file2), `${JSON.stringify(marker, null, 2)}
+`);
+}
+function renderSpecPointer(file2, pagePaths) {
+  const related = rankRelatedPages(pagePaths, [file2]).slice(
+    0,
+    Math.min(PTU_MAX_POINTER_PAGES, MAX_RELATED_PAGES)
+  );
+  if (related.length === 0) {
+    return null;
+  }
+  return [
+    `specraft: ${file2} has related spec pages \u2014 ${related.join(", ")}.`,
+    "Check them with specraft_read_page (or specraft_analyze for a drift review) before diverging from the spec."
+  ].join("\n");
+}
+var STATUS_CACHE_TTL_MS = 5 * 60 * 1e3;
+var StatusCacheSchema = external_exports.object({
+  server_url: external_exports.string(),
+  fetched_at: external_exports.string(),
+  branch_locks: external_exports.array(
+    external_exports.object({
+      branch: external_exports.string(),
+      conflict_id: external_exports.string(),
+      reason: external_exports.string().optional()
+    })
+  )
+});
+function statusCachePath(home) {
+  return join(home, ".specraft", "status-cache");
+}
+function readCachedBranchLocks(home, serverUrl, now) {
+  const path = statusCachePath(home);
+  if (!existsSync(path)) {
+    return null;
+  }
+  try {
+    const cache = StatusCacheSchema.parse(JSON.parse(readFileSync(path, "utf8")));
+    const fetchedAt = Date.parse(cache.fetched_at);
+    if (cache.server_url !== serverUrl || Number.isNaN(fetchedAt)) {
+      return null;
+    }
+    return now - fetchedAt < STATUS_CACHE_TTL_MS ? cache.branch_locks : null;
+  } catch {
+    return null;
+  }
+}
+function writeCachedBranchLocks(home, serverUrl, branchLocks, now) {
+  mkdirSync(join(home, ".specraft"), { recursive: true });
+  const cache = {
+    branch_locks: branchLocks,
+    fetched_at: new Date(now).toISOString(),
+    server_url: serverUrl
+  };
+  writeFileSync(statusCachePath(home), `${JSON.stringify(cache, null, 2)}
+`);
+}
+function renderBranchLockWarning(branchLocks, branch) {
+  const lock = branchLocks.find((entry) => entry.branch === branch);
+  if (!lock) {
+    return null;
+  }
+  const reason = lock.reason !== void 0 && lock.reason !== "" ? ` (${lock.reason})` : "";
+  return `specraft: branch '${branch}' is locked on the specraft server \u2014 conflict ${lock.conflict_id}${reason}. specraft_ingest will be rejected until it is resolved; inspect with specraft_conflicts.`;
 }
 var DeferMarkerSchema = external_exports.object({
   repo_path: external_exports.string(),
@@ -23867,6 +24205,20 @@ function readDirtyState(cwd) {
 }
 function readDirtyHash(cwd) {
   return readDirtyState(cwd).hash;
+}
+function readChangedFiles(cwd) {
+  const files = /* @__PURE__ */ new Set();
+  for (const args of [
+    ["diff", "--name-only", "HEAD"],
+    ["diff", "--name-only", "--cached"]
+  ]) {
+    for (const line of git(cwd, args).split("\n")) {
+      if (line !== "") {
+        files.add(line);
+      }
+    }
+  }
+  return [...files].sort();
 }
 function headPushState(cwd) {
   if (gitStatus(cwd, ["rev-parse", "--abbrev-ref", "@{u}"]) !== 0) {
@@ -32164,6 +32516,14 @@ function createSpecraftMcpServer(context) {
     },
     async (input) => toToolResult(await specraftContext(context, ContextToolInputSchema.parse(input ?? {})))
   );
+  server.registerTool(
+    "specraft_analyze",
+    {
+      description: "Collect spec-drift review material for the pending git changes: changed files (worktree+staged vs HEAD, or explicit paths), related spec wiki pages with excerpts, and open questions from those pages. Workflow: call this after editing, compare each related_pages excerpt with the actual diff, judge drift yourself (the tool only gathers material), then record deviations via specraft_ingest or answer open_questions.",
+      inputSchema: AnalyzeToolInputSchema.shape
+    },
+    async (input) => toToolResult(await specraftAnalyze(context, AnalyzeToolInputSchema.parse(input ?? {})))
+  );
   registerWikiResources(server, context);
   registerPrompts(server);
   return server;
@@ -32388,6 +32748,61 @@ async function runContextHook(cwd) {
     renderContextInjection({ branch: snapshot.branch, context, head: snapshot.head })
   );
 }
+async function runPostToolUseHook(cwd, file2) {
+  try {
+    const currentHome = homeDir();
+    const apiKey = resolveApiKey({ home: currentHome });
+    if (!apiKey) {
+      return;
+    }
+    const repoRoot = readRepoRoot(cwd);
+    const relativeFile = isAbsolute(file2) && (file2 === repoRoot || file2.startsWith(`${repoRoot}/`)) ? relative(repoRoot, file2) : file2;
+    const now = Date.now();
+    if (isPtuThrottled(currentHome, repoRoot, relativeFile, now)) {
+      return;
+    }
+    const client = createSpecraftClient({
+      apiKey,
+      baseUrl: resolveServerUrl({ cwd, home: currentHome })
+    });
+    const snapshot = readGitSnapshot(cwd);
+    const tree = await client.wikiTree({ branch: snapshot.branch });
+    const pointer = renderSpecPointer(
+      relativeFile,
+      tree.entries.filter((entry) => entry.type === "file").map((entry) => entry.path)
+    );
+    if (pointer === null) {
+      return;
+    }
+    markPtuNotified(currentHome, repoRoot, relativeFile, now);
+    process.stdout.write(`${pointer}
+`);
+  } catch {
+  }
+}
+async function runPreToolUseHook(cwd) {
+  try {
+    const currentHome = homeDir();
+    const apiKey = resolveApiKey({ home: currentHome });
+    if (!apiKey) {
+      return;
+    }
+    const serverUrl = resolveServerUrl({ cwd, home: currentHome });
+    const now = Date.now();
+    let locks = readCachedBranchLocks(currentHome, serverUrl, now);
+    if (locks === null) {
+      const status = await createSpecraftClient({ apiKey, baseUrl: serverUrl }).status();
+      writeCachedBranchLocks(currentHome, serverUrl, status.branch_locks, now);
+      locks = status.branch_locks;
+    }
+    const warning = renderBranchLockWarning(locks, readGitSnapshot(cwd).branch);
+    if (warning !== null) {
+      process.stdout.write(`${warning}
+`);
+    }
+  } catch {
+  }
+}
 async function runMcp(cwd) {
   const currentHome = homeDir();
   const apiKey = resolveApiKey({ home: currentHome });
@@ -32401,6 +32816,7 @@ async function runMcp(cwd) {
     baseUrl: resolveServerUrl({ cwd, home: currentHome })
   });
   const server = createSpecraftMcpServer({
+    changedFiles: () => readChangedFiles(cwd),
     client,
     gitSnapshot: async () => readGitSnapshot(cwd),
     headPushed: async () => isHeadPushed(cwd),
@@ -32412,7 +32828,7 @@ async function runMcp(cwd) {
 }
 async function main() {
   const cwd = process.cwd();
-  const [command, subcommand] = process.argv.slice(2);
+  const [command, subcommand, ...rest] = process.argv.slice(2);
   if (command === "--version") {
     process.stdout.write(`${mcpServerVersion()}
 `);
@@ -32432,6 +32848,18 @@ async function main() {
   }
   if (command === "hook" && subcommand === "context") {
     await runContextHook(cwd);
+    return;
+  }
+  if (command === "hook" && subcommand === "post-tool-use") {
+    const fileFlagIndex = rest.indexOf("--file");
+    const file2 = fileFlagIndex !== -1 ? rest[fileFlagIndex + 1] : void 0;
+    if (file2 !== void 0 && file2 !== "") {
+      await runPostToolUseHook(cwd, file2);
+    }
+    return;
+  }
+  if (command === "hook" && subcommand === "pre-tool-use") {
+    await runPreToolUseHook(cwd);
     return;
   }
   await runMcp(cwd);

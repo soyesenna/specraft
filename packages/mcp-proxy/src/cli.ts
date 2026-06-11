@@ -1,10 +1,26 @@
+import { isAbsolute, relative } from "node:path"
+
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { createSpecraftClient, type StatusResponse } from "@specraft/shared"
 
 import { findSpecraftConfig } from "./config.js"
 import { resolveApiKey, resolveServerUrl } from "./credentials.js"
+import {
+  isPtuThrottled,
+  markPtuNotified,
+  readCachedBranchLocks,
+  renderBranchLockWarning,
+  renderSpecPointer,
+  writeCachedBranchLocks,
+} from "./drift-hooks.js"
 import { decideStop, decideUserPrompt } from "./gate.js"
-import { isHeadPushed, readDirtyHash, readGitSnapshot, readRepoRoot } from "./git.js"
+import {
+  isHeadPushed,
+  readChangedFiles,
+  readDirtyHash,
+  readGitSnapshot,
+  readRepoRoot,
+} from "./git.js"
 import { INJECTION_BUDGET_TOKENS, renderContextInjection } from "./injection-budget.js"
 import { createSpecraftMcpServer, mcpServerVersion } from "./mcp.js"
 import {
@@ -196,6 +212,76 @@ async function runContextHook(cwd: string): Promise<void> {
   )
 }
 
+/**
+ * M4+ PostToolUse: 수정 파일과 연관된 위키 페이지 포인터(경로만)를 출력한다.
+ * 같은 파일 10분 내 재안내 금지(ptu-cache), 서버/설정 미가용 시 무출력 fail-open.
+ */
+async function runPostToolUseHook(cwd: string, file: string): Promise<void> {
+  try {
+    const currentHome = homeDir()
+    const apiKey = resolveApiKey({ home: currentHome })
+    if (!apiKey) {
+      return
+    }
+    const repoRoot = readRepoRoot(cwd)
+    // 절대 경로(Claude Code tool_input.file_path)를 레포 상대 경로로 정규화한다 —
+    // 홈 디렉터리 등 레포 밖 경로 토큰이 위키 페이지와 오매칭되는 것을 막는다.
+    const relativeFile =
+      isAbsolute(file) && (file === repoRoot || file.startsWith(`${repoRoot}/`))
+        ? relative(repoRoot, file)
+        : file
+    const now = Date.now()
+    if (isPtuThrottled(currentHome, repoRoot, relativeFile, now)) {
+      return
+    }
+    const client = createSpecraftClient({
+      apiKey,
+      baseUrl: resolveServerUrl({ cwd, home: currentHome }),
+    })
+    const snapshot = readGitSnapshot(cwd)
+    const tree = await client.wikiTree({ branch: snapshot.branch })
+    const pointer = renderSpecPointer(
+      relativeFile,
+      tree.entries.filter((entry) => entry.type === "file").map((entry) => entry.path),
+    )
+    if (pointer === null) {
+      return
+    }
+    markPtuNotified(currentHome, repoRoot, relativeFile, now)
+    process.stdout.write(`${pointer}\n`)
+  } catch {
+    // fail-open: 안내는 부가 기능이며 어떤 실패도 편집 흐름을 막으면 안 된다.
+  }
+}
+
+/**
+ * M4+ PreToolUse: 현재 브랜치가 서버 branch_locks에 잠겨 있으면 경고 1줄.
+ * status는 5분 캐시(status-cache), 실패 시 무출력 fail-open. 차단하지 않는다.
+ */
+async function runPreToolUseHook(cwd: string): Promise<void> {
+  try {
+    const currentHome = homeDir()
+    const apiKey = resolveApiKey({ home: currentHome })
+    if (!apiKey) {
+      return
+    }
+    const serverUrl = resolveServerUrl({ cwd, home: currentHome })
+    const now = Date.now()
+    let locks = readCachedBranchLocks(currentHome, serverUrl, now)
+    if (locks === null) {
+      const status = await createSpecraftClient({ apiKey, baseUrl: serverUrl }).status()
+      writeCachedBranchLocks(currentHome, serverUrl, status.branch_locks, now)
+      locks = status.branch_locks
+    }
+    const warning = renderBranchLockWarning(locks, readGitSnapshot(cwd).branch)
+    if (warning !== null) {
+      process.stdout.write(`${warning}\n`)
+    }
+  } catch {
+    // fail-open: 잠금 경고는 advisory다 — 서버 미가용이 도구 사용을 막으면 안 된다.
+  }
+}
+
 async function runMcp(cwd: string): Promise<void> {
   const currentHome = homeDir()
   const apiKey = resolveApiKey({ home: currentHome })
@@ -209,6 +295,7 @@ async function runMcp(cwd: string): Promise<void> {
     baseUrl: resolveServerUrl({ cwd, home: currentHome }),
   })
   const server = createSpecraftMcpServer({
+    changedFiles: () => readChangedFiles(cwd),
     client,
     gitSnapshot: async () => readGitSnapshot(cwd),
     headPushed: async () => isHeadPushed(cwd),
@@ -221,7 +308,7 @@ async function runMcp(cwd: string): Promise<void> {
 
 async function main(): Promise<void> {
   const cwd = process.cwd()
-  const [command, subcommand] = process.argv.slice(2)
+  const [command, subcommand, ...rest] = process.argv.slice(2)
   if (command === "--version") {
     process.stdout.write(`${mcpServerVersion()}\n`)
     return
@@ -240,6 +327,18 @@ async function main(): Promise<void> {
   }
   if (command === "hook" && subcommand === "context") {
     await runContextHook(cwd)
+    return
+  }
+  if (command === "hook" && subcommand === "post-tool-use") {
+    const fileFlagIndex = rest.indexOf("--file")
+    const file = fileFlagIndex !== -1 ? rest[fileFlagIndex + 1] : undefined
+    if (file !== undefined && file !== "") {
+      await runPostToolUseHook(cwd, file)
+    }
+    return
+  }
+  if (command === "hook" && subcommand === "pre-tool-use") {
+    await runPreToolUseHook(cwd)
     return
   }
   await runMcp(cwd)

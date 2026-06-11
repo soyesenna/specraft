@@ -53,6 +53,8 @@ export type ToolContext = {
   readonly gitSnapshot: () => Promise<GitSnapshot>
   readonly headPushed?: () => Promise<boolean> | boolean
   readonly repoRoot?: () => Promise<string> | string
+  /** M4+ specraft_analyze — HEAD 대비 + staged 변경 파일 수집(레포 루트 상대 경로). */
+  readonly changedFiles?: () => Promise<readonly string[]> | readonly string[]
 }
 
 export const QueryToolInputSchema = z.object({ question: z.string().min(1) })

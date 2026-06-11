@@ -4,6 +4,7 @@ import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mc
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js"
 import { z } from "zod"
 
+import { AnalyzeToolInputSchema, specraftAnalyze } from "./analyze.js"
 import {
   ContextToolInputSchema,
   DeferToolInputSchema,
@@ -138,6 +139,16 @@ export function createSpecraftMcpServer(context: ToolContext): McpServer {
     },
     async (input) =>
       toToolResult(await specraftContext(context, ContextToolInputSchema.parse(input ?? {}))),
+  )
+  server.registerTool(
+    "specraft_analyze",
+    {
+      description:
+        "Collect spec-drift review material for the pending git changes: changed files (worktree+staged vs HEAD, or explicit paths), related spec wiki pages with excerpts, and open questions from those pages. Workflow: call this after editing, compare each related_pages excerpt with the actual diff, judge drift yourself (the tool only gathers material), then record deviations via specraft_ingest or answer open_questions.",
+      inputSchema: AnalyzeToolInputSchema.shape,
+    },
+    async (input) =>
+      toToolResult(await specraftAnalyze(context, AnalyzeToolInputSchema.parse(input ?? {}))),
   )
   registerWikiResources(server, context)
   registerPrompts(server)

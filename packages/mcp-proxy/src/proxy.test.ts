@@ -265,7 +265,7 @@ describe("mcp sdk server", () => {
     await client.close()
   })
 
-  it("lists the nine tools with zod-derived inputSchema", async () => {
+  it("lists the ten tools with zod-derived inputSchema", async () => {
     const client = await connectMcpClient(testContext())
     const { tools } = await client.listTools()
 
@@ -279,6 +279,7 @@ describe("mcp sdk server", () => {
       "specraft_history",
       "specraft_conflicts",
       "specraft_context",
+      "specraft_analyze",
     ])
     const query = tools.find((tool) => tool.name === "specraft_query")
     expect(query?.inputSchema).toMatchObject({ type: "object" })

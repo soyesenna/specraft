@@ -36,6 +36,32 @@
         ]
       }
     ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${PLUGIN_ROOT}/hooks/pre-tool-use.js\"",
+            "timeout": 10,
+            "statusMessage": "Specraft: Checking branch locks"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${PLUGIN_ROOT}/hooks/post-tool-use.js\"",
+            "timeout": 10,
+            "statusMessage": "Specraft: Linking spec pages"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

@@ -50,7 +50,13 @@ const NonEmptyString = z.string().min(1)
 const SemverString = z.string().regex(/^\d+\.\d+\.\d+(?:-[\w.-]+)?$/, "expected semver")
 const AuthorSchema = z.object({ name: NonEmptyString })
 
-const ALLOWED_HOOK_EVENTS = ["SessionStart", "UserPromptSubmit", "Stop"] as const
+const ALLOWED_HOOK_EVENTS = [
+  "SessionStart",
+  "UserPromptSubmit",
+  "PreToolUse",
+  "PostToolUse",
+  "Stop",
+] as const
 
 // biome-ignore lint/suspicious/noTemplateCurlyInString: literal Claude Code expansion token, not a template
 const CLAUDE_PROXY_ENTRYPOINT = "${CLAUDE_PLUGIN_ROOT}/proxy/cli.js"
@@ -233,11 +239,46 @@ describe("Claude Code plugin contracts", () => {
     expect(mcp.mcpServers.specraft.command).toBe("node")
   })
 
+  it("PreToolUse/PostToolUse hooks match file-editing tools (M4+ drift hooks)", () => {
+    for (const [event, script] of [
+      ["PreToolUse", "pre-tool-use.js"],
+      ["PostToolUse", "post-tool-use.js"],
+    ] as const) {
+      const groups = required(claudeHooks.hooks[event], `${event} groups`)
+      const editGroup = groups.find(
+        (group) => matcherCovers(group.matcher, "Edit") && matcherCovers(group.matcher, "Write"),
+      )
+      expect(editGroup, `${event} must cover Edit and Write`).toBeDefined()
+      expect(editGroup?.hooks[0]?.command).toContain(script)
+    }
+  })
+
+  it("agents ship YAML frontmatter with name and description (M4+ librarian)", () => {
+    const agentFiles = readdirSync(repoPath("plugins/claude-code/agents")).filter((file) =>
+      file.endsWith(".md"),
+    )
+    expect(agentFiles).toEqual(expect.arrayContaining(["specraft-librarian.md"]))
+    for (const file of agentFiles) {
+      const frontmatter = parseFrontmatter(readText(`plugins/claude-code/agents/${file}`))
+      expect(() => SkillFrontmatterSchema.parse(frontmatter), file).not.toThrow()
+    }
+    const librarian = parseFrontmatter(readText("plugins/claude-code/agents/specraft-librarian.md"))
+    expect(librarian["name"]).toBe("specraft-librarian")
+  })
+
   it("commands ship YAML frontmatter with a description", () => {
     const commandFiles = readdirSync(repoPath("plugins/claude-code/commands")).filter((file) =>
       file.endsWith(".md"),
     )
-    expect(commandFiles).toEqual(expect.arrayContaining(["specraft-setup.md", "specraft-init.md"]))
+    expect(commandFiles).toEqual(
+      expect.arrayContaining([
+        "specraft-setup.md",
+        "specraft-init.md",
+        "specraft-spec.md",
+        "specraft-clarify.md",
+        "specraft-tasks.md",
+      ]),
+    )
     for (const file of commandFiles) {
       const frontmatter = parseFrontmatter(readText(`plugins/claude-code/commands/${file}`))
       expect(() => CommandFrontmatterSchema.parse(frontmatter), file).not.toThrow()
@@ -274,11 +315,44 @@ describe("Codex plugin contracts", () => {
     expect(mcp.mcpServers.specraft.cwd).toBe(".")
   })
 
+  it("PreToolUse/PostToolUse hooks cover the apply_patch alias (M4+ drift hooks)", () => {
+    for (const [event, script] of [
+      ["PreToolUse", "pre-tool-use.js"],
+      ["PostToolUse", "post-tool-use.js"],
+    ] as const) {
+      const groups = required(codexHooks.hooks[event], `${event} groups`)
+      const editGroup = groups.find(
+        (group) =>
+          // Codex 파일 편집은 apply_patch로 보고된다(Edit/Write는 alias) — §10.3/§10.5.
+          matcherCovers(group.matcher, "apply_patch") && matcherCovers(group.matcher, "Edit"),
+      )
+      expect(editGroup, `${event} must cover apply_patch and its Edit alias`).toBeDefined()
+      expect(editGroup?.hooks[0]?.command).toContain(script)
+    }
+  })
+
+  it("global hooks installer keeps event parity with hooks.json (#16430 fallback)", () => {
+    const installer = readText("plugins/codex/scripts/install-global-hooks.mjs")
+    for (const event of ALLOWED_HOOK_EVENTS) {
+      expect(installer, `installer must register ${event}`).toContain(`${event}:`)
+    }
+    expect(installer).toContain("pre-tool-use.js")
+    expect(installer).toContain("post-tool-use.js")
+  })
+
   it("skills ship SKILL.md frontmatter with name and description", () => {
     const skillDirs = readdirSync(repoPath("plugins/codex/skills"), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
-    expect(skillDirs).toEqual(expect.arrayContaining(["specraft-setup", "specraft-init"]))
+    expect(skillDirs).toEqual(
+      expect.arrayContaining([
+        "specraft-setup",
+        "specraft-init",
+        "specraft-spec",
+        "specraft-clarify",
+        "specraft-tasks",
+      ]),
+    )
     for (const dir of skillDirs) {
       const frontmatter = parseFrontmatter(readText(`plugins/codex/skills/${dir}/SKILL.md`))
       expect(() => SkillFrontmatterSchema.parse(frontmatter), dir).not.toThrow()

@@ -45,6 +45,18 @@ function specraftHookGroups() {
     UserPromptSubmit: [
       { hooks: [hook("user-prompt-submit.js", 5, "Specraft: Checking pending replay")] },
     ],
+    PreToolUse: [
+      {
+        matcher: "Edit|Write|apply_patch",
+        hooks: [hook("pre-tool-use.js", 10, "Specraft: Checking branch locks")],
+      },
+    ],
+    PostToolUse: [
+      {
+        matcher: "Edit|Write|apply_patch",
+        hooks: [hook("post-tool-use.js", 10, "Specraft: Linking spec pages")],
+      },
+    ],
     Stop: [{ hooks: [hook("stop.js", 10, "Specraft: Checking stop gate")] }],
   }
 }

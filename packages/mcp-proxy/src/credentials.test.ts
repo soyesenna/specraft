@@ -5,6 +5,7 @@ import { join } from "node:path"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import {
+  assertServerUrlSecure,
   credentialsPath,
   DEFAULT_SERVER_URL,
   parseCredentials,
@@ -114,6 +115,10 @@ describe("credentials", () => {
   })
 
   describe("resolveServerUrl fallback order", () => {
+    // 비-localhost http 픽스처는 M4+ TLS 가드에 걸리므로 명시 우회 env를 함께 준다
+    // (이 블록은 폴백 순서만 검증한다 — TLS 정책은 아래 전용 블록에서 검증).
+    const allowInsecure = { SPECRAFT_ALLOW_INSECURE_HTTP: "1" }
+
     it("prefers SPECRAFT_SERVER_URL env over every other source", () => {
       writeFileSync(
         join(cwd, ".specraft.json"),
@@ -121,7 +126,11 @@ describe("credentials", () => {
       )
       writeCredentials(home, "SPECRAFT_SERVER_URL=http://file.example:2222\n")
       expect(
-        resolveServerUrl({ cwd, env: { SPECRAFT_SERVER_URL: "http://env.example:3333" }, home }),
+        resolveServerUrl({
+          cwd,
+          env: { ...allowInsecure, SPECRAFT_SERVER_URL: "http://env.example:3333" },
+          home,
+        }),
       ).toBe("http://env.example:3333")
     })
 
@@ -131,17 +140,60 @@ describe("credentials", () => {
         JSON.stringify({ server_url: "http://project.example:1111" }),
       )
       writeCredentials(home, "SPECRAFT_SERVER_URL=http://file.example:2222\n")
-      expect(resolveServerUrl({ cwd, env: {}, home })).toBe("http://project.example:1111")
+      expect(resolveServerUrl({ cwd, env: allowInsecure, home })).toBe(
+        "http://project.example:1111",
+      )
     })
 
     it("prefers the credentials file over the default", () => {
       writeCredentials(home, "SPECRAFT_SERVER_URL=http://file.example:2222\n")
-      expect(resolveServerUrl({ cwd, env: {}, home })).toBe("http://file.example:2222")
+      expect(resolveServerUrl({ cwd, env: allowInsecure, home })).toBe("http://file.example:2222")
     })
 
     it("falls back to the local default when nothing is configured", () => {
       expect(resolveServerUrl({ cwd, env: {}, home })).toBe(DEFAULT_SERVER_URL)
       expect(DEFAULT_SERVER_URL).toBe("http://127.0.0.1:4311")
+    })
+  })
+
+  describe("TLS enforcement (M4+)", () => {
+    it("rejects plaintext http for non-localhost hosts with https/bypass guidance", () => {
+      expect(() =>
+        resolveServerUrl({ cwd, env: { SPECRAFT_SERVER_URL: "http://specraft.corp:4311" }, home }),
+      ).toThrowError(/https.*SPECRAFT_ALLOW_INSECURE_HTTP=1|SPECRAFT_ALLOW_INSECURE_HTTP=1/)
+    })
+
+    it("rejects a non-localhost http url coming from .specraft.json too", () => {
+      writeFileSync(
+        join(cwd, ".specraft.json"),
+        JSON.stringify({ server_url: "http://internal.example:4311" }),
+      )
+      expect(() => resolveServerUrl({ cwd, env: {}, home })).toThrowError(/refusing plaintext/)
+    })
+
+    it("allows the explicit SPECRAFT_ALLOW_INSECURE_HTTP=1 bypass", () => {
+      expect(
+        resolveServerUrl({
+          cwd,
+          env: {
+            SPECRAFT_ALLOW_INSECURE_HTTP: "1",
+            SPECRAFT_SERVER_URL: "http://specraft.corp:4311",
+          },
+          home,
+        }),
+      ).toBe("http://specraft.corp:4311")
+    })
+
+    it("always allows loopback http and any https url", () => {
+      for (const url of [
+        "http://127.0.0.1:4311",
+        "http://localhost:4311",
+        "http://[::1]:4311",
+        "https://specraft.corp",
+      ]) {
+        expect(resolveServerUrl({ cwd, env: { SPECRAFT_SERVER_URL: url }, home })).toBe(url)
+      }
+      expect(assertServerUrlSecure("https://specraft.example", {})).toBe("https://specraft.example")
     })
   })
 })
