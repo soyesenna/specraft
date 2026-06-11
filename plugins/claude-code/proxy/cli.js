@@ -24089,6 +24089,46 @@ ${lines.join("\n")}
   };
 }
 
+// src/injection-budget.ts
+var INJECTION_BUDGET_TOKENS = 2e3;
+var FALLBACK_MAX_TOKENS = 3e3;
+var TRUNCATION_NOTE = "[context truncated to fit budget]";
+var HEURISTIC_CHARS_PER_TOKEN = 3.5;
+function estimateTokens(text) {
+  return Math.ceil(text.length / HEURISTIC_CHARS_PER_TOKEN);
+}
+function truncationMarker(cutTokens) {
+  return `...[truncated ${cutTokens} tokens]`;
+}
+function fitContextForInjection(context) {
+  const serverTruncated = context.truncated === true;
+  const overviewTokens = estimateTokens(context.overview);
+  if (overviewTokens + estimateTokens(context.index) <= FALLBACK_MAX_TOKENS) {
+    return { index: context.index, overview: context.overview, truncated: serverTruncated };
+  }
+  const remaining = FALLBACK_MAX_TOKENS - estimateTokens(context.index);
+  if (remaining <= 0) {
+    return { index: context.index, overview: truncationMarker(overviewTokens), truncated: true };
+  }
+  const keepChars = Math.max(0, Math.floor(remaining * HEURISTIC_CHARS_PER_TOKEN));
+  const kept = context.overview.slice(0, keepChars);
+  const cutTokens = overviewTokens - estimateTokens(kept);
+  const overview = kept.length > 0 ? `${kept}
+${truncationMarker(cutTokens)}` : truncationMarker(cutTokens);
+  return { index: context.index, overview, truncated: true };
+}
+function renderContextInjection(input) {
+  const fitted = fitContextForInjection(input.context);
+  const note = fitted.truncated ? `
+${TRUNCATION_NOTE}` : "";
+  return `Specraft context for ${input.branch}@${input.head}:
+
+${fitted.overview}
+
+${fitted.index}${note}
+`;
+}
+
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/helpers/util.js
 var util;
 (function(util2) {
@@ -31961,6 +32001,9 @@ var HistoryToolInputSchema = external_exports.object({
   path: external_exports.string().min(1),
   limit: external_exports.number().int().min(1).max(100).optional()
 });
+var ContextToolInputSchema = external_exports.object({
+  budget_tokens: external_exports.number().int().positive().optional()
+});
 async function specraftQuery(context, input) {
   const snapshot = await context.gitSnapshot();
   return context.client.query({
@@ -32025,9 +32068,13 @@ async function specraftHistory(context, input) {
 async function specraftConflicts(context) {
   return context.client.listConflicts();
 }
-async function specraftContext(context) {
+async function specraftContext(context, input = {}) {
   const snapshot = await context.gitSnapshot();
-  return context.client.context({ branch: snapshot.branch, commit_hash: snapshot.head });
+  return context.client.context({
+    branch: snapshot.branch,
+    commit_hash: snapshot.head,
+    ...input.budget_tokens !== void 0 ? { budget_tokens: input.budget_tokens } : {}
+  });
 }
 
 // src/mcp.ts
@@ -32112,9 +32159,10 @@ function createSpecraftMcpServer(context) {
   server.registerTool(
     "specraft_context",
     {
-      description: "Re-fetch the specraft session context (wiki overview + index) bound to the current branch and HEAD. Use this to rehydrate spec context when hook-based injection is unavailable on this host or the injected context was compacted away."
+      description: "Re-fetch the specraft session context (wiki overview + index) bound to the current branch and HEAD. Use this to rehydrate spec context when hook-based injection is unavailable on this host or the injected context was compacted away. Optional budget_tokens caps the response size (index is preserved first; truncated=true marks a cut overview).",
+      inputSchema: ContextToolInputSchema.shape
     },
-    async () => toToolResult(await specraftContext(context))
+    async (input) => toToolResult(await specraftContext(context, ContextToolInputSchema.parse(input ?? {})))
   );
   registerWikiResources(server, context);
   registerPrompts(server);
@@ -32310,14 +32358,13 @@ async function runSessionStartHook(cwd) {
     apiKey,
     baseUrl: resolveServerUrl({ cwd, home: currentHome })
   });
-  const context = await client.context({ branch: snapshot.branch, commit_hash: snapshot.head });
+  const context = await client.context({
+    branch: snapshot.branch,
+    budget_tokens: INJECTION_BUDGET_TOKENS,
+    commit_hash: snapshot.head
+  });
   process.stdout.write(
-    `${pending}Specraft context for ${snapshot.branch}@${snapshot.head}:
-
-${context.overview}
-
-${context.index}
-`
+    `${pending}${renderContextInjection({ branch: snapshot.branch, context, head: snapshot.head })}`
   );
 }
 async function runContextHook(cwd) {
@@ -32332,14 +32379,13 @@ async function runContextHook(cwd) {
     apiKey,
     baseUrl: resolveServerUrl({ cwd, home: currentHome })
   });
-  const context = await client.context({ branch: snapshot.branch, commit_hash: snapshot.head });
+  const context = await client.context({
+    branch: snapshot.branch,
+    budget_tokens: INJECTION_BUDGET_TOKENS,
+    commit_hash: snapshot.head
+  });
   process.stdout.write(
-    `Specraft context for ${snapshot.branch}@${snapshot.head}:
-
-${context.overview}
-
-${context.index}
-`
+    renderContextInjection({ branch: snapshot.branch, context, head: snapshot.head })
   );
 }
 async function runMcp(cwd) {

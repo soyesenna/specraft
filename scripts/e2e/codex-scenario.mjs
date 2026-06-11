@@ -9,6 +9,8 @@
 //        직접 실행하는 프로세스 레벨 테스트로 대체 — 래퍼+번들 proxy 로직은 Claude Code와
 //        공유되므로 게이트 커버리지는 동등하다. MCP 측 기록(ingest/defer)은 번들 proxy를
 //        stdio JSON-RPC로 직접 구동해 수행한다(호스트 비의존).
+//   d15. M3.6 주입 예산: 소형 위키 session-start 비절단 + specraft_context
+//        budget_tokens 소형값 절단(truncated=true) — 프로세스 레벨.
 //
 // d1~d3은 codex CLI + auth.json이 없으면 SKIP. d4~d5는 무조건 실행(호스트 비의존).
 import { spawnSync } from "node:child_process"
@@ -389,6 +391,68 @@ async function runProcessLevelGate(log, cleanups) {
         log.pass("d14d resources/read 본문 회수", "시드 본문 일치")
       } else {
         log.fail("d14d resources/read 본문 회수", JSON.stringify(readResult).slice(0, 200))
+      }
+    } finally {
+      await client.close()
+    }
+  }
+
+  // d15. M3.6 주입 예산 (d14 옆 — 프로세스 레벨, 모델 비의존):
+  //      소형 위키는 budget_tokens=2000 주입에서 절단이 일어나지 않고,
+  //      specraft_context에 소형 budget_tokens를 주면 index 우선 보존 절단(truncated=true)된다.
+  {
+    const budgetSessionId = "e2e-codex-session-budget"
+    const truncationNote = "[context truncated to fit budget]"
+    const sessionStart = runHook(
+      "session-start.js",
+      { cwd: repo, hook_event_name: "SessionStart", session_id: budgetSessionId },
+      env,
+    )
+    if (
+      sessionStart.stdout.includes("Specraft context for main@") &&
+      !sessionStart.stdout.includes(truncationNote)
+    ) {
+      log.pass("d15a 주입 예산: 소형 위키 truncated 미발생", "session-start 출력에 절단 표식 없음")
+    } else {
+      log.fail(
+        "d15a 주입 예산: 소형 위키 truncated 미발생",
+        `stdout=${sessionStart.stdout.slice(0, 160)}`,
+      )
+    }
+    const client = new McpStdioClient({
+      args: [proxyBundle],
+      command: "node",
+      cwd: repo,
+      env: { ...env, SPECRAFT_SESSION_ID: budgetSessionId },
+    })
+    try {
+      await client.initialize()
+      const tight = await client.callTool("specraft_context", { budget_tokens: 50 })
+      const tightBody = tight.structuredContent ?? {}
+      if (
+        !tight.isError &&
+        tightBody.truncated === true &&
+        String(tightBody.overview).includes("[truncated")
+      ) {
+        log.pass(
+          "d15b specraft_context budget_tokens=50 → truncated",
+          "index 우선 보존 절단(truncated=true) 확인",
+        )
+      } else {
+        log.fail(
+          "d15b specraft_context budget_tokens=50 → truncated",
+          JSON.stringify(tight).slice(0, 200),
+        )
+      }
+      const unbudgeted = await client.callTool("specraft_context", {})
+      const unbudgetedBody = unbudgeted.structuredContent ?? {}
+      if (!unbudgeted.isError && unbudgetedBody.truncated !== true) {
+        log.pass("d15c budget 미지정 specraft_context는 비절단", "truncated 미설정(하위 호환)")
+      } else {
+        log.fail(
+          "d15c budget 미지정 specraft_context는 비절단",
+          JSON.stringify(unbudgeted).slice(0, 200),
+        )
       }
     } finally {
       await client.close()

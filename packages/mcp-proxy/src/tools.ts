@@ -26,6 +26,7 @@ export type SpecraftToolClient = {
   readonly context: (request: {
     readonly branch: string
     readonly commit_hash: string
+    readonly budget_tokens?: number | undefined
   }) => Promise<ContextResponse>
   readonly wikiPage: (request: {
     readonly branch: string
@@ -65,6 +66,10 @@ export const ReadPageToolInputSchema = z.object({ path: z.string().min(1) })
 export const HistoryToolInputSchema = z.object({
   path: z.string().min(1),
   limit: z.number().int().min(1).max(100).optional(),
+})
+// M3.6 — optional 토큰 예산. 서버 ContextRequestSchema(budget_tokens)와 동일 제약(양의 정수).
+export const ContextToolInputSchema = z.object({
+  budget_tokens: z.number().int().positive().optional(),
 })
 
 export async function specraftQuery(
@@ -168,8 +173,18 @@ export async function specraftConflicts(context: ToolContext): Promise<ConflictL
   return context.client.listConflicts()
 }
 
-/** 세션 컨텍스트(overview+index)를 수동 재수화한다 — 훅 미지원 호스트의 폴백 경로. */
-export async function specraftContext(context: ToolContext): Promise<ContextResponse> {
+/**
+ * 세션 컨텍스트(overview+index)를 수동 재수화한다 — 훅 미지원 호스트의 폴백 경로.
+ * budget_tokens 지정 시 서버에 그대로 전달한다(M3.6 — 미지정이면 현행 무제한 동작).
+ */
+export async function specraftContext(
+  context: ToolContext,
+  input: { readonly budget_tokens?: number | undefined } = {},
+): Promise<ContextResponse> {
   const snapshot = await context.gitSnapshot()
-  return context.client.context({ branch: snapshot.branch, commit_hash: snapshot.head })
+  return context.client.context({
+    branch: snapshot.branch,
+    commit_hash: snapshot.head,
+    ...(input.budget_tokens !== undefined ? { budget_tokens: input.budget_tokens } : {}),
+  })
 }

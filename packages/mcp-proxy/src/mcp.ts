@@ -5,6 +5,7 @@ import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js"
 import { z } from "zod"
 
 import {
+  ContextToolInputSchema,
   DeferToolInputSchema,
   HistoryToolInputSchema,
   IngestToolInputSchema,
@@ -132,9 +133,11 @@ export function createSpecraftMcpServer(context: ToolContext): McpServer {
     "specraft_context",
     {
       description:
-        "Re-fetch the specraft session context (wiki overview + index) bound to the current branch and HEAD. Use this to rehydrate spec context when hook-based injection is unavailable on this host or the injected context was compacted away.",
+        "Re-fetch the specraft session context (wiki overview + index) bound to the current branch and HEAD. Use this to rehydrate spec context when hook-based injection is unavailable on this host or the injected context was compacted away. Optional budget_tokens caps the response size (index is preserved first; truncated=true marks a cut overview).",
+      inputSchema: ContextToolInputSchema.shape,
     },
-    async () => toToolResult(await specraftContext(context)),
+    async (input) =>
+      toToolResult(await specraftContext(context, ContextToolInputSchema.parse(input ?? {}))),
   )
   registerWikiResources(server, context)
   registerPrompts(server)

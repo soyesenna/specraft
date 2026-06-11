@@ -3,19 +3,30 @@
 //
 // 검증 항목:
 //   c0. claude plugin validate (플러그인 + 마켓플레이스 매니페스트)
-//   c1. marketplace add → install → list 설치 경로
+//   c4·c7·c8 (프로세스 레벨 재설계 — M3 started_dirty_hash 의미론):
+//     claude-code 훅 래퍼를 codex d-step처럼 stdin JSON으로 직접 실행한다.
+//     세션 시작 전 dirty는 "질문 세션 면제"로 allow되므로, 클린 상태에서
+//     session-start를 먼저 실행한 뒤 트리를 dirty로 만들어 block을 검증한다.
+//     c4a. 클린 session-start: 컨텍스트 주입 + started_dirty_hash=clean 마커
+//     c4b. 세션 중 dirty → stop block
+//     c7a. specraft_defer(MCP 직구동) 기록
+//     c7b. defer → stop allow 1회 / c7c. deferred allow는 세션 미해소
+//     c7d. defer 소비 후 재-stop 재차단(consume-on-use)
+//     c8a. 같은 repo의 pending → 새 세션 프롬프트 block
+//     c8b. 다른 repo의 pending은 차단하지 않음(replay repo 스코핑)
+//   c1. marketplace add → install → list 설치 경로 (실세션)
 //   c2. SessionStart 컨텍스트 주입 (모델이 주입 문구를 직접 회신)
 //   c3. specraft_query MCP 도구 호출 (백엔드 키워드 폴백, 쿼리 로그 대조)
-//   c4. gate: dirty → stop block
-//   c5. replay 자기 제외: 같은 세션 resume 으로 pending 해소(stop allow → resolved)
+//   c5. replay 자기 제외: 세션 중 dirty로 pending 실세션을 만들고(c5a — M3 보정:
+//       dirty는 세션 중에 생성해야 block) 같은 세션 resume으로 해소(c5b)
 //   c6. gate 사이클: 세션 내 commit+push+specraft_ingest → stop allow
 //       (cross-process 세션 정체성: ingest 마커는 MCP 프로세스가 쓰고 stop 훅이 읽음)
-//   c7. specraft_defer 플로: 사유 기록 → 1회 allow (consume-on-use)
-//   c8. replay 게이트: pending 세션 존재 시 새 세션 프롬프트 block
 //
 // 인증: CLAUDE_CODE_OAUTH_TOKEN/ANTHROPIC_API_KEY env, 또는 macOS 키체인의
-// "Claude Code-credentials" 추출(.credentials.json) 순. 둘 다 없으면 세션 단계 SKIP.
+// "Claude Code-credentials" 추출(.credentials.json) 순. 둘 다 없으면 실세션 단계 SKIP
+// (프로세스 레벨 c4·c7·c8은 인증 비의존으로 무조건 실행).
 import { spawnSync } from "node:child_process"
+import { createHash } from "node:crypto"
 import {
   chmodSync,
   existsSync,
@@ -30,6 +41,7 @@ import { fileURLToPath } from "node:url"
 
 import { backendFetch, startBackendFixtureProcess } from "./backend-fixture.mjs"
 import { createGitFixture, git, writeSpecraftConfig } from "./git-fixture.mjs"
+import { McpStdioClient } from "./lib/mcp-client.mjs"
 import { commandExists, StepLog, tempDir, tryRun } from "./lib/util.mjs"
 
 // 디버그 산출물(세션 결과 JSON·디버그 로그)을 보존할 디렉터리 (정리 대상 아님)
@@ -168,16 +180,6 @@ function readSessionMarker(home, sessionId) {
   return existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : null
 }
 
-function readDeferMarkers(home) {
-  const dir = join(home, ".specraft", "defers")
-  if (!existsSync(dir)) {
-    return []
-  }
-  return readdirSync(dir)
-    .filter((name) => name.endsWith(".json"))
-    .map((name) => JSON.parse(readFileSync(join(dir, name), "utf8")))
-}
-
 /** 마커 디렉터리 스냅샷 대비 새로 생긴 세션 ID를 찾는다(결과 JSON 부재 시 폴백). */
 function newSessionId(before, home) {
   const after = listSessionMarkers(home)
@@ -185,12 +187,226 @@ function newSessionId(before, home) {
   return fresh.length === 1 ? fresh[0].replace(/\.json$/, "") : null
 }
 
+/** 격리 HOME(specraft 상태) + PATH shim — 훅 래퍼 프로세스 레벨 실행용(claude 인증 비의존). */
+function buildHookEnv(cleanups, backendUrl, apiKey) {
+  const home = tempDir("specraft-e2e-claude-hook-home", cleanups)
+  const specraftDir = join(home, ".specraft")
+  mkdirSync(specraftDir, { recursive: true })
+  const credentialsPath = join(specraftDir, "credentials")
+  writeFileSync(credentialsPath, `SPECRAFT_API_KEY=${apiKey}\nSPECRAFT_SERVER_URL=${backendUrl}\n`)
+  chmodSync(credentialsPath, 0o600)
+  const shimDir = join(home, "bin")
+  mkdirSync(shimDir, { recursive: true })
+  const shimPath = join(shimDir, "specraft-mcp-proxy")
+  writeFileSync(shimPath, `#!/bin/sh\nexec node "${proxyBundle}" "$@"\n`)
+  chmodSync(shimPath, 0o755)
+  return {
+    env: {
+      HOME: home,
+      LANG: process.env.LANG ?? "en_US.UTF-8",
+      PATH: `${shimDir}:${process.env.PATH ?? ""}`,
+      TERM: "dumb",
+      TMPDIR: process.env.TMPDIR,
+    },
+    home,
+  }
+}
+
+/**
+ * claude-code 훅 래퍼를 호스트가 주는 것과 동일한 stdin JSON으로 직접 실행한다.
+ * @returns {{ status: number | null, stdout: string, stderr: string }}
+ */
+function runPluginHook(script, payload, env) {
+  const result = spawnSync("node", [join(pluginDir, "hooks", script)], {
+    encoding: "utf8",
+    env,
+    input: JSON.stringify(payload),
+    timeout: 30_000,
+  })
+  return {
+    status: result.status,
+    stderr: result.stderr ?? "",
+    stdout: (result.stdout ?? "").trim(),
+  }
+}
+
+/** 훅 stdout(JSON decision)을 파싱한다 — JSON이 아니면 null. */
+function parseDecision(stdout) {
+  try {
+    return JSON.parse(stdout)
+  } catch {
+    return null
+  }
+}
+
+/**
+ * c4·c7·c8 프로세스 레벨 재설계(M3 의미론). claude CLI/인증 비의존:
+ * 훅 래퍼+번들 proxy 조합이 게이트 로직의 정본이므로, 결정적 검증은
+ * 실세션 대신 훅 래퍼 직접 실행으로 수행한다(codex d5~d13과 동형).
+ */
+async function runProcessLevelGate(log, cleanups) {
+  const gitFx = createGitFixture(cleanups)
+  // 훅 래퍼를 spawnSync(동기)로 실행하는 동안에도 백엔드가 응답해야 하므로 별도 프로세스 기동.
+  const backend = await startBackendFixtureProcess({ cleanups, codeRemoteUrl: gitFx.remote })
+  writeSpecraftConfig(gitFx.repo, backend.url)
+  const { env, home } = buildHookEnv(cleanups, backend.url, backend.apiKey)
+  const repo = gitFx.repo
+  const sessionId = "e2e-claude-gate-1"
+  const stdinBase = { cwd: repo, session_id: sessionId }
+  // 클린 트리의 dirty 스냅샷 = sha256("") — git status --porcelain 빈 출력의 해시.
+  const cleanDirtyHash = createHash("sha256").update("").digest("hex")
+
+  // c4a. 클린 상태 session-start: 컨텍스트 주입 + started_dirty_hash=clean 마커
+  {
+    const result = runPluginHook(
+      "session-start.js",
+      { ...stdinBase, hook_event_name: "SessionStart" },
+      env,
+    )
+    const marker = readSessionMarker(home, sessionId)
+    if (
+      result.stdout.includes("Specraft context for main@") &&
+      marker?.started_dirty_hash === cleanDirtyHash
+    ) {
+      log.pass("c4a session-start 마커(started_dirty_hash=clean)", "컨텍스트 주입 + 클린 스냅샷")
+    } else {
+      log.fail(
+        "c4a session-start 마커(started_dirty_hash=clean)",
+        `stdout=${result.stdout.slice(0, 120)} marker=${JSON.stringify(marker)}`,
+      )
+    }
+  }
+
+  // c4b. 세션 시작 후 dirty → stop block (구 c4 상당 — 새 의미론)
+  {
+    writeFileSync(join(repo, "scratch-gate.txt"), "dirty created during the session\n")
+    const result = runPluginHook(
+      "stop.js",
+      { ...stdinBase, hook_event_name: "Stop", stop_hook_active: false },
+      env,
+    )
+    const parsed = parseDecision(result.stdout)
+    if (parsed?.decision === "block" && String(parsed.reason).includes("working tree is dirty")) {
+      log.pass("c4b 세션 중 dirty → stop block", "block JSON + dirty 사유")
+    } else {
+      log.fail("c4b 세션 중 dirty → stop block", `stdout=${result.stdout.slice(0, 160)}`)
+    }
+  }
+
+  // c7a. specraft_defer 기록 (MCP 직구동 — cross-process: defer 마커를 stop 훅이 소비)
+  {
+    const client = new McpStdioClient({
+      args: [proxyBundle],
+      command: "node",
+      cwd: repo,
+      env: { ...env, SPECRAFT_SESSION_ID: sessionId },
+    })
+    try {
+      await client.initialize()
+      const defer = await client.callTool("specraft_defer", { reason: "E2E claude gate defer" })
+      if (!defer.isError && JSON.stringify(defer).includes("deferred")) {
+        log.pass("c7a specraft_defer 기록(MCP 직구동)", "사유 기록(서버 비의존)")
+      } else {
+        log.fail("c7a specraft_defer 기록(MCP 직구동)", JSON.stringify(defer).slice(0, 200))
+      }
+    } finally {
+      await client.close()
+    }
+  }
+
+  // c7b. defer → stop allow 1회 (claude 정본: {decision:"approve"} JSON)
+  {
+    const result = runPluginHook(
+      "stop.js",
+      { ...stdinBase, hook_event_name: "Stop", stop_hook_active: false },
+      env,
+    )
+    const parsed = parseDecision(result.stdout)
+    if (parsed?.decision === "approve" && String(parsed.reason).includes("deferred")) {
+      log.pass("c7b defer → stop allow(1회)", "deferred 사유의 approve JSON")
+    } else {
+      log.fail("c7b defer → stop allow(1회)", `stdout=${result.stdout.slice(0, 160)}`)
+    }
+  }
+
+  // c7c. deferred allow는 세션을 resolve하지 않음 (pending replay로 잔존 — 의도된 동작)
+  {
+    const marker = readSessionMarker(home, sessionId)
+    if (marker && marker.resolved !== true) {
+      log.pass("c7c deferred allow는 세션 미해소", "pending replay로 잔존(의도된 동작)")
+    } else {
+      log.fail("c7c deferred allow는 세션 미해소", JSON.stringify(marker))
+    }
+  }
+
+  // c7d. defer 소비 후 재-stop → 재차단 (consume-on-use)
+  {
+    const result = runPluginHook(
+      "stop.js",
+      { ...stdinBase, hook_event_name: "Stop", stop_hook_active: false },
+      env,
+    )
+    const parsed = parseDecision(result.stdout)
+    if (parsed?.decision === "block") {
+      log.pass("c7d defer 소비 후 재-stop block", "consume-on-use 확인(2회차 stop은 block)")
+    } else {
+      log.fail("c7d defer 소비 후 재-stop block", `stdout=${result.stdout.slice(0, 160)}`)
+    }
+  }
+
+  // c8a. 같은 repo의 pending(미해소 gate-1 세션) → 새 세션 프롬프트 block
+  {
+    const result = runPluginHook(
+      "user-prompt-submit.js",
+      { cwd: repo, hook_event_name: "UserPromptSubmit", session_id: "e2e-claude-gate-2" },
+      env,
+    )
+    const parsed = parseDecision(result.stdout)
+    if (
+      parsed?.decision === "block" &&
+      String(parsed.reason).includes("pending specraft ingest replay")
+    ) {
+      log.pass("c8a 같은 repo pending → 프롬프트 block", "미해소 세션으로 인한 차단 사유 확인")
+    } else {
+      log.fail("c8a 같은 repo pending → 프롬프트 block", `stdout=${result.stdout.slice(0, 160)}`)
+    }
+  }
+
+  // c8b. 다른 repo의 pending은 차단하지 않음 (M3.3 replay repo 스코핑)
+  {
+    const otherFx = createGitFixture(cleanups)
+    const result = runPluginHook(
+      "user-prompt-submit.js",
+      { cwd: otherFx.repo, hook_event_name: "UserPromptSubmit", session_id: "e2e-claude-gate-3" },
+      env,
+    )
+    const parsed = parseDecision(result.stdout)
+    if (
+      parsed?.decision === "approve" &&
+      String(parsed.reason).includes("no pending specraft replay")
+    ) {
+      log.pass("c8b 다른 repo pending은 비차단", "repo 스코핑으로 타 레포 pending 무시")
+    } else {
+      log.fail("c8b 다른 repo pending은 비차단", `stdout=${result.stdout.slice(0, 160)}`)
+    }
+    rmSync(join(repo, "scratch-gate.txt"), { force: true })
+  }
+}
+
 export async function runClaudeScenario(cleanups) {
   const log = new StepLog("9c claude")
 
+  if (!existsSync(proxyBundle)) {
+    log.fail("c0c proxy 번들 존재", `${proxyBundle} 없음 — pnpm --filter @specraft/mcp-proxy build`)
+    return log
+  }
+
+  // c4·c7·c8 — 프로세스 레벨 게이트(훅 래퍼 stdin 직접 실행). claude CLI/인증 비의존.
+  await runProcessLevelGate(log, cleanups)
+
   if (!commandExists("claude")) {
-    log.skip("c0 plugin validate", "claude CLI 미설치 — 9c 전체 스킵")
-    log.skip("c1-c8 세션 시나리오", "claude CLI 미설치")
+    log.skip("c0 plugin validate", "claude CLI 미설치 — 실세션 단계 스킵")
+    log.skip("c1-c6 실세션 시나리오", "claude CLI 미설치")
     return log
   }
 
@@ -208,15 +424,10 @@ export async function runClaudeScenario(cleanups) {
     log.fail("c0b marketplace validate (repo 루트)", validateMarketplace.stderr.slice(0, 300))
   }
 
-  if (!existsSync(proxyBundle)) {
-    log.fail("c0c proxy 번들 존재", `${proxyBundle} 없음 — pnpm --filter @specraft/mcp-proxy build`)
-    return log
-  }
-
   const auth = resolveClaudeAuth()
   if (!auth) {
     log.skip(
-      "c1-c8 세션 시나리오",
+      "c1-c6 실세션 시나리오",
       "claude 인증 수단 없음 (CLAUDE_CODE_OAUTH_TOKEN/ANTHROPIC_API_KEY env 또는 macOS 키체인 필요)",
     )
     return log
@@ -340,41 +551,51 @@ export async function runClaudeScenario(cleanups) {
     }
   }
 
-  // c4. gate: dirty → stop block
+  // c5a. pending 실세션 생성: 모델이 세션 중 dirty를 만들고 → stop block
+  //      (M3 보정: 세션 시작 전 dirty는 started_dirty_hash 면제로 allow되므로,
+  //       block을 만들려면 dirty가 세션 중에 생겨야 한다 — c5b resume 해소의 전제.)
   let dirtyBlockSessionId = null
   {
-    writeFileSync(join(repo, "scratch-wip.txt"), "uncommitted work in progress\n")
     const before = listSessionMarkers(home)
     const session = runClaudeSession({
       cwd: repo,
       env,
       home,
-      label: "c4-dirty-block",
+      label: "c5a-dirty-block",
+      model: "sonnet",
       pluginDir,
-      prompt:
-        "Reply with exactly: DONE. Do not use any tools. If a stop hook prevents you from stopping, still do not use any tools (especially do not call specraft_defer and do not run git); just reply again with exactly: BLOCKED",
-      timeoutMs: 90_000,
+      prompt: [
+        "Use the Bash tool to run exactly this one command and nothing else:",
+        'echo "uncommitted work in progress" > scratch-wip.txt',
+        "Then reply with exactly: DONE",
+        "If a stop hook prevents you from stopping, do not run any more commands and do not call any tools (especially do not call specraft_defer, do not run git, and do not delete the file); just reply again with exactly: BLOCKED",
+      ].join("\n"),
+      timeoutMs: 180_000,
     })
     dirtyBlockSessionId = session.sessionId ?? newSessionId(before, home)
     const marker = dirtyBlockSessionId ? readSessionMarker(home, dirtyBlockSessionId) : null
+    const dirtyCreated = existsSync(join(repo, "scratch-wip.txt"))
     const sawBlockReason = session.combined.includes("working tree is dirty")
-    if (marker && marker.resolved !== true && sawBlockReason) {
-      log.pass("c4 dirty → stop block", "block 사유(working tree is dirty) 확인, 세션 미해소")
-    } else if (marker && marker.resolved !== true) {
-      log.fail("c4 dirty → stop block", "마커는 미해소이나 block 사유 미검출")
+    if (marker && marker.resolved !== true && dirtyCreated && sawBlockReason) {
+      log.pass("c5a 세션 중 dirty → stop block", "block 사유(working tree is dirty), 세션 미해소")
+    } else if (marker && marker.resolved !== true && dirtyCreated) {
+      log.fail("c5a 세션 중 dirty → stop block", "마커는 미해소이나 block 사유 미검출")
     } else {
-      log.fail("c4 dirty → stop block", `marker=${JSON.stringify(marker)}`)
+      log.fail(
+        "c5a 세션 중 dirty → stop block",
+        `dirty=${dirtyCreated} marker=${JSON.stringify(marker)} exit=${session.status}`,
+      )
     }
     rmSync(join(repo, "scratch-wip.txt"), { force: true })
   }
 
-  // c5. replay 자기 제외 + pending 해소: 동일 세션 resume → 클린 상태 stop allow → resolved
+  // c5b. replay 자기 제외 + pending 해소: 동일 세션 resume → 클린 상태 stop allow → resolved
   if (dirtyBlockSessionId) {
     const session = runClaudeSession({
       cwd: repo,
       env,
       home,
-      label: "c5-resume-resolve",
+      label: "c5b-resume-resolve",
       pluginDir,
       prompt: "Reply with exactly: RESOLVED. Do not use any tools.",
       resume: dirtyBlockSessionId,
@@ -382,15 +603,15 @@ export async function runClaudeScenario(cleanups) {
     })
     const marker = readSessionMarker(home, dirtyBlockSessionId)
     if (marker?.resolved === true) {
-      log.pass("c5 resume로 pending 해소", `세션 ${dirtyBlockSessionId} resolved=true`)
+      log.pass("c5b resume로 pending 해소", `세션 ${dirtyBlockSessionId} resolved=true`)
     } else {
       log.fail(
-        "c5 resume로 pending 해소",
+        "c5b resume로 pending 해소",
         `marker=${JSON.stringify(marker)} exit=${session.status}`,
       )
     }
   } else {
-    log.skip("c5 resume로 pending 해소", "c4에서 세션 ID를 확보하지 못함")
+    log.skip("c5b resume로 pending 해소", "c5a에서 세션 ID를 확보하지 못함")
   }
 
   // c6. gate 사이클: 세션 내 commit+push+ingest → stop allow (cross-process 세션 정체성)
@@ -450,66 +671,7 @@ export async function runClaudeScenario(cleanups) {
     }
   }
 
-  // c7. specraft_defer 플로: dirty 상태에서 사유 기록 → 1회 allow (consume-on-use)
-  let deferSessionId = null
-  {
-    writeFileSync(join(repo, "scratch-defer.txt"), "work to be deferred\n")
-    const session = runClaudeSession({
-      cwd: repo,
-      env,
-      home,
-      label: "c7-defer",
-      model: "sonnet",
-      pluginDir,
-      prompt:
-        'Call the specraft_defer MCP tool with reason "E2E defer test". After the tool returns, reply with exactly: DEFERRED. Do not use any other tools and do not run git commands.',
-      timeoutMs: 180_000,
-    })
-    deferSessionId = session.sessionId
-    const markers = readDeferMarkers(home)
-    const consumed = markers.find(
-      (marker) => marker.reason === "E2E defer test" && marker.consumed === true,
-    )
-    const sessionMarker = deferSessionId ? readSessionMarker(home, deferSessionId) : null
-    if (consumed && session.status === 0) {
-      log.pass(
-        "c7 defer 플로 (사유 기록 → 1회 allow)",
-        `defer 마커 consumed=true (${consumed.head.slice(0, 8)}), 세션 정상 종료`,
-      )
-    } else {
-      log.fail(
-        "c7 defer 플로 (사유 기록 → 1회 allow)",
-        `markers=${JSON.stringify(markers).slice(0, 200)} exit=${session.status}`,
-      )
-    }
-    if (sessionMarker && sessionMarker.resolved !== true) {
-      log.pass("c7b deferred allow는 세션을 resolve하지 않음", "pending replay로 잔존(의도된 동작)")
-    } else {
-      log.fail("c7b deferred allow는 세션을 resolve하지 않음", JSON.stringify(sessionMarker))
-    }
-  }
-
-  // c8. replay 게이트: pending 세션(c7) 존재 시 새 세션의 UserPromptSubmit block
-  {
-    const session = runClaudeSession({
-      cwd: repo,
-      env,
-      home,
-      label: "c8-replay-block",
-      pluginDir,
-      prompt: "Reply with exactly: OK",
-      timeoutMs: 90_000,
-    })
-    if (session.combined.includes("pending specraft ingest replay")) {
-      log.pass("c8 pending replay 프롬프트 게이트", "이전 미해소 세션으로 인한 block 사유 확인")
-    } else {
-      log.fail(
-        "c8 pending replay 프롬프트 게이트",
-        `block 사유 미검출 (exit=${session.status}, result=${String(session.resultJson?.result).slice(0, 80)})`,
-      )
-    }
-    rmSync(join(repo, "scratch-defer.txt"), { force: true })
-  }
+  // (구 c7/c7b/c8 실세션 단계는 프로세스 레벨 c7a~c7d·c8a~c8b로 대체 — runProcessLevelGate 참조)
 
   // 격리 검증: 실제 사용자 영역을 건드리지 않았는지 확인용 로그
   log.pass("c9 격리 확인", `HOME=${home}, CLAUDE_CONFIG_DIR=${configDir} (모두 임시 디렉터리)`)

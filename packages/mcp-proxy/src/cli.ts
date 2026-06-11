@@ -5,6 +5,7 @@ import { findSpecraftConfig } from "./config.js"
 import { resolveApiKey, resolveServerUrl } from "./credentials.js"
 import { decideStop, decideUserPrompt } from "./gate.js"
 import { isHeadPushed, readDirtyHash, readGitSnapshot, readRepoRoot } from "./git.js"
+import { INJECTION_BUDGET_TOKENS, renderContextInjection } from "./injection-budget.js"
 import { createSpecraftMcpServer, mcpServerVersion } from "./mcp.js"
 import {
   pendingReplaySessions,
@@ -161,9 +162,14 @@ async function runSessionStartHook(cwd: string): Promise<void> {
     apiKey,
     baseUrl: resolveServerUrl({ cwd, home: currentHome }),
   })
-  const context = await client.context({ branch: snapshot.branch, commit_hash: snapshot.head })
+  // M3.6: 주입 본문은 INJECTION_BUDGET_TOKENS 이내로 요청한다(구버전 서버는 무시 — additive 스키마).
+  const context = await client.context({
+    branch: snapshot.branch,
+    budget_tokens: INJECTION_BUDGET_TOKENS,
+    commit_hash: snapshot.head,
+  })
   process.stdout.write(
-    `${pending}Specraft context for ${snapshot.branch}@${snapshot.head}:\n\n${context.overview}\n\n${context.index}\n`,
+    `${pending}${renderContextInjection({ branch: snapshot.branch, context, head: snapshot.head })}`,
   )
 }
 
@@ -179,9 +185,14 @@ async function runContextHook(cwd: string): Promise<void> {
     apiKey,
     baseUrl: resolveServerUrl({ cwd, home: currentHome }),
   })
-  const context = await client.context({ branch: snapshot.branch, commit_hash: snapshot.head })
+  // M3.6: 재수화 주입도 session-start와 같은 예산을 쓴다.
+  const context = await client.context({
+    branch: snapshot.branch,
+    budget_tokens: INJECTION_BUDGET_TOKENS,
+    commit_hash: snapshot.head,
+  })
   process.stdout.write(
-    `Specraft context for ${snapshot.branch}@${snapshot.head}:\n\n${context.overview}\n\n${context.index}\n`,
+    renderContextInjection({ branch: snapshot.branch, context, head: snapshot.head }),
   )
 }
 

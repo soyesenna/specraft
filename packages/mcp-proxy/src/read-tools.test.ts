@@ -209,6 +209,50 @@ describe("read tools (M2.1)", () => {
     expect(result.structuredContent).toMatchObject({ overview: "# Overview", index: "# Index" })
     await client.close()
   })
+
+  it("specraft_context forwards budget_tokens and omits the key when unspecified (M3.6)", async () => {
+    const requests: Array<{ branch: string; commit_hash: string; budget_tokens?: number }> = []
+    const context = testContext({
+      client: stubToolClient({
+        context: async (request) => {
+          requests.push(request)
+          return {
+            branch_status: { state: "ready" },
+            index: "# Index",
+            overview: "...[truncated 12 tokens]",
+            truncated: true,
+            wiki_head: "wiki_head_1",
+          }
+        },
+      }),
+    })
+    const client = await connectMcpClient(context)
+
+    const budgeted = (await client.callTool({
+      name: "specraft_context",
+      arguments: { budget_tokens: 64 },
+    })) as CallToolResult
+    expect(budgeted.isError).toBeFalsy()
+    expect(requests).toEqual([
+      { branch: "feature/login", budget_tokens: 64, commit_hash: "head_1" },
+    ])
+    expect(budgeted.structuredContent).toMatchObject({ truncated: true })
+
+    await client.callTool({ name: "specraft_context", arguments: {} })
+    expect(requests).toHaveLength(2)
+    expect(Object.keys(requests[1] ?? {})).not.toContain("budget_tokens")
+    await client.close()
+  })
+
+  it("specraft_context rejects non-positive budget_tokens via the inputSchema", async () => {
+    const client = await connectMcpClient(testContext())
+    const result = (await client.callTool({
+      name: "specraft_context",
+      arguments: { budget_tokens: 0 },
+    })) as CallToolResult
+    expect(result.isError).toBe(true)
+    await client.close()
+  })
 })
 
 describe("wiki resources (M2.2)", () => {
