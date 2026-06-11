@@ -2,15 +2,7 @@
   "name": "specraft",
   "version": "0.1.0",
   "description": "Injects specraft project context, exposes MCP tools, and enforces commit/push/ingest stop gates.",
-  "author": "specraft",
-  "hooks": {
-    "SessionStart": "./hooks/session-start.js",
-    "PostCompact": "./hooks/post-compact.js",
-    "UserPromptSubmit": "./hooks/user-prompt-submit.js",
-    "Stop": "./hooks/stop.js"
-  },
-  "commands": {
-    "specraft-setup": "./commands/specraft-setup.md",
-    "specraft-init": "./commands/specraft-init.md"
+  "author": {
+    "name": "specraft"
   }
 }
