@@ -8,13 +8,18 @@ import {
   IngestLogListResponseSchema,
   IngestPayloadSchema,
   IngestResponseSchema,
+  ProgressBoardResponseSchema,
   QueryLogDetailSchema,
   QueryLogListResponseSchema,
   QueryRequestSchema,
   QueryResponseSchema,
+  SearchRequestSchema,
+  SearchResponseSchema,
   StatusResponseSchema,
+  WikiChangesResponseSchema,
   WikiGraphResponseSchema,
   WikiHistoryResponseSchema,
+  WikiMergeResponseSchema,
   WikiPageResponseSchema,
   WikiTreeResponseSchema,
 } from "@specraft/shared"
@@ -27,17 +32,24 @@ import {
   commitExists,
   createCodeMirror,
   createSkeletonWiki,
+  type GitMirror,
+  inferParentBranchFromCode,
   listBranchLocks,
   listWikiFiles,
+  listWikiLastModified,
   readWikiFile,
   type WikiRepository,
+  wikiBranchExists,
+  wikiCommitExists,
   wikiHead,
 } from "../git/sync.js"
 import { isSafeBranchName, isSafeWikiPath } from "../git/validation.js"
+import { createWikiBranchFromParent, mergeWikiBranch } from "../git/wiki-merge.js"
 import { sendValidationFailed } from "../http/errors.js"
+import type { EmbeddingProvider } from "../llm/embedding.js"
 import type { LLMProvider } from "../llm/provider.js"
 import type { SpecraftDatabase } from "../storage/database.js"
-import { requireMember } from "./auth.js"
+import { requireAdmin, requireMember } from "./auth.js"
 import { registerConflictRoutes } from "./conflict-routes.js"
 import { fitContextToBudget } from "./context-budget.js"
 import { cachedWikiGraph } from "./graph-cache.js"
@@ -51,6 +63,8 @@ import {
   recordQueryLog,
   updateQueryLogResult,
 } from "./logs.js"
+import { listFeatureProgress, upsertFeatureProgress } from "./progress.js"
+import { indexChangedWikiPages, reindexWikiBranch, searchWiki } from "./search.js"
 import {
   answerWikiQuestionWithAgent,
   answerWikiQuestionWithAgentStream,
@@ -64,15 +78,57 @@ export type SpecRouteContext = {
   readonly codeRemoteUrl?: string
   readonly branchQueue?: BranchQueue
   readonly llmProvider?: LLMProvider
+  readonly embeddingProvider?: EmbeddingProvider
 }
 
 const BranchNameSchema = z.string().min(1).refine(isSafeBranchName)
 const BranchParamsSchema = z.object({ branch: BranchNameSchema })
 const WikiPageQuerySchema = z.object({ path: z.string().min(1).refine(isSafeWikiPath) })
 const LogIdParamsSchema = z.object({ id: z.string().min(1) })
+const WikiChangesQuerySchema = z.object({ since: z.string().regex(/^[0-9a-f]{4,64}$/) })
+const WikiMergeBodySchema = z.object({ into: BranchNameSchema })
+const ProgressQuerySchema = z.object({ branch: BranchNameSchema.optional() })
+const ReindexBodySchema = z.object({ branch: BranchNameSchema })
+
+function codeMirrorFor(context: SpecRouteContext): GitMirror | null {
+  const remoteUrl = context.codeRemoteUrl ?? getSetting(context.database, "git_remote_url")
+  if (!remoteUrl || !context.dataDir) {
+    return null
+  }
+  try {
+    return createCodeMirror({ dataDir: context.dataDir, remoteUrl })
+  } catch {
+    return null // 원격 접근 실패는 parent 추정 실패로만 취급한다(요청 자체는 계속).
+  }
+}
 
 function wikiFor(context: SpecRouteContext, branch: string): WikiRepository | null {
-  return context.dataDir ? createSkeletonWiki({ dataDir: context.dataDir, branch }) : null
+  if (!context.dataDir) {
+    return null
+  }
+  /*
+   * M4+.2 parent-aware 위키 분기 — 신규 위키 브랜치를 처음 만들 때 코드 미러의 merge-base로
+   * 실제 parent 브랜치를 추정할 수 있으면 그 브랜치에서 분기한다. 추정 불가(미러 없음·
+   * 코드 레포에 없는 브랜치·후보 없음)이면 기존과 동일하게 main에서 분기(createSkeletonWiki).
+   * 존재 검사는 스폰 없는 loose-ref 읽기라 warm 요청 비용은 기존과 같다.
+   */
+  if (branch !== "main" && !wikiBranchExists(context.dataDir, branch)) {
+    const mirror = codeMirrorFor(context)
+    const parent = mirror ? inferParentBranchFromCode(mirror, branch) : null
+    if (parent !== null && parent !== branch) {
+      return createWikiBranchFromParent({ dataDir: context.dataDir, branch, parentBranch: parent })
+    }
+  }
+  return createSkeletonWiki({ dataDir: context.dataDir, branch })
+}
+
+// steering.md처럼 실재할 때만 쓰는 페이지를 읽는다 — 부재(ENOENT)는 null.
+function readWikiFileIfExists(wiki: WikiRepository, path: string): string | null {
+  try {
+    return readWikiFile(wiki, path)
+  } catch {
+    return null
+  }
 }
 
 function ensureUnlocked(context: SpecRouteContext, branch: string, reply: FastifyReply): boolean {
@@ -85,12 +141,8 @@ function ensureUnlocked(context: SpecRouteContext, branch: string, reply: Fastif
 }
 
 function commitIsKnown(context: SpecRouteContext, commitHash: string): boolean {
-  const remoteUrl = context.codeRemoteUrl ?? getSetting(context.database, "git_remote_url")
-  if (!remoteUrl || !context.dataDir) {
-    return false
-  }
-  const mirror = createCodeMirror({ dataDir: context.dataDir, remoteUrl })
-  return commitExists(mirror, commitHash)
+  const mirror = codeMirrorFor(context)
+  return mirror !== null && commitExists(mirror, commitHash)
 }
 
 export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteContext): void {
@@ -111,6 +163,10 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
     const wiki = wikiFor(context, parsed.data.branch)
     const overview = wiki ? readWikiFile(wiki, "overview.md") : ""
     const index = wiki ? readWikiFile(wiki, "index.md") : ""
+    // M4+.5 steering 주입: 위키에 steering.md가 실재하면 overview 앞에 블록으로 합친다
+    // (응답 스키마 무변경). 예산 절단 시에도 보존 순서는 steering ≥ index > overview.
+    const steering = wiki ? readWikiFileIfExists(wiki, "steering.md") : null
+    const steeringBlock = steering === null ? undefined : `## Steering\n${steering.trim()}`
     // M3.6: budget_tokens 지정 시에만 예산 적용 — 미지정 시 현행(무제한) 동작 유지.
     const fitted =
       parsed.data.budget_tokens === undefined
@@ -118,11 +174,17 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
         : await fitContextToBudget({
             overview,
             index,
+            steering: steeringBlock,
             budgetTokens: parsed.data.budget_tokens,
             provider: context.llmProvider,
           })
+    const mergedOverview = fitted
+      ? fitted.overview
+      : steeringBlock === undefined
+        ? overview
+        : `${steeringBlock}\n\n${overview}`
     const response = {
-      overview: fitted ? fitted.overview : overview,
+      overview: mergedOverview,
       index,
       branch_status: { state: "ready" },
       wiki_head: wiki ? wikiHead(wiki) : "uninitialized",
@@ -275,6 +337,8 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
         return reply.status(422).send({ status: "rejected", reason: "commit_not_found" })
       }
       const wiki = wikiFor(context, parsed.data.branch)
+      // M4+.4 증분 재인덱싱 기준점 — ingest가 만들 커밋 직전의 head를 잡아둔다.
+      const headBefore = wiki && context.embeddingProvider ? wikiHead(wiki) : undefined
       const wikiCommit = wiki
         ? await ingestWikiWithAgent({
             member,
@@ -293,7 +357,30 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
         progressUpdates: parsed.data.progress_updates,
         openQuestions: parsed.data.open_questions,
       } as const
-      recordIngestLog(context.database, wikiCommit ? { ...logInput, wikiCommit } : logInput)
+      const ingestId = recordIngestLog(
+        context.database,
+        wikiCommit ? { ...logInput, wikiCommit } : logInput,
+      )
+      // M4+.3 진행률 보드 — 수락된 ingest의 progress_updates를 feature별 최신 상태로 upsert.
+      upsertFeatureProgress(context.database, {
+        branch: parsed.data.branch,
+        ingestId,
+        updates: parsed.data.progress_updates,
+      })
+      // M4+.4 — ingest 커밋으로 변경된 페이지만 재인덱싱. 인덱싱 실패가 ingest를 깨면 안 된다.
+      if (wiki && context.embeddingProvider && headBefore !== undefined) {
+        try {
+          await indexChangedWikiPages({
+            database: context.database,
+            wiki,
+            branch: parsed.data.branch,
+            provider: context.embeddingProvider,
+            sinceCommit: headBefore,
+          })
+        } catch {
+          // 임베딩 API 일시 장애 등 — 전체 재인덱스(관리 엔드포인트)로 복구 가능하므로 무시.
+        }
+      }
       return IngestResponseSchema.parse(
         wikiCommit ? { status: "accepted", wiki_commit: wikiCommit } : { status: "accepted" },
       )
@@ -450,6 +537,139 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
         ? buildWikiHistory(wiki, params.data.branch, query.data.path)
         : { branch: params.data.branch, path: query.data.path, versions: [] },
     )
+  })
+
+  // M4+.1 changes_since — since 커밋 이후 변경된 위키 페이지 목록(listWikiLastModified 래핑).
+  server.get("/api/v1/wiki/:branch/changes", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const params = BranchParamsSchema.safeParse(request.params)
+    const query = WikiChangesQuerySchema.safeParse(request.query)
+    if (!params.success || !query.success) {
+      return sendValidationFailed(reply)
+    }
+    const wiki = wikiFor(context, params.data.branch)
+    if (!wiki || !wikiCommitExists(wiki, query.data.since)) {
+      // 형식은 유효하나 위키 저장소에 없는 커밋 — 404로 구분한다(형식 오류는 위에서 422).
+      return reply.status(404).send({ error: "commit_not_found" })
+    }
+    const changes = [...listWikiLastModified(wiki, query.data.since).entries()]
+      .map(([path, touch]) => ({
+        path,
+        timestamp: touch.timestamp,
+        author: touch.author,
+        commit: touch.commitHash,
+      }))
+      .sort((left, right) => left.path.localeCompare(right.path))
+    return WikiChangesResponseSchema.parse({
+      branch: params.data.branch,
+      since: query.data.since,
+      changes,
+    })
+  })
+
+  // M4+.2 merge 배선 — :branch를 body.into로 병합. 충돌 시 기존 conflict+branch_lock 플로로 연결.
+  server.post("/api/v1/wiki/:branch/merge", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const params = BranchParamsSchema.safeParse(request.params)
+    const body = WikiMergeBodySchema.safeParse(request.body)
+    if (
+      !params.success ||
+      !body.success ||
+      !context.dataDir ||
+      params.data.branch === body.data.into
+    ) {
+      return sendValidationFailed(reply)
+    }
+    // 병합 대상(into)이 이미 잠겨 있으면 기존 conflict 해소가 선행되어야 한다.
+    if (!ensureUnlocked(context, body.data.into, reply)) {
+      return reply
+    }
+    const result = mergeWikiBranch({
+      database: context.database,
+      dataDir: context.dataDir,
+      targetBranch: body.data.into,
+      sourceBranch: params.data.branch,
+    })
+    if (result.status === "merged") {
+      return WikiMergeResponseSchema.parse({ status: "merged" })
+    }
+    return reply.status(409).send({ error: "merge_conflict", conflict_id: result.conflictId })
+  })
+
+  // M4+.3 진행률 보드 조회 — branch 미지정 시 전 브랜치 집계를 반환한다.
+  server.get("/api/v1/progress", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const query = ProgressQuerySchema.safeParse(request.query)
+    if (!query.success) {
+      return sendValidationFailed(reply)
+    }
+    return ProgressBoardResponseSchema.parse({
+      items: listFeatureProgress(context.database, query.data.branch),
+    })
+  })
+
+  // M4+.4 시맨틱 검색 — embedding provider·인덱스가 있으면 코사인, 아니면 키워드 폴백.
+  server.post("/api/v1/search", async (request, reply) => {
+    const member = await requireMember(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const parsed = SearchRequestSchema.safeParse(request.body)
+    if (!parsed.success || !isSafeBranchName(parsed.data.branch)) {
+      return sendValidationFailed(reply)
+    }
+    const wiki = wikiFor(context, parsed.data.branch)
+    if (!wiki) {
+      return SearchResponseSchema.parse({
+        branch: parsed.data.branch,
+        mode: "keyword",
+        results: [],
+      })
+    }
+    return SearchResponseSchema.parse(
+      await searchWiki({
+        database: context.database,
+        wiki,
+        branch: parsed.data.branch,
+        query: parsed.data.query,
+        ...(parsed.data.top_k !== undefined ? { topK: parsed.data.top_k } : {}),
+        provider: context.embeddingProvider,
+      }),
+    )
+  })
+
+  // M4+.4 전체 재인덱스(관리) — 임베딩 장애 복구·모델 교체 시 사용. lazy 기동 인덱싱 대신
+  // 명시적 관리 엔드포인트를 택했다(기동 시간·무키 CI 결정성 보존).
+  server.post("/api/v1/admin/search/reindex", async (request, reply) => {
+    const member = await requireAdmin(request, reply, context.database)
+    if ("statusCode" in member) {
+      return member
+    }
+    const parsed = ReindexBodySchema.safeParse(request.body)
+    if (!parsed.success) {
+      return sendValidationFailed(reply)
+    }
+    const wiki = wikiFor(context, parsed.data.branch)
+    if (!wiki || !context.embeddingProvider) {
+      // provider 부재 시 인덱스가 무의미하므로 거부 — 검색은 키워드 폴백으로 계속 동작한다.
+      return sendValidationFailed(reply)
+    }
+    const chunks = await reindexWikiBranch({
+      database: context.database,
+      wiki,
+      branch: parsed.data.branch,
+      provider: context.embeddingProvider,
+    })
+    return { status: "ok", chunks }
   })
 
   registerConflictRoutes(server, context)

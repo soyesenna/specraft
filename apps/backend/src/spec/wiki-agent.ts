@@ -178,18 +178,50 @@ function snippets(page: RankedPage, queryTokens: readonly string[]): readonly st
     .slice(0, 4)
 }
 
+/** wiki_search 키워드 스코어러의 랭킹 코어 — query 응답과 검색 폴백(M4+.4)이 공유한다. */
+function rankPages(wiki: WikiRepository, queryTokens: readonly string[], limit: number) {
+  return listWikiFiles(wiki)
+    .filter((path) => path.endsWith(".md"))
+    .map((path) => scorePage(path, readWikiFile(wiki, path), queryTokens))
+    .filter((page) => page.score > 0)
+    .sort((left, right) => right.score - left.score || left.path.localeCompare(right.path))
+    .slice(0, limit)
+}
+
+export type KeywordSearchHit = {
+  readonly path: string
+  readonly section: string
+  readonly score: number
+  readonly snippet: string
+}
+
+/**
+ * M4+.4 키워드 검색 폴백 — embedding provider 부재 시 POST /api/v1/search가 사용하는
+ * 결정적 검색 경로. 기존 wiki_search 스코어러(scorePage)를 그대로 재사용한다.
+ */
+export function searchWikiByKeyword(
+  wiki: WikiRepository,
+  query: string,
+  limit: number,
+): readonly KeywordSearchHit[] {
+  const queryTokens = tokens(query)
+  return rankPages(wiki, queryTokens, limit).map((page) => {
+    const pageSnippets = snippets(page, queryTokens)
+    const snippet = (pageSnippets.length > 0 ? pageSnippets.join("\n") : page.content.trim()).slice(
+      0,
+      300,
+    )
+    return { path: page.path, section: page.section, score: page.score, snippet }
+  })
+}
+
 export function answerWikiQuestion(
   wiki: WikiRepository,
   question: string,
   queryId: string,
 ): QueryResponse {
   const queryTokens = tokens(question)
-  const ranked = listWikiFiles(wiki)
-    .filter((path) => path.endsWith(".md"))
-    .map((path) => scorePage(path, readWikiFile(wiki, path), queryTokens))
-    .filter((page) => page.score > 0)
-    .sort((left, right) => right.score - left.score || left.path.localeCompare(right.path))
-    .slice(0, 3)
+  const ranked = rankPages(wiki, queryTokens, 3)
   const pages =
     ranked.length > 0 ? ranked : [scorePage("overview.md", readWikiFile(wiki, "overview.md"), [])]
   const citations: Citation[] = pages.map((page) => ({

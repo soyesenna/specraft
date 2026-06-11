@@ -144,6 +144,80 @@ export function commitExists(mirror: GitMirror, commitHash: string): boolean {
   return gitStatus(mirror.path, ["cat-file", "-e", `${commitHash}^{commit}`]) === 0
 }
 
+/** 위키 bare 저장소에 커밋이 존재하는지 확인한다 — changes_since의 since 검증용. */
+export function wikiCommitExists(wiki: WikiRepository, commitHash: string): boolean {
+  if (!/^[0-9a-f]{4,64}$/.test(commitHash)) {
+    return false
+  }
+  return gitStatus(wiki.gitDir, ["cat-file", "-e", `${commitHash}^{commit}`]) === 0
+}
+
+/**
+ * 위키 브랜치 존재 여부 — 워크트리/브랜치를 생성하지 않고 확인한다 (parent-aware 분기 판단용).
+ * 요청 핫패스에서 호출되므로 git 스폰 없이 wikiBranchTip의 loose-ref/packed-refs 읽기를 재사용한다.
+ */
+export function wikiBranchExists(dataDir: string, branch: string): boolean {
+  if (!isSafeBranchName(branch)) {
+    return false
+  }
+  const barePath = join(dataDir, "wiki.git")
+  if (!existsSync(barePath)) {
+    return false
+  }
+  return wikiBranchTip({ branch, gitDir: barePath, root: barePath }) !== null
+}
+
+/**
+ * 코드 미러에서 branch의 parent 브랜치를 추정한다 (M4+.2 parent-aware 위키 분기).
+ * 휴리스틱: branch와의 merge-base가 루트에서 가장 깊은(=가장 늦게 갈라진) 다른 브랜치를
+ * parent로 본다. 단 merge-base가 branch tip과 같은데 후보 tip이 더 나아간 경우는
+ * branch에서 갈라져 나간 자식(descendant) 브랜치이므로 제외한다 — 자식을 parent로
+ * 오인해 위키 계보가 역전되는 것을 막는다. 동률이면 main을 우선하고, 그 외에는
+ * 이름순으로 결정적이게 고른다. branch가 코드 미러에 없거나 후보가 없으면 null —
+ * 호출부는 main 폴백.
+ */
+export function inferParentBranchFromCode(mirror: GitMirror, branch: string): string | null {
+  if (!isSafeBranchName(branch)) {
+    return null
+  }
+  if (gitStatus(mirror.path, ["show-ref", "--verify", `refs/heads/${branch}`]) !== 0) {
+    return null
+  }
+  const branchTip = gitDir(mirror.path, ["rev-parse", `refs/heads/${branch}`])
+  const heads = gitDir(mirror.path, ["for-each-ref", "refs/heads", "--format=%(refname:short)"])
+    .split("\n")
+    .map((name) => name.trim())
+    .filter((name) => name !== "" && name !== branch && isSafeBranchName(name))
+  let best: { readonly name: string; readonly depth: number } | null = null
+  for (const candidate of heads) {
+    let mergeBase: string
+    let candidateTip: string
+    try {
+      mergeBase = gitDir(mirror.path, ["merge-base", branch, candidate])
+      candidateTip = gitDir(mirror.path, ["rev-parse", `refs/heads/${candidate}`])
+    } catch {
+      continue // 공통 조상이 없는 브랜치(orphan 등)는 parent 후보가 아니다.
+    }
+    if (mergeBase === branchTip && candidateTip !== branchTip) {
+      continue // branch의 자식(descendant) — parent 후보에서 제외.
+    }
+    const depth = Number.parseInt(gitDir(mirror.path, ["rev-list", "--count", mergeBase]), 10)
+    if (Number.isNaN(depth)) {
+      continue
+    }
+    const wins =
+      best === null ||
+      depth > best.depth ||
+      (depth === best.depth &&
+        best.name !== "main" &&
+        (candidate === "main" || candidate < best.name))
+    if (wins) {
+      best = { name: candidate, depth }
+    }
+  }
+  return best?.name ?? null
+}
+
 export function detectNonFastForward(
   mirror: GitMirror,
   previousTip: string,

@@ -34,15 +34,23 @@ import type {
   IngestResponse,
   OkResponse,
   PaginationRequest,
+  ProgressBoardRequest,
+  ProgressBoardResponse,
   QueryLogDetail,
   QueryLogListResponse,
   QueryRequest,
   QueryResponse,
+  SearchRequest,
+  SearchResponse,
   StatusResponse,
+  WikiChangesRequest,
+  WikiChangesResponse,
   WikiGraphRequest,
   WikiGraphResponse,
   WikiHistoryRequest,
   WikiHistoryResponse,
+  WikiMergeRequest,
+  WikiMergeResponse,
   WikiPageRequest,
   WikiPageResponse,
   WikiTreeRequest,
@@ -108,4 +116,12 @@ export type SpecraftClient = {
   readonly wikiHistory: (request: WikiHistoryRequest) => Promise<WikiHistoryResponse>
   readonly getGraphLayout: (request: GraphLayoutRequest) => Promise<GraphLayoutResponse>
   readonly saveGraphLayout: (request: GraphLayoutSaveRequest) => Promise<GraphLayoutSaveResponse>
+  /** M4+.1 — since 커밋 이후 변경된 위키 페이지 목록 */
+  readonly wikiChanges: (request: WikiChangesRequest) => Promise<WikiChangesResponse>
+  /** M4+.2 — branch를 into로 병합. 충돌 시 {status:"conflict", conflict_id}로 매핑된다 */
+  readonly wikiMerge: (request: WikiMergeRequest) => Promise<WikiMergeResponse>
+  /** M4+.3 — feature별 최신 진행률 보드 (branch 미지정 시 전체) */
+  readonly progressBoard: (request?: ProgressBoardRequest) => Promise<ProgressBoardResponse>
+  /** M4+.4 — 시맨틱 검색 (provider 부재 시 키워드 폴백) */
+  readonly search: (request: SearchRequest) => Promise<SearchResponse>
 }

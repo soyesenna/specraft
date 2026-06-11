@@ -1,1 +1,1 @@
-export { requireMember } from "../auth/identity.js"
+export { requireAdmin, requireMember } from "../auth/identity.js"

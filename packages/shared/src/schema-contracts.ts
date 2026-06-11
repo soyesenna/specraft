@@ -13,6 +13,7 @@ import {
   MemberSchema,
   NonEmptyStringSchema,
   OkResponseSchema,
+  ProgressStatusSchema,
   ProgressUpdateSchema,
   SpecChangeSchema,
 } from "./schema-foundation.js"
@@ -336,6 +337,85 @@ export const WikiHistoryResponseSchema = z.object({
   versions: z.array(WikiVersionSchema),
 })
 
+/** M4+.1 — `GET /api/v1/wiki/:branch/changes?since=<commit>` (changes_since) */
+export const WikiChangesRequestSchema = z.object({
+  branch: GitBranchNameSchema,
+  /** 기준 커밋(위키 저장소 커밋 해시) — 이 커밋 이후의 변경만 반환한다 */
+  since: z.string().regex(/^[0-9a-f]{4,64}$/),
+})
+
+export const WikiChangedFileSchema = z.object({
+  path: NonEmptyStringSchema,
+  /** 마지막 수정 커밋 시각(ISO) */
+  timestamp: NonEmptyStringSchema,
+  author: z.string(),
+  /** 마지막 수정 커밋 short hash */
+  commit: z.string(),
+})
+
+export const WikiChangesResponseSchema = z.object({
+  branch: NonEmptyStringSchema,
+  since: NonEmptyStringSchema,
+  changes: z.array(WikiChangedFileSchema),
+})
+
+/** M4+.2 — `POST /api/v1/wiki/:branch/merge` (branch를 into로 병합) */
+export const WikiMergeRequestSchema = z.object({
+  branch: GitBranchNameSchema,
+  into: GitBranchNameSchema,
+})
+
+/** 충돌 시 서버는 409 {error:"merge_conflict", conflict_id}를 반환하고 client가 conflict 변형으로 매핑한다 */
+export const WikiMergeResponseSchema = z.discriminatedUnion("status", [
+  z.object({ status: z.literal("merged") }),
+  z.object({ status: z.literal("conflict"), conflict_id: NonEmptyStringSchema }),
+])
+
+export const MergeConflictErrorSchema = z.object({
+  error: z.literal("merge_conflict"),
+  conflict_id: NonEmptyStringSchema,
+})
+
+/** M4+.3 — 진행률 보드: ingest progress_updates의 feature별 최신 상태 집계 */
+export const FeatureProgressSchema = z.object({
+  feature: NonEmptyStringSchema,
+  status: ProgressStatusSchema,
+  note: z.string(),
+  branch: NonEmptyStringSchema,
+  updated_at: NonEmptyStringSchema,
+  source_ingest_id: NonEmptyStringSchema,
+})
+
+export const ProgressBoardRequestSchema = z.object({
+  /** 미지정 시 전 브랜치의 집계를 반환한다 */
+  branch: GitBranchNameSchema.optional(),
+})
+
+export const ProgressBoardResponseSchema = z.object({
+  items: z.array(FeatureProgressSchema),
+})
+
+/** M4+.4 — `POST /api/v1/search` 시맨틱(임베딩) 검색, provider 부재 시 키워드 폴백 */
+export const SearchRequestSchema = z.object({
+  branch: GitBranchNameSchema,
+  query: NonEmptyStringSchema,
+  top_k: z.number().int().min(1).max(50).optional(),
+})
+
+export const SearchResultSchema = z.object({
+  path: NonEmptyStringSchema,
+  section: NonEmptyStringSchema.optional(),
+  score: z.number(),
+  snippet: z.string(),
+})
+
+export const SearchResponseSchema = z.object({
+  branch: NonEmptyStringSchema,
+  /** semantic = 임베딩 코사인 / keyword = 결정적 키워드 폴백 — CI 무키 환경 검증용 표식 */
+  mode: z.enum(["semantic", "keyword"]),
+  results: z.array(SearchResultSchema),
+})
+
 export const AdminGitTestConnectionResponseSchema = z.object({
   status: z.enum(["ok", "failed"]),
   message: z.string().optional(),
@@ -360,6 +440,7 @@ export const ErrorBodySchema = z.union([
   BranchLockedErrorSchema,
   UnauthorizedErrorSchema,
   IngestRejectedResponseSchema,
+  MergeConflictErrorSchema,
 ])
 
 export type PaginationRequest = z.infer<typeof PaginationRequestSchema>
@@ -424,3 +505,15 @@ export type AdminMemberEnableResponse = z.infer<typeof AdminMemberEnableResponse
 export type BranchLockedError = z.infer<typeof BranchLockedErrorSchema>
 export type UnauthorizedError = z.infer<typeof UnauthorizedErrorSchema>
 export type ErrorBody = z.infer<typeof ErrorBodySchema>
+export type WikiChangesRequest = z.infer<typeof WikiChangesRequestSchema>
+export type WikiChangedFile = z.infer<typeof WikiChangedFileSchema>
+export type WikiChangesResponse = z.infer<typeof WikiChangesResponseSchema>
+export type WikiMergeRequest = z.infer<typeof WikiMergeRequestSchema>
+export type WikiMergeResponse = z.infer<typeof WikiMergeResponseSchema>
+export type MergeConflictError = z.infer<typeof MergeConflictErrorSchema>
+export type FeatureProgress = z.infer<typeof FeatureProgressSchema>
+export type ProgressBoardRequest = z.infer<typeof ProgressBoardRequestSchema>
+export type ProgressBoardResponse = z.infer<typeof ProgressBoardResponseSchema>
+export type SearchRequest = z.infer<typeof SearchRequestSchema>
+export type SearchResult = z.infer<typeof SearchResultSchema>
+export type SearchResponse = z.infer<typeof SearchResponseSchema>

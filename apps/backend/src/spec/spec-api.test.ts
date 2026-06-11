@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest"
 import { MockProvider } from "../llm/provider.js"
 import { buildServer } from "../server.js"
 import { createDatabase } from "../storage/database.js"
+import { estimateTokens } from "./context-budget.js"
 
 const secret = "0123456789abcdef0123456789abcdef"
 
@@ -460,6 +461,55 @@ describe("spec REST API", () => {
     // 양의 정수가 아니면 422.
     const invalid = await fetchContext({ budget_tokens: 0 })
     expect(invalid.statusCode).toBe(422)
+
+    await server.close()
+    database.close()
+  })
+
+  it("injects steering.md ahead of overview and preserves it under budget cuts", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const dataDir = mkdtempSync(join(tmpdir(), "specraft-api-steering-"))
+    const server = buildServer({ database, secret, dataDir })
+    const admin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: { email: "admin@example.com", password: "password", name: "Admin" },
+    })
+    const cookie = admin.cookies[0]?.value ?? ""
+    type ContextBody = {
+      readonly overview: string
+      readonly index: string
+      readonly truncated?: boolean
+    }
+    const fetchContext = async (extra: Record<string, unknown> = {}) =>
+      server.inject({
+        method: "POST",
+        url: "/api/v1/context",
+        cookies: { specraft_session: cookie },
+        payload: { branch: "main", commit_hash: "abc123", ...extra },
+      })
+
+    // steering.md 부재 — 기존 응답 그대로.
+    const before = (await fetchContext()).json<ContextBody>()
+    expect(before.overview).not.toContain("## Steering")
+
+    // 위키 워크트리에 steering.md를 둔다(첫 context 호출로 워크트리는 이미 생성됨).
+    const steeringText = "Always anchor every artifact to branch+commit."
+    writeFileSync(join(dataDir, "workspace", "wiki", "main", "steering.md"), `${steeringText}\n`)
+
+    const injected = (await fetchContext()).json<ContextBody>()
+    expect(injected.overview.startsWith(`## Steering\n${steeringText}`)).toBe(true)
+    expect(injected.overview).toContain(before.overview)
+    expect(injected.index).toBe(before.index)
+
+    // 빠듯한 예산 — index와 steering은 통째로 보존되고 overview만 절단된다.
+    const steeringBlock = `## Steering\n${steeringText}`
+    const tightBudget = estimateTokens(before.index) + estimateTokens(steeringBlock) + 1
+    const tight = (await fetchContext({ budget_tokens: tightBudget })).json<ContextBody>()
+    expect(tight.truncated).toBe(true)
+    expect(tight.overview.startsWith(steeringBlock)).toBe(true)
+    expect(tight.overview).toContain("[truncated")
+    expect(tight.index).toBe(before.index)
 
     await server.close()
     database.close()

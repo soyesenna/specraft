@@ -44,4 +44,31 @@ describe("context token budget (M3.6)", () => {
     expect(result.truncated).toBe(true)
     expect(result.overview).toContain("[truncated")
   })
+
+  // M4+.5 steering 주입 — 보존 순서: steering ≥ index > overview.
+  describe("steering preservation", () => {
+    const steering = "## Steering\nAlways anchor outputs to branch+commit."
+
+    it("prepends steering without truncation when within budget", async () => {
+      const result = await fitContextToBudget({ overview, index, steering, budgetTokens: 100000 })
+      expect(result.truncated).toBe(false)
+      expect(result.overview).toBe(`${steering}\n\n${overview}`)
+    })
+
+    it("keeps steering whole while overview is truncated under a tight budget", async () => {
+      const budget = estimateTokens(index) + estimateTokens(steering) + 20
+      const result = await fitContextToBudget({ overview, index, steering, budgetTokens: budget })
+      expect(result.truncated).toBe(true)
+      expect(result.overview.startsWith(steering)).toBe(true)
+      expect(result.overview).toContain("[truncated")
+    })
+
+    it("keeps steering and index even when they alone exceed the budget", async () => {
+      const result = await fitContextToBudget({ overview, index, steering, budgetTokens: 1 })
+      expect(result.truncated).toBe(true)
+      expect(result.overview.startsWith(steering)).toBe(true)
+      // overview 본문은 마커로 대체되지만 steering 블록은 절대 잘리지 않는다.
+      expect(result.overview).toMatch(/\.\.\.\[truncated \d+ tokens\]$/)
+    })
+  })
 })

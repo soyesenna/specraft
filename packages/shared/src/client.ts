@@ -35,17 +35,26 @@ import {
   IngestLogListResponseSchema,
   IngestPayloadSchema,
   IngestResponseSchema,
+  MergeConflictErrorSchema,
   OkResponseSchema,
   PaginationRequestSchema,
+  ProgressBoardRequestSchema,
+  ProgressBoardResponseSchema,
   QueryLogDetailSchema,
   QueryLogListResponseSchema,
   QueryRequestSchema,
   QueryResponseSchema,
+  SearchRequestSchema,
+  SearchResponseSchema,
   StatusResponseSchema,
+  WikiChangesRequestSchema,
+  WikiChangesResponseSchema,
   WikiGraphRequestSchema,
   WikiGraphResponseSchema,
   WikiHistoryRequestSchema,
   WikiHistoryResponseSchema,
+  WikiMergeRequestSchema,
+  WikiMergeResponseSchema,
   WikiPageRequestSchema,
   WikiPageResponseSchema,
   WikiTreeRequestSchema,
@@ -308,6 +317,52 @@ export function createSpecraftClient(config: ClientConfig): SpecraftClient {
         body: { id: parsed.id },
       })
     },
+    wikiChanges: (body) => {
+      const parsed = WikiChangesRequestSchema.parse(body)
+      return request({
+        path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/changes`,
+        method: "GET",
+        responseSchema: WikiChangesResponseSchema,
+        query: [["since", parsed.since]],
+      })
+    },
+    wikiMerge: async (body) => {
+      const parsed = WikiMergeRequestSchema.parse(body)
+      try {
+        return await request({
+          path: `/api/v1/wiki/${encodeURIComponent(parsed.branch)}/merge`,
+          method: "POST",
+          responseSchema: WikiMergeResponseSchema,
+          body: { into: parsed.into },
+        })
+      } catch (error) {
+        // 409 merge_conflict는 정상 흐름의 한 갈래(conflict_id 회수)이므로 응답 변형으로 매핑한다.
+        if (error instanceof SpecraftHttpError && error.status === 409) {
+          const conflict = MergeConflictErrorSchema.safeParse(error.body)
+          if (conflict.success) {
+            return { status: "conflict", conflict_id: conflict.data.conflict_id }
+          }
+        }
+        throw error
+      }
+    },
+    progressBoard: (body = {}) => {
+      const parsed = ProgressBoardRequestSchema.parse(body)
+      return request({
+        path: "/api/v1/progress",
+        method: "GET",
+        responseSchema: ProgressBoardResponseSchema,
+        query: [["branch", parsed.branch]],
+      })
+    },
+    search: (body) =>
+      request({
+        path: "/api/v1/search",
+        method: "POST",
+        requestSchema: SearchRequestSchema,
+        responseSchema: SearchResponseSchema,
+        body,
+      }),
   }
 }
 

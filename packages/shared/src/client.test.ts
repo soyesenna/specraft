@@ -87,6 +87,10 @@ describe("Specraft client", () => {
       ["GET /api/v1/wiki/main/history", { branch: "main", path: "index.md", versions: [] }],
       ["POST /api/v1/admin/git/test-connection", { status: "ok" }],
       ["POST /api/v1/admin/members/enable", { status: "ok" }],
+      ["GET /api/v1/wiki/main/changes", { branch: "main", since: "abc123", changes: [] }],
+      ["POST /api/v1/wiki/feature/merge", { status: "merged" }],
+      ["GET /api/v1/progress", { items: [] }],
+      ["POST /api/v1/search", { branch: "main", mode: "keyword", results: [] }],
     ])
     const client = createSpecraftClient({
       baseUrl: "https://specraft.test",
@@ -167,8 +171,12 @@ describe("Specraft client", () => {
     await client.wikiHistory({ branch: "main", path: "index.md" })
     await client.testGitConnection()
     await client.enableAdminMember({ id: "mem-1" })
+    await client.wikiChanges({ branch: "main", since: "abc123" })
+    await client.wikiMerge({ branch: "feature", into: "main" })
+    await client.progressBoard({ branch: "main" })
+    await client.search({ branch: "main", query: "telemetry", top_k: 5 })
 
-    expect(calls).toHaveLength(28)
+    expect(calls).toHaveLength(32)
     expect(calls).toContainEqual({
       url: "https://specraft.test/api/v1/admin/members/mem-1/disable",
       method: "PUT",
@@ -204,5 +212,53 @@ describe("Specraft client", () => {
     expect(
       calls.find((call) => call.url.endsWith("/api/v1/conflicts/conf-1/resolve"))?.contentType,
     ).toBe("application/json")
+    expect(calls).toContainEqual({
+      url: "https://specraft.test/api/v1/wiki/main/changes?since=abc123",
+      method: "GET",
+      body: "",
+      contentType: null,
+    })
+    expect(calls.find((call) => call.url.endsWith("/api/v1/wiki/feature/merge"))?.body).toBe(
+      JSON.stringify({ into: "main" }),
+    )
+    expect(calls).toContainEqual({
+      url: "https://specraft.test/api/v1/progress?branch=main",
+      method: "GET",
+      body: "",
+      contentType: null,
+    })
+    expect(calls.find((call) => call.url.endsWith("/api/v1/search"))?.body).toBe(
+      JSON.stringify({ branch: "main", query: "telemetry", top_k: 5 }),
+    )
+  })
+
+  it("maps merge conflicts (409 merge_conflict) into a typed conflict response", async () => {
+    const client = createSpecraftClient({
+      baseUrl: "https://specraft.test",
+      apiKey: "sk-spcrft-test",
+      fetch: async () =>
+        new Response(JSON.stringify({ error: "merge_conflict", conflict_id: "conf-9" }), {
+          status: 409,
+          headers: { "content-type": "application/json" },
+        }),
+    })
+    await expect(client.wikiMerge({ branch: "dev", into: "main" })).resolves.toEqual({
+      status: "conflict",
+      conflict_id: "conf-9",
+    })
+
+    // merge_conflict가 아닌 409(branch_locked 등)는 그대로 에러로 던진다.
+    const lockedClient = createSpecraftClient({
+      baseUrl: "https://specraft.test",
+      apiKey: "sk-spcrft-test",
+      fetch: async () =>
+        new Response(JSON.stringify({ error: "branch_locked", conflict_id: "conf-1" }), {
+          status: 409,
+          headers: { "content-type": "application/json" },
+        }),
+    })
+    await expect(lockedClient.wikiMerge({ branch: "dev", into: "main" })).rejects.toMatchObject({
+      status: 409,
+    })
   })
 })
