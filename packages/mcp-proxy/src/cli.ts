@@ -2,9 +2,10 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { createSpecraftClient } from "@specraft/shared"
 
 import { findSpecraftConfig } from "./config.js"
+import { resolveApiKey, resolveServerUrl } from "./credentials.js"
 import { decideStop } from "./gate.js"
 import { isHeadPushed, readGitSnapshot, readRepoRoot } from "./git.js"
-import { createSpecraftMcpServer } from "./mcp.js"
+import { createSpecraftMcpServer, mcpServerVersion } from "./mcp.js"
 import {
   pendingReplaySessions,
   readSessionOrNull,
@@ -46,18 +47,6 @@ function resolveSessionId(): string | null {
     )
   }
   return id
-}
-
-function findServerUrl(cwd: string): string | null {
-  return process.env["SPECRAFT_SERVER_URL"] ?? findSpecraftConfig(cwd)?.server_url ?? null
-}
-
-function serverUrl(cwd: string): string {
-  const url = findServerUrl(cwd)
-  if (!url) {
-    throw new Error("SPECRAFT_SERVER_URL or .specraft.json server_url is required")
-  }
-  return url
 }
 
 function strictMode(cwd: string): boolean {
@@ -134,15 +123,17 @@ async function runSessionStartHook(cwd: string): Promise<void> {
     })
   }
   const pending = replayInstruction(currentHome, currentSessionId)
-  const apiKey = process.env["SPECRAFT_API_KEY"]
-  const url = findServerUrl(cwd)
-  if (!apiKey || !url) {
+  const apiKey = resolveApiKey({ home: currentHome })
+  if (!apiKey) {
     process.stdout.write(
       `${pending}Use specraft context before repository answers. Run specraft_status if context injection is unavailable.\n`,
     )
     return
   }
-  const client = createSpecraftClient({ apiKey, baseUrl: url })
+  const client = createSpecraftClient({
+    apiKey,
+    baseUrl: resolveServerUrl({ cwd, home: currentHome }),
+  })
   const context = await client.context({ branch: snapshot.branch, commit_hash: snapshot.head })
   process.stdout.write(
     `${pending}Specraft context for ${snapshot.branch}@${snapshot.head}:\n\n${context.overview}\n\n${context.index}\n`,
@@ -151,13 +142,16 @@ async function runSessionStartHook(cwd: string): Promise<void> {
 
 async function runContextHook(cwd: string): Promise<void> {
   const snapshot = readGitSnapshot(cwd)
-  const apiKey = process.env["SPECRAFT_API_KEY"]
-  const url = findServerUrl(cwd)
-  if (!apiKey || !url) {
+  const currentHome = homeDir()
+  const apiKey = resolveApiKey({ home: currentHome })
+  if (!apiKey) {
     process.stdout.write("Rehydrate specraft context with specraft_query before continuing.\n")
     return
   }
-  const client = createSpecraftClient({ apiKey, baseUrl: url })
+  const client = createSpecraftClient({
+    apiKey,
+    baseUrl: resolveServerUrl({ cwd, home: currentHome }),
+  })
   const context = await client.context({ branch: snapshot.branch, commit_hash: snapshot.head })
   process.stdout.write(
     `Specraft context for ${snapshot.branch}@${snapshot.head}:\n\n${context.overview}\n\n${context.index}\n`,
@@ -165,16 +159,22 @@ async function runContextHook(cwd: string): Promise<void> {
 }
 
 async function runMcp(cwd: string): Promise<void> {
-  const apiKey = process.env["SPECRAFT_API_KEY"]
+  const currentHome = homeDir()
+  const apiKey = resolveApiKey({ home: currentHome })
   if (!apiKey) {
-    throw new Error("SPECRAFT_API_KEY is required")
+    throw new Error(
+      "SPECRAFT_API_KEY is required: set the env var or add SPECRAFT_API_KEY=<key> to ~/.specraft/credentials",
+    )
   }
-  const client = createSpecraftClient({ apiKey, baseUrl: serverUrl(cwd) })
+  const client = createSpecraftClient({
+    apiKey,
+    baseUrl: resolveServerUrl({ cwd, home: currentHome }),
+  })
   const server = createSpecraftMcpServer({
     client,
     gitSnapshot: async () => readGitSnapshot(cwd),
     headPushed: async () => isHeadPushed(cwd),
-    home: homeDir(),
+    home: currentHome,
     repoRoot: () => readRepoRoot(cwd),
     sessionId: resolveSessionId(),
   })
@@ -184,6 +184,10 @@ async function runMcp(cwd: string): Promise<void> {
 async function main(): Promise<void> {
   const cwd = process.cwd()
   const [command, subcommand] = process.argv.slice(2)
+  if (command === "--version") {
+    process.stdout.write(`${mcpServerVersion()}\n`)
+    return
+  }
   if (command === "hook" && subcommand === "stop") {
     runStopHook(cwd)
     return

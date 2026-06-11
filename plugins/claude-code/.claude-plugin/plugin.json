@@ -4,5 +4,13 @@
   "description": "Injects specraft project context, exposes MCP tools, and enforces commit/push/ingest stop gates.",
   "author": {
     "name": "specraft"
+  },
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "Specraft API key",
+      "description": "Stored in the system keychain and exported to the specraft MCP proxy as CLAUDE_PLUGIN_OPTION_API_KEY. Leave empty to use the SPECRAFT_API_KEY env var or ~/.specraft/credentials instead.",
+      "sensitive": true
+    }
   }
 }

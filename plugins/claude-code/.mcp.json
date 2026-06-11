@@ -1,11 +1,8 @@
 {
   "mcpServers": {
     "specraft": {
-      "command": "specraft-mcp-proxy",
-      "env": {
-        "SPECRAFT_SERVER_URL": "${SPECRAFT_SERVER_URL}",
-        "SPECRAFT_API_KEY": "${SPECRAFT_API_KEY}"
-      }
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/proxy/cli.js"]
     }
   }
 }

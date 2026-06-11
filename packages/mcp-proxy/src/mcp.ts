@@ -19,7 +19,15 @@ export const MCP_SERVER_NAME = "specraft"
 
 const PackageManifestSchema = z.object({ version: z.string().min(1) })
 
+/** Inlined at bundle time by the tsup `define` option (see tsup.config.ts). */
+declare const __SPECRAFT_PROXY_VERSION__: string | undefined
+
 export function mcpServerVersion(): string {
+  // Single-file bundles cannot resolve ../package.json relative to import.meta.url,
+  // so the bundle carries the version as a build-time constant instead.
+  if (typeof __SPECRAFT_PROXY_VERSION__ === "string" && __SPECRAFT_PROXY_VERSION__ !== "") {
+    return __SPECRAFT_PROXY_VERSION__
+  }
   try {
     const manifest = PackageManifestSchema.parse(
       JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")),

@@ -26,7 +26,8 @@ describe("plugin packaging contracts", () => {
     expect(plugin["name"]).toBe("specraft")
     expect(JSON.stringify(hooks)).toContain("SessionStart")
     expect(JSON.stringify(hooks)).toContain("Stop")
-    expect(JSON.stringify(mcp)).toContain("specraft-mcp-proxy")
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: literal Claude Code expansion token, not a template
+    expect(JSON.stringify(mcp)).toContain("${CLAUDE_PLUGIN_ROOT}/proxy/cli.js")
     expect(stopHook).toContain("specraft-mcp-proxy")
     expect(stopHook).toContain("hook stop")
     expect(promptHook).toContain("hook user-prompt-submit")

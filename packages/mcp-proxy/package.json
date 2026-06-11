@@ -1,27 +1,28 @@
 {
   "name": "@specraft/mcp-proxy",
   "version": "0.1.0",
-  "private": true,
+  "description": "Specraft MCP stdio proxy: branch-aware spec wiki tools (query/ingest/status/defer) and stop-gate hooks for Claude Code and Codex.",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "bin": {
-    "specraft-mcp-proxy": "./dist/cli.js"
+    "specraft-mcp-proxy": "dist-bundle/cli.js"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+  "files": [
+    "dist-bundle"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && pnpm bundle",
+    "bundle": "tsup && node scripts/copy-bundle.mjs",
+    "prepublishOnly": "pnpm build",
     "test": "vitest run",
     "typecheck": "pnpm --filter @specraft/shared build && tsc -p tsconfig.json --noEmit"
   },
-  "dependencies": {
+  "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@specraft/shared": "workspace:*",
+    "tsup": "^8.5.0",
     "zod": "4.4.3"
   }
 }

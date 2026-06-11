@@ -1,4 +1,5 @@
 export * from "./config.js"
+export * from "./credentials.js"
 export * from "./defer-state.js"
 export * from "./gate.js"
 export * from "./mcp.js"
