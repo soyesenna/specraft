@@ -2,8 +2,8 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { createSpecraftClient } from "@specraft/shared"
 
 import { findSpecraftConfig } from "./config.js"
-import { evaluateStopGate, readGitGateState } from "./gate.js"
-import { isHeadPushed, readGitSnapshot } from "./git.js"
+import { decideStop } from "./gate.js"
+import { isHeadPushed, readGitSnapshot, readRepoRoot } from "./git.js"
 import { createSpecraftMcpServer } from "./mcp.js"
 import {
   pendingReplaySessions,
@@ -25,13 +25,27 @@ function homeDir(): string {
   return home
 }
 
-function sessionId(): string {
+function envOrNull(name: string): string | null {
+  const value = process.env[name]
+  return value !== undefined && value !== "" ? value : null
+}
+
+function sessionId(): string | null {
   return (
-    process.env["SPECRAFT_SESSION_ID"] ??
-    process.env["CODEX_SESSION_ID"] ??
-    process.env["CLAUDE_SESSION_ID"] ??
-    "default"
+    envOrNull("SPECRAFT_SESSION_ID") ??
+    envOrNull("CLAUDE_CODE_SESSION_ID") ??
+    envOrNull("CODEX_SESSION_ID")
   )
+}
+
+function resolveSessionId(): string | null {
+  const id = sessionId()
+  if (id === null) {
+    process.stderr.write(
+      "specraft: session id missing; running in safe mode without session tracking (세션 추적 없는 안전 모드)\n",
+    )
+  }
+  return id
 }
 
 function findServerUrl(cwd: string): string | null {
@@ -54,8 +68,14 @@ function writeHook(output: HookOutput): void {
   process.stdout.write(`${JSON.stringify(output)}\n`)
 }
 
-function replayInstruction(home: string, currentSessionId: string): string {
-  const pending = pendingReplaySessions(home, { excludeSessionId: currentSessionId })
+function pendingForSession(home: string, currentSessionId: string | null) {
+  return currentSessionId === null
+    ? pendingReplaySessions(home)
+    : pendingReplaySessions(home, { excludeSessionId: currentSessionId })
+}
+
+function replayInstruction(home: string, currentSessionId: string | null): string {
+  const pending = pendingForSession(home, currentSessionId)
   if (pending.length === 0) {
     return ""
   }
@@ -68,16 +88,19 @@ function replayInstruction(home: string, currentSessionId: string): string {
 
 function runStopHook(cwd: string): void {
   const currentHome = homeDir()
-  const currentSessionId = sessionId()
-  const decision = evaluateStopGate(
-    readGitGateState({
-      cwd,
-      home: currentHome,
-      sessionId: currentSessionId,
-      strictMode: strictMode(cwd),
-    }),
-  )
-  if (decision.decision === "allow" && readSessionOrNull(currentHome, currentSessionId)) {
+  const currentSessionId = resolveSessionId()
+  const decision = decideStop({
+    cwd,
+    home: currentHome,
+    sessionId: currentSessionId,
+    strictMode: strictMode(cwd),
+  })
+  if (
+    decision.decision === "allow" &&
+    !decision.deferred &&
+    currentSessionId !== null &&
+    readSessionOrNull(currentHome, currentSessionId)
+  ) {
     resolveSession(currentHome, currentSessionId)
   }
   writeHook({
@@ -87,7 +110,7 @@ function runStopHook(cwd: string): void {
 }
 
 function runUserPromptHook(): void {
-  const pending = pendingReplaySessions(homeDir(), { excludeSessionId: sessionId() })
+  const pending = pendingForSession(homeDir(), resolveSessionId())
   if (pending.length > 0) {
     writeHook({
       decision: "block",
@@ -101,13 +124,15 @@ function runUserPromptHook(): void {
 async function runSessionStartHook(cwd: string): Promise<void> {
   const snapshot = readGitSnapshot(cwd)
   const currentHome = homeDir()
-  const currentSessionId = sessionId()
-  startSession({
-    branch: snapshot.branch,
-    home: currentHome,
-    sessionId: currentSessionId,
-    startedHead: snapshot.head,
-  })
+  const currentSessionId = resolveSessionId()
+  if (currentSessionId !== null) {
+    startSession({
+      branch: snapshot.branch,
+      home: currentHome,
+      sessionId: currentSessionId,
+      startedHead: snapshot.head,
+    })
+  }
   const pending = replayInstruction(currentHome, currentSessionId)
   const apiKey = process.env["SPECRAFT_API_KEY"]
   const url = findServerUrl(cwd)
@@ -150,7 +175,8 @@ async function runMcp(cwd: string): Promise<void> {
     gitSnapshot: async () => readGitSnapshot(cwd),
     headPushed: async () => isHeadPushed(cwd),
     home: homeDir(),
-    sessionId: sessionId(),
+    repoRoot: () => readRepoRoot(cwd),
+    sessionId: resolveSessionId(),
   })
   await server.connect(new StdioServerTransport())
 }

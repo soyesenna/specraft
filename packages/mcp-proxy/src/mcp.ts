@@ -5,8 +5,10 @@ import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js"
 import { z } from "zod"
 
 import {
+  DeferToolInputSchema,
   IngestToolInputSchema,
   QueryToolInputSchema,
+  specraftDefer,
   specraftIngest,
   specraftQuery,
   specraftStatus,
@@ -58,6 +60,15 @@ export function createSpecraftMcpServer(context: ToolContext): McpServer {
     "specraft_status",
     { description: "Read specraft server status and branch locks." },
     async () => toToolResult(await specraftStatus(context)),
+  )
+  server.registerTool(
+    "specraft_defer",
+    {
+      description:
+        "Record a stop-gate defer marker for the current repo+branch+HEAD: the reason is logged and exactly one stop is allowed (consume-on-use). Works offline without the specraft server.",
+      inputSchema: DeferToolInputSchema.shape,
+    },
+    async (input) => toToolResult(await specraftDefer(context, DeferToolInputSchema.parse(input))),
   )
   return server
 }

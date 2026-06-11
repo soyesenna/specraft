@@ -174,6 +174,7 @@ describe("mcp proxy core", () => {
       hasNewCommits: false,
       headPushed: true,
       ingested: false,
+      safeMode: false,
       strictMode: true,
       worktreeClean: true,
     })
@@ -194,6 +195,7 @@ describe("mcp proxy core", () => {
       hasNewCommits: true,
       headPushed: true,
       ingested: true,
+      safeMode: false,
       strictMode: true,
       worktreeClean: true,
     })
@@ -255,6 +257,7 @@ describe("mcp sdk server", () => {
       "specraft_query",
       "specraft_ingest",
       "specraft_status",
+      "specraft_defer",
     ])
     const query = tools.find((tool) => tool.name === "specraft_query")
     expect(query?.inputSchema).toMatchObject({ type: "object" })

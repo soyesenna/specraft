@@ -19,6 +19,10 @@ export function readGitSnapshot(cwd: string): GitSnapshot {
   }
 }
 
+export function readRepoRoot(cwd: string): string {
+  return git(cwd, ["rev-parse", "--show-toplevel"])
+}
+
 export function isWorktreeClean(cwd: string): boolean {
   return git(cwd, ["status", "--porcelain"]) === ""
 }
