@@ -1,0 +1,9 @@
+{
+  "name": "specraft",
+  "plugins": [
+    {
+      "name": "specraft",
+      "source": "./plugins/codex"
+    }
+  ]
+}

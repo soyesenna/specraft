@@ -1,0 +1,29 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "specraft",
+  "description": "Single-project spec source server tooling: context injection, MCP query/ingest tools, and commit/push/ingest stop gates for AI coding agents.",
+  "owner": {
+    "name": "soyesenna"
+  },
+  "plugins": [
+    {
+      "name": "specraft",
+      "description": "Injects specraft project context, exposes MCP tools, and enforces commit/push/ingest stop gates.",
+      "version": "0.1.0",
+      "author": {
+        "name": "specraft"
+      },
+      "source": "./plugins/claude-code",
+      "category": "development",
+      "homepage": "https://github.com/soyesenna/specraft",
+      "tags": [
+        "spec",
+        "wiki",
+        "mcp",
+        "stop-gate",
+        "context-injection"
+      ]
+    }
+  ],
+  "version": "0.1.0"
+}

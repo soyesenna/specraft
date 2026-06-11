@@ -41,9 +41,30 @@ The compose stack stores `/data/specraft.db`, `/data/wiki.git`, `/data/code-mirr
 
 ## Plugins
 
-- `packages/mcp-proxy` exposes `specraft_status`, `specraft_query`, and `specraft_ingest` style behavior through the shared REST client.
-- `plugins/claude-code` contains Claude Code metadata, hooks, MCP registration, `/specraft-setup`, and `/specraft-init`.
-- `plugins/codex` contains the Codex `.codex-plugin` manifest, matcher-free hooks, and setup/init skills.
+- `packages/mcp-proxy` is `specraft-mcp-proxy`, an MCP stdio server built on the official `@modelcontextprotocol/sdk` exposing `specraft_status`, `specraft_query`, and `specraft_ingest` through the shared REST client.
+- `plugins/claude-code` contains the Claude Code plugin: session context hooks, stop gates, MCP registration, `/specraft-setup`, and `/specraft-init`.
+- `plugins/codex` contains the Codex plugin: `.codex-plugin` manifest, the same four hooks, and setup/init skills.
+
+### Install (Claude Code)
+
+This repo is a Claude Code marketplace (`.claude-plugin/marketplace.json`). Inside Claude Code:
+
+```
+/plugin marketplace add soyesenna/specraft
+/plugin install specraft@specraft
+```
+
+`/plugin marketplace add` also accepts a local path to a checkout of this repo. For development, load the plugin for a single session without installing:
+
+```sh
+claude --plugin-dir ./plugins/claude-code
+```
+
+Configuration: the agent-side `.specraft.json` (`server_url`, `strict_mode`) plus `SPECRAFT_SERVER_URL` / `SPECRAFT_API_KEY` environment variables for the MCP proxy.
+
+### Install (Codex)
+
+The Codex plugin lives in `plugins/codex`, and this repo ships a Codex marketplace manifest at `.agents/plugins/marketplace.json` pointing to it. Codex does not load plugin hooks yet (openai/codex#16430), so a global-hooks install script is planned for a later milestone; its location will be documented in `plugins/codex/README.md` once it lands.
 
 Stop gates are hard by default: dirty worktree, unpushed HEAD, or missing ingest marker blocks ending a write session. Read-only sessions are exempt.
 
