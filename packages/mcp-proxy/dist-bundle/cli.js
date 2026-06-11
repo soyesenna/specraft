@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { createRequire } from 'node:module';
 import process3 from 'process';
-import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync, mkdirSync, statSync } from 'fs';
+import { existsSync, rmSync, writeFileSync, readFileSync, renameSync, mkdirSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
-import { createHash } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
 import { execFileSync, spawnSync } from 'child_process';
 
 createRequire(import.meta.url);
@@ -23034,13 +23034,17 @@ var IngestPayloadSchema = external_exports.object({
 });
 var ContextRequestSchema = external_exports.object({
   branch: GitBranchNameSchema,
-  commit_hash: NonEmptyStringSchema
+  commit_hash: NonEmptyStringSchema,
+  // M3.6 context 토큰 예산(optional, 양의 정수) — 미지정 시 현행(무제한) 동작 유지(하위 호환).
+  budget_tokens: external_exports.number().int().positive().optional()
 });
 var ContextResponseSchema = external_exports.object({
   overview: external_exports.string(),
   index: external_exports.string(),
   branch_status: BranchStatusSchema,
-  wiki_head: NonEmptyStringSchema
+  wiki_head: NonEmptyStringSchema,
+  // M3.6 — budget_tokens 지정 요청에서만 채워지는 절단 여부 플래그(additive, 하위 호환).
+  truncated: external_exports.boolean().optional()
 });
 var QueryRequestSchema = ContextRequestSchema.extend({
   question: NonEmptyStringSchema
@@ -23757,21 +23761,19 @@ var DeferMarkerSchema = external_exports.object({
   head: external_exports.string(),
   reason: external_exports.string(),
   created_at: external_exports.string(),
-  consumed: external_exports.boolean().default(false)
+  consumed: external_exports.boolean().default(false),
+  consumed_at: external_exports.string().nullable().default(null)
 });
+var REPEATED_DEFER_WARNING_THRESHOLD = 3;
+var CONSUMED_DEFER_RETENTION_MS = 30 * 24 * 60 * 60 * 1e3;
 function defersDir(home) {
   return join(home, ".specraft", "defers");
 }
-function markerFileName(key) {
+function deferFileName(key) {
   const digest = createHash("sha256").update(`${key.repoPath}
 ${key.branch}
 ${key.head}`).digest("hex");
-  return `${digest.slice(0, 40)}.json`;
-}
-function writeMarker(home, key, marker) {
-  mkdirSync(defersDir(home), { recursive: true });
-  writeFileSync(join(defersDir(home), markerFileName(key)), `${JSON.stringify(marker, null, 2)}
-`);
+  return `${digest.slice(0, 16)}-${Date.now().toString(36)}-${randomBytes(3).toString("hex")}.json`;
 }
 function recordDefer(home, key, reason) {
   const marker = {
@@ -23780,17 +23782,20 @@ function recordDefer(home, key, reason) {
     head: key.head,
     reason,
     created_at: (/* @__PURE__ */ new Date()).toISOString(),
-    consumed: false
+    consumed: false,
+    consumed_at: null
   };
-  writeMarker(home, key, marker);
+  mkdirSync(defersDir(home), { recursive: true });
+  writeFileSync(join(defersDir(home), deferFileName(key)), `${JSON.stringify(marker, null, 2)}
+`);
   return marker;
 }
-function consumeDefer(home, key) {
+function scanDefers(home, now) {
   const dir = defersDir(home);
   if (!existsSync(dir)) {
-    return null;
+    return [];
   }
-  let match = null;
+  const entries = [];
   for (const name of readdirSync(dir).filter((entry) => entry.endsWith(".json")).sort()) {
     const path = join(dir, name);
     let marker;
@@ -23799,21 +23804,43 @@ function consumeDefer(home, key) {
     } catch {
       continue;
     }
+    if (marker.consumed) {
+      const consumedAt = Date.parse(marker.consumed_at ?? marker.created_at);
+      if (!Number.isNaN(consumedAt) && now - consumedAt > CONSUMED_DEFER_RETENTION_MS) {
+        rmSync(path, { force: true });
+        continue;
+      }
+    }
+    entries.push({ marker, path });
+  }
+  return entries;
+}
+function consumeDefer(home, key) {
+  let match = null;
+  for (const { marker, path } of scanDefers(home, Date.now())) {
     if (marker.repo_path !== key.repoPath || marker.branch !== key.branch) {
       continue;
     }
     if (marker.head !== key.head) {
-      rmSync(path, { force: true });
+      if (!marker.consumed) {
+        rmSync(path, { force: true });
+      }
       continue;
     }
     if (marker.consumed || match) {
       continue;
     }
-    match = { ...marker, consumed: true };
+    match = { ...marker, consumed: true, consumed_at: (/* @__PURE__ */ new Date()).toISOString() };
     writeFileSync(path, `${JSON.stringify(match, null, 2)}
 `);
   }
   return match;
+}
+function listDeferHistory(home, filter = {}) {
+  return scanDefers(home, Date.now()).map((entry) => entry.marker).filter((marker) => filter.repoPath === void 0 || marker.repo_path === filter.repoPath).filter((marker) => filter.branch === void 0 || marker.branch === filter.branch).sort((left, right) => right.created_at.localeCompare(left.created_at));
+}
+function countConsumedDefers(home, filter) {
+  return listDeferHistory(home, filter).filter((marker) => marker.consumed).length;
 }
 var gitTimeoutMs = 3e4;
 function git(cwd, args) {
@@ -23831,19 +23858,45 @@ function readGitSnapshot(cwd) {
 function readRepoRoot(cwd) {
   return git(cwd, ["rev-parse", "--show-toplevel"]);
 }
-function isWorktreeClean(cwd) {
-  return git(cwd, ["status", "--porcelain"]) === "";
+function readDirtyState(cwd) {
+  const porcelain = git(cwd, ["status", "--porcelain"]);
+  return {
+    clean: porcelain === "",
+    hash: createHash("sha256").update(porcelain).digest("hex")
+  };
+}
+function readDirtyHash(cwd) {
+  return readDirtyState(cwd).hash;
+}
+function headPushState(cwd) {
+  if (gitStatus(cwd, ["rev-parse", "--abbrev-ref", "@{u}"]) !== 0) {
+    return "no-upstream";
+  }
+  return gitStatus(cwd, ["merge-base", "--is-ancestor", "HEAD", "@{u}"]) === 0 ? "pushed" : "not-pushed";
 }
 function isHeadPushed(cwd) {
-  return gitStatus(cwd, ["merge-base", "--is-ancestor", "HEAD", "@{u}"]) === 0;
+  return headPushState(cwd) === "pushed";
 }
 var SessionMarkerSchema = external_exports.object({
   session_id: external_exports.string(),
   started_at: external_exports.string(),
   branch: external_exports.string(),
   started_head: external_exports.string().nullable().default(null),
+  /**
+   * sha256 snapshot of `git status --porcelain` at session start (plan M3.1).
+   * null = legacy marker: the gate falls back to the old clean-based exemption.
+   */
+  started_dirty_hash: external_exports.string().nullable().default(null),
   ingested: external_exports.boolean(),
-  resolved: external_exports.boolean().default(false)
+  /**
+   * HEAD at the time of the accepted ingest. The gate only trusts the marker
+   * when this matches the current HEAD; legacy boolean-only markers (null) are
+   * never trusted (closes the "one ingest, then more commits" hole).
+   */
+  ingested_head: external_exports.string().nullable().default(null),
+  resolved: external_exports.boolean().default(false),
+  /** Repo root the session ran in. null = legacy marker, treated as matching every repo. */
+  repo_path: external_exports.string().nullable().default(null)
 });
 function sessionsDir(home) {
   return join(home, ".specraft", "sessions");
@@ -23851,10 +23904,23 @@ function sessionsDir(home) {
 function markerPath(home, sessionId2) {
   return join(sessionsDir(home), `${sessionId2}.json`);
 }
-function writeMarker2(home, marker) {
+function writeMarker(home, marker) {
   mkdirSync(sessionsDir(home), { recursive: true });
   writeFileSync(markerPath(home, marker.session_id), `${JSON.stringify(marker, null, 2)}
 `);
+}
+function readMarkerFileOrQuarantine(path) {
+  try {
+    return SessionMarkerSchema.parse(JSON.parse(readFileSync(path, "utf8")));
+  } catch {
+    try {
+      renameSync(path, `${path}.corrupt`);
+      process.stderr.write(`specraft: corrupt session marker quarantined: ${path}.corrupt
+`);
+    } catch {
+    }
+    return null;
+  }
 }
 function startSession(input) {
   const marker = {
@@ -23862,25 +23928,28 @@ function startSession(input) {
     started_at: (/* @__PURE__ */ new Date()).toISOString(),
     branch: input.branch,
     started_head: input.startedHead ?? null,
+    started_dirty_hash: input.startedDirtyHash ?? null,
     ingested: false,
-    resolved: false
+    ingested_head: null,
+    resolved: false,
+    repo_path: input.repoPath ?? null
   };
-  writeMarker2(input.home, marker);
+  writeMarker(input.home, marker);
   return marker;
 }
-function markIngested(home, sessionId2) {
+function markIngested(home, sessionId2, ingestedHead = null) {
   const marker = readSessionOrNull(home, sessionId2);
   if (!marker) {
     return null;
   }
-  const updated = { ...marker, ingested: true };
-  writeMarker2(home, updated);
+  const updated = { ...marker, ingested: true, ingested_head: ingestedHead };
+  writeMarker(home, updated);
   return updated;
 }
 function resolveSession(home, sessionId2) {
   const marker = readSession(home, sessionId2);
   const updated = { ...marker, resolved: true };
-  writeMarker2(home, updated);
+  writeMarker(home, updated);
   return updated;
 }
 function readSession(home, sessionId2) {
@@ -23891,72 +23960,133 @@ function readSessionOrNull(home, sessionId2) {
   if (!existsSync(path)) {
     return null;
   }
-  return SessionMarkerSchema.parse(JSON.parse(readFileSync(path, "utf8")));
+  return readMarkerFileOrQuarantine(path);
 }
 function pendingReplaySessions(home, options = {}) {
   const dir = sessionsDir(home);
   if (!existsSync(dir)) {
     return [];
   }
-  return readdirSync(dir).filter((name) => name.endsWith(".json")).map((name) => SessionMarkerSchema.parse(JSON.parse(readFileSync(join(dir, name), "utf8")))).filter((marker) => marker.session_id !== options.excludeSessionId).filter((marker) => !marker.ingested && !marker.resolved).sort((left, right) => left.started_at.localeCompare(right.started_at));
+  return readdirSync(dir).filter((name) => name.endsWith(".json")).map((name) => readMarkerFileOrQuarantine(join(dir, name))).filter((marker) => marker !== null).filter((marker) => marker.session_id !== options.excludeSessionId).filter((marker) => !marker.ingested && !marker.resolved).filter(
+    (marker) => options.repoPath === void 0 || marker.repo_path === null || marker.repo_path === options.repoPath
+  ).sort((left, right) => left.started_at.localeCompare(right.started_at));
 }
 
 // src/gate.ts
 var STOP_GATE_RESOLUTION_GUIDANCE = "\uD574\uC18C: \uBCC0\uACBD\uC744 commit+push \uD6C4 specraft_ingest\uB97C \uC2E4\uD589\uD558\uAC70\uB098, specraft_defer \uB3C4\uAD6C\uB85C \uC0AC\uC720\uB97C \uAE30\uB85D\uD574 1\uD68C \uC885\uB8CC\uB97C \uD5C8\uC6A9\uD558\uAC70\uB098, .specraft.json\uC5D0 strict_mode=false\uB97C \uC124\uC815\uD558\uC138\uC694.";
+var INGESTED_ALLOW_REASON = "clean, pushed, ingested";
 function blockDecision(reason) {
   return { decision: "block", reason: `${reason} \u2014 ${STOP_GATE_RESOLUTION_GUIDANCE}` };
 }
 function readGitGateState(input) {
   const snapshot = readGitSnapshot(input.cwd);
   const session = input.sessionId === null ? null : readSessionOrNull(input.home, input.sessionId);
+  const dirty = readDirtyState(input.cwd);
   return {
+    // Legacy markers (started_dirty_hash null) and untracked sessions fall back
+    // to the old clean-based exemption semantics.
+    dirtyUnchangedSinceStart: session?.started_dirty_hash != null ? session.started_dirty_hash === dirty.hash : dirty.clean,
     hasNewCommits: session?.started_head ? session.started_head !== snapshot.head : true,
-    headPushed: isHeadPushed(input.cwd),
-    ingested: session?.ingested ?? false,
+    headPushState: headPushState(input.cwd),
+    ingested: session?.ingested_head != null && session.ingested_head === snapshot.head,
     safeMode: input.sessionId === null,
     strictMode: input.strictMode,
-    worktreeClean: isWorktreeClean(input.cwd)
+    worktreeClean: dirty.clean
   };
 }
 function evaluateStopGate(input) {
   if (!input.strictMode) {
     return { decision: "allow", reason: "strict_mode=false" };
   }
-  if (input.backgroundTasksRunning || input.sessionCronsRunning) {
-    return blockDecision("background_tasks/session_crons still running");
+  if (input.sessionCronsRunning) {
+    return blockDecision("session_crons still running");
+  }
+  if (!input.hasNewCommits && input.dirtyUnchangedSinceStart) {
+    return { decision: "allow", reason: "read-only session exemption" };
   }
   if (!input.worktreeClean) {
     return blockDecision("working tree is dirty; commit, push, then ingest");
   }
-  if (!input.hasNewCommits) {
-    return { decision: "allow", reason: "read-only session exemption" };
+  if (input.headPushState === "no-upstream") {
+    return blockDecision("no upstream \u2014 git push -u\uB85C \uC5C5\uC2A4\uD2B8\uB9BC \uC124\uC815 \uD6C4 \uC7AC\uC2DC\uB3C4");
   }
-  if (!input.headPushed) {
+  if (input.headPushState === "not-pushed") {
     return blockDecision("HEAD is not pushed; push before ingest");
   }
   if (input.safeMode) {
     return { decision: "allow", reason: "clean and pushed (safe mode: ingest check skipped)" };
   }
   if (!input.ingested) {
-    return blockDecision("session has pushed commits but no specraft ingest marker");
+    return blockDecision(
+      "session has pushed commits but no specraft ingest marker for the current HEAD"
+    );
   }
-  return { decision: "allow", reason: "clean, pushed, ingested" };
+  return { decision: "allow", reason: INGESTED_ALLOW_REASON };
 }
-function decideStop(input) {
-  const decision = evaluateStopGate(readGitGateState(input));
+function recheckAgainstServer(decision, branch, status) {
+  const lock = status.branch_locks.find((candidate) => candidate.branch === branch);
+  if (!lock) {
+    return decision;
+  }
+  const detail = lock.reason ? `: ${lock.reason}` : "";
+  return {
+    decision: "block",
+    reason: `server status recheck: branch "${branch}" is locked (conflict ${lock.conflict_id}${detail}). specraft_conflicts\uB85C \uCDA9\uB3CC\uC744 \uD655\uC778\xB7\uD574\uC18C\uD55C \uD6C4 \uB2E4\uC2DC \uC885\uB8CC\uD558\uC138\uC694 \u2014 ${STOP_GATE_RESOLUTION_GUIDANCE}`
+  };
+}
+async function decideStop(input, options = {}) {
+  let decision = evaluateStopGate(readGitGateState(input));
+  const snapshot = readGitSnapshot(input.cwd);
+  if (decision.decision === "allow" && decision.reason === INGESTED_ALLOW_REASON && options.serverStatus) {
+    try {
+      decision = recheckAgainstServer(decision, snapshot.branch, await options.serverStatus());
+    } catch (error51) {
+      const message = error51 instanceof Error ? error51.message : String(error51);
+      process.stderr.write(
+        `specraft: server status recheck unavailable (${message}); keeping the local allow (fail-open)
+`
+      );
+    }
+  }
   if (decision.decision === "allow") {
     return decision;
   }
-  const snapshot = readGitSnapshot(input.cwd);
+  const repoPath = readRepoRoot(input.cwd);
   const deferred = consumeDefer(input.home, {
     branch: snapshot.branch,
     head: snapshot.head,
-    repoPath: readRepoRoot(input.cwd)
+    repoPath
   });
   if (deferred) {
-    return { decision: "allow", deferred: true, reason: `deferred: ${deferred.reason}` };
+    const consumedCount = countConsumedDefers(input.home, {
+      branch: snapshot.branch,
+      repoPath
+    });
+    const warning = consumedCount >= REPEATED_DEFER_WARNING_THRESHOLD ? `
+\uACBD\uACE0: \uC774 \uB808\uD3EC\xB7\uBE0C\uB79C\uCE58\uC5D0\uC11C defer\uAC00 ${consumedCount}\uD68C \uB204\uC801\uB418\uC5C8\uC2B5\uB2C8\uB2E4 \u2014 \uBBF8\uB904\uB454 spec ingest\uB97C \uC815\uB9AC\uD558\uC138\uC694.` : "";
+    return { decision: "allow", deferred: true, reason: `deferred: ${deferred.reason}${warning}` };
   }
   return decision;
+}
+function describePendingMarker(marker) {
+  const repo = marker.repo_path ?? "\uB808\uD3EC \uBBF8\uAE30\uB85D(\uB808\uAC70\uC2DC \uB9C8\uCEE4 \u2014 \uC804 \uB808\uD3EC \uD574\uB2F9)";
+  return `- \uC138\uC158 ${marker.session_id} @ ${repo} (branch ${marker.branch}, started ${marker.started_at})`;
+}
+function decideUserPrompt(input) {
+  const pending = pendingReplaySessions(input.home, {
+    excludeSessionId: input.sessionId ?? void 0,
+    repoPath: input.repoPath ?? void 0
+  });
+  if (pending.length === 0) {
+    return { decision: "allow", reason: "no pending specraft replay" };
+  }
+  const lines = pending.map(describePendingMarker);
+  return {
+    decision: "block",
+    reason: `pending specraft ingest replay exists; resolve or ingest before continuing:
+${lines.join("\n")}
+\uD574\uC18C: \uD574\uB2F9 \uB808\uD3EC\uC5D0\uC11C \uC138\uC158\uC744 \uC7AC\uAC1C\uD574 \uBCC0\uACBD\uC744 commit/push \uD6C4 specraft_ingest\uB97C \uC2E4\uD589\uD558\uAC70\uB098, \uBCC0\uACBD\uC774 \uC5C6\uB2E4\uBA74 \uC138\uC158\uC744 \uC7AC\uAC1C\uD574 \uADF8\uB300\uB85C \uC885\uB8CC(stop allow \uC2DC \uC790\uB3D9 resolve)\uD558\uAC70\uB098, \uB9C8\uCEE4 \uD30C\uC77C(~/.specraft/sessions/<\uC138\uC158ID>.json)\uC758 resolved\uB97C true\uB85C \uC124\uC815\uD558\uC138\uC694.`
+  };
 }
 
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v3/helpers/util.js
@@ -31851,7 +31981,7 @@ async function specraftIngest(context, input) {
     session_id: context.sessionId ?? "safe-mode"
   });
   if (response.status === "accepted" && context.sessionId !== null) {
-    markIngested(context.home, context.sessionId);
+    markIngested(context.home, context.sessionId, snapshot.head);
   }
   return response;
 }
@@ -32091,30 +32221,48 @@ function writeHook(output) {
   process.stdout.write(`${JSON.stringify(output)}
 `);
 }
-function pendingForSession(home, currentSessionId) {
-  return currentSessionId === null ? pendingReplaySessions(home) : pendingReplaySessions(home, { excludeSessionId: currentSessionId });
+function repoRootOrNull(cwd) {
+  try {
+    return readRepoRoot(cwd);
+  } catch {
+    return null;
+  }
 }
-function replayInstruction(home, currentSessionId) {
-  const pending = pendingForSession(home, currentSessionId);
+function serverStatusCheck(cwd, home) {
+  const apiKey = resolveApiKey({ home });
+  if (!apiKey) {
+    return null;
+  }
+  const client = createSpecraftClient({ apiKey, baseUrl: resolveServerUrl({ cwd, home }) });
+  return () => client.status();
+}
+function replayInstruction(home, currentSessionId, repoPath) {
+  const pending = pendingReplaySessions(home, {
+    excludeSessionId: currentSessionId ?? void 0,
+    repoPath: repoPath ?? void 0
+  });
   if (pending.length === 0) {
     return "";
   }
   const lines = pending.map(
-    (marker) => `- ${marker.session_id} (${marker.started_at}, branch ${marker.branch}) requires specraft_ingest`
+    (marker) => `- ${marker.session_id} (${marker.started_at}, branch ${marker.branch}, repo ${marker.repo_path ?? "\uBBF8\uAE30\uB85D(\uB808\uAC70\uC2DC \u2014 \uC804 \uB808\uD3EC \uD574\uB2F9)"}) requires specraft_ingest`
   );
   return `Pending specraft replay from previous sessions:
 ${lines.join("\n")}
 `;
 }
-function runStopHook(cwd) {
+async function runStopHook(cwd) {
   const currentHome = homeDir();
   const currentSessionId = resolveSessionId();
-  const decision = decideStop({
-    cwd,
-    home: currentHome,
-    sessionId: currentSessionId,
-    strictMode: strictMode(cwd)
-  });
+  const decision = await decideStop(
+    {
+      cwd,
+      home: currentHome,
+      sessionId: currentSessionId,
+      strictMode: strictMode(cwd)
+    },
+    { serverStatus: serverStatusCheck(cwd, currentHome) }
+  );
   if (decision.decision === "allow" && !decision.deferred && currentSessionId !== null && readSessionOrNull(currentHome, currentSessionId)) {
     resolveSession(currentHome, currentSessionId);
   }
@@ -32123,30 +32271,33 @@ function runStopHook(cwd) {
     reason: decision.reason
   });
 }
-function runUserPromptHook() {
-  const pending = pendingForSession(homeDir(), resolveSessionId());
-  if (pending.length > 0) {
-    writeHook({
-      decision: "block",
-      reason: "pending specraft ingest replay exists; resolve or ingest before continuing"
-    });
-    return;
-  }
-  writeHook({ decision: "approve", reason: "no pending specraft replay" });
+function runUserPromptHook(cwd) {
+  const decision = decideUserPrompt({
+    home: homeDir(),
+    repoPath: repoRootOrNull(cwd),
+    sessionId: resolveSessionId()
+  });
+  writeHook({
+    decision: decision.decision === "allow" ? "approve" : "block",
+    reason: decision.reason
+  });
 }
 async function runSessionStartHook(cwd) {
   const snapshot = readGitSnapshot(cwd);
   const currentHome = homeDir();
   const currentSessionId = resolveSessionId();
+  const repoPath = repoRootOrNull(cwd);
   if (currentSessionId !== null) {
     startSession({
       branch: snapshot.branch,
       home: currentHome,
       sessionId: currentSessionId,
-      startedHead: snapshot.head
+      startedDirtyHash: readDirtyHash(cwd),
+      startedHead: snapshot.head,
+      ...repoPath !== null ? { repoPath } : {}
     });
   }
-  const pending = replayInstruction(currentHome, currentSessionId);
+  const pending = replayInstruction(currentHome, currentSessionId, repoPath);
   const apiKey = resolveApiKey({ home: currentHome });
   if (!apiKey) {
     process.stdout.write(
@@ -32222,11 +32373,11 @@ async function main() {
     return;
   }
   if (command === "hook" && subcommand === "stop") {
-    runStopHook(cwd);
+    await runStopHook(cwd);
     return;
   }
   if (command === "hook" && subcommand === "user-prompt-submit") {
-    runUserPromptHook();
+    runUserPromptHook(cwd);
     return;
   }
   if (command === "hook" && subcommand === "session-start") {

@@ -1,4 +1,5 @@
 import { execFileSync, spawnSync } from "node:child_process"
+import { createHash } from "node:crypto"
 
 import type { GitSnapshot } from "./tools.js"
 
@@ -23,10 +24,43 @@ export function readRepoRoot(cwd: string): string {
   return git(cwd, ["rev-parse", "--show-toplevel"])
 }
 
+export type DirtyState = {
+  readonly clean: boolean
+  /** sha256 of the `git status --porcelain` output — the dirty-file-set snapshot (plan M3.1). */
+  readonly hash: string
+}
+
+export function readDirtyState(cwd: string): DirtyState {
+  const porcelain = git(cwd, ["status", "--porcelain"])
+  return {
+    clean: porcelain === "",
+    hash: createHash("sha256").update(porcelain).digest("hex"),
+  }
+}
+
 export function isWorktreeClean(cwd: string): boolean {
-  return git(cwd, ["status", "--porcelain"]) === ""
+  return readDirtyState(cwd).clean
+}
+
+export function readDirtyHash(cwd: string): string {
+  return readDirtyState(cwd).hash
+}
+
+export type HeadPushState = "pushed" | "not-pushed" | "no-upstream"
+
+/**
+ * Distinguishes a missing upstream (`@{u}` unset) from an unpushed HEAD so the
+ * stop gate can give `git push -u` guidance instead of a generic push reason.
+ */
+export function headPushState(cwd: string): HeadPushState {
+  if (gitStatus(cwd, ["rev-parse", "--abbrev-ref", "@{u}"]) !== 0) {
+    return "no-upstream"
+  }
+  return gitStatus(cwd, ["merge-base", "--is-ancestor", "HEAD", "@{u}"]) === 0
+    ? "pushed"
+    : "not-pushed"
 }
 
 export function isHeadPushed(cwd: string): boolean {
-  return gitStatus(cwd, ["merge-base", "--is-ancestor", "HEAD", "@{u}"]) === 0
+  return headPushState(cwd) === "pushed"
 }

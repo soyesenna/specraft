@@ -54,32 +54,32 @@ function readSingleMarker(home: string): Record<string, unknown> {
 }
 
 describe("specraft_defer stop-gate escape", () => {
-  it("allows exactly one stop after a defer and re-blocks once consumed", () => {
+  it("allows exactly one stop after a defer and re-blocks once consumed", async () => {
     const fixture = createGitRepo()
     const home = makeHome()
     writeFileSync(join(fixture.repo, "WIP.md"), "draft\n")
     const stopInput = { cwd: fixture.repo, home, sessionId: "s-defer", strictMode: true }
 
-    expect(decideStop(stopInput).decision).toBe("block")
+    expect((await decideStop(stopInput)).decision).toBe("block")
 
     recordDefer(
       home,
       { branch: "main", head: fixture.first, repoPath: readRepoRoot(fixture.repo) },
       "backend outage",
     )
-    expect(decideStop(stopInput)).toEqual({
+    expect(await decideStop(stopInput)).toEqual({
       decision: "allow",
       deferred: true,
       reason: "deferred: backend outage",
     })
     expect(readSingleMarker(home)["consumed"]).toBe(true)
 
-    const reStop = decideStop(stopInput)
+    const reStop = await decideStop(stopInput)
     expect(reStop.decision).toBe("block")
     expect(reStop.reason).toContain("specraft_defer")
   })
 
-  it("lets a different session consume the marker (cross-session, session-independent key)", () => {
+  it("lets a different session consume the marker (cross-session, session-independent key)", async () => {
     const fixture = createGitRepo()
     const home = makeHome()
     writeFileSync(join(fixture.repo, "WIP.md"), "draft\n")
@@ -89,7 +89,12 @@ describe("specraft_defer stop-gate escape", () => {
       "recorded by another process",
     )
 
-    const decision = decideStop({ cwd: fixture.repo, home, sessionId: null, strictMode: true })
+    const decision = await decideStop({
+      cwd: fixture.repo,
+      home,
+      sessionId: null,
+      strictMode: true,
+    })
     expect(decision).toEqual({
       decision: "allow",
       deferred: true,
@@ -97,7 +102,7 @@ describe("specraft_defer stop-gate escape", () => {
     })
   })
 
-  it("ignores and deletes stale markers whose HEAD does not match", () => {
+  it("ignores and deletes stale markers whose HEAD does not match", async () => {
     const fixture = createGitRepo()
     const home = makeHome()
     writeFileSync(join(fixture.repo, "WIP.md"), "draft\n")
@@ -108,12 +113,13 @@ describe("specraft_defer stop-gate escape", () => {
     )
 
     expect(
-      decideStop({ cwd: fixture.repo, home, sessionId: "s-stale", strictMode: true }).decision,
+      (await decideStop({ cwd: fixture.repo, home, sessionId: "s-stale", strictMode: true }))
+        .decision,
     ).toBe("block")
     expect(readdirSync(defersDir(home))).toHaveLength(0)
   })
 
-  it("does not consume markers belonging to a different repo", () => {
+  it("does not consume markers belonging to a different repo", async () => {
     const fixture = createGitRepo()
     const home = makeHome()
     writeFileSync(join(fixture.repo, "WIP.md"), "draft\n")
@@ -124,7 +130,8 @@ describe("specraft_defer stop-gate escape", () => {
     )
 
     expect(
-      decideStop({ cwd: fixture.repo, home, sessionId: "s-other", strictMode: true }).decision,
+      (await decideStop({ cwd: fixture.repo, home, sessionId: "s-other", strictMode: true }))
+        .decision,
     ).toBe("block")
     expect(
       consumeDefer(home, { branch: "main", head: fixture.first, repoPath: "/other/repo" }),
@@ -133,7 +140,7 @@ describe("specraft_defer stop-gate escape", () => {
 })
 
 describe("safe mode (no session id)", () => {
-  it("marks safeMode in gate state and skips the ingest check on clean+pushed repos", () => {
+  it("marks safeMode in gate state and skips the ingest check on clean+pushed repos", async () => {
     const fixture = createGitRepo()
     const home = makeHome()
 
@@ -141,7 +148,7 @@ describe("safe mode (no session id)", () => {
       readGitGateState({ cwd: fixture.repo, home, sessionId: null, strictMode: true }).safeMode,
     ).toBe(true)
 
-    const withSessionId = decideStop({
+    const withSessionId = await decideStop({
       cwd: fixture.repo,
       home,
       sessionId: "s-no-marker",
@@ -150,28 +157,38 @@ describe("safe mode (no session id)", () => {
     expect(withSessionId.decision).toBe("block")
     expect(withSessionId.reason).toContain("ingest marker")
 
-    const safeMode = decideStop({ cwd: fixture.repo, home, sessionId: null, strictMode: true })
+    const safeMode = await decideStop({
+      cwd: fixture.repo,
+      home,
+      sessionId: null,
+      strictMode: true,
+    })
     expect(safeMode.decision).toBe("allow")
     expect(safeMode.reason).toContain("safe mode")
   })
 
-  it("still blocks dirty worktrees in safe mode", () => {
+  it("still blocks dirty worktrees in safe mode", async () => {
     const fixture = createGitRepo()
     const home = makeHome()
     writeFileSync(join(fixture.repo, "WIP.md"), "draft\n")
 
-    const decision = decideStop({ cwd: fixture.repo, home, sessionId: null, strictMode: true })
+    const decision = await decideStop({
+      cwd: fixture.repo,
+      home,
+      sessionId: null,
+      strictMode: true,
+    })
     expect(decision.decision).toBe("block")
     expect(decision.reason).toContain("dirty")
   })
 
-  it("keeps the session-bound ingest check for tracked sessions", () => {
+  it("keeps the session-bound ingest check for tracked sessions", async () => {
     const fixture = createGitRepo()
     const home = makeHome()
     startSession({ home, sessionId: "s-tracked", branch: "main", startedHead: fixture.first })
 
     expect(
-      decideStop({ cwd: fixture.repo, home, sessionId: "s-tracked", strictMode: true }),
+      await decideStop({ cwd: fixture.repo, home, sessionId: "s-tracked", strictMode: true }),
     ).toEqual({ decision: "allow", reason: "read-only session exemption" })
   })
 })

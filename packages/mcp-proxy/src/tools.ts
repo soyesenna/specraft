@@ -94,7 +94,9 @@ export async function specraftIngest(
     session_id: context.sessionId ?? "safe-mode",
   })
   if (response.status === "accepted" && context.sessionId !== null) {
-    markIngested(context.home, context.sessionId)
+    // Bind the marker to the ingested HEAD: the stop gate only trusts it while
+    // HEAD is unchanged (plan M3.1 ingested_head binding).
+    markIngested(context.home, context.sessionId, snapshot.head)
   }
   return response
 }

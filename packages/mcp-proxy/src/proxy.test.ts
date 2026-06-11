@@ -59,8 +59,9 @@ describe("mcp proxy core", () => {
       evaluateStopGate({
         strictMode: true,
         worktreeClean: true,
+        dirtyUnchangedSinceStart: true,
         hasNewCommits: false,
-        headPushed: false,
+        headPushState: "not-pushed",
         ingested: false,
       }),
     ).toEqual({ decision: "allow", reason: "read-only session exemption" })
@@ -68,8 +69,9 @@ describe("mcp proxy core", () => {
       evaluateStopGate({
         strictMode: true,
         worktreeClean: false,
+        dirtyUnchangedSinceStart: false,
         hasNewCommits: false,
-        headPushed: false,
+        headPushState: "not-pushed",
         ingested: false,
       }).decision,
     ).toBe("block")
@@ -77,8 +79,9 @@ describe("mcp proxy core", () => {
       evaluateStopGate({
         strictMode: true,
         worktreeClean: true,
+        dirtyUnchangedSinceStart: true,
         hasNewCommits: true,
-        headPushed: true,
+        headPushState: "pushed",
         ingested: true,
       }).decision,
     ).toBe("allow")
@@ -168,8 +171,9 @@ describe("mcp proxy core", () => {
     expect(
       readGitGateState({ cwd: fixture.repo, home, sessionId: "s2", strictMode: true }),
     ).toEqual({
+      dirtyUnchangedSinceStart: true,
       hasNewCommits: false,
-      headPushed: true,
+      headPushState: "pushed",
       ingested: false,
       safeMode: false,
       strictMode: true,
@@ -179,18 +183,20 @@ describe("mcp proxy core", () => {
     writeFileSync(join(fixture.repo, "README.md"), "# App\n\nchanged\n")
     git(fixture.repo, ["commit", "-am", "second"])
     expect(
-      readGitGateState({ cwd: fixture.repo, home, sessionId: "s2", strictMode: true }).headPushed,
-    ).toBe(false)
+      readGitGateState({ cwd: fixture.repo, home, sessionId: "s2", strictMode: true })
+        .headPushState,
+    ).toBe("not-pushed")
     git(fixture.repo, ["push"])
     expect(
       readGitGateState({ cwd: fixture.repo, home, sessionId: "s2", strictMode: true }).ingested,
     ).toBe(false)
-    markIngested(home, "s2")
+    markIngested(home, "s2", git(fixture.repo, ["rev-parse", "HEAD"]))
     expect(
       readGitGateState({ cwd: fixture.repo, home, sessionId: "s2", strictMode: true }),
     ).toEqual({
+      dirtyUnchangedSinceStart: true,
       hasNewCommits: true,
-      headPushed: true,
+      headPushState: "pushed",
       ingested: true,
       safeMode: false,
       strictMode: true,

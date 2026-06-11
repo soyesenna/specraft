@@ -1,10 +1,10 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
-import { createSpecraftClient } from "@specraft/shared"
+import { createSpecraftClient, type StatusResponse } from "@specraft/shared"
 
 import { findSpecraftConfig } from "./config.js"
 import { resolveApiKey, resolveServerUrl } from "./credentials.js"
-import { decideStop } from "./gate.js"
-import { isHeadPushed, readGitSnapshot, readRepoRoot } from "./git.js"
+import { decideStop, decideUserPrompt } from "./gate.js"
+import { isHeadPushed, readDirtyHash, readGitSnapshot, readRepoRoot } from "./git.js"
 import { createSpecraftMcpServer, mcpServerVersion } from "./mcp.js"
 import {
   pendingReplaySessions,
@@ -57,33 +57,57 @@ function writeHook(output: HookOutput): void {
   process.stdout.write(`${JSON.stringify(output)}\n`)
 }
 
-function pendingForSession(home: string, currentSessionId: string | null) {
-  return currentSessionId === null
-    ? pendingReplaySessions(home)
-    : pendingReplaySessions(home, { excludeSessionId: currentSessionId })
+function repoRootOrNull(cwd: string): string | null {
+  try {
+    return readRepoRoot(cwd)
+  } catch {
+    return null
+  }
 }
 
-function replayInstruction(home: string, currentSessionId: string | null): string {
-  const pending = pendingForSession(home, currentSessionId)
+/** Reuses the existing credentials/url chain for the stop-time server recheck. */
+function serverStatusCheck(cwd: string, home: string): (() => Promise<StatusResponse>) | null {
+  const apiKey = resolveApiKey({ home })
+  if (!apiKey) {
+    return null
+  }
+  const client = createSpecraftClient({ apiKey, baseUrl: resolveServerUrl({ cwd, home }) })
+  return () => client.status()
+}
+
+function replayInstruction(
+  home: string,
+  currentSessionId: string | null,
+  repoPath: string | null,
+): string {
+  const pending = pendingReplaySessions(home, {
+    excludeSessionId: currentSessionId ?? undefined,
+    repoPath: repoPath ?? undefined,
+  })
   if (pending.length === 0) {
     return ""
   }
   const lines = pending.map(
     (marker) =>
-      `- ${marker.session_id} (${marker.started_at}, branch ${marker.branch}) requires specraft_ingest`,
+      `- ${marker.session_id} (${marker.started_at}, branch ${marker.branch}, repo ${
+        marker.repo_path ?? "미기록(레거시 — 전 레포 해당)"
+      }) requires specraft_ingest`,
   )
   return `Pending specraft replay from previous sessions:\n${lines.join("\n")}\n`
 }
 
-function runStopHook(cwd: string): void {
+async function runStopHook(cwd: string): Promise<void> {
   const currentHome = homeDir()
   const currentSessionId = resolveSessionId()
-  const decision = decideStop({
-    cwd,
-    home: currentHome,
-    sessionId: currentSessionId,
-    strictMode: strictMode(cwd),
-  })
+  const decision = await decideStop(
+    {
+      cwd,
+      home: currentHome,
+      sessionId: currentSessionId,
+      strictMode: strictMode(cwd),
+    },
+    { serverStatus: serverStatusCheck(cwd, currentHome) },
+  )
   if (
     decision.decision === "allow" &&
     !decision.deferred &&
@@ -98,31 +122,34 @@ function runStopHook(cwd: string): void {
   })
 }
 
-function runUserPromptHook(): void {
-  const pending = pendingForSession(homeDir(), resolveSessionId())
-  if (pending.length > 0) {
-    writeHook({
-      decision: "block",
-      reason: "pending specraft ingest replay exists; resolve or ingest before continuing",
-    })
-    return
-  }
-  writeHook({ decision: "approve", reason: "no pending specraft replay" })
+function runUserPromptHook(cwd: string): void {
+  const decision = decideUserPrompt({
+    home: homeDir(),
+    repoPath: repoRootOrNull(cwd),
+    sessionId: resolveSessionId(),
+  })
+  writeHook({
+    decision: decision.decision === "allow" ? "approve" : "block",
+    reason: decision.reason,
+  })
 }
 
 async function runSessionStartHook(cwd: string): Promise<void> {
   const snapshot = readGitSnapshot(cwd)
   const currentHome = homeDir()
   const currentSessionId = resolveSessionId()
+  const repoPath = repoRootOrNull(cwd)
   if (currentSessionId !== null) {
     startSession({
       branch: snapshot.branch,
       home: currentHome,
       sessionId: currentSessionId,
+      startedDirtyHash: readDirtyHash(cwd),
       startedHead: snapshot.head,
+      ...(repoPath !== null ? { repoPath } : {}),
     })
   }
-  const pending = replayInstruction(currentHome, currentSessionId)
+  const pending = replayInstruction(currentHome, currentSessionId, repoPath)
   const apiKey = resolveApiKey({ home: currentHome })
   if (!apiKey) {
     process.stdout.write(
@@ -189,11 +216,11 @@ async function main(): Promise<void> {
     return
   }
   if (command === "hook" && subcommand === "stop") {
-    runStopHook(cwd)
+    await runStopHook(cwd)
     return
   }
   if (command === "hook" && subcommand === "user-prompt-submit") {
-    runUserPromptHook()
+    runUserPromptHook(cwd)
     return
   }
   if (command === "hook" && subcommand === "session-start") {
