@@ -144,7 +144,12 @@ function requestJson(url: URL, headers: Record<string, string>, body: unknown): 
             reject(new OpenRouterResponseError(response.statusCode ?? 500, text))
             return
           }
-          resolve(JSON.parse(text))
+          try {
+            resolve(JSON.parse(text))
+          } catch (error) {
+            // 2xx + 비JSON(프록시 HTML 등)이 uncaughtException으로 프로세스를 죽이지 않게 reject로 변환
+            reject(error instanceof Error ? error : new Error(String(error)))
+          }
         })
       },
     )

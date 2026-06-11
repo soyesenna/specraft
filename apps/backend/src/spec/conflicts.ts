@@ -34,6 +34,16 @@ export function listConflicts(database: SpecraftDatabase): readonly Conflict[] {
   return rows.map(toConflict)
 }
 
+/** 충돌의 병합 대상(잠긴) 브랜치 — merge 직렬화 큐 키로 사용한다. */
+export function conflictTargetBranch(database: SpecraftDatabase, id: string): string | null {
+  const row = database
+    .prepare<[string], { readonly branch: string | null }>(
+      "SELECT branch FROM conflicts WHERE id = ?",
+    )
+    .get(id)
+  return row?.branch ?? null
+}
+
 export function conflictHasSourceBranch(database: SpecraftDatabase, id: string): boolean {
   const row = database
     .prepare<[string], { readonly source_branch: string | null }>(

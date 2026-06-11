@@ -32729,7 +32729,7 @@ async function runSessionStartHook(cwd) {
   const apiKey = resolveApiKey({ home: currentHome });
   if (!apiKey) {
     process.stdout.write(
-      `${pending}Use specraft context before repository answers. Run specraft_status if context injection is unavailable.
+      `${pending}Specraft context unavailable - configure SPECRAFT_API_KEY (env, plugin config, or ~/.specraft/credentials) and SPECRAFT_SERVER_URL (env or .specraft.json), then restart the session.
 `
     );
     return;
@@ -32752,7 +32752,9 @@ async function runContextHook(cwd) {
   const currentHome = homeDir();
   const apiKey = resolveApiKey({ home: currentHome });
   if (!apiKey) {
-    process.stdout.write("Rehydrate specraft context with specraft_query before continuing.\n");
+    process.stdout.write(
+      "Specraft context unavailable - configure SPECRAFT_API_KEY (env, plugin config, or ~/.specraft/credentials) and SPECRAFT_SERVER_URL (env or .specraft.json), then restart the session.\n"
+    );
     return;
   }
   const client = createSpecraftClient({

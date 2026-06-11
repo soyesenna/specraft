@@ -590,16 +590,19 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
     if (!ensureUnlocked(context, body.data.into, reply)) {
       return reply
     }
-    const result = mergeWikiBranch({
-      database: context.database,
-      dataDir: context.dataDir,
-      targetBranch: body.data.into,
-      sourceBranch: params.data.branch,
+    // merge는 대상 브랜치 워크트리를 직접 조작하므로 ingest와 동일 큐로 직렬화한다.
+    return branchQueue.run(body.data.into, async () => {
+      const result = mergeWikiBranch({
+        database: context.database,
+        dataDir: context.dataDir as string,
+        targetBranch: body.data.into,
+        sourceBranch: params.data.branch,
+      })
+      if (result.status === "merged") {
+        return WikiMergeResponseSchema.parse({ status: "merged" })
+      }
+      return reply.status(409).send({ error: "merge_conflict", conflict_id: result.conflictId })
     })
-    if (result.status === "merged") {
-      return WikiMergeResponseSchema.parse({ status: "merged" })
-    }
-    return reply.status(409).send({ error: "merge_conflict", conflict_id: result.conflictId })
   })
 
   // M4+.3 진행률 보드 조회 — branch 미지정 시 전 브랜치 집계를 반환한다.
@@ -672,7 +675,7 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
     return { status: "ok", chunks }
   })
 
-  registerConflictRoutes(server, context)
+  registerConflictRoutes(server, context, branchQueue)
 
   server.get("/api/v1/status", async () => {
     const headByBranch: Record<string, string> = {}

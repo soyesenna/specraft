@@ -45,6 +45,10 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      # ADR-1 — 커밋된 proxy 번들(마켓플레이스 설치 정본)이 소스 재빌드 결과와 일치하는지 검증.
+      # 소스만 고치고 번들 커밋을 빠뜨리면 설치본이 조용히 구버전이 되는 것을 차단한다.
+      - name: Bundle freshness gate (committed == rebuilt)
+        run: git diff --exit-code -- packages/mcp-proxy/dist-bundle plugins/claude-code/proxy plugins/codex/proxy
       - run: pnpm typecheck
       - run: pnpm test
       # M2.3 도구 정의 토큰 게이트(≤5k). ANTHROPIC_API_KEY secret이 있으면 count_tokens

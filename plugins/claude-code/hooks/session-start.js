@@ -6,7 +6,7 @@ const hookCommand = "hook session-start"
 const installGuidance =
   "specraft-mcp-proxy가 설치되지 않았습니다. `npm install -g @specraft/mcp-proxy`로 설치하면 specraft 컨텍스트 주입이 활성화됩니다.\n"
 const fallbackGuidance =
-  "Use specraft context before repository answers. Run specraft_status if context injection is unavailable.\n"
+  "Specraft context unavailable - configure SPECRAFT_API_KEY (env, plugin config, or ~/.specraft/credentials) and SPECRAFT_SERVER_URL (env or .specraft.json), then restart the session.\n"
 
 function readHookInput() {
   try {
