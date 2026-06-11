@@ -14,7 +14,7 @@ import {
   type StreamToolCall,
   type StreamToolResult,
 } from "../llm/provider.js"
-import { createWikiTools } from "../llm/wiki-tools.js"
+import { createReadOnlyWikiTools, createWikiTools } from "../llm/wiki-tools.js"
 
 type RankedPage = {
   readonly content: string
@@ -234,7 +234,8 @@ export async function answerWikiQuestionWithAgent(input: {
       { role: "user", content: input.question },
     ],
     provider: input.provider,
-    tools: createWikiTools(input.wiki.root),
+    // Query Agent는 read 전용 — 위키 변경 도구(wiki_write/wiki_delete)를 노출하지 않는다 (M3.4).
+    tools: createReadOnlyWikiTools(input.wiki.root),
   })
   const citations = citationsFromAnswer(response.content)
   return {
@@ -274,7 +275,8 @@ export async function answerWikiQuestionWithAgentStream(input: {
     onToolCall: input.onToolCall,
     onToolResult: input.onToolResult,
     provider: input.provider,
-    tools: createWikiTools(input.wiki.root),
+    // Query Agent는 read 전용 — 위키 변경 도구(wiki_write/wiki_delete)를 노출하지 않는다 (M3.4).
+    tools: createReadOnlyWikiTools(input.wiki.root),
   })
   const citations = citationsFromAnswer(response.content)
   return {

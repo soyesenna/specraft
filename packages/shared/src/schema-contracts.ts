@@ -36,6 +36,8 @@ export const IngestPayloadSchema = z.object({
 export const ContextRequestSchema = z.object({
   branch: GitBranchNameSchema,
   commit_hash: NonEmptyStringSchema,
+  // M3.6 context 토큰 예산(optional, 양의 정수) — 미지정 시 현행(무제한) 동작 유지(하위 호환).
+  budget_tokens: z.number().int().positive().optional(),
 })
 
 export const ContextResponseSchema = z.object({
@@ -43,6 +45,8 @@ export const ContextResponseSchema = z.object({
   index: z.string(),
   branch_status: BranchStatusSchema,
   wiki_head: NonEmptyStringSchema,
+  // M3.6 — budget_tokens 지정 요청에서만 채워지는 절단 여부 플래그(additive, 하위 호환).
+  truncated: z.boolean().optional(),
 })
 
 export const QueryRequestSchema = ContextRequestSchema.extend({

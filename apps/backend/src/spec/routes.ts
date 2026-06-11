@@ -39,6 +39,7 @@ import type { LLMProvider } from "../llm/provider.js"
 import type { SpecraftDatabase } from "../storage/database.js"
 import { requireMember } from "./auth.js"
 import { registerConflictRoutes } from "./conflict-routes.js"
+import { fitContextToBudget } from "./context-budget.js"
 import { cachedWikiGraph } from "./graph-cache.js"
 import { getGraphLayout, saveGraphLayout } from "./layouts.js"
 import {
@@ -108,11 +109,24 @@ export function registerSpecRoutes(server: FastifyInstance, context: SpecRouteCo
       return reply
     }
     const wiki = wikiFor(context, parsed.data.branch)
+    const overview = wiki ? readWikiFile(wiki, "overview.md") : ""
+    const index = wiki ? readWikiFile(wiki, "index.md") : ""
+    // M3.6: budget_tokens 지정 시에만 예산 적용 — 미지정 시 현행(무제한) 동작 유지.
+    const fitted =
+      parsed.data.budget_tokens === undefined
+        ? undefined
+        : await fitContextToBudget({
+            overview,
+            index,
+            budgetTokens: parsed.data.budget_tokens,
+            provider: context.llmProvider,
+          })
     const response = {
-      overview: wiki ? readWikiFile(wiki, "overview.md") : "",
-      index: wiki ? readWikiFile(wiki, "index.md") : "",
+      overview: fitted ? fitted.overview : overview,
+      index,
       branch_status: { state: "ready" },
       wiki_head: wiki ? wikiHead(wiki) : "uninitialized",
+      ...(fitted ? { truncated: fitted.truncated } : {}),
     }
     return ContextResponseSchema.parse(response)
   })

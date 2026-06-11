@@ -212,4 +212,44 @@ describe("M1 v1 contracts", () => {
     expect(branchLocked.conflict_id).toBe("conflict-001")
     expect(unauthorized.error).toBe("unauthorized")
   })
+
+  it("keeps the context budget contract additive and backward compatible (M3.6)", () => {
+    // budget_tokens 미지정 — 현행 요청이 그대로 통과한다(하위 호환).
+    const legacy = ContextRequestSchema.parse({ branch: "main", commit_hash: "abc123" })
+    expect(legacy.budget_tokens).toBeUndefined()
+
+    const withBudget = ContextRequestSchema.parse({
+      branch: "main",
+      commit_hash: "abc123",
+      budget_tokens: 2000,
+    })
+    expect(withBudget.budget_tokens).toBe(2000)
+
+    // 양의 정수만 허용한다.
+    expect(
+      ContextRequestSchema.safeParse({ branch: "main", commit_hash: "abc123", budget_tokens: 0 })
+        .success,
+    ).toBe(false)
+    expect(
+      ContextRequestSchema.safeParse({ branch: "main", commit_hash: "abc123", budget_tokens: 1.5 })
+        .success,
+    ).toBe(false)
+
+    // truncated는 optional — 없는 응답(현행)과 있는 응답 모두 유효하다.
+    const legacyResponse = ContextResponseSchema.parse({
+      overview: "# specraft",
+      index: "- overview.md",
+      branch_status: { state: "ready" },
+      wiki_head: "def456",
+    })
+    expect(legacyResponse.truncated).toBeUndefined()
+    const truncatedResponse = ContextResponseSchema.parse({
+      overview: "...[truncated 120 tokens]",
+      index: "- overview.md",
+      branch_status: { state: "ready" },
+      wiki_head: "def456",
+      truncated: true,
+    })
+    expect(truncatedResponse.truncated).toBe(true)
+  })
 })

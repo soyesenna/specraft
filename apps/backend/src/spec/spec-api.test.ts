@@ -411,6 +411,60 @@ describe("spec REST API", () => {
     database.close()
   })
 
+  it("applies context budget_tokens with index-first preservation", async () => {
+    const database = createDatabase({ path: ":memory:" })
+    const dataDir = mkdtempSync(join(tmpdir(), "specraft-api-budget-"))
+    const server = buildServer({ database, secret, dataDir })
+    const admin = await server.inject({
+      method: "POST",
+      url: "/api/v1/auth/bootstrap-admin",
+      payload: { email: "admin@example.com", password: "password", name: "Admin" },
+    })
+    const cookie = admin.cookies[0]?.value ?? ""
+    type ContextBody = {
+      readonly overview: string
+      readonly index: string
+      readonly truncated?: boolean
+    }
+    const fetchContext = async (extra: Record<string, unknown>) =>
+      server.inject({
+        method: "POST",
+        url: "/api/v1/context",
+        cookies: { specraft_session: cookie },
+        payload: { branch: "main", commit_hash: "abc123", ...extra },
+      })
+
+    // budget 미지정 — 현행 동작 그대로, truncated 필드 자체가 없다.
+    const baseline = await fetchContext({})
+    expect(baseline.statusCode).toBe(200)
+    const base = baseline.json<ContextBody>()
+    expect(base.truncated).toBeUndefined()
+    expect(base.overview.length).toBeGreaterThan(0)
+
+    // 넉넉한 예산 — 절단 없음, truncated: false.
+    const roomy = await fetchContext({ budget_tokens: 100000 })
+    expect(roomy.statusCode).toBe(200)
+    expect(roomy.json<ContextBody>().truncated).toBe(false)
+    expect(roomy.json<ContextBody>().overview).toBe(base.overview)
+
+    // 빠듯한 예산 — index는 우선 보존되어 그대로, overview만 절단 마커로 줄어든다.
+    const indexTokens = Math.ceil(base.index.length / 3.5)
+    const tight = await fetchContext({ budget_tokens: indexTokens + 1 })
+    expect(tight.statusCode).toBe(200)
+    const tightBody = tight.json<ContextBody>()
+    expect(tightBody.truncated).toBe(true)
+    expect(tightBody.index).toBe(base.index)
+    expect(tightBody.overview).toContain("[truncated")
+    expect(tightBody.overview).not.toBe(base.overview)
+
+    // 양의 정수가 아니면 422.
+    const invalid = await fetchContext({ budget_tokens: 0 })
+    expect(invalid.statusCode).toBe(422)
+
+    await server.close()
+    database.close()
+  })
+
   it("uses the configured LLM provider for query responses", async () => {
     const database = createDatabase({ path: ":memory:" })
     const dataDir = mkdtempSync(join(tmpdir(), "specraft-api-provider-"))

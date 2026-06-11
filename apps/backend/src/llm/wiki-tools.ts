@@ -39,6 +39,15 @@ function listFiles(root: string): readonly string[] {
   return files
 }
 
+/**
+ * Read 전용 서브셋 (wiki_read/wiki_list/wiki_search).
+ * Query Agent는 위키를 변경할 권한이 없어야 하므로 이 서브셋만 받는다 (M3.4).
+ */
+export function createReadOnlyWikiTools(wikiRoot: string): readonly ToolDefinition[] {
+  const readOnlyNames = new Set(["wiki_read", "wiki_list", "wiki_search"])
+  return createWikiTools(wikiRoot).filter((tool) => readOnlyNames.has(tool.name))
+}
+
 export function createWikiTools(wikiRoot: string): readonly ToolDefinition[] {
   return [
     {
